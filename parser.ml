@@ -132,15 +132,15 @@ module MCFG_ParserGen =
 
     let build_items rules trigger items = 
      let build' rules item_list = 
-       let item_map = build_item_map item_list in 
+       (*let item_map = build_item_map item_list in*) 
        let combine' items rule =
         match Rule.get_expansion rule with
           | PublicTerminating _ -> None
           | PublicNonTerminating (nts, f) -> 
             let left = Rule.get_nonterm rule in 
-            let possible_items = filter_items item_map rule in 
-            let item_nonterms = map_tr get_nonterm possible_items in 
-            let item_ranges = map_tr get_ranges possible_items in 
+            (*let possible_items = filter_items item_map rule in*)
+            let item_nonterms = map_tr get_nonterm items in 
+            let item_ranges = map_tr get_ranges items in 
             if item_nonterms = NEList.to_list nts then
                 try
                     Some (create_item left (Rule.apply f item_ranges concat_ranges))
