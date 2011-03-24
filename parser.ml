@@ -78,7 +78,7 @@ module MCFG_ParserGen =
 			        else Grammar_Map.add key [rule] map in
 		  List.fold_left load_map Grammar_Map.empty grammar 
 
-(*
+(*TODO: Not using the two next functions yet, not working properly. Speed win might be minimal, so might want to ditch them anyway*)
    let build_item_map items =
       let load_map map item =
         let key = get_nonterm item in
@@ -87,7 +87,7 @@ module MCFG_ParserGen =
           Item_Map.add key (item::prev_value) map 
         else Item_Map.add key [item] map in
       List.fold_left load_map Item_Map.empty items 
-*)
+
     let filter_items map rule =
       let rec filter' lst acc =
         match lst with 
@@ -105,9 +105,9 @@ module MCFG_ParserGen =
      uniques (List.concat (filter' rights [])) 
      
                 
-
+(*TODO: Currently using build_items instead of this. Might want to remove it and change the interface*)
 		let build_nary rules items =
-		   (*let item_map = build_item_map items in*)
+       (*let item_map = build_item_map items in*)
        let combine' items rule =
 			  	match Rule.get_expansion rule with
 				    | PublicTerminating _ -> None
@@ -115,6 +115,11 @@ module MCFG_ParserGen =
 					      let left = Rule.get_nonterm rule in
 				      (*  let possible_items = filter_items item_map rule in *)
                 let item_nonterms = map_tr get_nonterm items in
+                print_string "\n nonterms\n";
+                for i=0 to (List.length item_nonterms)-1 do 
+                  Printf.printf " %s" (List.nth item_nonterms i);
+                done;
+
                 let item_ranges = map_tr get_ranges items in
                 if item_nonterms = NEList.to_list nts then
                   try
@@ -124,6 +129,32 @@ module MCFG_ParserGen =
                 else
                     None in
 		      optlistmap (combine' items) rules
+
+    let build_items rules trigger items = 
+     let build' rules item_list = 
+       let item_map = build_item_map item_list in 
+       let combine' items rule =
+        match Rule.get_expansion rule with
+          | PublicTerminating _ -> None
+          | PublicNonTerminating (nts, f) -> 
+            let left = Rule.get_nonterm rule in 
+            let possible_items = filter_items item_map rule in 
+            let item_nonterms = map_tr get_nonterm possible_items in 
+            let item_ranges = map_tr get_ranges possible_items in 
+            if item_nonterms = NEList.to_list nts then
+                try
+                    Some (create_item left (Rule.apply f item_ranges concat_ranges))
+                  with
+                    RangesNotAdjacentException -> None
+                else
+                    None in
+
+		    optlistmap (combine' item_list) rules in 
+      let trigger_item = concatmap_tr (fun item -> (build' rules [trigger;item])) items in 
+      let item_trigger =  concatmap_tr (fun item -> (build' rules [item;trigger])) items in
+      let trigger_only = (build' rules) [trigger] in 
+      trigger_item @ item_trigger @ trigger_only 
+
 
 		(* Filter rules based on current items using the map*)
 		let filter_rules gram_map items = 
@@ -137,32 +168,33 @@ module MCFG_ParserGen =
 			  with _ ->
 			    filter' t acc in 
 		  uniques (List.flatten (filter' items []))
-		  
-		let rec consequences max_depth prims recent_items old_items gram_map =
-		        let all_existing_items = recent_items @ old_items in
-			if max_depth = 0 then
-				all_existing_items
-			else
-			       match recent_items with
-					  [] -> old_items
-					| (i::is) ->
-					        let possible_rules = filter_rules gram_map recent_items in
-									
-					        let rules_of_arity n = List.filter (fun rule -> rule_arity rule = n) possible_rules in
-						     
-                  let new_items n = concatmap_tr (build_nary (rules_of_arity n))  (all_lists all_existing_items n)  in
-   						   
-                  let all_new_items = concatmap_tr new_items (range 1 ((max_arity prims)+1)) in
-		 				     
-                  let useful_new_items = List.filter (fun x -> not (List.mem x all_existing_items)) all_new_items in
-					      	
-                  consequences (max_depth-1) prims (is @ useful_new_items) (i :: old_items) gram_map
-		 
-		  let deduce max_depth prims input =
-		  let gram_map = build_map prims in 
-		  let axioms = get_axioms prims input in
-	  	  consequences max_depth prims axioms [] gram_map
-		
+	
+    let rec consequences max_depth prims chart q gram_map =
+      if (Queue.is_empty q)
+      then chart
+      else
+        let trigger = Queue.pop q in
+          let possible_rules = filter_rules gram_map (trigger::chart) in 
+          
+          let all_new_items = build_items possible_rules trigger chart in 
+         
+          let useful_new_items = List.filter (fun x -> not (List.mem x chart)) all_new_items in  
+         
+          for i=0 to (List.length useful_new_items)-1 do
+            Queue.add (List.nth useful_new_items i) q
+          done;
+         
+          let chart' = chart@useful_new_items in
+          consequences (max_depth -1) prims chart' q gram_map
+       
+	  let deduce max_depth prims input =
+	  let gram_map = build_map prims in 
+	  let axioms = get_axioms prims input in
+    let queue = Queue.create () in 
+    for i=0 to (List.length axioms)-1 do
+      Queue.add (List.nth axioms i) queue 
+    done;
+	 	  consequences max_depth prims axioms queue gram_map 
        	end
 
 
