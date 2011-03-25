@@ -17,6 +17,7 @@ module MCFG_ParserGen =
 		type prim = Rule.r
 		type item = ParseItem of string * ((int * int) list)
 		type input = Prefix of (string list) | Sentence of (string list)
+    type tables = {lRule_map: Rule.r list Grammar_Map.t ; rRule_map: Rule.r list Grammar_Map.t ; item_map: item list Item_Map.t}
 
     let create_item str ranges = ParseItem(str, ranges)
 
@@ -65,20 +66,22 @@ module MCFG_ParserGen =
 
 		let max_arity rules = List.fold_left max 0 (map_tr Rule.rule_arity rules)
 
-		(*Builds a map with leftmost symbol as the key, based upon the provided grammar*)
-		let build_map grammar =
+		(*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar*)
+		let build_map grammar daughter =
 		  let load_map map rule =
-		    match Rule.get_expansion rule with 
+		    if (rule_arity rule)-1 >= daughter then  
+        match Rule.get_expansion rule with 
 		      | PublicTerminating str -> map
 		      | PublicNonTerminating (rights, recipes) -> 
-		         	let key = NEList.nth rights 0 in
+		         	let key = NEList.nth rights daughter in
 			        if Grammar_Map.mem key map then 
 			          let prev_value = Grammar_Map.find key map in
 			          Grammar_Map.add key (rule::prev_value) map
-			        else Grammar_Map.add key [rule] map in
+			        else Grammar_Map.add key [rule] map 
+        else map in 
 		  List.fold_left load_map Grammar_Map.empty grammar 
 
-(*TODO: Not using the two next functions yet, not working properly. Speed win might be minimal, so might want to ditch them anyway*)
+(*builds a map out the provided items, using the nonterminal as the key*)
    let build_item_map items =
       let load_map map item =
         let key = get_nonterm item in
@@ -88,21 +91,13 @@ module MCFG_ParserGen =
         else Item_Map.add key [item] map in
       List.fold_left load_map Item_Map.empty items 
 
-    let filter_items map rule =
-      let rec filter' lst acc =
-        match lst with 
-          | [] -> acc 
-          | h::t -> 
-              try
-                  let res = Item_Map.find h map in
-                  filter' t (res::acc)
-              with _ ->
-                filter' t acc in
-      let rights = match Rule.get_expansion rule with 
-                     | PublicNonTerminating (rights, recipes) -> NEList.to_list rights
-                     | _ -> print_string "This should never happen..."; [] in
-     (*The concat might be slowing things down. Find a different way?*)
-     uniques (List.concat (filter' rights [])) 
+(*Add an item to the given item map*)
+    let add_item item_map item =
+      let key = get_nonterm item in 
+      if Item_Map.mem key item_map then 
+        let prev_value = Item_Map.find key item_map in
+        Item_Map.add key (item::prev_value) item_map
+      else Item_Map.add key [item] item_map 
      
                 
 (*TODO: Currently using build_items instead of this. Might want to remove it and change the interface*)
@@ -130,11 +125,11 @@ module MCFG_ParserGen =
                     None in
 		      optlistmap (combine' items) rules
 
+
     let build_items rules trigger items = 
      let build' rules item_list = 
-       (*let item_map = build_item_map item_list in*) 
        let combine' items rule =
-        match Rule.get_expansion rule with
+         match Rule.get_expansion rule with
           | PublicTerminating _ -> None
           | PublicNonTerminating (nts, f) -> 
             let left = Rule.get_nonterm rule in 
@@ -148,7 +143,6 @@ module MCFG_ParserGen =
                     RangesNotAdjacentException -> None
                 else
                     None in
-
 		    optlistmap (combine' item_list) rules in 
       let trigger_item = concatmap_tr (fun item -> (build' rules [trigger;item])) items in 
       let item_trigger =  concatmap_tr (fun item -> (build' rules [item;trigger])) items in
@@ -157,44 +151,67 @@ module MCFG_ParserGen =
 
 
 		(* Filter rules based on current items using the map*)
-		let filter_rules gram_map items = 
-		  let rec filter' lst acc =
-		      match lst with 
-			| [] -> acc
-			| h::t -> 
-			  (*if Grammar_Map.mem (get_nonterm h) gram_map then *)
-        try
-			    filter' t ((Grammar_Map.find (get_nonterm h) gram_map)::acc)
-			  with _ ->
-			    filter' t acc in 
-		  uniques (List.flatten (filter' items []))
+		let filter_rules rule_map trigger = 
+		  try
+		    Grammar_Map.find (get_nonterm trigger) rule_map
+			with _ -> []
+		
+    (*produce a chart which contains only relevant items based on the given rules*)
+    (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
+    let filter_chart item_map left_rules right_rules =
+      let arity_two_rules = List.filter (fun r -> (rule_arity r) = 2) in   (*Only want to be dealing with rules of arity 2*)
+      let left_rules = arity_two_rules left_rules in 
+      let right_rules = arity_two_rules right_rules in 
+      let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
+        match nonterms with 
+          | [] -> acc
+          | h::t -> if (Item_Map.mem h item_map) then
+                      get_items t ((Item_Map.find h item_map)::acc)
+                    else 
+                      get_items t acc in 
+      let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
+        match Rule.get_expansion rule with
+          | PublicNonTerminating (nts, recipes) -> List.nth (NEList.to_list nts) daughter
+          | _ -> failwith "Error filtering chart" in
+      let left_nts = List.map (get_nts 1) left_rules in   (*For right_rules, collect all the left daughters, opposite for left_rules*)
+      let right_nts = List.map (get_nts 0) right_rules in 
+      let left_items = get_items left_nts [] in
+      let right_items = get_items right_nts [] in 
+      List.flatten ( left_items @ right_items)
 	
-    let rec consequences max_depth prims chart q gram_map =
+    let rec consequences max_depth prims chart q tables =
       if (Queue.is_empty q)
       then chart
       else
         let trigger = Queue.pop q in
-          let possible_rules = filter_rules gram_map (trigger::chart) in 
+          let left_rules = filter_rules tables.lRule_map trigger in 
+
+          let right_rules = filter_rules tables.rRule_map trigger in
           
-          let all_new_items = build_items possible_rules trigger chart in 
+          let possible_rules = left_rules @ right_rules in
+          let possible_items = filter_chart tables.item_map left_rules right_rules in 
+          let all_new_items = build_items possible_rules trigger possible_items in 
          
           let useful_new_items = List.filter (fun x -> not (List.mem x chart)) all_new_items in  
          
           for i=0 to (List.length useful_new_items)-1 do
             Queue.add (List.nth useful_new_items i) q
           done;
-         
-          let chart' = chart@useful_new_items in
-          consequences (max_depth -1) prims chart' q gram_map
+          let item_map = List.fold_left (fun im item -> add_item im item) tables.item_map useful_new_items in
+          let tables = {lRule_map = tables.lRule_map; rRule_map = tables.rRule_map; item_map = item_map} in 
+          consequences (max_depth -1) prims (chart@useful_new_items) q tables
        
 	  let deduce max_depth prims input =
-	  let gram_map = build_map prims in 
+	  let left_map = build_map prims 0 in 
+    let right_map = build_map prims 1 in
 	  let axioms = get_axioms prims input in
+    let item_map = build_item_map axioms in 
+    let tables = {lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
     let queue = Queue.create () in 
     for i=0 to (List.length axioms)-1 do
       Queue.add (List.nth axioms i) queue 
     done;
-	 	  consequences max_depth prims axioms queue gram_map 
+	 	  consequences max_depth prims axioms queue tables 
        	end
 
 

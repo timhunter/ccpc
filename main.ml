@@ -186,10 +186,10 @@ let main =
 	run_sanity_check ["a";"a";"b";"a";"a";"b"] true ; 
 	run_sanity_check ["a";"a";"b";"b";"a";"a"] false ;
 	run_sanity_check ["a";"a";"b";"a";"a";"a";"b";"a"] true ;
-(*	run_test ["a"] ["a";"b";"a";"b"] true ;
+	run_test ["a"] ["a";"b";"a";"b"] true ;
 	run_test ["a"] ["b";"a";"b";"a"] false ;
 	run_test ["a";"b"] ["a";"a";"b";"b"] false ;
-	run_test ["a";"b"] ["a";"b";"b";"a";"b";"b"] true ;  *)
+	run_test ["a";"b"] ["a";"b";"b";"a";"b";"b"] true ;  
 	(* run_test ["a";"b"] ["a";"b";"a";"a";"a";"b";"a";"a"] true ; *)
 	end
 
