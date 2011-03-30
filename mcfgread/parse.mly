@@ -1,12 +1,13 @@
 %{
-open Grammar
+open Rule
+open Util
 %}
 
 %token ARROW NEWLINE EOF QUOTE LBRAC RBRAC COMMA INT CONCAT EPSILON
 %token <string> CAT TERM
 %token <int> INT
 %start mcfgrule
-%type <Grammar.t> mcfgrule
+%type <Rule.r list> mcfgrule
 %%
 
 mcfgrule:
@@ -14,23 +15,23 @@ mcfgrule:
 |  rule mcfgrule {$1::$2};
 
 rule:
-   CAT ARROW children stringyield NEWLINE {($1, $3, $4) }
-|  CAT ARROW QUOTE TERM QUOTE NEWLINE {($1, [$4], [[Component(0,0)]])}
-|  CAT ARROW QUOTE QUOTE NEWLINE {($1, [" "], [[]])};
+   CAT ARROW children stringyield NEWLINE {Rule.create_rule ($1, $3, $4)}
+|  CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($1, $4)}
+|  CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($1, " ")};
 
 children:
    CAT {[ $1 ]}
 |  CAT children {$1::$2};
 
 stringyield:
-   LBRAC component RBRAC { [$2] }
-|  LBRAC component RBRAC stringyield { $2 :: $4 };
+   LBRAC component RBRAC {Rule.create_tuplerecipe $2  }
+|  LBRAC component RBRAC stringyield { Rule.add_to_recipe $2 $4 };
 
 component:
    tuple { [$1] }
-|  EPSILON { [Epsilon] }
+|  EPSILON { [Rule.Epsilon] }
 |  tuple CONCAT component { $1 :: $3 }
-|  EPSILON CONCAT component { Epsilon :: $3 };
+|  EPSILON CONCAT component { Rule.Epsilon :: $3};
 
 tuple:
-   INT COMMA INT { Component($1,$3) };
+   INT COMMA INT { Rule.Component($1,$3) };

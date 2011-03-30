@@ -6,10 +6,11 @@ open Util
 open Rule
 open Deriver
 open Parser
+open Parse
 
 (******************************************************************************************)
 
-let sample_grammar =
+(*let sample_grammar =
 	let f1 = [[(0,0);(0,1)]] in
 	let f2 = [[(0,0)]; [(0,1)]] in
 	let f3 = [[(0,0);(1,0)]; [(0,1);(1,1)]] in
@@ -21,7 +22,13 @@ let sample_grammar =
 					  ("X", ["A";"A"], f4) ;
 					  ("X", ["B";"B"], f4) ] in
 	let rules2 = map_tr Rule.create_terminating [ ("A", "a") ; ("B", "b") ] in
-	rules1 @ rules2
+	rules1 @ rules2*)
+
+let sample_grammar =
+  try 	
+		let lexbuf = Lexing.from_channel stdin in
+		Parse.mcfgrule Lexer.token lexbuf 
+  with _ -> print_string "Can't parse input mcfg file\n"; exit 0
 
 (******************************************************************************************)
 

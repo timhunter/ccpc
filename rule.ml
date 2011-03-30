@@ -14,12 +14,15 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 
 module type RULE =
 	sig
+		type component = Component of int * int | Epsilon
 		type tuplerecipe
 		type r
 		val print_rule : r -> unit
 		val create_terminating : string * string -> r
-		val create_nonterminating : string * (string list) * ((int * int) list list) -> r
+		val create_nonterminating : string * (string list) * (component list list) -> r
 		val create_rule : string * (string list) * tuplerecipe -> r
+		val create_tuplerecipe : component list -> tuplerecipe
+		val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
 		val rule_arity : r -> int
 		val nonterm_degree : r -> int
 		val get_nonterm : r -> string
@@ -30,16 +33,20 @@ module type RULE =
 
 module Rule : RULE =
 	struct
-
-		type stringrecipe = (int * int) NEList.t
+    
+		type component = Component of int * int | Epsilon
+		type stringrecipe = component NEList.t
 		type tuplerecipe = stringrecipe NEList.t
 		type r = Terminating of (string * string) | NonTerminating of (string * string NEList.t * tuplerecipe)
 
 		(**********************************************************)
 
-		let getstr yields concat (i,j) =
-			let relevant_yield = List.nth yields i in
-			List.nth relevant_yield j
+		let getstr yields concat pair =
+			match pair with 
+				| Component (i,j) ->
+							let relevant_yield = List.nth yields i in
+							List.nth relevant_yield j
+			  | Epsilon -> failwith "Error, should not have encountered epsilon here"
 
 		let makestr list_of_pairs yields concat =
 			let pieces_to_concatenate = NEList.map (getstr yields concat) list_of_pairs in
@@ -53,6 +60,14 @@ module Rule : RULE =
 			| PublicTerminating s -> [s]
 			| PublicNonTerminating (_, srecipes) -> NEList.to_list (NEList.map (fun strfunc -> makestr strfunc yields (^)) srecipes)
 
+    let create_tuplerecipe lst =
+			NEList.from_list [(NEList.from_list lst)]
+
+		let add_to_recipe lst recipe =
+			let component = NEList.from_list lst in 
+			NEList.from_list (component::(NEList.to_list recipe))
+			
+			
 		(**********************************************************)
 
 		(* Input to these creation functions should be aggressively verified *)

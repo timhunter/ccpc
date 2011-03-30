@@ -1,9 +1,0 @@
-lexer.cmo: parse.cmi
-lexer.cmx: parse.cmx
-main.cmo: lexer.cmo parse.cmi main.cmi
-main.cmx: lexer.cmx parse.cmx main.cmi
-parse.cmo: parse.cmi grammar.cmi
-parse.cmx: parse.cmi grammar.cmi
-grammar.cmo: grammar.cmi
-grammar.cmx: grammar.cmi
-main.cmi: main.ml
