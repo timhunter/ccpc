@@ -26,8 +26,8 @@ open Parse
 
 let sample_grammar =
   try 	
-		let lexbuf = Lexing.from_channel stdin in
-		Parse.mcfgrule Lexer.token lexbuf 
+		let lexbuf = Lexing.from_channel stdin in 
+	  Parse.mcfgrule Lexer.token lexbuf  
   with _ -> print_string "Can't parse input mcfg file\n"; exit 0
 
 (******************************************************************************************)
@@ -89,7 +89,9 @@ let rec cartesian lists =
 let rec build_symbol sym ranges =
 	match ranges with
 	  [] -> sym
-	| ((p,q)::rs) -> build_symbol (sym ^ (Printf.sprintf "_%d%d" p q)) rs
+	| ((RangeVal p, RangeVal q)::rs) -> build_symbol (sym ^ (Printf.sprintf "_%d%d" p q)) rs
+	| ((EpsVar, EpsVar)::rs) -> build_symbol (sym ^ (Printf.sprintf "Epsilon")) rs
+  | _ -> failwith "Should not be mixing RangeVal with EpsVar!"
 
 let result_matches f input_ranges expected_result =
 	try
@@ -147,7 +149,7 @@ let intersection_grammar orig_grammar symbols =
 (* Top-level stuff for testing *)
 
 let derivations rules =
-  MCFG_Derivation_Deducer.deduce 6 rules MCFG_Deriver.null_input
+  MCFG_Derivation_Deducer.deduce 1 rules MCFG_Deriver.null_input
 
 
 
@@ -169,7 +171,7 @@ let parse_with_intersection prefix sentence =
 
 let run_test prefix sentence expected =
 	let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
-	let is_goal item = ((MCFG_ParserGen.get_nonterm item) = intersection_start_symbol) && (MCFG_ParserGen.get_ranges item = [(0, List.length sentence)]) in
+	let is_goal item = ((MCFG_ParserGen.get_nonterm item) = intersection_start_symbol) && (MCFG_ParserGen.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
 	let result = List.exists is_goal (parse_with_intersection prefix sentence) in
 	let show_result res = if res then "IN" else "OUT" in
 	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
@@ -188,7 +190,8 @@ let main =
         begin
 (*	 let complete_derivations = List.filter (MCFG_Deriver.is_goal ()) (derivations sample_grammar) in
 	Printf.printf "Pass?  %b\n" (List.mem (MCFG_Deriver.DerivItem("S", [["b"; "a"; "b"; "b"; "b"; "a"; "b"; "b"]])) complete_derivations) ; *)
-	run_sanity_check ["a";"a";"b";"b"] false ; 
+  run_sanity_check ["the";"fact";"that";"the";"girl";"who";"pay";"-ed";"for";"the";"ticket";"be";"-s";"very";"poor";"doesnt";"matter"] true ; 
+(*	run_sanity_check ["a";"a";"b";"b"] false ; 
 	run_sanity_check ["a";"b";"a";"b"] true ;
 	run_sanity_check ["a";"a";"b";"a";"a";"b"] true ; 
 	run_sanity_check ["a";"a";"b";"b";"a";"a"] false ;
@@ -196,7 +199,7 @@ let main =
 	run_test ["a"] ["a";"b";"a";"b"] true ;
 	run_test ["a"] ["b";"a";"b";"a"] false ;
 	run_test ["a";"b"] ["a";"a";"b";"b"] false ;
-	run_test ["a";"b"] ["a";"b";"b";"a";"b";"b"] true ;  
+	run_test ["a";"b"] ["a";"b";"b";"a";"b";"b"] true ;  *)
 	(* run_test ["a";"b"] ["a";"b";"a";"a";"a";"b";"a";"a"] true ; *)
 	end
 

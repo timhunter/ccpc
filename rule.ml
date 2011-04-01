@@ -15,7 +15,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 module type RULE =
 	sig
 		type component = Component of int * int | Epsilon
-		type tuplerecipe
+		type tuplerecipe 
 		type r
 		val print_rule : r -> unit
 		val create_terminating : string * string -> r
@@ -66,8 +66,7 @@ module Rule : RULE =
 		let add_to_recipe lst recipe =
 			let component = NEList.from_list lst in 
 			NEList.from_list (component::(NEList.to_list recipe))
-			
-			
+		
 		(**********************************************************)
 
 		(* Input to these creation functions should be aggressively verified *)
@@ -112,6 +111,15 @@ module Rule : RULE =
 
 		(**********************************************************)
 
+		let component_to_string prev tup = 
+		  let tup = match tup with
+				| Component (a,b) -> (a,b)
+				| Epsilon -> failwith "Should not have encountered epsilon here" in 
+			String.concat "" [(string_of_int (fst tup)); ","; (string_of_int(snd tup)); ";"; prev]
+		
+		let stringrecipe_to_string lst =
+			String.concat "" ["["; (List.fold_left component_to_string "" (List.rev (NEList.to_list lst))); "]"]
+	
 		let print_rule rule =
 			let left = get_nonterm rule in
 			let rhs_output = 
@@ -119,7 +127,12 @@ module Rule : RULE =
 				| PublicTerminating s -> s
 				| PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (NEList.to_list rights)
 			in
-			Printf.printf "%s  --->  %s\n" left rhs_output
+			let recipe =
+				match (get_expansion rule) with
+					| PublicTerminating s -> []
+					| PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (NEList.to_list recs) in
+			let recipe = String.concat "" recipe in 
+			Printf.printf "%s  --->  %s %s\n" left rhs_output recipe
 
 	end ;;
 

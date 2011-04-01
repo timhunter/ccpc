@@ -116,6 +116,18 @@ let find_in_list target lst =
 	find_in_list' target lst 0
 
 exception RangesNotAdjacentException
+
+type range_item = RangeVal of int | EpsVar
+
 let concat_ranges (i,j) (k,l) =
-	if (j = k) then (i,l) else (raise RangesNotAdjacentException)
+	match (i,j) with 
+		| (EpsVar, EpsVar) -> (match (k,l) with
+														| (EpsVar, EpsVar) -> (EpsVar, EpsVar)
+														| (RangeVal a, RangeVal b) -> (RangeVal a, RangeVal b)
+														| _ -> failwith "Should never mix EpsVar with RangeVal")
+		| (RangeVal a, RangeVal b) -> (match (k,l) with 
+																		| (EpsVar, EpsVar) -> (RangeVal a, RangeVal b)
+																		| (RangeVal c, RangeVal d) -> if (b = c) then (RangeVal a, RangeVal d) else (raise RangesNotAdjacentException)
+																		| _ -> failwith "Should never mix EpsVar with RangeVal")
+		| _ -> failwith "Should never mix EpsVar with RangeVal"
 

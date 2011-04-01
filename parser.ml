@@ -15,7 +15,7 @@ module MCFG_ParserGen =
 	struct
 
 		type prim = Rule.r
-		type item = ParseItem of string * ((int * int) list)
+		type item = ParseItem of string * ((range_item * range_item) list) (*range_item defined in Util*)
 		type input = Prefix of (string list) | Sentence of (string list)
     type tables = {lRule_map: Rule.r list Grammar_Map.t ; rRule_map: Rule.r list Grammar_Map.t ; item_map: item list Item_Map.t}
 
@@ -23,7 +23,7 @@ module MCFG_ParserGen =
 
 		let is_goal input item =
 			match input with
-			| Sentence strings -> item = ParseItem ("S", [(0, List.length strings)])
+			| Sentence strings -> item = ParseItem ("S", [(RangeVal 0, RangeVal (List.length strings))])
 			| Prefix strings -> failwith("Help! Start symbol isn't going to be S!")
 
 		let get_nonterm = function ParseItem(nt, _) -> nt
@@ -32,12 +32,15 @@ module MCFG_ParserGen =
 
 		let to_string item =
 			let ParseItem (nt, ranges) = item in
-			let range_strings = map_tr (fun (p,q) -> Printf.sprintf "(%d,%d)" p q) ranges in
+			let range_strings = map_tr (fun (p,q) -> match (p,q) with 
+																									| (EpsVar, EpsVar) -> Printf.sprintf "(Epsilon, Epsilon)"
+																									| (RangeVal a, RangeVal b) -> Printf.sprintf "(%d,%d)" a b  
+																									| _ -> failwith "Should never mix RangeVal and EpsVar!") ranges in 
 			Printf.sprintf "[%s, %s]" nt (List.fold_left (^) "" range_strings)
 
 		let get_axioms_parse grammar symbols =
 		        let indices = range 0 (List.length symbols) in
-			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [i,i+1]) else None in
+			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)]) else None in
 			let get_axiom symbols rule =
 				match Rule.get_expansion rule with
 				| PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str) indices
@@ -47,8 +50,8 @@ module MCFG_ParserGen =
 			
 		let get_axioms_intersect grammar prefix =
 			let len = List.length prefix in
-			let situated_axiom nt index = create_item nt [(index,index+1)] in
-			let unsituated_axiom nt = create_item nt [(len,len)] in
+			let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] in
+			let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] in
 			let get_axiom rule =
 				let nt = Rule.get_nonterm rule in
 				match Rule.get_expansion rule with
@@ -58,9 +61,17 @@ module MCFG_ParserGen =
 			concatmap_tr get_axiom grammar
 
 		let get_axioms grammar input =
-			match input with
-			| Prefix strings -> get_axioms_intersect grammar strings
-			| Sentence strings -> get_axioms_parse grammar strings
+		 	let from_symbols =	match input with
+				| Prefix strings -> get_axioms_intersect grammar strings
+				| Sentence strings -> get_axioms_parse grammar strings in 
+			let rec get_empties gram acc =
+				match gram with 
+					| [] -> acc
+					| h::t -> (match Rule.get_expansion h with 
+									  	|	PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar])::acc))
+																											 else get_empties t acc
+											| PublicNonTerminating _ -> get_empties t acc) in 
+			(get_empties grammar []) @ from_symbols 
 
 		let rule_arity rule = Rule.rule_arity rule
 
@@ -147,7 +158,10 @@ module MCFG_ParserGen =
       let trigger_item = concatmap_tr (fun item -> (build' rules [trigger;item])) items in 
       let item_trigger =  concatmap_tr (fun item -> (build' rules [item;trigger])) items in
       let trigger_only = (build' rules) [trigger] in 
-      trigger_item @ item_trigger @ trigger_only 
+			let empty = create_item "E" [EpsVar, EpsVar] in 
+			let emp_before = (build' rules) [empty; trigger] in 
+			let emp_after = (build' rules) [trigger; empty] in
+      emp_before@emp_after@trigger_item @ item_trigger @ trigger_only 
 
 
 		(* Filter rules based on current items using the map*)
@@ -202,16 +216,16 @@ module MCFG_ParserGen =
           consequences (max_depth -1) prims (chart@useful_new_items) q tables
        
 	  let deduce max_depth prims input =
-	  let left_map = build_map prims 0 in 
+		let left_map = build_map prims 0 in 
     let right_map = build_map prims 1 in
-	  let axioms = get_axioms prims input in
+		let axioms = (get_axioms prims input) in
     let item_map = build_item_map axioms in 
     let tables = {lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
     let queue = Queue.create () in 
     for i=0 to (List.length axioms)-1 do
       Queue.add (List.nth axioms i) queue 
     done;
-	 	  consequences max_depth prims axioms queue tables 
+	 	   consequences max_depth prims axioms queue tables 
        	end
 
 
