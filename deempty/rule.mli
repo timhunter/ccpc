@@ -2,6 +2,6 @@
  * either a Component or Epsilon *)
 type component = Component of int*int | Epsilon
 type t = string * string list * (component list list)
-let get_cat (cat, children, rewrite) = cat
-let get_children (cat, children, rewrite) = children
-let get_rewrite (cat, children, rewrite) = rewrite
+val get_cat : t -> string
+val get_children : t -> string list
+val get_rewrite : t -> component list list

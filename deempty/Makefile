@@ -8,7 +8,7 @@ YACC=ocamlyacc
 FLAGS=
 NATIVEFLAGS=$(FLAGS) -inline 32 -ccopt "-O3"
 
-OCAMLINT=nullcomponenttable.cmi rule.cmo parse.cmi utilities.cmi deempty.cmi
+OCAMLINT=nullcomponenttable.cmi rule.cmi parse.cmi utilities.cmi deempty.cmi
 OCAMLOBJ=nullcomponenttable.cmo rule.cmo parse.cmo lexer.cmo deempty.cmo utilities.cmo main.cmo
 NATIVEOBJ=nullcomponenttable.cmx rule.cmx parse.cmx lexer.cmx deempty.cmx utilities.cmx main.cmx
 
@@ -23,14 +23,15 @@ all: $(TARGET) $(TARGET)_opt
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx $(TARGET) $(TARGET)_opt
 
+%.cmi: %.mli
+	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
+
 %.cmx: %.ml
 	$(COMPILER_NATIVE) $(NATIVEFLAGS) -c $*.ml
 
 %.cmo: %.ml
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
 
-%.cmi: %.mli
-	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
 
 %.ml: %.mll
 	$(LEX) $*.mll
