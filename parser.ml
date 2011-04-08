@@ -84,7 +84,7 @@ module MCFG_ParserGen =
         match Rule.get_expansion rule with 
 		      | PublicTerminating str -> map
 		      | PublicNonTerminating (rights, recipes) -> 
-		         	let key = NEList.nth rights daughter in
+		         	let key = Nelist.nth rights daughter in
 			        if Grammar_Map.mem key map then 
 			          let prev_value = Grammar_Map.find key map in
 			          Grammar_Map.add key (rule::prev_value) map
@@ -127,7 +127,7 @@ module MCFG_ParserGen =
                 done;
 
                 let item_ranges = map_tr get_ranges items in
-                if item_nonterms = NEList.to_list nts then
+                if item_nonterms = Nelist.to_list nts then
                   try
                     Some (create_item left (Rule.apply f item_ranges concat_ranges))
                   with
@@ -147,7 +147,7 @@ module MCFG_ParserGen =
             (*let possible_items = filter_items item_map rule in*)
             let item_nonterms = map_tr get_nonterm items in 
             let item_ranges = map_tr get_ranges items in 
-            if item_nonterms = NEList.to_list nts then
+            if item_nonterms = Nelist.to_list nts then
                 try
                     Some (create_item left (Rule.apply f item_ranges concat_ranges))
                   with
@@ -185,7 +185,7 @@ module MCFG_ParserGen =
                       get_items t acc in 
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
         match Rule.get_expansion rule with
-          | PublicNonTerminating (nts, recipes) -> List.nth (NEList.to_list nts) daughter
+          | PublicNonTerminating (nts, recipes) -> List.nth (Nelist.to_list nts) daughter
           | _ -> failwith "Error filtering chart" in
       let left_nts = List.map (get_nts 1) left_rules in   (*For right_rules, collect all the left daughters, opposite for left_rules*)
       let right_nts = List.map (get_nts 0) right_rules in 

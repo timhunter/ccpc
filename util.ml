@@ -21,46 +21,8 @@ let concatmap_tr f lsts =
 	in concatmap' f lsts []
 
 
-(***************************)
-(*** Non-empty list type ***)
-
-module type LISTLIKE =
-	sig
-		type 'a t
-		val cons : 'a -> 'a t -> 'a t
-		val length : 'a t -> int
-		val map : ('a -> 'b) -> 'a t -> 'b t
-		val fold : ('a -> 'a -> 'a) -> 'a t -> 'a
-		val from_list : 'a list -> 'a t
-		val to_list : 'a t -> 'a list
-		val nth : 'a t -> int -> 'a
-	end ;;
 
 exception EmptyListException
-module NEList : LISTLIKE =
-	struct
-
-		type 'a t = NonEmptyList of ('a * ('a list))
-
-		let cons x (NonEmptyList (y,ys)) = NonEmptyList (x, y::ys)
-		let length (NonEmptyList (x,xs)) = 1 + List.length xs
-
-		let map f (NonEmptyList (x,xs)) = NonEmptyList(f x, map_tr f xs)
-
-		let fold f (NonEmptyList (x,xs)) = List.fold_left f x xs
-		let from_list lst =
-			match lst with
-			| [] -> raise EmptyListException
-			| (x::xs) -> NonEmptyList(x,xs)
-		let to_list (NonEmptyList(x,xs)) = x::xs
-		let nth (NonEmptyList (x,xs)) i  =
-		  match i with
-		    | 0 -> x
-		    | _ -> List.nth xs (i-1)
-	end ;;
-
-(***************************)
-(***************************)
 
 let optlistmap f xs =
 	let rec optlistmap' f lst acc =

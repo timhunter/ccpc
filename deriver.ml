@@ -40,7 +40,7 @@ module MCFG_Deriver =
 				| PublicNonTerminating (nts, f) ->
 					let left = Rule.get_nonterm rule in
 					let yields = List.map get_ntyield items in
-					if ((List.map get_nonterm items) = (NEList.to_list nts)) then (Some (DerivItem(left, Rule.apply f yields (@)))) else None
+					if ((List.map get_nonterm items) = (Nelist.to_list nts)) then (Some (DerivItem(left, Rule.apply f yields (@)))) else None
 			in
 			optlistmap (build_nary' items) rules
 		

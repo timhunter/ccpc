@@ -114,13 +114,13 @@ let intersection_rules_per_rule all_items item rule =
 	| PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str)], [])
 	| PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
 		let items_headed_by nt = List.filter (fun item -> (MCFG_ParserGen.get_nonterm item) = nt) all_items in
-		let items_grouped = NEList.to_list (NEList.map items_headed_by nts') in
+		let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
 		let item_combinations = cartesian items_grouped in
 		let ranges_from_item_comb items = map_tr MCFG_ParserGen.get_ranges items in
 		let function_inputs = map_tr ranges_from_item_comb item_combinations in
 		let defined_function_inputs = List.filter (fun input -> result_matches func input (MCFG_ParserGen.get_ranges item)) function_inputs in
 		(* results_to_combine :: (Rule.r * MCFG_ParserGen.item list) list *)
-		let results_to_combine = map_tr (make_new_rule sit_nonterm (NEList.to_list nts') func) defined_function_inputs in
+		let results_to_combine = map_tr (make_new_rule sit_nonterm (Nelist.to_list nts') func) defined_function_inputs in
 		let new_rules = map_tr fst results_to_combine in
 		let new_agenda_items = concatmap_tr snd results_to_combine in
 		(new_rules, new_agenda_items)

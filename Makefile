@@ -10,9 +10,13 @@ LEX=ocamllex
 YACC=ocamlyacc
 
 FLAGS= -I mcfgread
+OCAMLINT= util.cmo nelist.cmi rule.cmi mcfgread/parse.cmi util.cmi 
+OCAMLOBJ= util.cmo nelist.cmo rule.cmo mcfgread/parse.cmo mcfgread/lexer.cmo deriver.cmo parser.cmo main.cmo
 
-$(EXE)_bc: util.cmo rule.cmo mcfgread/parse.cmo mcfgread/lexer.cmo deriver.cmo parser.cmo main.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $^
+
+
+$(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ)
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(OCAMLOBJ)
 
 $(EXE)_nt: util.cmx rule.cmx deriver.cmx parser.cmx main.cmx
 	$(COMPILER_NATIVE) -o $@ $^
