@@ -35,7 +35,7 @@ let rule_needs_update ((tok, rw, sy) : Rule.t) : bool =
   let lst = List.flatten sy in
   List.fold_left (fun acc (i,j) -> if List.mem (Component(i,j)) lst then true else acc) false (lookup_nullcomponents rw)
     
-(* find out if a grammar contains rules that need to updated *)
+(* find out if a grammar contains rules that need to be updated *)
 let grammar_needs_update g = 
   List.fold_left (fun acc r -> (rule_needs_update r) || acc) false g
     
@@ -78,7 +78,12 @@ let modify_grammar (g : grammar) : grammar =
     else g in
   mod_grammar g
 
-(* remove all rules that contain only epsilon in the string yield *)
+(* remove all epsilons from string yield
+ * then remove all rules with an empty string yield *)
 let clean_grammar (g : grammar) : grammar =
-  let all_epsilons sy = List.fold_left (fun acc c -> acc && c=Epsilon) true (List.flatten sy) in
-  List.filter (fun (_,_,sy) -> not (all_epsilons sy)) g
+  let remove_epsilon = List.map (List.filter (fun c -> not (c = Epsilon))) in
+  let remove_emptylst = (List.filter (fun lst -> not (lst=[]))) in
+  let clean_sy sy = remove_emptylst (remove_epsilon sy) in
+  let remove_empty_rules = List.filter (fun (cat,children,sy) -> not (sy=[])) in
+  let g = List.map (fun (cat,children,sy) -> (cat,children,(clean_sy sy))) g in
+  remove_empty_rules g

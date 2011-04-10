@@ -21,7 +21,10 @@ let string_of_grammar (g : Rule.t list) =
 	  | _ -> if (compare ret "[]") == 0 then "" else ret) 
      in
      let show_rule ((t,rw,sy) : Rule.t) =
-       t^" --> "^(show_rw "" rw)^(show_sy "" sy)
+       let rw_str = show_rw "" rw in
+       if (String.length rw_str) >= 1 && rw_str.[0]=='\"'
+       then t^" --> "^rw_str
+       else t^" --> "^rw_str^(show_sy "" sy)
      in
      match g with
 	 h::t -> grammar_to_string (ret^(show_rule h)^"\n") t

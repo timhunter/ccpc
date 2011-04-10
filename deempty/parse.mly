@@ -15,7 +15,7 @@ mcfgrule:
 
 rule:
    CAT ARROW children stringyield NEWLINE {($1, $3, $4) }
-|  CAT ARROW QUOTE TERM QUOTE NEWLINE {($1, [$4], [[Component(0,0)]])}
+|  CAT ARROW QUOTE TERM QUOTE NEWLINE {($1, ["\""^$4^"\""], [[Component(0,0)]])}
 |  CAT ARROW QUOTE QUOTE NEWLINE {($1, [""], [[]])};
 
 children:

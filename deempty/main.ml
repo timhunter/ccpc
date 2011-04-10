@@ -8,6 +8,7 @@ let main () =
      g := (Parse.mcfgrule Lexer.token lexbuf)
    with 
        _ -> print_string "Can't parse input mcfg file\n");
-  print_string (Utilities.string_of_grammar (Deempty.modify_grammar !g))
+  g := Deempty.clean_grammar (Deempty.modify_grammar !g);
+  print_string (Utilities.string_of_grammar !g)
 
 let _ = Printexc.print main ()
