@@ -25,8 +25,9 @@ open Parse
 	rules1 @ rules2*)
 
 let sample_grammar =
-  try 	
-		let lexbuf = Lexing.from_channel stdin in 
+  try 
+		let channel = open_in Sys.argv.(1) in 
+		let lexbuf = Lexing.from_channel channel in 
 	  Parse.mcfgrule Lexer.token lexbuf  
   with _ -> print_string "Can't parse input mcfg file\n"; exit 0
 
@@ -188,9 +189,11 @@ let run_sanity_check sentence expected =
 
 let main =
         begin
+	let sentence = Util.split ' ' Sys.argv.(2) in
 (*	 let complete_derivations = List.filter (MCFG_Deriver.is_goal ()) (derivations sample_grammar) in
 	Printf.printf "Pass?  %b\n" (List.mem (MCFG_Deriver.DerivItem("S", [["b"; "a"; "b"; "b"; "b"; "a"; "b"; "b"]])) complete_derivations) ; *)
-  run_sanity_check ["the";"fact";"that";"the";"girl";"who";"pay";"-ed";"for";"the";"ticket";"be";"-s";"very";"poor";"doesnt";"matter"] true ; 
+  (*run_sanity_check ["the";"fact";"that";"the";"girl";"who";"pay";"-ed";"for";"the";"ticket";"be";"-s";"very";"poor";"doesnt";"matter"] true ; *)
+	run_sanity_check sentence true ;
 (*	run_sanity_check ["a";"a";"b";"b"] false ; 
 	run_sanity_check ["a";"b";"a";"b"] true ;
 	run_sanity_check ["a";"a";"b";"a";"a";"b"] true ; 

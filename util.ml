@@ -21,7 +21,6 @@ let concatmap_tr f lsts =
 	in concatmap' f lsts []
 
 
-
 exception EmptyListException
 
 let optlistmap f xs =
@@ -76,6 +75,15 @@ let find_in_list target lst =
 			if (x = target) then (n::rest) else rest
 	in
 	find_in_list' target lst 0
+
+let rec split sep str =
+  try
+    let i = String.index str sep in
+    String.sub str 0 i ::
+      split sep (String.sub str (i+1) (String.length str - i - 1))
+  with Not_found ->
+    [str] 
+
 
 exception RangesNotAdjacentException
 
