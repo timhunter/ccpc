@@ -188,12 +188,18 @@ let run_sanity_check sentence expected =
 	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 
 let main =
-        begin
-	let sentence = Util.split ' ' Sys.argv.(2) in
+  begin
+		try
+			match Sys.argv.(2) with
+				"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
+								let sentence = Util.split ' ' Sys.argv.(4) in
+								run_test prefix sentence true)
+				| _ -> (let sentence = Util.split ' ' Sys.argv.(2) in
+	  							run_sanity_check sentence true) ;
+		with _ -> failwith "Improper input to mcfgcky2"
 (*	 let complete_derivations = List.filter (MCFG_Deriver.is_goal ()) (derivations sample_grammar) in
 	Printf.printf "Pass?  %b\n" (List.mem (MCFG_Deriver.DerivItem("S", [["b"; "a"; "b"; "b"; "b"; "a"; "b"; "b"]])) complete_derivations) ; *)
   (*run_sanity_check ["the";"fact";"that";"the";"girl";"who";"pay";"-ed";"for";"the";"ticket";"be";"-s";"very";"poor";"doesnt";"matter"] true ; *)
-	run_sanity_check sentence true ;
 (*	run_sanity_check ["a";"a";"b";"b"] false ; 
 	run_sanity_check ["a";"b";"a";"b"] true ;
 	run_sanity_check ["a";"a";"b";"a";"a";"b"] true ; 
