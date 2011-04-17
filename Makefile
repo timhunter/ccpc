@@ -10,8 +10,8 @@ LEX=ocamllex
 YACC=ocamlyacc
 
 FLAGS= -I mcfgread
-OCAMLINT= util.cmo nelist.cmi rule.cmi mcfgread/parse.cmi util.cmi 
-OCAMLOBJ= util.cmo nelist.cmo rule.cmo mcfgread/parse.cmo mcfgread/lexer.cmo deriver.cmo parser.cmo main.cmo
+OCAMLINT= util.cmo nelist.cmi rule.cmi parser.cmi mcfgread/read.cmi util.cmi 
+OCAMLOBJ= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo deriver.cmo parser.cmo main.cmo
 
 
 
