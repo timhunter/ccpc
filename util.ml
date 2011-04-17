@@ -1,3 +1,12 @@
+module Key =
+  struct
+    type t = string
+    let compare = String.compare
+  end;;
+
+module Grammar_Map = Map.Make(Key);;
+
+module Item_Map = Map.Make(Key);;
 
 let reverse_tr lst =
 	let rec reverse' lst acc =

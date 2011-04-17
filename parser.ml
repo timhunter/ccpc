@@ -1,46 +1,39 @@
 open Util
 open Rule
 
-module Key =
-  struct
-    type t = string
-    let compare = String.compare
-  end;;
 
-module Grammar_Map = Map.Make(Key);;
-
-module Item_Map = Map.Make(Key);;
-
-module MCFG_ParserGen =
-	struct
 
 		type prim = Rule.r
-		type item = ParseItem of string * ((range_item * range_item) list) (*range_item defined in Util*)
+		type backpointer = item option * item option
+		and item = ParseItem of string * ((range_item * range_item) list) * backpointer option (*range_item defined in Util*) 
 		type input = Prefix of (string list) | Sentence of (string list)
-    type tables = {lRule_map: Rule.r list Grammar_Map.t ; rRule_map: Rule.r list Grammar_Map.t ; item_map: item list Item_Map.t}
+    type tables = {lRule_map: (string, Rule.r list) Hashtbl.t ; rRule_map: (string, Rule.r list) Hashtbl.t ; item_map: (string, item list) Hashtbl.t}
 
-    let create_item str ranges = ParseItem(str, ranges)
+    let create_item str ranges bp = ParseItem(str, ranges, bp)
+		let get_ranges = function ParseItem(_, rs,_) -> rs
+   
+		let get_nonterm = function ParseItem(nt, _,_) -> nt
+		let get_backpointer = function ParseItem(_,_,bp) -> bp
 
 		let is_goal input item =
 			match input with
-			| Sentence strings -> item = ParseItem ("S", [(RangeVal 0, RangeVal (List.length strings))])
+			| Sentence strings -> (get_nonterm item = "S") && (get_ranges item = [(RangeVal 0, RangeVal (List.length strings))])
 			| Prefix strings -> failwith("Help! Start symbol isn't going to be S!")
 
-		let get_nonterm = function ParseItem(nt, _) -> nt
 
-		let get_ranges = function ParseItem(_, rs) -> rs
 
 		let to_string item =
-			let ParseItem (nt, ranges) = item in
+			let ParseItem (nt, ranges, bp) = item in
 			let range_strings = map_tr (fun (p,q) -> match (p,q) with 
 																									| (EpsVar, EpsVar) -> Printf.sprintf "(Epsilon, Epsilon)"
 																									| (RangeVal a, RangeVal b) -> Printf.sprintf "(%d,%d)" a b  
 																									| _ -> failwith "Should never mix RangeVal and EpsVar!") ranges in 
-			Printf.sprintf "[%s, %s]" nt (List.fold_left (^) "" range_strings)
+			  Printf.sprintf "[%s, %s]" nt (List.fold_left (^) "" range_strings) 
+
 
 		let get_axioms_parse grammar symbols =
 		        let indices = range 0 (List.length symbols) in
-			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)]) else None in
+			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None) else None in
 			let get_axiom symbols rule =
 				match Rule.get_expansion rule with
 				| PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str) indices
@@ -50,8 +43,8 @@ module MCFG_ParserGen =
 			
 		let get_axioms_intersect grammar prefix =
 			let len = List.length prefix in
-			let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] in
-			let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] in
+			let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] None in
+			let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] None in
 			let get_axiom rule =
 				let nt = Rule.get_nonterm rule in
 				match Rule.get_expansion rule with
@@ -68,7 +61,7 @@ module MCFG_ParserGen =
 				match gram with 
 					| [] -> acc
 					| h::t -> (match Rule.get_expansion h with 
-									  	|	PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar])::acc))
+									  	|	PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None)::acc))
 																											 else get_empties t acc
 											| PublicNonTerminating _ -> get_empties t acc) in 
 			(get_empties grammar []) @ from_symbols 
@@ -82,33 +75,37 @@ module MCFG_ParserGen =
 		  let load_map map rule =
 		    if (rule_arity rule)-1 >= daughter then  
         match Rule.get_expansion rule with 
-		      | PublicTerminating str -> map
+		      | PublicTerminating str -> () 
 		      | PublicNonTerminating (rights, recipes) -> 
 		         	let key = Nelist.nth rights daughter in
-			        if Grammar_Map.mem key map then 
-			          let prev_value = Grammar_Map.find key map in
-			          Grammar_Map.add key (rule::prev_value) map
-			        else Grammar_Map.add key [rule] map 
-        else map in 
-		  List.fold_left load_map Grammar_Map.empty grammar 
+			        if Hashtbl.mem map key then 
+			          let prev_value = Hashtbl.find map key in
+			          Hashtbl.add map key (rule::prev_value) 
+			        else Hashtbl.add map key [rule]  
+        else () in
+			let tbl = Hashtbl.create 100 in 
+		  List.iter (load_map tbl) grammar;
+			tbl
 
 (*builds a map out the provided items, using the nonterminal as the key*)
    let build_item_map items =
       let load_map map item =
         let key = get_nonterm item in
-        if Item_Map.mem key map then
-          let prev_value = Item_Map.find key map in
-          Item_Map.add key (item::prev_value) map 
-        else Item_Map.add key [item] map in
-      List.fold_left load_map Item_Map.empty items 
+        if Hashtbl.mem map key then
+          let prev_value = Hashtbl.find map key in
+          Hashtbl.add map key (item::prev_value) 
+        else Hashtbl.add map key [item] in
+			let tbl = Hashtbl.create 100 in 
+      List.iter (load_map tbl) items;
+			tbl
 
 (*Add an item to the given item map*)
     let add_item item_map item =
       let key = get_nonterm item in 
-      if Item_Map.mem key item_map then 
-        let prev_value = Item_Map.find key item_map in
-        Item_Map.add key (item::prev_value) item_map
-      else Item_Map.add key [item] item_map 
+      if Hashtbl.mem item_map key then 
+        let prev_value = Hashtbl.find item_map key in
+        Hashtbl.add item_map key (item::prev_value) 
+      else Hashtbl.add item_map key [item] 
      
                 
 (*TODO: Currently using build_items instead of this. Might want to remove it and change the interface*)
@@ -129,7 +126,7 @@ module MCFG_ParserGen =
                 let item_ranges = map_tr get_ranges items in
                 if item_nonterms = Nelist.to_list nts then
                   try
-                    Some (create_item left (Rule.apply f item_ranges concat_ranges))
+                    Some (create_item left (Rule.apply f item_ranges concat_ranges) None)
                   with
                     RangesNotAdjacentException -> None
                 else
@@ -149,8 +146,11 @@ module MCFG_ParserGen =
             let item_ranges = map_tr get_ranges items in 
             if item_nonterms = Nelist.to_list nts then
                 try
-                    Some (create_item left (Rule.apply f item_ranges concat_ranges))
-                  with
+                    match items with 
+										 [h] ->	Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
+										 | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t))) 
+										 | _ -> failwith "List can only have one or two items"
+			         with
                     RangesNotAdjacentException -> None
                 else
                     None in
@@ -158,16 +158,13 @@ module MCFG_ParserGen =
       let trigger_item = concatmap_tr (fun item -> (build' rules [trigger;item])) items in 
       let item_trigger =  concatmap_tr (fun item -> (build' rules [item;trigger])) items in
       let trigger_only = (build' rules) [trigger] in 
-			let empty = create_item "E" [EpsVar, EpsVar] in 
-			let emp_before = (build' rules) [empty; trigger] in 
-			let emp_after = (build' rules) [trigger; empty] in
-      emp_before@emp_after@trigger_item @ item_trigger @ trigger_only 
+      trigger_item @ item_trigger @ trigger_only 
 
 
 		(* Filter rules based on current items using the map*)
 		let filter_rules rule_map trigger = 
 		  try
-		    Grammar_Map.find (get_nonterm trigger) rule_map
+		    Hashtbl.find rule_map (get_nonterm trigger)
 			with _ -> []
 		
     (*produce a chart which contains only relevant items based on the given rules*)
@@ -179,8 +176,8 @@ module MCFG_ParserGen =
       let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
         match nonterms with 
           | [] -> acc
-          | h::t -> if (Item_Map.mem h item_map) then
-                      get_items t ((Item_Map.find h item_map)::acc)
+          | h::t -> if (Hashtbl.mem item_map h) then
+                      get_items t ((Hashtbl.find item_map h)::acc)
                     else 
                       get_items t acc in 
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
@@ -211,8 +208,8 @@ module MCFG_ParserGen =
           for i=0 to (List.length useful_new_items)-1 do
             Queue.add (List.nth useful_new_items i) q
           done;
-          let item_map = List.fold_left (fun im item -> add_item im item) tables.item_map useful_new_items in
-          let tables = {lRule_map = tables.lRule_map; rRule_map = tables.rRule_map; item_map = item_map} in 
+          List.iter (fun item -> add_item tables.item_map item) useful_new_items; 
+         (* let tables = {lRule_map = tables.lRule_map; rRule_map = tables.rRule_map; item_map = item_map} in *)
           consequences (max_depth -1) prims (chart@useful_new_items) q tables
        
 	  let deduce max_depth prims input =
@@ -225,7 +222,6 @@ module MCFG_ParserGen =
     for i=0 to (List.length axioms)-1 do
       Queue.add (List.nth axioms i) queue 
     done;
-	 	   consequences max_depth prims axioms queue tables 
-       	end
+	 	consequences max_depth prims axioms queue tables  
 
 

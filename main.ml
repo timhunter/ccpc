@@ -6,7 +6,7 @@ open Util
 open Rule
 open Deriver
 open Parser
-open Parse
+open Read 
 
 (******************************************************************************************)
 
@@ -28,7 +28,7 @@ let sample_grammar =
   try 
 		let channel = open_in Sys.argv.(1) in 
 		let lexbuf = Lexing.from_channel channel in 
-	  Parse.mcfgrule Lexer.token lexbuf  
+	  Read.mcfgrule Lexer.token lexbuf  
   with _ -> print_string "Can't parse input mcfg file\n"; exit 0
 
 (******************************************************************************************)
@@ -38,11 +38,11 @@ module type DEDUCTIVE_SYSTEM =
 		type prim  (* eg. a list of these makes up a grammar *)
 		type item  (* the things we deduce *)
 		type input (* once-off input, eg. a sentence or a prefix *)
-		val get_axioms : prim list -> input -> item list
+		val get_axioms : Rule.r list -> input -> item list
 		val is_goal : input -> item -> bool
-		val max_arity : prim list -> int
-		val rule_arity : prim -> int
-		val build_nary : prim list -> item list -> item list
+		val max_arity : Rule.r list -> int
+		val rule_arity : Rule.r -> int
+		val build_nary : Rule.r list -> item list -> item list
 	end ;;
 
 module Deducer = functor (D : DEDUCTIVE_SYSTEM) ->
@@ -71,7 +71,7 @@ module Deducer = functor (D : DEDUCTIVE_SYSTEM) ->
 	end;;
 
 module MCFG_Derivation_Deducer = Deducer(MCFG_Deriver)
-module MCFG_ParseGen_Deducer = Deducer(MCFG_ParserGen) 
+module MCFG_ParseGen_Deducer = Deducer(Parser) 
 
 (******************************************************************************************)
 (* Extract the intersection grammar *)
@@ -102,7 +102,12 @@ let result_matches f input_ranges expected_result =
 
 let make_new_rule sit_nonterm rights func range_lists =
 	let new_rights = List.map2 build_symbol rights range_lists in
-	let new_agenda_items = List.map2 MCFG_ParserGen.create_item rights range_lists in
+	let new_agenda_items = List.map2 Parser.create_item rights range_lists in
+	let rec add_nones lst acc =
+		match lst with 
+			[] -> acc
+			| h::t -> add_nones t ((h None)::acc) in
+  let new_agenda_items =	add_nones new_agenda_items [] in 
 	(Rule.create_rule (sit_nonterm, new_rights, func), new_agenda_items)
 
 (* NB: There is a "bug" in Albro's dissertation where he describes this algorithm.
@@ -110,24 +115,24 @@ let make_new_rule sit_nonterm rights func range_lists =
        "check whether f is well-defined and evaluates to the ranges in the trigger item".
  *)
 let intersection_rules_per_rule all_items item rule =
-	let sit_nonterm = build_symbol (MCFG_ParserGen.get_nonterm item) (MCFG_ParserGen.get_ranges item) in
+	let sit_nonterm = build_symbol (Parser.get_nonterm item) (Parser.get_ranges item) in
 	match Rule.get_expansion rule with
 	| PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str)], [])
 	| PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
-		let items_headed_by nt = List.filter (fun item -> (MCFG_ParserGen.get_nonterm item) = nt) all_items in
+		let items_headed_by nt = List.filter (fun item -> (Parser.get_nonterm item) = nt) all_items in
 		let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
 		let item_combinations = cartesian items_grouped in
-		let ranges_from_item_comb items = map_tr MCFG_ParserGen.get_ranges items in
+		let ranges_from_item_comb items = map_tr Parser.get_ranges items in
 		let function_inputs = map_tr ranges_from_item_comb item_combinations in
-		let defined_function_inputs = List.filter (fun input -> result_matches func input (MCFG_ParserGen.get_ranges item)) function_inputs in
-		(* results_to_combine :: (Rule.r * MCFG_ParserGen.item list) list *)
+		let defined_function_inputs = List.filter (fun input -> result_matches func input (Parser.get_ranges item)) function_inputs in
+		(* results_to_combine :: (Rule.r * Parser.item list) list *)
 		let results_to_combine = map_tr (make_new_rule sit_nonterm (Nelist.to_list nts') func) defined_function_inputs in
 		let new_rules = map_tr fst results_to_combine in
 		let new_agenda_items = concatmap_tr snd results_to_combine in
 		(new_rules, new_agenda_items)
 
 let new_intersection_grammar_rules orig_grammar chart item =
-	let relevant_rules = List.filter (fun rule -> (Rule.get_nonterm rule = MCFG_ParserGen.get_nonterm item)) orig_grammar in
+	let relevant_rules = List.filter (fun rule -> (Rule.get_nonterm rule = Parser.get_nonterm item)) orig_grammar in
 	let results_to_combine = map_tr (intersection_rules_per_rule chart item) relevant_rules in               (* (rule list * item list) list *)
 	let new_rules = concatmap_tr fst results_to_combine in
 	let new_agenda_items = concatmap_tr snd results_to_combine in
@@ -142,8 +147,8 @@ let rec build_intersection_grammar orig_grammar chart (agenda,i) grammar_so_far 
 		build_intersection_grammar orig_grammar chart (uniques (agenda @ new_agenda_items), i+1) (grammar_so_far @ new_rules)
 
 let intersection_grammar orig_grammar symbols =
-	let chart = uniques (MCFG_ParserGen.deduce (-1) orig_grammar (MCFG_ParserGen.Prefix symbols)) in
-	let goal_items = List.filter (MCFG_ParserGen.is_goal (MCFG_ParserGen.Sentence symbols)) chart in
+	let chart = uniques (Parser.deduce (-1) orig_grammar (Parser.Prefix symbols)) in
+	let goal_items = List.filter (Parser.is_goal (Parser.Sentence symbols)) chart in
 	uniques (build_intersection_grammar orig_grammar chart (goal_items,0) [])
 
 (******************************************************************************************)
@@ -155,8 +160,8 @@ let derivations rules =
 
 
 let parse rules symbols = 
-(*  MCFG_ParseGen_Deducer.deduce (-1) rules (MCFG_ParserGen.Sentence symbols)*)
-	MCFG_ParserGen.deduce (-1) rules (MCFG_ParserGen.Sentence symbols)
+(*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
+	Parser.deduce (-1) rules (Parser.Sentence symbols)
 
 
 let parse_with_intersection prefix sentence =
@@ -172,20 +177,38 @@ let parse_with_intersection prefix sentence =
 
 let run_test prefix sentence expected =
 	let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
-	let is_goal item = ((MCFG_ParserGen.get_nonterm item) = intersection_start_symbol) && (MCFG_ParserGen.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
+	let is_goal item = ((Parser.get_nonterm item) = intersection_start_symbol) && (Parser.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
 	let result = List.exists is_goal (parse_with_intersection prefix sentence) in
 	let show_result res = if res then "IN" else "OUT" in
 	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
 	Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
 	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 
+let rec print_tree item level =
+	let backpointer = Parser.get_backpointer item in 
+	Printf.printf "\n";
+  for i=0 to level do
+		Printf.printf "    "
+	done;
+	Printf.printf "%s" (Parser.to_string item);
+	match backpointer with 
+		None -> ()
+		| Some (Some a, None) ->  print_tree a (level+1)
+		| Some (Some a, Some b) -> print_tree a (level+1); print_tree b (level+1)
+		| _ -> failwith "Invalid Parent backpointer"
+
 let run_sanity_check sentence expected =
-	let goal_items = List.filter (MCFG_ParserGen.is_goal (MCFG_ParserGen.Sentence sentence)) (parse sample_grammar sentence) in 
+	let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) (parse sample_grammar sentence) in 
 	let result = goal_items <> [] in
 	let show_result res = if res then "IN" else "OUT" in
 	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
-	Printf.printf "SANITY: %-15s \t\t" (show_list sentence);
-	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
+	Printf.printf "%-15s \t\t" (show_list sentence);
+	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL");
+	for i=0 to (List.length goal_items)-1 do
+		print_tree (List.nth goal_items i) 0
+  done
+  
+		
 
 let main =
   begin
