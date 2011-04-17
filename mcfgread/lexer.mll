@@ -1,5 +1,5 @@
 {
-   open Parse
+   open Read 
 }
 
 rule token = parse
