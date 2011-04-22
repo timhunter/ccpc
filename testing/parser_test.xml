@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<configuration>
+<parser>
+   <path>../mcfg_bc</path>
+   <configuration>GRAMMAR SENTENCE</configuration>
+   <pass>PASS!</pass>
+   <fail>FAIL</fail>
+</parser>
+<testcases>
+   <test>
+      <grammar>mcfgs/larsonian.mcfg</grammar>
+      <sentences>
+         <sentence>"sentence 1 goes here"</sentence>
+         <sentence>"the fact that the girl who pay -ed for the ticket be -s very poor doesnt matter"</sentence>
+      </sentences>
+   </test>
+</testcases>
+</configuration>

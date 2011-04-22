@@ -20,6 +20,8 @@ $(TARGET)_opt: $(OCAMLINT) $(NATIVEOBJ)
 
 all: $(TARGET) $(TARGET)_opt
 
+opt: $(TARGET)_opt
+
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx $(TARGET) $(TARGET)_opt
 
