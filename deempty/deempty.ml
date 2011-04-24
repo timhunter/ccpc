@@ -87,3 +87,28 @@ let clean_grammar (g : grammar) : grammar =
   let remove_empty_rules = List.filter (fun (cat,children,sy) -> not (sy=[])) in
   let g = List.map (fun (cat,children,sy) -> (cat,children,(clean_sy sy))) g in
   remove_empty_rules g
+
+(* remove children that are unreferenced in the string yield 
+ * also rereference the string yield to account for the absense of removed children *)
+let remove_children (g : grammar) : grammar = 
+  let remove_children_prime ((tok,children,sy) : Rule.t) : Rule.t =
+    let referenced = 
+      List.fold_left 
+        (fun acc comp ->
+          match comp with
+            Component(i,_) -> if (List.mem i acc) then acc else i::acc 
+          | Epsilon -> acc)
+          [] (List.flatten sy) in
+    let referenced = List.sort compare referenced in
+    let rec remove i daughters ret =
+      match daughters with
+        [] -> ret
+      | h::t -> if List.mem i referenced then remove (i+1) t (h::ret) else remove (i+1) t ret in
+    let rereference ((tok,children,sy) : Rule.t) : Rule.t =
+      (* a mapping of i -> i* ---- from old (i,_) to new (i*,_) *)
+      let (_,mapping) = List.fold_left (fun (i,acc) x -> ((i+1),((x,i)::acc))) (0,[]) referenced in
+      let map_lst = List.map (fun (Component(i,j)) -> Component((List.assoc i mapping),j)) in
+      (tok,children,(List.map (fun lst -> map_lst lst) sy)) in
+    let r = (tok, (List.rev (remove 0 children [])), sy) in
+    rereference r in
+  List.map remove_children_prime g
