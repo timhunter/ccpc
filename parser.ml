@@ -7,7 +7,7 @@ open Rule
 		type backpointer = item option * item option
 		and item = ParseItem of string * ((range_item * range_item) list) * backpointer option (*range_item defined in Util*) 
 		type input = Prefix of (string list) | Sentence of (string list)
-    type tables = {lRule_map: (string, Rule.r list) Hashtbl.t ; rRule_map: (string, Rule.r list) Hashtbl.t ; item_map: (string, item list) Hashtbl.t}
+    type tables = {sRule_map: (string, Rule.r list) Hashtbl.t ; lRule_map: (string, Rule.r list) Hashtbl.t ; rRule_map: (string, Rule.r list) Hashtbl.t ; item_map: (string, item list) Hashtbl.t}
 
     let create_item str ranges bp = ParseItem(str, ranges, bp)
 		let get_ranges = function ParseItem(_, rs,_) -> rs
@@ -147,7 +147,7 @@ open Rule
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-										 [h] ->	Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
+										 [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
 										 | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t))) 
 										 | _ -> failwith "List can only have one or two items"
 			         with
@@ -170,10 +170,7 @@ open Rule
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
     let filter_chart item_map left_rules right_rules =
-      let arity_two_rules = List.filter (fun r -> (rule_arity r) = 2) in   (*Only want to be dealing with rules of arity 2*)
-      let left_rules = arity_two_rules left_rules in 
-      let right_rules = arity_two_rules right_rules in 
-      let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
+			let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
         match nonterms with 
           | [] -> acc
           | h::t -> if (Hashtbl.mem item_map h) then
@@ -198,30 +195,59 @@ open Rule
           let left_rules = filter_rules tables.lRule_map trigger in 
 
           let right_rules = filter_rules tables.rRule_map trigger in
+
+					let single_rules = filter_rules tables.sRule_map trigger in 
           
-          let possible_rules = left_rules @ right_rules in
+          let possible_rules = single_rules @ left_rules @ right_rules in
           let possible_items = filter_chart tables.item_map left_rules right_rules in 
           let all_new_items = build_items possible_rules trigger possible_items in 
          
-          let useful_new_items = List.filter (fun x -> not (List.mem x chart)) all_new_items in  
+          let useful_new_items = List.filter (fun x -> not (Setlike.mem chart x)) all_new_items in  
          
           for i=0 to (List.length useful_new_items)-1 do
-            Queue.add (List.nth useful_new_items i) q
+						let item = List.nth useful_new_items i in 
+            Queue.add item q;
+						Setlike.add chart item
           done;
           List.iter (fun item -> add_item tables.item_map item) useful_new_items; 
-         (* let tables = {lRule_map = tables.lRule_map; rRule_map = tables.rRule_map; item_map = item_map} in *)
-          consequences (max_depth -1) prims (chart@useful_new_items) q tables
+          consequences (max_depth -1) prims chart q tables
        
+		let build_arity_map rules =
+		 let arr = Array.make 3 [] in 
+		 let rec build' lst =
+		   match lst with
+			 	| [] -> arr
+				| h::t -> match Rule.rule_arity h with
+										| 0 -> Array.set arr 0 (h::(Array.get arr 0)); build' t
+										| 1 -> Array.set arr 1 (h::(Array.get arr 1)); build' t
+										| 2 -> Array.set arr 2 (h::(Array.get arr 2)); build' t 
+										| _ -> build' t in 
+		 build' rules
+
+
+
+
 	  let deduce max_depth prims input =
-		let left_map = build_map prims 0 in 
-    let right_map = build_map prims 1 in
-		let axioms = (get_axioms prims input) in
-    let item_map = build_item_map axioms in 
-    let tables = {lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
-    let queue = Queue.create () in 
-    for i=0 to (List.length axioms)-1 do
-      Queue.add (List.nth axioms i) queue 
-    done;
-	 	consequences max_depth prims axioms queue tables  
+			let arity_map = build_arity_map prims in 
+			let left_map = build_map (Array.get arity_map 2) 0 in 
+			let right_map = build_map (Array.get arity_map 2) 1 in
+			let single_map = build_map (Array.get arity_map 1) 0 in
+	    let axioms_list = get_axioms prims input in 	
+			let axioms =
+				let tbl = Setlike.create 100 in 
+				let rec add lst  =
+					match lst with 
+						| [] -> tbl
+						| h::t -> Setlike.add tbl h ; add t in 
+				add axioms_list in
+			let item_map = build_item_map axioms_list in 
+			let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
+			let queue = Queue.create () in 
+			for i=0 to (List.length axioms_list)-1 do
+				Queue.add (List.nth axioms_list i) queue 
+			done;
+			let chart = consequences max_depth prims axioms queue tables in
+			let chart_as_list = Hashtbl.fold (fun a b lst -> (a::lst)) chart [] in
+			chart_as_list
 
 

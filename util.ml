@@ -109,4 +109,14 @@ let concat_ranges (i,j) (k,l) =
 																		| (RangeVal c, RangeVal d) -> if (b = c) then (RangeVal a, RangeVal d) else (raise RangesNotAdjacentException)
 																		| _ -> failwith "Should never mix EpsVar with RangeVal")
 		| _ -> failwith "Should never mix EpsVar with RangeVal"
+		
+
+module Setlike =
+	struct
+		type setlike = (string, string) Hashtbl.t 
+		let create i = Hashtbl.create i
+		let add s elt = Hashtbl.add s elt " "
+		let mem s elt = Hashtbl.mem s elt 
+	end;;
+
 
