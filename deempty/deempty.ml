@@ -66,8 +66,7 @@ let modify_rule ((tok, rw, sy) : Rule.t) (g : grammar): Rule.t =
       
 let modify_grammar (g : grammar) : grammar =
   (* add all initially null categories to the nullcomponents table*)
-  List.iter (fun tok -> add_nullcomponent tok 0) (identify_empty g); 
-  add_nullcomponent "E" 0;
+  List.iter (fun tok -> add_nullcomponent tok 0) (identify_empty g);
   (* modify rules until no further modification is necessary *)
   let rec mod_grammar g =
     if grammar_needs_update g
