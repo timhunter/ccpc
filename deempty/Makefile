@@ -23,7 +23,7 @@ all: $(TARGET) $(TARGET)_opt
 opt: $(TARGET)_opt
 
 clean:
-	rm -f *.o *.cmo *.cmi *.cmx *.exe $(TARGET) $(TARGE)_opt
+	rm -f *.o *.cmo *.cmi *.cmx *.exe $(TARGET) $(TARGET)_opt
 
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
