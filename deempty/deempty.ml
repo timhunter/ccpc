@@ -112,3 +112,10 @@ let remove_children (g : grammar) : grammar =
     let r = (tok, (List.rev (remove 0 children [])), sy) in
     rereference r in
   List.map remove_children_prime g
+
+let deempty (g : Rule.t list) : Rule.t list = 
+  remove_children (clean_grammar (modify_grammar g))
+
+let print_nullcomponenttable unit =
+  let items = Nullcomponenttable.get_items nullcomponenttable in
+  List.iter (fun (s,il) -> print_string (s^": "); List.iter (fun i -> print_string ((string_of_int i)^" ")) il; print_string "\n") items
