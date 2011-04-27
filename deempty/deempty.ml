@@ -114,7 +114,10 @@ let remove_children (g : grammar) : grammar =
   List.map remove_children_prime g
 
 let deempty (g : Rule.t list) : Rule.t list = 
-  remove_children (clean_grammar (modify_grammar g))
+  Componentmap.initialize g;
+  let g = remove_children (clean_grammar (modify_grammar g)) in
+  Componentmap.compute_mappings (Nullcomponenttable.get_items nullcomponenttable);
+  Componentmap.remap_components g
 
 let print_nullcomponenttable unit =
   let items = Nullcomponenttable.get_items nullcomponenttable in
