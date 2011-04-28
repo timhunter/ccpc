@@ -30,6 +30,10 @@ let lookup cat comp =
   with Not_found -> comp
 
 let rewrite_rule (cat,children,sy) =
-  (cat, children, List.map (fun lst -> (List.map (fun (Component(i,j)) -> Component(i,lookup (List.nth children i) j)) lst)) sy)
+  (cat, children, List.map 
+    (fun lst -> (List.map 
+      (fun c -> match c with
+        Component(i,j) -> Component(i,lookup (List.nth children i) j)
+      | Epsilon -> Epsilon) lst)) sy)
 
 let remap_components g = List.map rewrite_rule g

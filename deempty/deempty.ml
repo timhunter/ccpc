@@ -2,6 +2,8 @@ open Rule
 type grammar = Rule.t list
 
 let epsilon = [""],[[]]
+(* get all productions of a rule *)
+let all_productions (cat,_,_) g = List.filter (fun (cat2,_,_) -> cat2=cat) g 
 (* find all categories that only have empty productions *)
 let identify_empty (g : grammar) : string list = 
   (* build a hashtable as follows: true if all rules of a token are empty, 
@@ -38,14 +40,26 @@ let rule_needs_update ((tok, rw, sy) : Rule.t) : bool =
 (* find out if a grammar contains rules that need to be updated *)
 let grammar_needs_update g = 
   List.fold_left (fun acc r -> (rule_needs_update r) || acc) false g
-    
-(* add all empty components of a rule to the table *)
-let add_nullable_components ((tok, rw, sy) : Rule.t) (g : grammar) : unit =
+
+(* identify all components of a category that are nullable in all productions of that category *)
+let identify_nullable_in_all_prods ((tok,rw,sy) : Rule.t) (g : grammar) : bool list =
   let is_empty lst = List.fold_left (fun acc x -> (x=Epsilon)&&acc) true lst in
-  let _ = List.fold_left (fun i lst -> if is_empty lst then add_nullcomponent tok i; (i+1)) 0 sy 
+  let get_empty_comps (_,_,ll) = List.map is_empty ll in
+  let all_empty = List.map (fun r -> get_empty_comps r) (all_productions (tok,rw,sy) g) in
+  let aggregate lst1 lst2 = List.map2 (fun a b -> a&&b) lst1 lst2 in
+  let rec base size ret = if (List.length ret)<size then base size (true::ret) else ret in
+  List.fold_left aggregate (base (List.length sy) []) all_empty
+
+(* add all empty components of a rule to the table
+ * but only if that component is nullable in every other production of tok *)
+let add_nullable_components ((tok, rw, sy) : Rule.t) (g : grammar) : unit =
+  let nullable_comps = identify_nullable_in_all_prods (tok,rw,sy) g in
+  let _ = List.fold_left (fun i x -> if x then add_nullcomponent tok i; (i+1)) 0 nullable_comps 
     in ()
-												
-(* rewrite a rule, replacing nullable components with Epsilon *)
+									
+(* rewrite a rule, replacing nullable components with Epsilon
+ * only if this doesn't create a problem down the road because we might have
+ * two different arities for two productions of the same category *)
 let modify_rule ((tok, rw, sy) : Rule.t) (g : grammar): Rule.t =
   let nullcomponents = List.map (fun (i,j) -> (Component(i,j))) (lookup_nullcomponents rw) in
   if nullcomponents=[]
@@ -64,19 +78,27 @@ let modify_grammar (g : grammar) : grammar =
     then
       let mod_g = List.map (fun r -> modify_rule r g) g in
       List.iter (fun r -> add_nullable_components r mod_g) mod_g;
-      mod_grammar  mod_g
+      mod_grammar mod_g
     else g in
   mod_grammar g
 
-(* remove all epsilons from string yield
- * then remove all rules with an empty string yield *)
 let clean_grammar (g : grammar) : grammar =
+  (* remove components that are nullable in all productions of that category *)
+  let nullable_table = List.fold_left 
+    (fun acc (cat,ch,sy) -> 
+      try List.assoc cat acc; acc 
+      with _ -> (cat, (identify_nullable_in_all_prods (cat,ch,sy) g))::acc) [] g in
+  let pair cat sy = List.map2 (fun syc b -> (syc,b)) sy (List.assoc cat nullable_table) in
+  let rewrite_sy cat sy = List.map (fun (x,_) -> x) (List.filter (fun (_,b) -> not b) (pair cat sy)) in
+  let g = List.map (fun (cat,ch,sy) -> (cat,ch,(rewrite_sy cat sy))) g in
+  (* delete all remaining Epsilons that don't change the arity *)
   let remove_epsilon = List.map (List.filter (fun c -> not (c = Epsilon))) in
-  let remove_emptylst = (List.filter (fun lst -> not (lst=[]))) in
-  let clean_sy sy = remove_emptylst (remove_epsilon sy) in
-  let remove_empty_rules = List.filter (fun (cat,children,sy) -> not (sy=[])) in
-  let g = List.map (fun (cat,children,sy) -> (cat,children,(clean_sy sy))) g in
-  remove_empty_rules g
+  let replace_epsilon = List.map (fun c -> if c=[] then [Epsilon] else c) in
+  let clean_sy sy = replace_epsilon (remove_epsilon sy) in
+  let g = List.map (fun (cat,ch,sy) -> (cat,ch,(clean_sy sy))) g in
+  (* delete empty terminals *)
+  let remove_empty_rules = List.filter (fun (_,_,sy) -> (compare sy []) != 0 && (compare sy [[Epsilon]]) != 0) in
+  let g = remove_empty_rules g in g
 
 (* remove children that are unreferenced in the string yield 
  * also rereference the string yield to account for the absense of removed children *)
@@ -97,32 +119,12 @@ let remove_children (g : grammar) : grammar =
     let rereference ((tok,children,sy) : Rule.t) : Rule.t =
       (* a mapping of i -> i* ---- from old (i,_) to new (i*,_) *)
       let (_,mapping) = List.fold_left (fun (i,acc) x -> ((i+1),((x,i)::acc))) (0,[]) referenced in
-      let map_lst = List.map (fun (Component(i,j)) -> Component((List.assoc i mapping),j)) in
+      let map_lst = List.map 
+        (function (Component(i,j)) -> Component((List.assoc i mapping),j) | Epsilon -> Epsilon) in
       (tok,children,(List.map (fun lst -> map_lst lst) sy)) in
     let r = (tok, (List.rev (remove 0 children [])), sy) in
     rereference r in
   List.map remove_children_prime g
-
-(* introduce empty components to maintain the length of string yield function
- * in all productions of a category*)
-let maintain_length (g : grammar) : grammar =
-  let all_productions (cat,_,_) g = List.filter (fun (cat2,_,_) -> cat2=cat) g in
-  let max_length = List.fold_left (fun m (_,_,sy) -> max (List.length sy) m) 0 in
-  let rec mod_sy sy size child_num =
-    if (List.length sy) < size
-    then mod_sy ([(Component(child_num,0))]::sy) size child_num
-    else sy in
-  let rewrite_rule (cat,ch,sy) size =
-    if (List.length sy) = size
-    then (cat,ch,sy)
-    else
-      let mod_ch = ch@["E"] in
-      let child_num = (List.length mod_ch) - 1 in
-      (cat,mod_ch,(mod_sy sy size child_num)) in
-  let max_lengths = List.fold_left (fun a (c,ch,sy) -> (c,(max_length (all_productions (c,ch,sy) g)))::a) [] g in
-  let lookup cat = List.assoc cat max_lengths in
-  let g = List.map (fun (cat,ch,sy) -> rewrite_rule (cat,ch,sy) (lookup cat)) g in
-  ("E",[""],[])::g
 
 let print_nullcomponenttable unit =
   let items = Nullcomponenttable.get_items nullcomponenttable in
@@ -155,10 +157,10 @@ let sanity_check (g : grammar) =
   check_all_children_exist g;
   let check_component_child_references (cat,ch,sy) =
     let len = List.length ch in
-    List.iter (fun (Component(i,_)) -> if i<len then () else failwith ("a production of category "^cat^" has a sy component number that is greater than the number of children")) (List.flatten sy) in
+    List.iter (fun c -> match c with (Component(i,_)) -> if i<len then () else failwith ("a production of category "^cat^" has a sy component number that is greater than the number of children") | Epsilon -> ()) (List.flatten sy) in
   List.iter check_component_child_references g;
   let check_children_components_for_arity (cat,ch,sy) =
-    let children_comps = List.map (fun (Component(i,j)) -> ((List.nth ch i),j)) (List.flatten sy) in
+    let children_comps = List.map (fun c -> match c with (Component(i,j)) -> ((List.nth ch i),j) | Epsilon -> failwith "shouldn't happen") (List.filter (fun c -> not (c=Epsilon)) (List.flatten sy)) in
     let check (child,comp) = 
       if (String.length child != 0 && String.get child 0 !='\"') 
       then if comp<Hashtbl.find tbl child then () else failwith ("cat "^child^" as referenced by "^cat^" has too many components ("^(string_of_int comp)^")")
@@ -175,6 +177,5 @@ let deempty (g : Rule.t list) : Rule.t list =
   let g = remove_children (clean_grammar (modify_grammar g)) in
   Componentmap.compute_mappings (Nullcomponenttable.get_items nullcomponenttable);
   let g = Componentmap.remap_components g in
-  (*let g = maintain_length g in*)
-  (*sanity_check g; *)
+  sanity_check g;
   g
