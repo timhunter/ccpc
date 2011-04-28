@@ -39,20 +39,11 @@ let rule_needs_update ((tok, rw, sy) : Rule.t) : bool =
 let grammar_needs_update g = 
   List.fold_left (fun acc r -> (rule_needs_update r) || acc) false g
     
-(* add all empty components of a rule to the table - check that no other productions exist where that component is not null *)
+(* add all empty components of a rule to the table *)
 let add_nullable_components ((tok, rw, sy) : Rule.t) (g : grammar) : unit =
-  if not (List.mem [Epsilon] sy) (* if there are no empty categories in the string yield fxn *)
-  then ()
-  else 
-    let emptycomps = List.map (fun c -> c=[Epsilon]) sy in
-    let emptycomps = 
-      (List.fold_left 
-	 (fun acc (t,_,s) -> 
-	   if t=tok 
-	   then (List.map2 (fun current acc -> current=[Epsilon] && acc) s acc) 
-	   else acc) 
-	 emptycomps g) in
-    let _ = List.fold_left (fun i c -> (if c then add_nullcomponent tok i); (i+1)) 0 emptycomps in ()
+  let is_empty lst = List.fold_left (fun acc x -> (x=Epsilon)&&acc) true lst in
+  let _ = List.fold_left (fun i lst -> if is_empty lst then add_nullcomponent tok i; (i+1)) 0 sy 
+    in ()
 												
 (* rewrite a rule, replacing nullable components with Epsilon *)
 let modify_rule ((tok, rw, sy) : Rule.t) (g : grammar): Rule.t =
@@ -63,7 +54,7 @@ let modify_rule ((tok, rw, sy) : Rule.t) (g : grammar): Rule.t =
     let new_sy = 
       (List.map (fun l -> (List.map (fun c -> if (c != Epsilon) && not (List.mem c nullcomponents) then c else Epsilon) l)) sy) in 
     (tok, rw, new_sy)
-      
+
 let modify_grammar (g : grammar) : grammar =
   (* add all initially null categories to the nullcomponents table*)
   List.iter (fun tok -> add_nullcomponent tok 0) (identify_empty g);
@@ -112,12 +103,78 @@ let remove_children (g : grammar) : grammar =
     rereference r in
   List.map remove_children_prime g
 
-let deempty (g : Rule.t list) : Rule.t list = 
-  Componentmap.initialize g;
-  let g = remove_children (clean_grammar (modify_grammar g)) in
-  Componentmap.compute_mappings (Nullcomponenttable.get_items nullcomponenttable);
-  Componentmap.remap_components g
+(* introduce empty components to maintain the length of string yield function
+ * in all productions of a category*)
+let maintain_length (g : grammar) : grammar =
+  let all_productions (cat,_,_) g = List.filter (fun (cat2,_,_) -> cat2=cat) g in
+  let max_length = List.fold_left (fun m (_,_,sy) -> max (List.length sy) m) 0 in
+  let rec mod_sy sy size child_num =
+    if (List.length sy) < size
+    then mod_sy ([(Component(child_num,0))]::sy) size child_num
+    else sy in
+  let rewrite_rule (cat,ch,sy) size =
+    if (List.length sy) = size
+    then (cat,ch,sy)
+    else
+      let mod_ch = ch@["E"] in
+      let child_num = (List.length mod_ch) - 1 in
+      (cat,mod_ch,(mod_sy sy size child_num)) in
+  let max_lengths = List.fold_left (fun a (c,ch,sy) -> (c,(max_length (all_productions (c,ch,sy) g)))::a) [] g in
+  let lookup cat = List.assoc cat max_lengths in
+  let g = List.map (fun (cat,ch,sy) -> rewrite_rule (cat,ch,sy) (lookup cat)) g in
+  ("E",[""],[])::g
 
 let print_nullcomponenttable unit =
   let items = Nullcomponenttable.get_items nullcomponenttable in
   List.iter (fun (s,il) -> print_string (s^": "); List.iter (fun i -> print_string ((string_of_int i)^" ")) il; print_string "\n") items
+
+(* SANITY CHECK
+ * - check that all string yields have same arity
+ * - check that all children exist
+ * - for all Component(i,j) check that i <= length(sy)
+ * - for all Component(i,j) with child c_i, check that j <= length(sy_c_i)
+ * - check that grammar is in CNF
+ *)
+let sanity_check (g : grammar) =
+  let tbl = Hashtbl.create 101 in
+  let add (cat,ch,sy) =
+    try Hashtbl.find tbl cat; ()
+    with Not_found -> Hashtbl.add tbl cat (List.length sy) in
+  List.iter add g;
+  let rec check_sy_lengths g = 
+    match g with
+      [] -> ()
+    | (cat,ch,sy)::t ->
+        if Hashtbl.find tbl cat = List.length sy
+        then check_sy_lengths t
+        else failwith ("string yield in different productions of the same category have inconsistent arities: "^cat) in
+  check_sy_lengths g;
+  let check_all_children_exist g =
+    let exists cat child = try Hashtbl.find tbl child; () with _-> if String.length child = 0 || String.get child 0 ='\"' then () else failwith ("child ("^child^") that is referenced by cat ("^cat^") does not exist") in
+    List.iter (fun (cat,ch,sy) -> List.iter (fun child -> exists cat child) ch) g in
+  check_all_children_exist g;
+  let check_component_child_references (cat,ch,sy) =
+    let len = List.length ch in
+    List.iter (fun (Component(i,_)) -> if i<len then () else failwith ("a production of category "^cat^" has a sy component number that is greater than the number of children")) (List.flatten sy) in
+  List.iter check_component_child_references g;
+  let check_children_components_for_arity (cat,ch,sy) =
+    let children_comps = List.map (fun (Component(i,j)) -> ((List.nth ch i),j)) (List.flatten sy) in
+    let check (child,comp) = 
+      if (String.length child != 0 && String.get child 0 !='\"') 
+      then if comp<Hashtbl.find tbl child then () else failwith ("cat "^child^" as referenced by "^cat^" has too many components ("^(string_of_int comp)^")")
+      else () in
+    List.iter check children_comps in
+  List.iter check_children_components_for_arity g;
+  let check_cnf (cat,children,_) = 
+    if List.length children > 2 then failwith ("CNF violated by production of "^cat) else () in
+  List.iter check_cnf g
+
+
+let deempty (g : Rule.t list) : Rule.t list = 
+  Componentmap.initialize g;
+  let g = remove_children (clean_grammar (modify_grammar g)) in
+  Componentmap.compute_mappings (Nullcomponenttable.get_items nullcomponenttable);
+  let g = Componentmap.remap_components g in
+  (*let g = maintain_length g in*)
+  (*sanity_check g; *)
+  g
