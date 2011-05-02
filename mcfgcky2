@@ -1,0 +1,5 @@
+#!/bin/bash
+STR=`./mcfg_bc "$@"` 
+echo "tikz_qtree($STR, 'output.tex')." > maketree.pl
+prolog -q -s tikz_qtreeSWI.pl < maketree.pl
+rm maketree.pl
