@@ -14,8 +14,8 @@ let identify_empty (g : grammar) : string list =
 	  (if (compare (rw,sy) epsilon)=0
 	   then 
 	      (try let _ = Hashtbl.find tbl tok in build_table tbl t
-	       with Not_found -> Hashtbl.add tbl tok true; build_table tbl t)
-	   else ((Hashtbl.add tbl tok false); build_table tbl t))
+	       with Not_found -> Hashtbl.replace tbl tok true; build_table tbl t)
+	   else ((Hashtbl.replace tbl tok false); build_table tbl t))
       | _ -> () in
   let tbl = Hashtbl.create 101 in
   build_table tbl g;
