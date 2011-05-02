@@ -7,7 +7,10 @@ open Util
 		let map f (NonEmptyList (x,xs)) = NonEmptyList(f x, map_tr f xs)
 
 		let fold f (NonEmptyList (x,xs)) = List.fold_left f x xs
-		let from_list lst =
+	
+		let fold_l f a (NonEmptyList (x,xs)) = List.fold_left f a (x::xs)
+
+	  let from_list lst =
 			match lst with
 			| [] -> raise EmptyListException
 			| (x::xs) -> NonEmptyList(x,xs)

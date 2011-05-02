@@ -21,24 +21,28 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 
 		(**********************************************************)
 
-		let getstr yields concat pair =
+		let getstr yields pair =
 			match pair with 
 				| Component (i,j) ->
 							let relevant_yield = List.nth yields i in
-							List.nth relevant_yield j
-			  | Epsilon -> failwith "Error, should not have encountered epsilon here"
+						 (List.nth relevant_yield j)
+			  | Epsilon -> (EpsVar, EpsVar) (* failwith "Should not have encountered Epsilon here"*)
 
 		let makestr list_of_pairs yields concat =
-			let pieces_to_concatenate = Nelist.map (getstr yields concat) list_of_pairs in
-			Nelist.fold concat pieces_to_concatenate
+			let pieces_to_concatenate = Nelist.map (getstr yields) list_of_pairs in
+		  (Nelist.fold concat pieces_to_concatenate)
 
 		let apply srecipes yields concat =
-			Nelist.to_list (Nelist.map (fun sf -> makestr sf yields concat) srecipes)
+			let res = Nelist.to_list (Nelist.map (fun sf -> makestr sf yields concat) srecipes) in 
+		(*	let r = List.fold_left (fun acc x -> match x with 
+																						 None -> acc
+																						 | Some a -> (a::acc)) [] res in *)
+			res
 
-		let eval_str exp yields =
+		(*let eval_str exp yields =
 			match exp with
 			| PublicTerminating s -> [s]
-			| PublicNonTerminating (_, srecipes) -> Nelist.to_list (Nelist.map (fun strfunc -> makestr strfunc yields (^)) srecipes)
+			| PublicNonTerminating (_, srecipes) -> Nelist.to_list (Nelist.map (fun strfunc -> makestr strfunc yields (^)) srecipes) *)
 
     let create_tuplerecipe lst =
 			Nelist.from_list [(Nelist.from_list lst)]
@@ -72,6 +76,8 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 			match rule with
 			| Terminating _ -> 0
 			| NonTerminating (left, rights, _) -> Nelist.length rights
+	  
+		let max_arity rules = List.fold_left max 0 (map_tr rule_arity rules)
 
 		(* How many components does the tuple produced by this rule have? *)
 		let nonterm_degree rule =
@@ -94,7 +100,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		let component_to_string prev tup = 
 		  let tup = match tup with
 				| Component (a,b) -> (a,b)
-				| Epsilon -> failwith "Should not have encountered epsilon here" in 
+				| Epsilon -> (333, 333) in 
 			String.concat "" [(string_of_int (fst tup)); ","; (string_of_int(snd tup)); ";"; prev]
 		
 		let stringrecipe_to_string lst =

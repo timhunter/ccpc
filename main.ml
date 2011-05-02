@@ -4,7 +4,7 @@
        They still need to be written with an initial capital. *)
 open Util
 open Rule
-open Deriver
+(*open Deriver*)
 open Parser
 open Read 
 
@@ -70,8 +70,7 @@ module Deducer = functor (D : DEDUCTIVE_SYSTEM) ->
 
 	end;;
 
-module MCFG_Derivation_Deducer = Deducer(MCFG_Deriver)
-module MCFG_ParseGen_Deducer = Deducer(Parser) 
+(*module MCFG_Derivation_Deducer = Deducer(MCFG_Deriver)*)
 
 (******************************************************************************************)
 (* Extract the intersection grammar *)
@@ -154,8 +153,8 @@ let intersection_grammar orig_grammar symbols =
 (******************************************************************************************)
 (* Top-level stuff for testing *)
 
-let derivations rules =
-  MCFG_Derivation_Deducer.deduce 1 rules MCFG_Deriver.null_input
+(*let derivations rules =
+  MCFG_Derivation_Deducer.deduce 1 rules MCFG_Deriver.null_input*)
 
 
 
@@ -184,28 +183,29 @@ let run_test prefix sentence expected =
 	Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
 	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 
-let rec print_tree item level =
-	let backpointer = Parser.get_backpointer item in 
-	Printf.printf "\n";
-  for i=0 to level do
-		Printf.printf "    "
-	done;
-	Printf.printf "%s" (Parser.to_string item);
-	match backpointer with 
-		None -> ()
-		| Some (Some a, None) ->  print_tree a (level+1)
-		| Some (Some a, Some b) -> print_tree a (level+1); print_tree b (level+1)
-		| _ -> failwith "Invalid Parent backpointer"
+let  print_tree item  =
+	let rec print item level =
+		let backpointer = Parser.get_backpointer item in 
+		(*for i=0 to level do
+			Printf.printf "    "
+		done;*)
+		Printf.printf "%s/[" (Parser.to_string item);
+		(match backpointer with 
+			None -> ()
+			| Some (Some a, None) ->  print a (level+1) ; Printf.printf "]"
+			| Some (Some a, Some b) -> print a (level+1) ; Printf.printf "]," ; print b (level+1) ; Printf.printf "]"
+			| _ -> failwith "Invalid Parent backpointer") in
+	print item 0;
+	Printf.printf "]"
 
 let run_sanity_check sentence expected =
 	let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) (parse sample_grammar sentence) in 
 	let result = goal_items <> [] in
 	let show_result res = if res then "IN" else "OUT" in
 	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
-	Printf.printf "%-15s \t\t" (show_list sentence);
-	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL");
 	for i=0 to (List.length goal_items)-1 do
-		print_tree (List.nth goal_items i) 0
+		print_tree (List.nth goal_items i);
+		Printf.printf "\n"
   done
   
 		

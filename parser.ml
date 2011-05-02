@@ -28,7 +28,7 @@ open Rule
 																									| (EpsVar, EpsVar) -> Printf.sprintf "(Epsilon, Epsilon)"
 																									| (RangeVal a, RangeVal b) -> Printf.sprintf "(%d,%d)" a b  
 																									| _ -> failwith "Should never mix RangeVal and EpsVar!") ranges in 
-			  Printf.sprintf "[%s, %s]" nt (List.fold_left (^) "" range_strings) 
+			  Printf.sprintf "'{%s, %s}'" nt (List.fold_left (^) "" range_strings) 
 
 
 		let get_axioms_parse grammar symbols =
@@ -65,11 +65,7 @@ open Rule
 																											 else get_empties t acc
 											| PublicNonTerminating _ -> get_empties t acc) in 
 			(get_empties grammar []) @ from_symbols 
-
-		let rule_arity rule = Rule.rule_arity rule
-
-		let max_arity rules = List.fold_left max 0 (map_tr Rule.rule_arity rules)
-
+	
 		(*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar*)
 		let build_map grammar daughter =
 		  let load_map map rule =
@@ -107,51 +103,25 @@ open Rule
         Hashtbl.add item_map key (item::prev_value) 
       else Hashtbl.add item_map key [item] 
      
-                
-(*TODO: Currently using build_items instead of this. Might want to remove it and change the interface*)
-		let build_nary rules items =
-       (*let item_map = build_item_map items in*)
-       let combine' items rule =
-			  	match Rule.get_expansion rule with
-				    | PublicTerminating _ -> None
-				    | PublicNonTerminating (nts, f) ->
-					      let left = Rule.get_nonterm rule in
-				      (*  let possible_items = filter_items item_map rule in *)
-                let item_nonterms = map_tr get_nonterm items in
-                print_string "\n nonterms\n";
-                for i=0 to (List.length item_nonterms)-1 do 
-                  Printf.printf " %s" (List.nth item_nonterms i);
-                done;
-
-                let item_ranges = map_tr get_ranges items in
-                if item_nonterms = Nelist.to_list nts then
-                  try
-                    Some (create_item left (Rule.apply f item_ranges concat_ranges) None)
-                  with
-                    RangesNotAdjacentException -> None
-                else
-                    None in
-		      optlistmap (combine' items) rules
-
-
     let build_items rules trigger items = 
      let build' rules item_list = 
        let combine' items rule =
+			 	 (*Printf.printf "\nRULE: ";
+				 print_rule rule;*)
          match Rule.get_expansion rule with
           | PublicTerminating _ -> None
           | PublicNonTerminating (nts, f) -> 
             let left = Rule.get_nonterm rule in 
-            (*let possible_items = filter_items item_map rule in*)
             let item_nonterms = map_tr get_nonterm items in 
             let item_ranges = map_tr get_ranges items in 
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-										 [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
-										 | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t))) 
+										 [h] -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "\n%s" (to_string h)); *)Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
+										 | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t))) 
 										 | _ -> failwith "List can only have one or two items"
 			         with
-                    RangesNotAdjacentException -> None
+                    RangesNotAdjacentException -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "OH no");*) None
                 else
                     None in
 		    optlistmap (combine' item_list) rules in 

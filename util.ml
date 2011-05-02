@@ -29,7 +29,6 @@ let concatmap_tr f lsts =
 		| (xs::xss) -> concatmap' f xss ((f xs) @ acc)
 	in concatmap' f lsts []
 
-
 exception EmptyListException
 
 let optlistmap f xs =
@@ -117,6 +116,8 @@ module Setlike =
 		let create i = Hashtbl.create i
 		let add s elt = Hashtbl.add s elt " "
 		let mem s elt = Hashtbl.mem s elt 
+		let length s = Hashtbl.length s 
+		let iter f s = Hashtbl.iter f s
 	end;;
 
 

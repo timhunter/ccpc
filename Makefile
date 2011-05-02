@@ -11,7 +11,7 @@ YACC=ocamlyacc
 
 FLAGS= -I mcfgread
 OCAMLINT_bc= util.cmo nelist.cmi rule.cmi parser.cmi mcfgread/read.cmi util.cmi 
-OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo deriver.cmo parser.cmo main.cmo
+OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo parser.cmo main.cmo
 
 OCAMLINT_nt= util.cmx nelist.cmi rule.cmi parser.cmi mcfgread/read.cmi util.cmi 
 OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx mcfgread/read.cmx mcfgread/lexer.cmx deriver.cmx parser.cmx main.cmx
@@ -22,6 +22,9 @@ $(EXE)_bc: $(OCAMLINT_bc) $(OCAMLOBJ_bc)
 
 $(EXE)_nt: $(OCAMLINT_nt) $(OCAMLOBJ_nt) 
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt)
+
+tree: 
+	echo hello > #!/bin/bash
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx $(EXE)_bc $(EXE)_nt
