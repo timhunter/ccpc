@@ -1,12 +1,3 @@
-module Key =
-  struct
-    type t = string
-    let compare = String.compare
-  end;;
-
-module Grammar_Map = Map.Make(Key);;
-
-module Item_Map = Map.Make(Key);;
 
 let reverse_tr lst =
 	let rec reverse' lst acc =
@@ -110,14 +101,5 @@ let concat_ranges (i,j) (k,l) =
 		| _ -> failwith "Should never mix EpsVar with RangeVal"
 		
 
-module Setlike =
-	struct
-		type setlike = (string, string) Hashtbl.t 
-		let create i = Hashtbl.create i
-		let add s elt = Hashtbl.add s elt " "
-		let mem s elt = Hashtbl.mem s elt 
-		let length s = Hashtbl.length s 
-		let iter f s = Hashtbl.iter f s
-	end;;
 
 

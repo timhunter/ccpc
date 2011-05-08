@@ -26,7 +26,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 				| Component (i,j) ->
 							let relevant_yield = List.nth yields i in
 						 (List.nth relevant_yield j)
-			  | Epsilon -> (EpsVar, EpsVar) (* failwith "Should not have encountered Epsilon here"*)
+			  | Epsilon -> (EpsVar, EpsVar) 
 
 		let makestr list_of_pairs yields concat =
 			let pieces_to_concatenate = Nelist.map (getstr yields) list_of_pairs in

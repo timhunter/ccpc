@@ -7,6 +7,7 @@ open Rule
 (*open Deriver*)
 open Parser
 open Read 
+open Chart
 
 (******************************************************************************************)
 
@@ -101,7 +102,7 @@ let result_matches f input_ranges expected_result =
 
 let make_new_rule sit_nonterm rights func range_lists =
 	let new_rights = List.map2 build_symbol rights range_lists in
-	let new_agenda_items = List.map2 Parser.create_item rights range_lists in
+	let new_agenda_items = List.map2 Chart.create_item rights range_lists in
 	let rec add_nones lst acc =
 		match lst with 
 			[] -> acc
@@ -114,16 +115,16 @@ let make_new_rule sit_nonterm rights func range_lists =
        "check whether f is well-defined and evaluates to the ranges in the trigger item".
  *)
 let intersection_rules_per_rule all_items item rule =
-	let sit_nonterm = build_symbol (Parser.get_nonterm item) (Parser.get_ranges item) in
+	let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
 	match Rule.get_expansion rule with
 	| PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str)], [])
 	| PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
-		let items_headed_by nt = List.filter (fun item -> (Parser.get_nonterm item) = nt) all_items in
+		let items_headed_by nt = List.filter (fun item -> (Chart.get_nonterm item) = nt) all_items in
 		let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
 		let item_combinations = cartesian items_grouped in
-		let ranges_from_item_comb items = map_tr Parser.get_ranges items in
+		let ranges_from_item_comb items = map_tr Chart.get_ranges items in
 		let function_inputs = map_tr ranges_from_item_comb item_combinations in
-		let defined_function_inputs = List.filter (fun input -> result_matches func input (Parser.get_ranges item)) function_inputs in
+		let defined_function_inputs = List.filter (fun input -> result_matches func input (Chart.get_ranges item)) function_inputs in
 		(* results_to_combine :: (Rule.r * Parser.item list) list *)
 		let results_to_combine = map_tr (make_new_rule sit_nonterm (Nelist.to_list nts') func) defined_function_inputs in
 		let new_rules = map_tr fst results_to_combine in
@@ -131,7 +132,7 @@ let intersection_rules_per_rule all_items item rule =
 		(new_rules, new_agenda_items)
 
 let new_intersection_grammar_rules orig_grammar chart item =
-	let relevant_rules = List.filter (fun rule -> (Rule.get_nonterm rule = Parser.get_nonterm item)) orig_grammar in
+	let relevant_rules = List.filter (fun rule -> (Rule.get_nonterm rule = Chart.get_nonterm item)) orig_grammar in
 	let results_to_combine = map_tr (intersection_rules_per_rule chart item) relevant_rules in               (* (rule list * item list) list *)
 	let new_rules = concatmap_tr fst results_to_combine in
 	let new_agenda_items = concatmap_tr snd results_to_combine in
@@ -176,63 +177,54 @@ let parse_with_intersection prefix sentence =
 
 let run_test prefix sentence expected =
 	let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
-	let is_goal item = ((Parser.get_nonterm item) = intersection_start_symbol) && (Parser.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
+	let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
 	let result = List.exists is_goal (parse_with_intersection prefix sentence) in
 	let show_result res = if res then "IN" else "OUT" in
 	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
 	Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
 	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 
-let  print_tree item  =
+let  print_tree item oc =
 	let rec print item level =
-		let backpointer = Parser.get_backpointer item in 
-		(*for i=0 to level do
-			Printf.printf "    "
-		done;*)
-		Printf.printf "%s/[" (Parser.to_string item);
+		let backpointer = Chart.get_backpointer item in 
+		Printf.fprintf oc "%s/[" (Chart.to_string item);
 		(match backpointer with 
-			None -> ()
-			| Some (Some a, None) ->  print a (level+1) ; Printf.printf "]"
-			| Some (Some a, Some b) -> print a (level+1) ; Printf.printf "]," ; print b (level+1) ; Printf.printf "]"
+			None -> () 
+			| Some (Some a, None) ->  print a (level+1) ; Printf.fprintf oc "]"
+			| Some (Some a, Some b) -> print a (level+1) ; Printf.fprintf oc "]," ; print b (level+1) ; Printf.fprintf oc "]"
 			| _ -> failwith "Invalid Parent backpointer") in
 	print item 0;
-	Printf.printf "]"
-
-let run_sanity_check sentence expected =
-	let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) (parse sample_grammar sentence) in 
-	let result = goal_items <> [] in
-	let show_result res = if res then "IN" else "OUT" in
-	let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
-	for i=0 to (List.length goal_items)-1 do
-		print_tree (List.nth goal_items i);
-		Printf.printf "\n"
-  done
-  
-		
-
+	Printf.fprintf oc "]"
+	
+let run_sanity_check sentence debug file =
+	let chart = parse sample_grammar sentence in 
+	let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
+  (match file with 
+		Some f ->
+				for i=0 to (List.length goal_items)-1 do
+					let oc = open_out f in
+					print_tree (List.nth goal_items i) oc;
+					close_out oc; (* flush and close the channel *)
+ 				  done
+		| None -> ());
+	(if (List.length goal_items)>0 then 
+		(Printf.printf "SUCCESS!\n";
+		if debug then 
+		List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x)) chart)
+	else 
+		Printf.printf "FAILED\n")
+	
+	  
 let main =
   begin
-		
-			match Sys.argv.(2) with
+			match Sys.argv.(4) with
 				"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
 								let sentence = Util.split ' ' Sys.argv.(4) in
 								run_test prefix sentence true)
-				| _ -> (let sentence = Util.split ' ' Sys.argv.(2) in
-	  							run_sanity_check sentence true) ;
-		
-(*	 let complete_derivations = List.filter (MCFG_Deriver.is_goal ()) (derivations sample_grammar) in
-	Printf.printf "Pass?  %b\n" (List.mem (MCFG_Deriver.DerivItem("S", [["b"; "a"; "b"; "b"; "b"; "a"; "b"; "b"]])) complete_derivations) ; *)
-  (*run_sanity_check ["the";"fact";"that";"the";"girl";"who";"pay";"-ed";"for";"the";"ticket";"be";"-s";"very";"poor";"doesnt";"matter"] true ; *)
-(*	run_sanity_check ["a";"a";"b";"b"] false ; 
-	run_sanity_check ["a";"b";"a";"b"] true ;
-	run_sanity_check ["a";"a";"b";"a";"a";"b"] true ; 
-	run_sanity_check ["a";"a";"b";"b";"a";"a"] false ;
-	run_sanity_check ["a";"a";"b";"a";"a";"a";"b";"a"] true ;
-	run_test ["a"] ["a";"b";"a";"b"] true ;
-	run_test ["a"] ["b";"a";"b";"a"] false ;
-	run_test ["a";"b"] ["a";"a";"b";"b"] false ;
-	run_test ["a";"b"] ["a";"b";"b";"a";"b";"b"] true ;  *)
-	(* run_test ["a";"b"] ["a";"b";"a";"a";"a";"b";"a";"a"] true ; *)
+			|	"-d" -> (let sentence = Util.split ' ' Sys.argv.(5) in
+								run_sanity_check sentence true (Some Sys.argv.(3)))
+			| _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
+	  							run_sanity_check sentence false (Some Sys.argv.(3))) 
 	end
 
 

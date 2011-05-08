@@ -23,8 +23,13 @@
         format(Stream, "\\documentclass{article}~n", []),
 		format(Stream, "\\usepackage{tikz}~n", []),
 		format(Stream, "\\usepackage{tikz-qtree-compat}~n", []),
+		format(Stream, "\\usepackage[paperwidth=20in,paperheight=15in]{geometry}~n", []),
+
         format(Stream, "\\begin{document}~n", []),
         format(Stream, "\\begin{tikzpicture}~n", []),
+				format(Stream, "\\tikzset{level distance=30pt, sibling distance=30pt}~n", []),
+				format(Stream, "\\begin{tiny}~n", []),
+				format(Stream, "\\hspace{-3.0in}~n", []),
         format(Stream, "%tikz_qtree(~w).~n%~n", [Tree]).
 
 writetree(Tree, Stream) :-
@@ -52,7 +57,8 @@ decodetree([Tree|Trees], Stream) :-
 	decodetree(Trees, Stream).
 	
  closestream(Stream) :-
-        format(Stream, "~n\\end{tikzpicture}~n", []),
+				format(Stream, "~n\\end{tiny}~n", []),
+        format(Stream, "\\end{tikzpicture}~n", []),
 		format(Stream, "\\end{document}~n", []),
 	close(Stream).
 

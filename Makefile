@@ -10,21 +10,19 @@ LEX=ocamllex
 YACC=ocamlyacc
 
 FLAGS= -I mcfgread
-OCAMLINT_bc= util.cmo nelist.cmi rule.cmi parser.cmi mcfgread/read.cmi util.cmi 
-OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo parser.cmo main.cmo
+OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo main.cmo
 
-OCAMLINT_nt= util.cmx nelist.cmi rule.cmi parser.cmi mcfgread/read.cmi util.cmi 
-OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx mcfgread/read.cmx mcfgread/lexer.cmx deriver.cmx parser.cmx main.cmx
+OCAMLINT= util.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi 
+OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx main.cmx
 
+all: $(EXE)_bc $(EXE)_nt
 
-$(EXE)_bc: $(OCAMLINT_bc) $(OCAMLOBJ_bc)
+$(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc)
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(OCAMLOBJ_bc)
 
-$(EXE)_nt: $(OCAMLINT_nt) $(OCAMLOBJ_nt) 
+$(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) 
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt)
 
-tree: 
-	echo hello > #!/bin/bash
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx $(EXE)_bc $(EXE)_nt
@@ -36,7 +34,7 @@ clean:
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
 	
 %.cmi: %.mli
-	$(COMPILER_NATIVE) $(FLAGS) -c $*.mli
+	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
 
 %.ml: %.mll
 	$(LEX) $*.mll

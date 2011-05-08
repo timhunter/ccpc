@@ -1,20 +1,13 @@
 open Util
 open Rule
-
-
+open Tables
+open Chart
 
 		type prim = Rule.r
-		type backpointer = item option * item option
-		and item = ParseItem of string * ((range_item * range_item) list) * backpointer option (*range_item defined in Util*) 
 		type input = Prefix of (string list) | Sentence of (string list)
-    type tables = {sRule_map: (string, Rule.r list) Hashtbl.t ; lRule_map: (string, Rule.r list) Hashtbl.t ; rRule_map: (string, Rule.r list) Hashtbl.t ; item_map: (string, item list) Hashtbl.t}
+    type tables = {sRule_map: Tables.map ; lRule_map: Tables.map ; rRule_map: Tables.map ; item_map: Tables.map}
 
-    let create_item str ranges bp = ParseItem(str, ranges, bp)
-		let get_ranges = function ParseItem(_, rs,_) -> rs
-   
-		let get_nonterm = function ParseItem(nt, _,_) -> nt
-		let get_backpointer = function ParseItem(_,_,bp) -> bp
-
+   	
 		let is_goal input item =
 			match input with
 			| Sentence strings -> (get_nonterm item = "S") && (get_ranges item = [(RangeVal 0, RangeVal (List.length strings))])
@@ -22,14 +15,7 @@ open Rule
 
 
 
-		let to_string item =
-			let ParseItem (nt, ranges, bp) = item in
-			let range_strings = map_tr (fun (p,q) -> match (p,q) with 
-																									| (EpsVar, EpsVar) -> Printf.sprintf "(Epsilon, Epsilon)"
-																									| (RangeVal a, RangeVal b) -> Printf.sprintf "(%d,%d)" a b  
-																									| _ -> failwith "Should never mix RangeVal and EpsVar!") ranges in 
-			  Printf.sprintf "'{%s, %s}'" nt (List.fold_left (^) "" range_strings) 
-
+	
 
 		let get_axioms_parse grammar symbols =
 		        let indices = range 0 (List.length symbols) in
@@ -66,42 +52,18 @@ open Rule
 											| PublicNonTerminating _ -> get_empties t acc) in 
 			(get_empties grammar []) @ from_symbols 
 	
-		(*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar*)
-		let build_map grammar daughter =
-		  let load_map map rule =
-		    if (rule_arity rule)-1 >= daughter then  
-        match Rule.get_expansion rule with 
-		      | PublicTerminating str -> () 
-		      | PublicNonTerminating (rights, recipes) -> 
-		         	let key = Nelist.nth rights daughter in
-			        if Hashtbl.mem map key then 
-			          let prev_value = Hashtbl.find map key in
-			          Hashtbl.add map key (rule::prev_value) 
-			        else Hashtbl.add map key [rule]  
-        else () in
-			let tbl = Hashtbl.create 100 in 
-		  List.iter (load_map tbl) grammar;
-			tbl
-
-(*builds a map out the provided items, using the nonterminal as the key*)
-   let build_item_map items =
-      let load_map map item =
-        let key = get_nonterm item in
-        if Hashtbl.mem map key then
-          let prev_value = Hashtbl.find map key in
-          Hashtbl.add map key (item::prev_value) 
-        else Hashtbl.add map key [item] in
-			let tbl = Hashtbl.create 100 in 
-      List.iter (load_map tbl) items;
-			tbl
+	
 
 (*Add an item to the given item map*)
     let add_item item_map item =
       let key = get_nonterm item in 
-      if Hashtbl.mem item_map key then 
-        let prev_value = Hashtbl.find item_map key in
-        Hashtbl.add item_map key (item::prev_value) 
-      else Hashtbl.add item_map key [item] 
+      if Tables.mem item_map key then 
+        let prev_value =
+					match Tables.find item_map key with  
+						ItemVal iv -> iv 
+						| _ -> failwith "Should not have encountered RuleVal here" in
+        Tables.add item_map key (ItemVal (item::prev_value))
+      else Tables.add item_map key (ItemVal [item])
      
     let build_items rules trigger items = 
      let build' rules item_list = 
@@ -134,7 +96,9 @@ open Rule
 		(* Filter rules based on current items using the map*)
 		let filter_rules rule_map trigger = 
 		  try
-		    Hashtbl.find rule_map (get_nonterm trigger)
+		     match Tables.find rule_map (get_nonterm trigger) with
+				 	 RuleVal rlist -> rlist
+					 | _ -> failwith "Should only encounter a Rule list here"
 			with _ -> []
 		
     (*produce a chart which contains only relevant items based on the given rules*)
@@ -143,8 +107,11 @@ open Rule
 			let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
         match nonterms with 
           | [] -> acc
-          | h::t -> if (Hashtbl.mem item_map h) then
-                      get_items t ((Hashtbl.find item_map h)::acc)
+          | h::t -> if (Tables.mem item_map h) then
+											let itm = match Tables.find item_map h with
+												 ItemVal iv -> iv 
+												 | _ -> failwith "Error: Should not have encountered RuleVal here" in 
+                      get_items t (itm::acc)
                     else 
                       get_items t acc in 
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
@@ -155,7 +122,7 @@ open Rule
       let right_nts = List.map (get_nts 0) right_rules in 
       let left_items = get_items left_nts [] in
       let right_items = get_items right_nts [] in 
-      List.flatten ( left_items @ right_items)
+      List.flatten (left_items @ right_items)
 	
     let rec consequences max_depth prims chart q tables =
       if (Queue.is_empty q)
@@ -172,12 +139,12 @@ open Rule
           let possible_items = filter_chart tables.item_map left_rules right_rules in 
           let all_new_items = build_items possible_rules trigger possible_items in 
          
-          let useful_new_items = List.filter (fun x -> not (Setlike.mem chart x)) all_new_items in  
+          let useful_new_items = List.filter (fun x -> not (Chart.mem chart x)) all_new_items in  
          
           for i=0 to (List.length useful_new_items)-1 do
 						let item = List.nth useful_new_items i in 
             Queue.add item q;
-						Setlike.add chart item
+						Chart.add chart item
           done;
           List.iter (fun item -> add_item tables.item_map item) useful_new_items; 
           consequences (max_depth -1) prims chart q tables
@@ -194,21 +161,18 @@ open Rule
 										| _ -> build' t in 
 		 build' rules
 
-
-
-
 	  let deduce max_depth prims input =
 			let arity_map = build_arity_map prims in 
-			let left_map = build_map (Array.get arity_map 2) 0 in 
-			let right_map = build_map (Array.get arity_map 2) 1 in
-			let single_map = build_map (Array.get arity_map 1) 0 in
+			let left_map = build_rule_map (Array.get arity_map 2) 0 in 
+			let right_map = build_rule_map (Array.get arity_map 2) 1 in
+			let single_map = build_rule_map (Array.get arity_map 1) 0 in
 	    let axioms_list = get_axioms prims input in 	
 			let axioms =
-				let tbl = Setlike.create 100 in 
+				let tbl = Chart.create 100 in 
 				let rec add lst  =
 					match lst with 
 						| [] -> tbl
-						| h::t -> Setlike.add tbl h ; add t in 
+						| h::t -> Chart.add tbl h ; add t in 
 				add axioms_list in
 			let item_map = build_item_map axioms_list in 
 			let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
@@ -217,7 +181,7 @@ open Rule
 				Queue.add (List.nth axioms_list i) queue 
 			done;
 			let chart = consequences max_depth prims axioms queue tables in
-			let chart_as_list = Hashtbl.fold (fun a b lst -> (a::lst)) chart [] in
+			let chart_as_list = Chart.fold (fun a b lst -> (a::lst)) chart [] in
 			chart_as_list
 
 
