@@ -133,10 +133,10 @@ module Rasp = struct
   let parse sentence_list = 
     let ids = fst (List.split sentence_list) in (* save the ids for later *)
       restore_ids ids
-	(make_key_value
+	(*(make_key_value*)
 	   (extract_trees
 	      (interpret_penn_output 
-		 (get_parsing_result sentences))))
+		 (get_parsing_result sentence_list)))
 
 
   let initialize argument_string = 0 (* noop *)

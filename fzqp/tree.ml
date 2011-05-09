@@ -1,3 +1,5 @@
+
+module Tree = struct
 (*  Huet's zipper *)
   type 'a tree = Leaf of 'a | Branch of 'a * 'a tree list
   and 'a path = Top | Context of 'a tree list * 'a * 'a path * 'a tree list (* reversed list of left-siblings, parent label, path back to root, right sib list *)
@@ -136,7 +138,7 @@
     | Branch (label,kids) -> "("^label^" "^(List.fold_left (fun x y -> concat (x,y)) "" (List.map bracketOf kids))^")"
 
   (* flavors of output *)
-  let dot_of_tree t = 
+  let dot_of_tree_labeled t the_label = 
     let rec dtAux i = function
 	Leaf label -> ("n"^(string_of_int i)^" [label = \""^label^"\"];" , i)
       | Branch (label,children) -> 
@@ -151,8 +153,11 @@
 	    children in
 	    parent^subtrees,maximum
     in
-      ("digraph foobar {\n node [shape = plaintext]; \n edge [arrowhead = none]; \n"^(Pervasives.fst (dtAux 0 t))^"}")
+      ("digraph "^the_label^" {\n node [shape = plaintext]; \n edge [arrowhead = none]; \n"^(Pervasives.fst (dtAux 0 t))^"}")
 	
+  let dot_of_tree t = dot_of_tree_labeled t "foobar"
+
+
   let qtree_of_tree t =
     let rec qtAux recursionLevel tree =
       if recursionLevel > 20 then failwith "your tree is too deep for qtree v3.1"
@@ -280,3 +285,4 @@ idea: pdfcrop the whole file
 (*   let rec bracketOf = function *)
 (*       Tree.Leaf s -> "(."^s^" ) " *)
 (*     | Tree.Branch (label,kids) -> "(."^label^" "^(List.fold_left (fun x y -> Utilities.space x y) "" (List.map bracketOf kids))^") " *)
+end
