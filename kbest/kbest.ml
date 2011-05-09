@@ -39,6 +39,12 @@ module VertexSet = Set.Make(Vertex)
 module VertexMap = Map.Make(Vertex)
 module EdgeSet = Set.Make(Edge)
 
+module Item = struct
+  type t = Chart.item
+  let compare = Pervasives.compare
+end
+module ItemMap = Map.Make(Item)
+
 (** A hypergraph is a set of vertices and a set of edges. *)
 type hypergraph = {vertices : VertexSet.t; edges : EdgeSet.t}
 
@@ -74,6 +80,13 @@ let ( >+ ) = List.map2 ( + )
   * @raise Failure "nth" if i is greater than or equal to the length of v.
   * @raise Invalid_argument "List.nth" if i is negative. *)
 let ( >. ) v i = List.nth v i
+
+let edge_to_string e =
+  (List.fold_left (fun s t -> s ^ (string_of_int t) ^ ", ") "" e.tails)
+  ^ "-> " ^ (string_of_int e.head)
+
+let print_hypergraph hypergraph =
+  EdgeSet.iter (fun e -> print_endline (edge_to_string e)) hypergraph.edges
 
 (** @return The edges in a hypergraph that have a certain vertex as their head.
   * @param h The hypergraph in which to look for edges.
@@ -240,8 +253,9 @@ let k_best hypergraph best_derivs target_vertex global_k =
 	  if num_derivs > 0 then
 	    (* Take the last derivation for v and expand it, adding new
 	     * candidates for v. *)
-	    let (e, j, _) = get_last_derivation derivs v in
-	    lazy_next derivs cands e j
+	    let (e, j, w) = get_last_derivation derivs v in
+	    if Rational.compare w Rational.zero = 0 then (derivs, cands)
+	    else lazy_next derivs cands e j
 	  else (derivs, cands) in
 	if not (is_candidates_empty cands v) then
 	  (* Take the best candidate and add it to the list of derivations. *)
@@ -259,7 +273,7 @@ let k_best hypergraph best_derivs target_vertex global_k =
     while_less_than_k derivs cands
   (* Expand a derivation by adding its "neighbors" to the candidates for v. *)
   and lazy_next derivs cands e j =
-(*    let _ = print_endline ("lazy_next (" ^ (List.fold_left (fun s t -> s ^ (string_of_int t) ^ " ") "" e.tails) ^ "-> " ^ (string_of_int e.head) ^ ") (" ^ (List.fold_left (fun s ji -> s ^ (string_of_int ji) ^ ", ") "" j) ^ ")") in let _ = ignore (read_line ()) in*)
+(*    let _ = print_endline (edge_to_string e) in*)
     (* Return a vector of length arity that is all 0s except with a 1 at index
      * i. *)
     let get_b_vector arity i =
@@ -325,6 +339,55 @@ let best_derivs = List.fold_left (fun bds (v, d) -> add_to_derivations v d bds) 
 let (derivs, cands) = k_best hypergraph best_derivs 1 2
   *)
 
+let get_chart rules sentence =
+  Parser.deduce (-1) rules (Parser.Sentence sentence)
+
+(* a chart is a Parser.item list
+   A Parser.item is a tuple (nonterminal, ranges, backpointer) where
+   A nonterminal is a string like "S"
+   A ranges is a list of (int, int) pairs representing the spans of each of the components of the nonterminal in the PCFG
+   A backpointer is a pair (item option, item option)
+*)
+
+let chart_to_hypergraph chart =
+  let weight_fun = fun l -> Rational.zero in
+  let (item_to_vertex, _) = List.fold_left (fun (map, current_vertex) item ->
+      (ItemMap.add item current_vertex map, current_vertex + 1))
+    (ItemMap.empty, 0) chart
+  in
+  let (vertices, edges) = List.fold_left (fun (vertices, edges) item ->
+      let vertex = ItemMap.find item item_to_vertex in
+      let edge = match Chart.get_backpointer item with
+	None | Some (None, None) ->
+	  {arity = 0; tails = []; head = vertex; weight = weight_fun}
+      | Some (Some child, None) | Some (None, Some child) ->
+	  let child_vertex = ItemMap.find child item_to_vertex in
+	  {arity = 1; tails = [child_vertex]; head = vertex; weight = weight_fun}
+      | Some (Some child1, Some child2) ->
+	  let child_vertex1 = ItemMap.find child1 item_to_vertex in
+	  let child_vertex2 = ItemMap.find child2 item_to_vertex in
+	  {arity = 2; tails = [child_vertex1; child_vertex2]; head = vertex; weight = weight_fun}
+      in
+      (VertexSet.add vertex vertices, EdgeSet.add edge edges))
+    (VertexSet.empty, EdgeSet.empty) chart
+  in
+  {vertices = vertices; edges = edges}
+
+let sample_grammar =
+  try
+    let channel = open_in Sys.argv.(1) in
+    let lexbuf = Lexing.from_channel channel in
+    Read.mcfgrule Lexer.token lexbuf
+  with _ -> print_string "Can't parse input mcfg file\n"; exit 0
+
+let sentence = ["the"; "fact"; "that"; "the"; "girl"; "who"; "pay"; "-ed"; "for"; "the"; "ticket"; "be"; "-s"; "very"; "poor"; "doesnt"; "matter"]
+let chart = get_chart sample_grammar sentence
+
+let h = chart_to_hypergraph chart
+
+let _ = print_hypergraph h
+let _ = print_endline "made it"
+
 let weight = List.fold_left Rational.plusr Rational.zero
 
 let s041 = {arity = 2; tails = [3;4]; head = 1; weight = weight}
@@ -368,4 +431,7 @@ let best_deriv_list = [(1, (s041, [0;0], (2, 1)));
 
 let best_derivations = List.fold_left (fun bds (v, d) -> add_to_derivations v d bds) VertexMap.empty best_deriv_list
 
-let (derivs, cands) = k_best hypergraph best_derivations 1 2
+(*let (derivs, cands) = k_best hypergraph best_derivations 1 2
+
+let _ = VertexMap.iter (fun v ds -> print_endline ((string_of_int v) ^ ":"); List.iter (fun (e, j, w) -> print_string ("  (" ^ (edge_to_string e) ^ ") ["); List.iter (fun ji -> print_string ((string_of_int ji) ^ ", ")) j; print_endline ("] " ^ (Rational.string_of_rat w))) ds) derivs
+*)
