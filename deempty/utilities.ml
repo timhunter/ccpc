@@ -45,4 +45,4 @@ let printer g =
     Format.open_hvbox 0;
     Format.print_string (string_of_grammar g);
     Format.close_box ()
-  end
+  end 
