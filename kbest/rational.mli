@@ -1,4 +1,4 @@
-type rat
+type rat = int*int
 
 val zero: rat
 
