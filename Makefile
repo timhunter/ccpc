@@ -9,11 +9,11 @@ COMPILER_NATIVE=ocamlopt -p
 LEX=ocamllex
 YACC=ocamlyacc
 
-FLAGS= -I mcfgread
-OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo main.cmo
+FLAGS= -I mcfgread -I kbest
+OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo main.cmo
 
-OCAMLINT= util.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi 
-OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx main.cmx
+OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi 
+OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx main.cmx
 
 all: $(EXE)_bc $(EXE)_nt
 
@@ -25,7 +25,7 @@ $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt)
 
 
 clean:
-	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx $(EXE)_bc $(EXE)_nt
+	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx $(EXE)_bc $(EXE)_nt
 
 %.cmx: %.ml
 	$(COMPILER_NATIVE) $(FLAGS) -c $*.ml

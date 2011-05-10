@@ -5,9 +5,9 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		type tuplerecipe 
 		type r 
 		val print_rule : r -> unit
-		val create_terminating : string * string -> r
-		val create_nonterminating : string * (string list) * (component list list) -> r
-		val create_rule : string * (string list) * tuplerecipe -> r
+		val create_terminating : string * string * Rational.rat -> r
+		val create_nonterminating : string * (string list) * (component list list) *Rational.rat -> r
+		val create_rule : string * (string list) * tuplerecipe * Rational.rat -> r
 		val create_tuplerecipe : component list -> tuplerecipe
 		val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
 		val rule_arity : r -> int

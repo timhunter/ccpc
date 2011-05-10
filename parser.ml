@@ -2,6 +2,7 @@ open Util
 open Rule
 open Tables
 open Chart
+open Rational
 
 		type prim = Rule.r
 		type input = Prefix of (string list) | Sentence of (string list)
@@ -19,7 +20,7 @@ open Chart
 
 		let get_axioms_parse grammar symbols =
 		        let indices = range 0 (List.length symbols) in
-			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None) else None in
+			let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None (0,0)) else None in
 			let get_axiom symbols rule =
 				match Rule.get_expansion rule with
 				| PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str) indices
@@ -29,8 +30,8 @@ open Chart
 			
 		let get_axioms_intersect grammar prefix =
 			let len = List.length prefix in
-			let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] None in
-			let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] None in
+			let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] None (0,0) in
+			let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] None (0,0) in
 			let get_axiom rule =
 				let nt = Rule.get_nonterm rule in
 				match Rule.get_expansion rule with
@@ -47,7 +48,7 @@ open Chart
 				match gram with 
 					| [] -> acc
 					| h::t -> (match Rule.get_expansion h with 
-									  	|	PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None)::acc))
+									  	|	PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None (0,0))::acc))
 																											 else get_empties t acc
 											| PublicNonTerminating _ -> get_empties t acc) in 
 			(get_empties grammar []) @ from_symbols 
@@ -79,8 +80,8 @@ open Chart
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-										 [h] -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "\n%s" (to_string h)); *)Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) )
-										 | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t))) 
+										 [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) (0,0))
+										 | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t)) (0,0)) 
 										 | _ -> failwith "List can only have one or two items"
 			         with
                     RangesNotAdjacentException -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "OH no");*) None

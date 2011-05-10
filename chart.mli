@@ -1,8 +1,8 @@
 type backpointer = item option * item option
-and item = ParseItem of string * ((Util.range_item * Util.range_item) list) * backpointer option (*range_item defined in Util*) 
+and item = ParseItem of string * ((Util.range_item * Util.range_item) list) * backpointer option * Rational.rat (*range_item defined in Util*) 
 
 val get_nonterm: item -> string
-val create_item: string -> (Util.range_item * Util.range_item) list -> backpointer option -> item 
+val create_item: string -> (Util.range_item * Util.range_item) list -> backpointer option -> Rational.rat -> item 
 val get_ranges: item -> (Util.range_item * Util.range_item) list 
 val get_backpointer: item -> backpointer option
 val to_string: item -> string 

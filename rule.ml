@@ -1,4 +1,5 @@
 open Util
+open Rational
 
 (****
  This type is meant to be understood as part of the RULE interface.
@@ -17,7 +18,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		type component = Component of int * int | Epsilon
 		type stringrecipe = component Nelist.t
 		type tuplerecipe = stringrecipe Nelist.t
-		type r = Terminating of (string * string) | NonTerminating of (string * string Nelist.t * tuplerecipe)
+		type r = Terminating of (string * string * Rational.rat) | NonTerminating of (string * string Nelist.t * tuplerecipe * Rational.rat) 
 
 		(**********************************************************)
 
@@ -55,19 +56,19 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 
 		(* Input to these creation functions should be aggressively verified *)
 
-		let create_terminating (nonterm, term) = Terminating (nonterm, term)
+		let create_terminating (nonterm, term, weight) = Terminating (nonterm, term, weight)
 
 		(* TODO: Still need to make sure the ``rights'' and the ``recipes'' are compatible *)
-		let create_nonterminating (nonterm, rights, recipes) =
+		let create_nonterminating (nonterm, rights, recipes, weight) =
 			let checked_rights =
 				try Nelist.from_list rights
 				with EmptyListException -> failwith("Nonterminating rule must have nonterminals to expand to") in
 			let checked_recipes =
 				try Nelist.from_list (List.map Nelist.from_list recipes)
 				with EmptyListException -> failwith("Nonterminating rule must have a function for composing yields") in
-			NonTerminating (nonterm, checked_rights, checked_recipes)
+			NonTerminating (nonterm, checked_rights, checked_recipes, weight)
 
-		let create_rule (nonterm, rights, srecipes) = create_nonterminating (nonterm, rights, List.map Nelist.to_list (Nelist.to_list srecipes))
+		let create_rule (nonterm, rights, srecipes, weight) = create_nonterminating (nonterm, rights, List.map Nelist.to_list (Nelist.to_list srecipes), weight)
 
 		(**********************************************************)
 
@@ -75,7 +76,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		let rule_arity rule =
 			match rule with
 			| Terminating _ -> 0
-			| NonTerminating (left, rights, _) -> Nelist.length rights
+			| NonTerminating (left, rights, _, _) -> Nelist.length rights
 	  
 		let max_arity rules = List.fold_left max 0 (map_tr rule_arity rules)
 
@@ -83,17 +84,17 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		let nonterm_degree rule =
 			match rule with
 			| Terminating _ -> 1
-			| NonTerminating (left, rights, recipes) -> Nelist.length recipes
+			| NonTerminating (left, rights, recipes, weight) -> Nelist.length recipes
 
 		let get_nonterm rule =
 			match rule with
-			| Terminating (nt, _) -> nt
-			| NonTerminating (nt, _, _) -> nt
+			| Terminating (nt, _, _) -> nt
+			| NonTerminating (nt, _, _, _) -> nt
 
 		let get_expansion rule =
 			match rule with
-			| Terminating (_, str) -> PublicTerminating str
-			| NonTerminating (_, rights, recipes) -> PublicNonTerminating (rights, recipes)
+			| Terminating (_, str, weight) -> PublicTerminating str
+			| NonTerminating (_, rights, recipes, weight) -> PublicNonTerminating (rights, recipes)
 
 		(**********************************************************)
 
