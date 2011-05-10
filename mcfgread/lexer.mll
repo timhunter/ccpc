@@ -21,6 +21,7 @@ rule token = parse
    |  ','                                                { COMMA }
    |  [^ '\n']* eof                                      { EOF }
    |  '#' [^ '\n']* eof                                  { EOF }
+	 |	"/"			                                           { SLASH }
    |  eof                                                { EOF }
 
 {
