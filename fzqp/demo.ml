@@ -128,16 +128,6 @@ let rasp_gp = List.filter (fun x -> (fst x) = "Rasp") garden_paths;;
 let st_gp_tree = Tree.read_sexp (snd (snd (List.hd stanford_gp)));;
 let ra_gp_tree = Tree.read_sexp (snd (snd (List.hd rasp_gp)));;
 
-
-
-print_string "uh oh.";;
-
-
-
-
-(* I'm going to cheat a little here: *)
-let ra_gp_tree = Tree.read_sexp "(TOP  (S (NP (AT The:1) (NN1 horse:2))   (VP (VVD race+ed:3)    (PP (II past:4) (S (NP (AT the:5) (NNL1 barn:6)) (VVD fall+ed:7)))))  (. .:8))";;
-
 Tree.write_file "st_gp_tree.dot" 
   (Tree.dot_of_tree_labeled st_gp_tree "Stanford");;
 

@@ -108,8 +108,16 @@ module Rasp = struct
   let interpret_penn_output (output, errput) =
     (* right now errput is ignored *)
     let root = Str.regexp_string "upenn:" in 
-    List.map (fun x -> trim x) 
-      (List.filter (fun x -> trim x <> "") (Str.split root output))
+    let trim_at_penn_end item = (* hacktrocious, but desperate times... *)
+      let r = Str.regexp_string "(|" in 
+	try
+	  let loc = Str.search_forward r item 0 in
+	    String.sub item 0 loc
+	with Not_found -> item
+    in
+      (List.filter (fun x -> trim x <> "")
+	 (List.map (fun x -> trim_at_penn_end (trim x) )
+	 (Str.split root output)))
       
   let extract_trees the_list = 
     let extract_number item = 
