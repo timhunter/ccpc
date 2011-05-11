@@ -8,7 +8,7 @@
 </parser>
 <testcases>
    <test>
-      <grammar>mcfgs/larsonian.mcfg</grammar>
+      <grammar>../grammars/mcfgs/larsonian.mcfg</grammar>
       <sentences>
          <sentence>"sentence 1 goes here"</sentence>
          <sentence>"the fact that the girl who pay -ed for the ticket be -s very poor doesnt matter"</sentence>
