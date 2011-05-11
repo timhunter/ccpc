@@ -1,9 +1,12 @@
 open Rule
 type grammar = Rule.t list
 
-let epsilon = [""],[[]]
 (* get all productions of a rule *)
-let all_productions (cat,_,_) g = List.filter (fun (cat2,_,_) -> cat2=cat) g 
+let all_productions cat (g : Rule.t list) = List.filter (fun (cat2,_,_) -> cat2=cat) g
+(* find the index of an element in a list *)
+let rec find_index elt lst =
+  let (_,ind) = List.fold_left (fun (i,acc) e -> if e=elt then (i,i) else ((i+1),acc)) (0,(-1)) lst in
+  ind 
 (* find all categories that only have empty productions *)
 let identify_empty (g : grammar) : string list = 
   (* build a hashtable as follows: true if all rules of a token are empty, 
@@ -11,7 +14,7 @@ let identify_empty (g : grammar) : string list =
   let rec build_table (tbl : (string,bool) Hashtbl.t) (g : grammar) =
     match g with
 	(tok,rw,sy)::t -> 
-	  (if (compare (rw,sy) epsilon)=0
+	  (if (compare rw [""])=0 || (compare rw [])=0
 	   then 
 	      (try let _ = Hashtbl.find tbl tok in build_table tbl t
 	       with Not_found -> Hashtbl.replace tbl tok true; build_table tbl t)
@@ -20,6 +23,43 @@ let identify_empty (g : grammar) : string list =
   let tbl = Hashtbl.create 101 in
   build_table tbl g;
   Hashtbl.fold (fun k v acc -> if v=true then k::acc else acc) tbl []
+
+(* For each rule that references an epsilon that can't be removed, add 
+ * a new rule that doesn't contain that reference
+ * do this recursively until no new rules left to add *)
+let add_rules (g : Rule.t list) : Rule.t list =
+  (* identify epsion terminals that can't be deleted because 
+   * they aren't the only production of that category *)
+  let identify_epsilon_terminals (g : Rule.t list) =
+    let multiple_productions c = List.length (all_productions c g)>1 in
+    let rules = List.filter (fun (c,ch,sy) -> Rule.is_terminal (c,ch,sy) && List.length ch=1 && (List.nth ch 0)="" && multiple_productions c) g in
+    List.map (fun (c,_,_) -> c) rules in 
+  (* identify rules that reference a category *)
+  let identify_references c (g : Rule.t list) = 
+    List.filter (fun (_,ch,_) -> List.mem c ch) g in
+  (* replace all references to a CATEGORY with epsilon 
+   * NOTE: entire category must be nullable (cat, not component)
+   * NOTE: must be in CNF *)
+  let remove_reference cat ((c,ch,sy) : Rule.t) : Rule.t =
+    let index = find_index cat ch in
+    let replace_and_renumber_cmp cmp = 
+      match cmp with
+        Component(i,j) -> if i != index then Component(0,j) else Epsilon
+      | Epsilon -> Epsilon in
+    let sy = (List.map (fun lst -> List.map (replace_and_renumber_cmp) lst) sy) in
+    let ch = List.filter (fun elt -> compare elt cat != 0) ch in
+    (c,ch,sy) in
+  let clean_rule (cat,ch,sy) empty = cat,(List.filter (fun c -> not (List.mem c empty)) ch),sy in
+  let rec do_add_rules empty eps_terms new_rules =
+    let refs = List.fold_left (fun acc t -> (t,(identify_references t g))::acc) [] eps_terms in
+    let rules_to_add = List.flatten (List.map (fun (t,rules) -> List.map (fun r -> remove_reference t r) rules) refs) in
+    let rules_to_add = List.map (fun r -> clean_rule r empty) rules_to_add in
+    let new_empty = (identify_empty rules_to_add) in
+    if List.length rules_to_add = 0
+    then new_rules
+    else do_add_rules (empty@new_empty) new_empty (new_rules@rules_to_add) in
+  let rules = do_add_rules (identify_empty g) (identify_epsilon_terminals g) [] in
+  List.filter (fun (_,ch,_) -> List.length ch != 0) rules
     
 (* build a data structure that keeps null component information *)
 let nullcomponenttable = Nullcomponenttable.create ()
@@ -45,7 +85,7 @@ let grammar_needs_update g =
 let identify_nullable_in_all_prods ((tok,rw,sy) : Rule.t) (g : grammar) : bool list =
   let is_empty lst = List.fold_left (fun acc x -> (x=Epsilon)&&acc) true lst in
   let get_empty_comps (_,_,ll) = List.map is_empty ll in
-  let all_empty = List.map (fun r -> get_empty_comps r) (all_productions (tok,rw,sy) g) in
+  let all_empty = List.map (fun r -> get_empty_comps r) (all_productions tok g) in
   let aggregate lst1 lst2 = List.map2 (fun a b -> a&&b) lst1 lst2 in
   let rec base size ret = if (List.length ret)<size then base size (true::ret) else ret in
   List.fold_left aggregate (base (List.length sy) []) all_empty
@@ -96,13 +136,9 @@ let clean_grammar (g : grammar) : grammar =
   let replace_epsilon = List.map (fun c -> if c=[] then [Epsilon] else c) in
   let clean_sy sy = replace_epsilon (remove_epsilon sy) in
   let g = List.map (fun (cat,ch,sy) -> (cat,ch,(clean_sy sy))) g in
-  (* delete empty terminals that are the only productions of a category *)
-  (* TODO - check if a terminal is in the null component table *)
-  let nonerasable_rule (c,ch,sy) = 
-    if (Rule.is_terminal (c,ch,sy)) 
-    then (List.length (Nullcomponenttable.lookup nullcomponenttable c))=0 
-    else true in
-  List.filter nonerasable_rule g 
+  (* delete empty terminals *)
+  let remove_empty_rules = List.filter (fun (_,_,sy) -> (compare sy []) != 0 && (compare sy [[Epsilon]]) != 0) in
+  remove_empty_rules g
 
 (* remove children that are unreferenced in the string yield 
  * also rereference the string yield to account for the absense of removed children *)
@@ -179,6 +215,7 @@ let sanity_check (g : grammar) =
 
 
 let deempty (g : Rule.t list) : Rule.t list = 
+  let g = g@(add_rules g) in
   Componentmap.initialize g;
   let g = remove_children (clean_grammar (modify_grammar g)) in
   Componentmap.compute_mappings (Nullcomponenttable.get_items nullcomponenttable);
