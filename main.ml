@@ -185,10 +185,10 @@ let run_test prefix sentence expected =
 	Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
 	Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 
-let  print_tree item oc =
+let print_tree item sentence oc =
 	let rec print item level =
 		let backpointer = Chart.get_backpointer item in 
-		Printf.fprintf oc "%s/[" (Chart.to_string item);
+		Printf.fprintf oc "%s/[" (Chart.to_string item sentence);
 		(match backpointer with 
 			None -> () 
 			| Some (Some a, None) ->  print a (level+1) ; Printf.fprintf oc "]"
@@ -204,14 +204,14 @@ let run_sanity_check sentence debug file =
 		Some f ->
 				for i=0 to (List.length goal_items)-1 do
 					let oc = open_out f in
-					print_tree (List.nth goal_items i) oc;
+					print_tree (List.nth goal_items i) sentence oc;
 					close_out oc; (* flush and close the channel *)
  				  done
 		| None -> ());
 	(if (List.length goal_items)>0 then 
 		(Printf.printf "SUCCESS!\n";
 		if debug then 
-		List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x)) chart)
+		List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart)
 	else 
 		Printf.printf "FAILED\n")
 	

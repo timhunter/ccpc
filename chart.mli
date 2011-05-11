@@ -5,7 +5,7 @@ val get_nonterm: item -> string
 val create_item: string -> (Util.range_item * Util.range_item) list -> backpointer option -> Rational.rat -> item 
 val get_ranges: item -> (Util.range_item * Util.range_item) list 
 val get_backpointer: item -> backpointer option
-val to_string: item -> string 
+val to_string: item -> string list -> string 
 type t
 
 val create : int -> t

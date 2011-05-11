@@ -14,18 +14,30 @@ let get_ranges = function ParseItem(_, rs,_,_) -> rs
 	 
 let get_backpointer = function ParseItem(_,_,bp,_) -> bp
 
+let get_string sentence range_list =
+  let find_words (first, last) =
+		let rec find' index acc =
+			if index= last then acc
+			else
+				find' (index+1) ((List.nth sentence index)::acc) in
+		["("]@(List.rev  (find' first []))@[")"] in
+	let rec get' lst acc =
+		match lst with 
+			[] -> acc
+		| h::t -> match h with 
+								  (RangeVal x, RangeVal y) -> get' t ((find_words (x,y))::acc)
+								| (EpsVar, EpsVar) -> get' t acc 
+								| _ -> failwith "Should not mix EpsVar with RangeVal" in
+	List.flatten (get' range_list [])
 
+	
 
-let to_string item =
-	let ParseItem (nt, ranges, bp,_) = item in
-	let range_strings = map_tr (fun (p,q) -> match (p,q) with 
-		| (EpsVar, EpsVar) -> Printf.sprintf "(Epsilon, Epsilon)"
-		| (RangeVal a, RangeVal b) -> Printf.sprintf "(%d,%d)" a b  
-		| _ -> failwith "Should never mix RangeVal and EpsVar!") ranges in 
-		Printf.sprintf "'{%s, %s}'" nt (List.fold_left (^) "" range_strings) 
+let to_string item sentence =
+	let ParseItem (nt, ranges, _,_) = item in
+	let words = get_string sentence ranges in
+	Printf.sprintf "'{%s, %s}'" nt (List.fold_left (fun x y -> x ^ (y ^ " ")) "" words) 
 
 let create i = Table (Hashtbl.create i)
-
 let get_tbl cht =
 	match cht with 
 		Table t -> t
