@@ -205,7 +205,7 @@ let run_parser sentence debug file gram_file =
     Printf.printf "\nFAILED\n")
   
     
-let main () =
+let main =
   begin
   try
       match Sys.argv.(4) with
