@@ -220,9 +220,3 @@ let main () =
                Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
                Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
   end
-
-
-
-
-
-
