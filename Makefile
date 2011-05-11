@@ -32,7 +32,7 @@ clean:
 
 %.cmo: %.ml
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
-	
+
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
 

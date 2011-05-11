@@ -13,9 +13,9 @@ open Rational
 (******************************************************************************************)
 
 
-let get_input_grammar () =
+let get_input_grammar grammar_file =
   try 
-    let channel = open_in Sys.argv.(1) in 
+    let channel = open_in grammar_file in 
     let lexbuf = Lexing.from_channel channel in 
     Read.mcfgrule Lexer.token lexbuf  
   with _ -> print_string "Can't parse input mcfg file\n"; exit 0
@@ -185,8 +185,8 @@ let print_tree item sentence oc =
   print item 0;
   Printf.fprintf oc "]"
   
-let run_sanity_check sentence debug file =
-  let chart = parse (get_input_grammar ()) sentence in 
+let run_parser sentence debug file gram_file =
+  let chart = parse (get_input_grammar gram_file) sentence in 
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
   (match file with 
     Some f ->
@@ -205,7 +205,7 @@ let run_sanity_check sentence debug file =
     Printf.printf "\nFAILED\n")
   
     
-let main =
+let main () =
   begin
   try
       match Sys.argv.(4) with
@@ -213,9 +213,9 @@ let main =
                 let sentence = Util.split ' ' Sys.argv.(4) in
                 run_test prefix sentence true) *)
       | "-d" -> (let sentence = Util.split ' ' Sys.argv.(5) in
-                run_sanity_check sentence true (Some Sys.argv.(3)))
+                run_parser sentence true (Some Sys.argv.(3)) Sys.argv.(1))
       | _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
-                  run_sanity_check sentence false (Some Sys.argv.(3))) 
+                  run_parser sentence false (Some Sys.argv.(3)) Sys.argv.(1)) 
      with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
                Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
                Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
