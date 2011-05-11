@@ -12,21 +12,8 @@ open Rational
 
 (******************************************************************************************)
 
-(*let sample_grammar =
-  let f1 = [[(0,0);(0,1)]] in
-  let f2 = [[(0,0)]; [(0,1)]] in
-  let f3 = [[(0,0);(1,0)]; [(0,1);(1,1)]] in
-  let f4 = [[(0,0)]; [(1,0)]] in
-  let rules1 = map_tr Rule.create_nonterminating
-          [ ("S", ["R"], f1) ;
-            ("R", ["X"], f2) ;
-            ("R", ["X";"R"], f3) ;
-            ("X", ["A";"A"], f4) ;
-            ("X", ["B";"B"], f4) ] in
-  let rules2 = map_tr Rule.create_terminating [ ("A", "a") ; ("B", "b") ] in
-  rules1 @ rules2*)
 
-let sample_grammar =
+let get_input_grammar () =
   try 
     let channel = open_in Sys.argv.(1) in 
     let lexbuf = Lexing.from_channel channel in 
@@ -164,10 +151,11 @@ let parse rules symbols =
 (*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
-
+(*
 let parse_with_intersection prefix sentence =
-  let new_grammar = intersection_grammar sample_grammar prefix in
+  let new_grammar = intersection_grammar input_grammar prefix in
   parse new_grammar sentence
+  *)
 
 (*
  * Bit of a hack here: the start symbol that makes a goal item a goal item depends on the length of the 
@@ -175,7 +163,7 @@ let parse_with_intersection prefix sentence =
  * have to put together a start symbol by hand out here and look at the insides of the items directly. 
  * Not sure what the best approach to fixing this is.
  *)
-
+(*
 let run_test prefix sentence expected =
   let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
   let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
@@ -184,7 +172,7 @@ let run_test prefix sentence expected =
   let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
   Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
   Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
-
+*)
 let print_tree item sentence oc =
   let rec print item level =
     let backpointer = Chart.get_backpointer item in 
@@ -198,7 +186,7 @@ let print_tree item sentence oc =
   Printf.fprintf oc "]"
   
 let run_sanity_check sentence debug file =
-  let chart = parse sample_grammar sentence in 
+  let chart = parse (get_input_grammar ()) sentence in 
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
   (match file with 
     Some f ->
@@ -221,10 +209,9 @@ let main =
   begin
   try
       match Sys.argv.(4) with
-        
-        "-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
+       (*"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
                 let sentence = Util.split ' ' Sys.argv.(4) in
-                run_test prefix sentence true)
+                run_test prefix sentence true) *)
       | "-d" -> (let sentence = Util.split ' ' Sys.argv.(5) in
                 run_sanity_check sentence true (Some Sys.argv.(3)))
       | _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
