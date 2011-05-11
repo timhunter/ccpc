@@ -96,9 +96,13 @@ let clean_grammar (g : grammar) : grammar =
   let replace_epsilon = List.map (fun c -> if c=[] then [Epsilon] else c) in
   let clean_sy sy = replace_epsilon (remove_epsilon sy) in
   let g = List.map (fun (cat,ch,sy) -> (cat,ch,(clean_sy sy))) g in
-  (* delete empty terminals *)
-  let remove_empty_rules = List.filter (fun (_,_,sy) -> (compare sy []) != 0 && (compare sy [[Epsilon]]) != 0) in
-  let g = remove_empty_rules g in g
+  (* delete empty terminals that are the only productions of a category *)
+  (* TODO - check if a terminal is in the null component table *)
+  let nonerasable_rule (c,ch,sy) = 
+    if (Rule.is_terminal (c,ch,sy)) 
+    then (List.length (Nullcomponenttable.lookup nullcomponenttable c))=0 
+    else true in
+  List.filter nonerasable_rule g 
 
 (* remove children that are unreferenced in the string yield 
  * also rereference the string yield to account for the absense of removed children *)
@@ -129,6 +133,8 @@ let remove_children (g : grammar) : grammar =
 let print_nullcomponenttable unit =
   let items = Nullcomponenttable.get_items nullcomponenttable in
   List.iter (fun (s,il) -> print_string (s^": "); List.iter (fun i -> print_string ((string_of_int i)^" ")) il; print_string "\n") items
+
+let get_nullcomponenttable unit = nullcomponenttable
 
 (* SANITY CHECK
  * - check that all string yields have same arity

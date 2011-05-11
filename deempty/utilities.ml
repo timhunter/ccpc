@@ -5,7 +5,7 @@ let string_of_grammar (g : Rule.t list) =
     (let rec show_rw ret = 
        (function
        h::t -> show_rw (ret^h^" ") t
-	 | [] -> if (compare ret " ") == 0 then "\"\" " else ret) 
+	 | [] -> if (compare ret "") == 0 then "\"\" " else ret) 
      in
      let rec show_sy ret l =
        (let rec show_component ret = 
