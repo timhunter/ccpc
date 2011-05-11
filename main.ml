@@ -219,7 +219,9 @@ let run_sanity_check sentence debug file =
 	  
 let main =
   begin
+	try
 			match Sys.argv.(4) with
+			 	
 				"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
 								let sentence = Util.split ' ' Sys.argv.(4) in
 								run_test prefix sentence true)
@@ -227,6 +229,9 @@ let main =
 								run_sanity_check sentence true (Some Sys.argv.(3)))
 			| _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
 	  							run_sanity_check sentence false (Some Sys.argv.(3))) 
+		 with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
+		           Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
+							 Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
 	end
 
 
