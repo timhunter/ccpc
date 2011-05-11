@@ -208,12 +208,13 @@ let run_sanity_check sentence debug file =
 					close_out oc; (* flush and close the channel *)
  				  done
 		| None -> ());
+  (if debug then 
+		List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
 	(if (List.length goal_items)>0 then 
-		(Printf.printf "SUCCESS!\n";
-		if debug then 
-		List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart)
+		(Printf.printf "\nSUCCESS!\n";
+	)
 	else 
-		Printf.printf "FAILED\n")
+		Printf.printf "\nFAILED\n")
 	
 	  
 let main =
