@@ -1,13 +1,8 @@
-This is a test script written in python. It is configurable using an XML configuration file.
-
-It can be used in two ways:
-   1 - To run a batch of tests
-   2 - To run a grammar modifier (some executable that takes a grammer and outputs a grammar) and then run a batch of tests on both the modified and unmodified grammars.  As an example, this is useful to test the epsilon removal executable.
+This is a test script written in python. It is configurable using an XML configuration file.  It can be used to run a batch of tests.
 
 To run the test script, you need to have python installed on your machine.  This is done by default in Linux and Mac OS X.
 
-This is the format of the XML configuration file.  The strings GRAMMAR, SENTENCE, and OUT must appear as written (in all caps). [args] designates that there may be any number of arguments (including zero) in that space.  To run without running a grammar modifier, just remove the grammar modifier section from the XML file.
-
+This is the format of the XML configuration file.  The strings GRAMMAR and SENTENCE must appear as written (in all caps). [args] designates that there may be any number of arguments (including zero) in that space.  
 <?xml version="1.0"?>
 <configuration>
 <parser>
@@ -16,10 +11,6 @@ This is the format of the XML configuration file.  The strings GRAMMAR, SENTENCE
    <pass>string_designating_a_pass</pass>
    <fail>string_designating_a_failure</fail>
 </parser>
-<grammarmodifier>
-   <path>path_to_modifier</path>
-   <configuration>[args] GRAMMAR [args] OUT [args]</configuration>
-</grammarmodifier>
 <testcases>
    <test>
       <grammar>path_to_grammar_1</grammar>
