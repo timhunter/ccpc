@@ -5,6 +5,7 @@ LING 4485, Spring 2011
 DDS Contents:
 	openccg: directory for OpenCCG Visualization
 	mgcky-swi: directory for Stabler, et al., SWI-Prolog MG system 
+	tikz-qtree: resources (manual and .sty files) for David Chiang's tikz-qtree package
 
 *** NB: You must have pdflatex (as well as packages tikz, tikz-qtree, and tikz-qtree-compat installed / on-the-fly package installation) on your PATH ***
 
