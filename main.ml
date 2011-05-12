@@ -173,50 +173,55 @@ let run_test prefix sentence expected =
   Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
   Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
 *)
-let print_tree item sentence oc =
-  let rec print item level =
+let print_tree item sentence =
+  let rec print item level str =
     let backpointer = Chart.get_backpointer item in 
-    Printf.fprintf oc "%s/[" (Chart.to_string item sentence);
+    let str = str ^ Printf.sprintf "%s/[" (Chart.to_string item sentence) in
     (match backpointer with 
-      None -> () 
-      | Some (Some a, None) ->  print a (level+1) ; Printf.fprintf oc "]"
-      | Some (Some a, Some b) -> print a (level+1) ; Printf.fprintf oc "]," ; print b (level+1) ; Printf.fprintf oc "]"
+      None -> str
+      | Some (Some a, None) -> ((print a (level+1) str) ^ (Printf.sprintf "]"))
+      | Some (Some a, Some b) -> (print b (level+1) ((print a (level+1) str) ^ "],")) ^ (Printf.sprintf "]" )
       | _ -> failwith "Invalid Parent backpointer") in
-  print item 0;
-  Printf.fprintf oc "]"
+  (print item 0 "") ^ "]"
   
-let run_parser sentence debug file gram_file =
+let run_parser sentence debug gram_file =
   let chart = parse (get_input_grammar gram_file) sentence in 
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
-  (match file with 
-    Some f ->
-        for i=0 to (List.length goal_items)-1 do
-          let oc = open_out f in
-          print_tree (List.nth goal_items i) sentence oc;
-          close_out oc; (* flush and close the channel *)
-          done
-    | None -> ());
+  let rec make_trees goals acc =
+    match goals with
+      [] -> acc
+    | h::t ->  make_trees t ((print_tree h sentence)::acc) in
+  let result = make_trees goal_items [] in
   (if debug then 
     List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
   (if (List.length goal_items)>0 then 
-    (Printf.printf "\nSUCCESS!\n";
-  )
+    (Printf.printf "\nSUCCESS!\n";)
   else 
-    Printf.printf "\nFAILED\n")
+    Printf.printf "\nFAILED\n");
+  result
   
     
 let main =
   begin
+  let oc = open_out "maketree.pl" in
   try
-      match Sys.argv.(4) with
+     let lst =( match Sys.argv.(4) with
        (*"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
                 let sentence = Util.split ' ' Sys.argv.(4) in
                 run_test prefix sentence true) *)
       | "-d" -> (let sentence = Util.split ' ' Sys.argv.(5) in
-                run_parser sentence true (Some Sys.argv.(3)) Sys.argv.(1))
+                run_parser sentence true Sys.argv.(1))
       | _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
-                  run_parser sentence false (Some Sys.argv.(3)) Sys.argv.(1)) 
-     with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
-               Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
-               Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
+              run_parser sentence false Sys.argv.(1))) in 
+      for i=0 to (List.length lst)-1 do                             
+        Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth lst i) (Sys.argv.(3));
+        let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
+        (if exit_code = 1 then Printf.printf "Error running tree drawer")
+      done;
+      let exit_code = Sys.command "rm maketree.pl" in 
+      (if exit_code = 1 then Printf.printf "Error deleting prolog tree file");
+      close_out oc;
+  with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
+            Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
+            Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
   end
