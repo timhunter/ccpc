@@ -6,10 +6,6 @@
    <pass>SUCCESS!</pass>
    <fail>FAILED</fail>
 </parser>
-<grammarmodifier>
-   <path>../deempty/deempty_opt</path>
-   <configuration>&lt; GRAMMAR &gt; OUT</configuration>
-</grammarmodifier>
 <testcases>
    <test>
       <grammar>../grammars/mcfgs/larsonian.mcfg</grammar>
