@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo $1 | rasp_parse=cat /home/del82/projects/mcfgcky/rasp3os/scripts/rasp.sh | sed -e 's/\_[a-zA-Z0-9]*//g' -e 's/[\^\.\$]//g' -e 's/\+/ -/g' -e 's/^ *//g' -e 's/ *$//g' -e 's/whose/who s/g' -e 's/egg -s/eggs/g' -e 's/lose -ed/lost/g' -e 's/interest -ing/interesting/g' -e 's/lie -s/lies/g' -e 's/we -/us/g' -e 's/ is / be -s /g' -e 's/ was / be -ed /g' -e 's/ read -ing / reading /g'
+
