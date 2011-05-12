@@ -1,0 +1,1 @@
+@pdflatex %1 >NUL
