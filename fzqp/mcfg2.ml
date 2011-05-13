@@ -81,8 +81,8 @@ module Mcfg2 = struct
   let tokenize sentences = 
     List.map (fun x -> ((fst x), (Util.split ' ' (snd x)))) sentences
 
-  let parse_one sentence = 
-    let parsed = Main.timed_parse !grammar sentence in
+  let parse_one grammar sentence = 
+    let parsed = Main.timed_parse grammar sentence in
     let items_in_chart = List.length (snd parsed) in
       (* turns out returning the whole chart is a bad idea, 'cause it's huge.*)
     (*let chart_strings = List.map 
@@ -93,38 +93,30 @@ module Mcfg2 = struct
      (string_of_float (fst parsed))^" "^
      (string_of_int items_in_chart)
 
-  let parse_all sentences = List.map parse_one sentences
+  let parse_all grammar sentences = List.map (parse_one grammar) sentences
 
   let re_id ids sentences = List.combine ids sentences
 
 
   (* pi functions *)
-  let initialize argument_string = 
-    grammar := Main.get_input_grammar argument_string; 0
-      (* get_input_grammar calls exit if it can't find the grammar. *)
+  let initialize  argument_string = 0
 
   let close () = [] (*noop*)
 
-  let parse sentence_list = 
+  let parse grammar_file sentence_list = 
+    let grammar = Main.get_input_grammar grammar_file in
     let a = List.split sentence_list in
     let tokenized = tokenize (morph (sentence_list)) in
-    re_id (fst a) (parse_all (List.map (fun x -> snd x) tokenized))
+    re_id (fst a) (parse_all grammar (List.map (fun x -> snd x) tokenized))
 
 
-  let pi = new Runner.parser_interface
-    id initialize parse close
 end
 
+(*
 let g = Main.get_input_grammar "../grammars/mcfgs/larsonian.mcfg"
 let s = Util.split ' ' "they have -ed forget -en that the boy who tell -ed the story be -s so young"
 
 let i () = Mcfg2.initialize "../grammars/mcfgs/larsonian.mcfg"
 let i2 () = Mcfg2.initialize "../grammars/mcfgs/larsonian.deemptied.mcfg"
-
-(* non-deemptied:
- * 12.1701500000000014,
- *
- * deemptied: 
- * 11.914188 
- *)
+*)
   

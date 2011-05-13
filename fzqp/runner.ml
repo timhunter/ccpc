@@ -35,12 +35,12 @@ module Runner = struct
   let make_sentence_list  string_list = 
     ((List.map (fun x -> ((gensym_id ()), x)) string_list) : sentence list)
 
+  let rec range = function
+      0 -> []
+    | n -> range (n-1) @ [n]
+
 
   let n_of_each n sentences = 
-    let rec range = function
-	0 -> []
-      | n -> range (n-1) @ [n]
-    in
     let n_of_one n_list sentence = 
       List.map (fun x -> ((fst sentence)^" "^(string_of_int x)),(snd sentence))
 	n_list

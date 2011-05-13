@@ -18,7 +18,7 @@ let get_input_grammar grammar_file =
     let channel = open_in grammar_file in 
     let lexbuf = Lexing.from_channel channel in 
     Read.mcfgrule Lexer.token lexbuf  
-  with _ -> print_string "Can't parse input mcfg file\n"; exit 0
+  with _ -> print_string ("Can't parse input mcfg file "^grammar_file^"\n"); []
 
 (******************************************************************************************)
 
@@ -152,10 +152,13 @@ let parse rules symbols =
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
 let timed_parse rules symbols =
-(* parses with timing info; returns a (float seconds * chart list) pair  *)
   let t = Sys.time () in
   let chart = parse rules symbols in 
-    ((Sys.time ()) -. t), chart
+  let duration = (Sys.time ()) -. t in
+  let goal_items = List.filter (Parser.is_goal (Parser.Sentence symbols)) chart in 
+  let d = if (List.length goal_items) > 0 then duration else 0. -. duration in
+    (d, chart)
+
 
 let parse_with_intersection prefix sentence =
   let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
