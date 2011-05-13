@@ -1,6 +1,6 @@
 #!/bin/bash
 
 N=0
-cat larsonian.txt | while read LINE ; do
+cat $1 | while read LINE ; do
     echo `./morph "$LINE"`
 done

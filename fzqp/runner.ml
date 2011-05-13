@@ -24,7 +24,61 @@ module Runner = struct
     method close = close
     method get_id = parser_id
   end
+
+  module Util = struct 
+  let gensym_id =
+    let count = ref (-1) in
+      function
+	  () -> count := !count+1;
+	    "id"^(string_of_int !count)
       
+  let make_sentence_list  string_list = 
+    ((List.map (fun x -> ((gensym_id ()), x)) string_list) : sentence list)
+
+
+  let n_of_each n sentences = 
+    let rec range = function
+	0 -> []
+      | n -> range (n-1) @ [n]
+    in
+    let n_of_one n_list sentence = 
+      List.map (fun x -> ((fst sentence)^" "^(string_of_int x)),(snd sentence))
+	n_list
+    in
+      List.flatten (List.map (n_of_one (range n)) sentences)
+
+    (* this astonishing piece of code appears to be the most concise way to
+       strip whitespace from the begining and end of a string in ocaml.  *)
+  let trim str =   if str = "" then "" else   let search_pos init p next =
+    let rec search i =
+      if p i then raise(Failure "empty") else
+	match str.[i] with
+	  | ' ' | '\n' | '\r' | '\t' -> search (next i)
+	  | _ -> i
+    in
+      search init   in   let len = String.length str in   try
+      let left = search_pos 0 (fun i -> i >= len) (succ)
+      and right = search_pos (len - 1) (fun i -> i < 0) (pred)
+      in
+	String.sub str left (right - left + 1)   with   
+	  | Failure "empty" -> "" ;;
+      
+  let read_file filename = 
+    let lines = ref [] in
+    let chan = open_in filename in
+      try
+	while true; do
+	  lines := input_line chan :: !lines
+	done; []
+      with End_of_file ->
+	close_in chan;
+	(List.rev !lines)
+
+
+  end
+
+
+
 
   let runner = 
   object (self : 'self)
