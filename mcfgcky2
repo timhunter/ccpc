@@ -1,6 +1,0 @@
-#!/bin/bash
-./mcfg_bc "$@" 
-FILE=`cat $3`
-echo "tikz_qtree($FILE, '$3')." > maketree.pl
-prolog -q -s tikz_qtreeSWI.pl < maketree.pl
-rm maketree.pl
