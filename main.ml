@@ -151,11 +151,11 @@ let parse rules symbols =
 (*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
-(*
+
 let parse_with_intersection prefix sentence =
-  let new_grammar = intersection_grammar input_grammar prefix in
+  let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
   parse new_grammar sentence
-  *)
+  
 
 (*
  * Bit of a hack here: the start symbol that makes a goal item a goal item depends on the length of the 
@@ -163,16 +163,7 @@ let parse_with_intersection prefix sentence =
  * have to put together a start symbol by hand out here and look at the insides of the items directly. 
  * Not sure what the best approach to fixing this is.
  *)
-(*
-let run_test prefix sentence expected =
-  let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
-  let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
-  let result = List.exists is_goal (parse_with_intersection prefix sentence) in
-  let show_result res = if res then "IN" else "OUT" in
-  let show_list l = "'" ^ (List.fold_left (^^) "" l) ^ "'" in
-  Printf.printf "TEST:   %-10s %-15s \t" (show_list prefix) (show_list sentence);
-  Printf.printf "Result: %-3s \tIntended: %-3s \t\t%s\n" (show_result result) (show_result expected) (if (expected = result) then "PASS!" else "FAIL")
-*)
+
 let print_tree item sentence =
   let rec print item level str =
     let backpointer = Chart.get_backpointer item in 
@@ -183,7 +174,27 @@ let print_tree item sentence =
       | Some (Some a, Some b) -> (print b (level+1) ((print a (level+1) str) ^ "],")) ^ (Printf.sprintf "]" )
       | _ -> failwith "Invalid Parent backpointer") in
   (print item 0 "") ^ "]"
-  
+
+let run_prefix_parser prefix sentence debug =
+  let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
+  let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
+  let chart = parse_with_intersection prefix sentence in 
+
+  let goal_items = List.filter (is_goal) chart in 
+  print_int (List.length goal_items);
+  let rec make_trees goals acc =
+    match goals with
+      [] -> acc
+    | h::t ->  make_trees t ((print_tree h sentence)::acc) in
+  let result = make_trees goal_items [] in
+  (if debug then 
+    List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
+  (if (List.length goal_items)>0 then 
+    (Printf.printf "\nSUCCESS!\n";)
+  else 
+    Printf.printf "\nFAILED\n");
+  result
+
 let run_parser sentence debug gram_file =
   let chart = parse (get_input_grammar gram_file) sentence in 
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
@@ -205,22 +216,40 @@ let main =
   begin
   let oc = open_out "maketree.pl" in
   try
-     let lst =( match Sys.argv.(4) with
-       (*"-p" -> (let prefix = Util.split ' ' Sys.argv.(3) in 
+     match Sys.argv.(2) with
+        "-p" -> let prefix = Util.split ' ' Sys.argv.(3) in 
                 let sentence = Util.split ' ' Sys.argv.(4) in
-                run_test prefix sentence true) *)
-      | "-d" -> (let sentence = Util.split ' ' Sys.argv.(5) in
-                run_parser sentence true Sys.argv.(1))
-      | _ -> (let sentence = Util.split ' ' Sys.argv.(4) in
-              run_parser sentence false Sys.argv.(1))) in 
-      for i=0 to (List.length lst)-1 do                             
-        Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth lst i) (Sys.argv.(3));
-        let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
-        (if exit_code = 1 then Printf.printf "Error running tree drawer")
-      done;
-      let exit_code = Sys.command "rm maketree.pl" in 
-      (if exit_code = 1 then Printf.printf "Error deleting prolog tree file");
-      close_out oc;
+                run_prefix_parser prefix sentence false;
+                ()
+      | "-d" -> (match Sys.argv.(3) with 
+                  "-p" -> let prefix = Util.split ' ' Sys.argv.(4) in 
+                          let sentence = Util.split ' ' Sys.argv.(5) in
+                          run_prefix_parser prefix sentence true;
+                          ()
+                  | _ ->  let sentence = Util.split ' ' Sys.argv.(3) in
+                          run_parser sentence true Sys.argv.(1);
+                          ())
+      | "-o" -> (let lst = (match Sys.argv.(4) with
+                              "-d" -> (match Sys.argv.(5) with 
+                                         "-p" -> let prefix = Util.split ' ' Sys.argv.(6) in 
+                                                 let sentence = Util.split ' ' Sys.argv.(7) in 
+                                                 run_prefix_parser prefix sentence true
+                                       | _ ->    let sentence = Util.split ' ' Sys.argv.(5) in 
+                                                 run_parser sentence true Sys.argv.(1)) 
+                            | "-p" -> let prefix = Util.split ' ' Sys.argv.(5) in 
+                                      let sentence = Util.split ' ' Sys.argv.(6) in 
+                                      run_prefix_parser prefix sentence false
+                            | _ ->    let sentence = Util.split ' ' Sys.argv.(4) in
+                                      run_parser sentence false Sys.argv.(1)) in 
+                   Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth lst 0) (Sys.argv.(3));
+                   close_out oc;
+                   let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
+                   (if exit_code = 1 then Printf.printf "Error running tree drawer");
+                let exit_code = Sys.command "rm maketree.pl" in 
+                if exit_code = 1 then Printf.printf "Error deleting prolog tree file";)
+       | _ -> let sentence = Util.split ' ' Sys.argv.(2) in
+              run_parser sentence false Sys.argv.(1);
+              ()
   with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
             Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
             Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
