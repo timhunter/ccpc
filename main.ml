@@ -152,7 +152,7 @@ let parse rules symbols =
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
 let timed_parse rules symbols =
-(* parses with timing info; returns a (float seconds * chart list) pair 
+(* parses with timing info; returns a (float seconds * chart list) pair  *)
   let t = Sys.time () in
   let chart = parse rules symbols in 
     ((Sys.time ()) -. t), chart

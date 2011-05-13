@@ -1,3 +1,4 @@
+
 #use "mcfg2.ml"
 
 let larsonian_pi = new Runner.parser_interface "mcfgcky2-larsonian" Mcfg2.initialize Mcfg2.parse Mcfg2.close;;
@@ -13,4 +14,4 @@ let larsonian_test_sentences = Runner.Util.make_sentence_list
 
 let ten_of_each = Runner.Util.n_of_each 10 larsonian_test_sentences
 
-let results = Runner.runner#parse_all larsonian_test_sentences
+let results = Runner.runner#parse_all ten_of_each
