@@ -55,6 +55,13 @@ def check(output, parser_pass, parser_fail):
       print 'Error: parser neither passes nor fails! check xml file.'
       exit(-1)
 
+def print_result(g,s,r,t):
+  print g
+  print s
+  print 'Recognized: %s' % r
+  print 'Parse time: %f' % t
+  print '---------------------------------'
+
 if len(sys.argv) != 2:
   print_usage()
 else:
@@ -77,16 +84,13 @@ testcases = configuration[4]
 parser_pass = configuration[2]
 parser_fail = configuration[3]
 results = []
+
+print 'TEST RESULTS:'
 for grammar, sentences in testcases:
   for sentence in sentences:
     out,runtime = run(parser_cmd(grammar,sentence))
     result = check(out, parser_pass, parser_fail)
     results.append((grammar, sentence, result, runtime))
+    print_result(grammar, sentence, result, runtime)
 
-print 'TEST RESULTS:'
-for (g,s,r,t) in results:
-  print g
-  print s
-  print 'Recognized: %s' % r
-  print 'Parse time: %f' % t
-  print '---------------------------------'
+
