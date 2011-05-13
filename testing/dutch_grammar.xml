@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<configuration>
+<parser>
+   <path>../mcfg_nt</path>
+   <configuration>GRAMMAR -o ~/Desktop/out SENTENCE</configuration>
+   <pass>SUCCESS!</pass>
+   <fail>FAILED</fail>
+</parser>
+<testcases>
+   <test>
+      <grammar>../grammars/mcfgs/nl7-ctrl.mcfg</grammar>
+      <sentences>
+	       <sentence>"omdat ik Cecilia helpen"</sentence>
+          <sentence>"omdat ik Cecilia Henk zag helpen"</sentence>
+          <sentence>"omdat ik Cecilia Henk nijlpaarden zag helpen voeren"</sentence>
+      </sentences>
+   </test>
+</testcases>
+</configuration>
