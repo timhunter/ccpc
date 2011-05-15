@@ -1,7 +1,7 @@
 open Util
 open Rational
 
-type backpointer = item option * item option
+type backpointer = item ref option * item ref option
 and item = ParseItem of string * ((range_item * range_item) list) * backpointer option * Rational.rat  (*range_item defined in Util*) 
 type t = Table of (item, string) Hashtbl.t 
 

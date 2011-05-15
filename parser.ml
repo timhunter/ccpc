@@ -80,8 +80,8 @@ open Rational
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, None)) (0,0))
-                     | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some h, Some t)) (0,0)) 
+                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), None)) (0,0))
+                     | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), Some (ref t))) (0,0)) 
                      | _ -> failwith "List can only have one or two items"
                with
                     RangesNotAdjacentException -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "OH no");*) None
