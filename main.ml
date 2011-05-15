@@ -258,7 +258,6 @@ let main =
        | _ -> let sentence = Util.split ' ' Sys.argv.(2) in
               run_parser sentence false Sys.argv.(1);
               ()
-  with _ -> Printf.printf "Usage (parse mode): mcfgcky2 grammar-file -o output-file \"sentence\"";
-            Printf.printf "\nUsage (degug mode): mcfgcky2 grammar-file -o output-file -d \"sentence\"";
-            Printf.printf "\nUsage (prefix mode): mcfgcky2 grammar-file -o output-file -p \"prefix\" \"sentence\""
+  with _ -> Printf.printf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
+            Printf.printf "\nFlags in parentheses are optional\n"
   end
