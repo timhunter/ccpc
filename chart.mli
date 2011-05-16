@@ -6,12 +6,12 @@ val create_item: string -> (Util.range_item * Util.range_item) list -> backpoint
 val get_ranges: item -> (Util.range_item * Util.range_item) list 
 val get_backpointer: item -> backpointer option
 val to_string: item -> string list -> string 
-type t
+type chart 
 
-val create : int -> t
-val add : t -> item -> unit
-val mem : t -> item -> bool
-val length : t -> int
-val iter : (item -> string -> unit) -> t -> unit
-val find : t -> item -> string
-val fold : (item -> string -> 'a -> 'a) -> t -> 'a -> 'a
+val create : int -> chart 
+val add : chart -> item -> unit
+val mem : chart -> item -> bool
+val length : chart -> int
+val iter : (item -> string -> unit) -> chart -> unit
+val find : chart -> item -> string
+val fold : (item -> string -> 'a -> 'a) -> chart -> 'a -> 'a

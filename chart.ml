@@ -3,7 +3,7 @@ open Rational
 
 type backpointer = item ref option * item ref option
 and item = ParseItem of string * ((range_item * range_item) list) * backpointer option * Rational.rat  (*range_item defined in Util*) 
-type t = Table of (item, string) Hashtbl.t 
+type chart = Table of (item, string) Hashtbl.t 
 
 let get_nonterm = function ParseItem(nt, _,_,_) -> nt
 
