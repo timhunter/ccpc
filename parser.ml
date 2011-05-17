@@ -134,9 +134,7 @@ open Rational
           let possible_items = filter_chart tables.item_map left_rules right_rules in 
           let all_new_items = build_items possible_rules trigger possible_items in 
          
-          let useful_new_items = List.filter (fun x -> not (Chart.mem chart x)) all_new_items in  
-         
-          List.iter (fun item -> add_item tables.item_map item; Queue.add item q; Chart.add chart item) useful_new_items; 
+          List.iter (fun item -> if (not (Chart.mem chart item)) then (add_item tables.item_map item; Queue.add item q; Chart.add chart item)) all_new_items; 
           consequences (max_depth -1) prims chart q tables
        
     let build_arity_map rules =
