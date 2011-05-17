@@ -136,12 +136,7 @@ open Rational
          
           let useful_new_items = List.filter (fun x -> not (Chart.mem chart x)) all_new_items in  
          
-          for i=0 to (List.length useful_new_items)-1 do
-            let item = List.nth useful_new_items i in 
-            Queue.add item q;
-            Chart.add chart item
-          done;
-          List.iter (fun item -> add_item tables.item_map item) useful_new_items; 
+          List.iter (fun item -> add_item tables.item_map item; Queue.add item q; Chart.add chart item) useful_new_items; 
           consequences (max_depth -1) prims chart q tables
        
     let build_arity_map rules =
