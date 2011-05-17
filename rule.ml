@@ -91,6 +91,11 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
       | Terminating (nt, _, _) -> nt
       | NonTerminating (nt, _, _, _) -> nt
 
+    let get_weight rule =
+      match rule with 
+        Terminating (_,_,w) -> w
+      | NonTerminating (_,_,_,w) -> w
+
     let get_expansion rule =
       match rule with
       | Terminating (_, str, weight) -> PublicTerminating str

@@ -14,6 +14,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		val max_arity: r list -> int
 		val nonterm_degree : r -> int
 		val get_nonterm : r -> string
+    val get_weight : r -> int * int
 		val get_expansion : r -> tuplerecipe expansion
 		val apply :  tuplerecipe ->
            (Util.range_item * Util.range_item) list list ->

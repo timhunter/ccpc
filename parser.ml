@@ -14,28 +14,24 @@ open Rational
       | Sentence strings -> (get_nonterm item = "S") && (get_ranges item = [(RangeVal 0, RangeVal (List.length strings))])
       | Prefix strings -> failwith("Help! Start symbol isn't going to be S!")
 
-
-
-  
-
     let get_axioms_parse grammar symbols =
-            let indices = range 0 (List.length symbols) in
-      let make_axiom nt term i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None (0,0)) else None in
+      let indices = range 0 (List.length symbols) in
+      let make_axiom nt term (w1, w2) i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None (w1,w2)) else None in
       let get_axiom symbols rule =
         match Rule.get_expansion rule with
-        | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str) indices
+        | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str (Rule.get_weight rule)) indices
         | PublicNonTerminating _ -> []
       in
       concatmap_tr (get_axiom symbols) grammar 
       
     let get_axioms_intersect grammar prefix =
       let len = List.length prefix in
-      let situated_axiom nt index = create_item nt [(RangeVal index, RangeVal (index+1))] None (0,0) in
-      let unsituated_axiom nt = create_item nt [(RangeVal len, RangeVal len)] None (0,0) in
+      let situated_axiom nt weight index = create_item nt [(RangeVal index, RangeVal (index+1))] None weight in
+      let unsituated_axiom nt weight = create_item nt [(RangeVal len, RangeVal len)] None weight in
       let get_axiom rule =
         let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
-        | PublicTerminating str -> (unsituated_axiom nt) :: (map_tr (situated_axiom nt) (find_in_list str prefix))
+        | PublicTerminating str -> (unsituated_axiom nt (Rule.get_weight rule)) :: (map_tr (situated_axiom nt (Rule.get_weight rule)) (find_in_list str prefix))
         | PublicNonTerminating _ -> []
       in
       concatmap_tr get_axiom grammar
@@ -48,7 +44,7 @@ open Rational
         match gram with 
           | [] -> acc
           | h::t -> (match Rule.get_expansion h with 
-                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None (0,0))::acc))
+                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None (Rule.get_weight h))::acc))
                                                        else get_empties t acc
                       | PublicNonTerminating _ -> get_empties t acc) in 
       (get_empties grammar []) @ from_symbols 
@@ -69,8 +65,6 @@ open Rational
     let build_items rules trigger items = 
      let build' rules item_list = 
        let combine' items rule =
-         (*Printf.printf "\nRULE: ";
-         print_rule rule;*)
          match Rule.get_expansion rule with
           | PublicTerminating _ -> None
           | PublicNonTerminating (nts, f) -> 
@@ -80,11 +74,11 @@ open Rational
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), None)) (0,0))
-                     | [h;t] -> (*(if (Rule.get_nonterm rule) = "t157" then (Printf.printf "\n%s" (to_string h); Printf.printf " ---- %s" (to_string t)));*) Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), Some (ref t))) (0,0)) 
+                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), None)) (Rule.get_weight rule))
+                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), Some (ref t))) (Rule.get_weight rule)) 
                      | _ -> failwith "List can only have one or two items"
                with
-                    RangesNotAdjacentException -> (*(if (Rule.get_nonterm rule) = "t157" then Printf.printf "OH no");*) None
+                    RangesNotAdjacentException -> None
                 else
                     None in
         optlistmap (combine' item_list) rules in 

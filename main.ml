@@ -90,12 +90,7 @@ let result_matches f input_ranges expected_result =
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
-  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y None (0,0)) rights range_lists in
-  (*let rec add_nones lst acc =
-    match lst with 
-      [] -> acc
-      | h::t -> add_nones t ((h None)::acc) in
-  let new_agenda_items =  add_nones new_agenda_items [] in *)
+  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y None weight) rights range_lists in
   (Rule.create_rule (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
 (* NB: There is a "bug" in Albro's dissertation where he describes this algorithm.
@@ -105,7 +100,7 @@ let make_new_rule sit_nonterm rights func range_lists weight =
 let intersection_rules_per_rule all_items item rule =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   match Rule.get_expansion rule with
-  | PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str, (0,0))], [])
+  | PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
   | PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
     let items_headed_by nt = List.filter (fun item -> (Chart.get_nonterm item) = nt) all_items in
     let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
@@ -114,7 +109,7 @@ let intersection_rules_per_rule all_items item rule =
     let function_inputs = map_tr ranges_from_item_comb item_combinations in
     let defined_function_inputs = List.filter (fun input -> result_matches func input (Chart.get_ranges item)) function_inputs in
     (* results_to_combine :: (Rule.r * Parser.item list) list *)
-    let results_to_combine = map_tr (fun x -> (make_new_rule sit_nonterm (Nelist.to_list nts') func x (0,0))) defined_function_inputs in
+    let results_to_combine = map_tr (fun x -> (make_new_rule sit_nonterm (Nelist.to_list nts') func x (Rule.get_weight rule))) defined_function_inputs in
     let new_rules = map_tr fst results_to_combine in
     let new_agenda_items = concatmap_tr snd results_to_combine in
     (new_rules, new_agenda_items)
