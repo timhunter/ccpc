@@ -5,7 +5,9 @@ type map_value = RuleVal of Rule.r list | ItemVal of Chart.item list
 type map = Map of (string, map_value) Hashtbl.t 
   
 
-(*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar*)
+(*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar. *)
+(* daughter is an index into the right-hand side of a rule. *)
+(* The returned object maps a nonterminal NT to a list of rules which have NT in the daughter'th position in their right-hand side. *)
 let build_rule_map grammar daughter =
   let load_map map rule =
     if (Rule.rule_arity rule)-1 >= daughter then  

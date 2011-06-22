@@ -40,6 +40,8 @@ open Rational
       let from_symbols =  match input with
         | Prefix strings -> get_axioms_intersect grammar strings
         | Sentence strings -> get_axioms_parse grammar strings in 
+      (* get_axioms_parse only gives us items that cover non-empty chunks of the input; get_empties creates 
+         items that can go anywhere in the input (i.e. EpsVar) from each terminating rule that produces the empty string *)
       let rec get_empties gram acc =
         match gram with 
           | [] -> acc
@@ -131,12 +133,13 @@ open Rational
           let single_rules = filter_rules tables.sRule_map trigger in 
           
           let possible_rules = single_rules @ left_rules @ right_rules in
-          let possible_items = filter_chart tables.item_map left_rules right_rules in 
+          let possible_items = filter_chart tables.item_map left_rules right_rules in    (* Limits the chart to other items the trigger might combine with *)
           let all_new_items = build_items possible_rules trigger possible_items in 
          
           List.iter (fun item -> if (not (Chart.mem chart item)) then (add_item tables.item_map item; Queue.add item q; Chart.add chart item)) all_new_items; 
           consequences (max_depth -1) prims chart q tables
        
+    (* Produces a length-three array of rule lists; nullary, unary and binary rules *)
     let build_arity_map rules =
      let arr = Array.make 3 [] in 
      let rec build' lst =
