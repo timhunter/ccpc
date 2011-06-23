@@ -37,6 +37,23 @@ let to_string item sentence =
   let words = get_string sentence ranges in
   Printf.sprintf "'{%s, %s}'" nt (List.fold_left (fun x y -> x ^ (y ^ " ")) "" words) 
 
+let debug_str item =
+	let ParseItem (nt, ranges, bps, _) = item in
+	let show_range r =
+		match r with
+		| (RangeVal x, RangeVal y) -> Printf.sprintf "%d:%d" x y
+		| (EpsVar, EpsVar)         -> Printf.sprintf "eps"
+		| _ -> failwith "Should not mix EpsVar with RangeVal"
+	in
+	let show_bps bps =
+		match bps with
+		| Some (Some r1, Some r2) -> Printf.sprintf "%s %s" (get_nonterm !r1) (get_nonterm !r2)
+		| Some (Some r1, None)    -> Printf.sprintf "%s" (get_nonterm !r1)
+		| Some (None,    Some r2) -> Printf.sprintf "%s" (get_nonterm !r2)
+		| _                       -> Printf.sprintf ""
+	in
+	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "|" ^^ (show_bps bps) ^^ "]")
+
 let create i = Table (Hashtbl.create i)
 let get_tbl cht =
   match cht with 

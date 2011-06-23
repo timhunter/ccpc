@@ -6,6 +6,7 @@ val create_item: string -> (Util.range_item * Util.range_item) list -> backpoint
 val get_ranges: item -> (Util.range_item * Util.range_item) list 
 val get_backpointer: item -> backpointer option
 val to_string: item -> string list -> string 
+val debug_str : item -> string
 type chart 
 
 val create : int -> chart 
