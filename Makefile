@@ -15,7 +15,10 @@ OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo m
 OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi main.cmi
 OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx main.cmx
 
-all: $(EXE)_bc $(EXE)_nt
+# There are some complicated interactions I don't understand yet between the native and bytecode compilation 
+# procedures, such that if the bytecode exe is not produced *last*, there are "inconsistent assumptions over interface" 
+# errors when things are loaded into the REPL.
+all: $(EXE)_nt $(EXE)_bc
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc)
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(OCAMLOBJ_bc)

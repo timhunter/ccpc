@@ -1,6 +1,4 @@
-(* #use this file from the interpreter to load the parser, which becomes 
- * available in module "Main"
- *)
+(* #use this file from the interpreter to load all the bindings declared in main.ml *)
 
 #load "profiling.cmo";;
 #load "util.cmo";;
@@ -12,6 +10,5 @@
 #load "chart.cmo";;
 #load "tables.cmo";;
 #load "parser.cmo";;
-#load "main.cmo";;
-(* #use "main.ml";;  still doesn't work *)
+#use "main.ml";;
    

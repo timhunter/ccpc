@@ -215,7 +215,7 @@ let run_parser sentence debug gram_file =
   result
   
     
-let main =
+let main () =
   begin
   let oc = open_out "maketree.pl" in
   try
@@ -256,3 +256,5 @@ let main =
   with _ -> Printf.printf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
             Printf.printf "\nFlags in parentheses are optional\n"
   end
+
+let _ = if (!Sys.interactive) then () else main () ;;
