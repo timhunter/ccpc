@@ -13,6 +13,4 @@ val create : int -> chart
 val add : chart -> item -> unit
 val mem : chart -> item -> bool
 val length : chart -> int
-val iter : (item -> string -> unit) -> chart -> unit
-val find : chart -> item -> string
-val fold : (item -> string -> 'a -> 'a) -> chart -> 'a -> 'a
+val fold : (item -> unit -> 'a -> 'a) -> chart -> 'a -> 'a
