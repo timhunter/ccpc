@@ -160,23 +160,37 @@ let parse_with_intersection prefix sentence =
   parse new_grammar sentence
   
 
+let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item)) : string =
+	match r with
+	| (RangeVal i, RangeVal j) -> List.fold_left (^^) "" (map_tr (List.nth sentence) (range i j))
+	| (EpsVar, EpsVar) -> ""
+	| _ -> failwith "Should never mix EpsVar with RangeVal"
+
+let print_tree item sentence =
+	let get_children item =
+		match (Chart.get_backpointer item) with
+		| None -> []
+		| Some (Some x, None) -> [!x]
+		| Some (Some x, Some y) -> [!x;!y]
+		| _ -> failwith "Invalid parent backpointer"
+	in
+	let rec print_item item =      (* print_item returns a list of strings, each representing one line *)
+		let yields_list : (string list) = map_tr (get_yield sentence) (Chart.get_ranges item) in
+		let yields_string : string = List.fold_left (^^) "" (map_tr (Printf.sprintf "'%s'") yields_list) in
+		let first_line = Printf.sprintf "%s (%s) " (Chart.get_nonterm item) yields_string in
+		let child_items : (item list) = get_children item in
+		let child_subtrees : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_item child_items : (string list list))) in
+		let all_lines : (string list) = first_line :: child_subtrees in
+		all_lines
+	in
+	List.fold_right (Printf.sprintf("%s\n%s")) (print_item item) ""
+
 (*
  * Bit of a hack here: the start symbol that makes a goal item a goal item depends on the length of the 
  * prefix, but the span that makes a goal item a goal item depends on the length of the sentence. So I 
  * have to put together a start symbol by hand out here and look at the insides of the items directly. 
  * Not sure what the best approach to fixing this is.
  *)
-
-let print_tree item sentence =
-  let rec print item level str =
-    let backpointer = Chart.get_backpointer item in 
-    let str = str ^ Printf.sprintf "%s/[" (Chart.to_string item sentence) in
-    (match backpointer with 
-      None -> str
-      | Some (Some a, None) -> ((print !a (level+1) str) ^ (Printf.sprintf "]"))
-      | Some (Some a, Some b) -> (print !b (level+1) ((print !a (level+1) str) ^ "],")) ^ (Printf.sprintf "]" )
-      | _ -> failwith "Invalid Parent backpointer") in
-  (print item 0 "") ^ "]"
 
 let run_prefix_parser prefix sentence debug =
   let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
@@ -196,6 +210,7 @@ let run_prefix_parser prefix sentence debug =
     (Printf.printf "\nSUCCESS!\n";)
   else 
     Printf.printf "\nFAILED\n");
+  if debug then List.iter (Printf.printf "%s\n") result ;
   result
 
 let run_parser sentence debug gram_file =
@@ -212,6 +227,7 @@ let run_parser sentence debug gram_file =
     (Printf.printf "\nSUCCESS!\n";)
   else 
     Printf.printf "\nFAILED\n");
+  if debug then List.iter (Printf.printf "%s\n") result ;
   result
   
     
