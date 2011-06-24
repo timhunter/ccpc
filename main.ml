@@ -238,16 +238,13 @@ let main () =
      match Sys.argv.(2) with
         "-p" -> let prefix = Util.split ' ' Sys.argv.(3) in 
                 let sentence = Util.split ' ' Sys.argv.(4) in
-                run_prefix_parser prefix sentence false;
-                ()
+                ignore (run_prefix_parser prefix sentence false);
       | "-d" -> (match Sys.argv.(3) with 
                   "-p" -> let prefix = Util.split ' ' Sys.argv.(4) in 
                           let sentence = Util.split ' ' Sys.argv.(5) in
-                          run_prefix_parser prefix sentence true;
-                          ()
+                          ignore (run_prefix_parser prefix sentence true);
                   | _ ->  let sentence = Util.split ' ' Sys.argv.(3) in
-                          run_parser sentence true Sys.argv.(1);
-                          ())
+                          ignore (run_parser sentence true Sys.argv.(1)); )
       | "-o" -> (let lst = (match Sys.argv.(4) with
                               "-d" -> (match Sys.argv.(5) with 
                                          "-p" -> let prefix = Util.split ' ' Sys.argv.(6) in 
@@ -267,8 +264,7 @@ let main () =
                 let exit_code = Sys.command "rm maketree.pl" in 
                 if exit_code = 1 then Printf.printf "Error deleting prolog tree file";)
        | _ -> let sentence = Util.split ' ' Sys.argv.(2) in
-              run_parser sentence false Sys.argv.(1);
-              ()
+              ignore (run_parser sentence false Sys.argv.(1));
   with _ -> Printf.printf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
             Printf.printf "\nFlags in parentheses are optional\n"
   end
