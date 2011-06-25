@@ -159,7 +159,8 @@ open Rational
       let single_map = build_rule_map (Array.get arity_map 1) 0 in
       let axioms_list = get_axioms prims input in   
       let axioms =
-        let tbl = Chart.create 100 in 
+        let track_history = (match input with | Prefix _ -> false | Sentence _ -> true) in
+        let tbl = Chart.create 100 track_history in 
         let rec add lst  =
           match lst with 
             | [] -> tbl
@@ -172,7 +173,8 @@ open Rational
         Queue.add (List.nth axioms_list i) queue 
       done;
       let chart = consequences max_depth prims axioms queue tables in
-      let chart_as_list = Chart.fold (fun a b lst -> (a::lst)) chart [] in
+      (* Printf.printf "Chart contains %d propositions\n" (Chart.length chart) ; *)
+      let chart_as_list = Chart.item_list chart in
       chart_as_list
 
 

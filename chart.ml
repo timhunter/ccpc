@@ -1,9 +1,17 @@
 open Util
 open Rational
 
+type proposition = Proposition of string * ((range_item * range_item) list)
+
 type backpointer = item ref option * item ref option
 and item = ParseItem of string * ((range_item * range_item) list) * backpointer option * Rational.rat  (*range_item defined in Util*) 
-type chart = Table of (item, unit) Hashtbl.t 
+
+type history = backpointer option * Rational.rat
+
+(* An item is basically a proposition with a history. *)
+(* We don't actually store items ever internally; we store propositions, and (perhaps) a list of histories for each one. *)
+
+type chart = Table of (proposition, unit) Hashtbl.t | TableWithHistory of (proposition, history list) Hashtbl.t
 
 let get_nonterm = function ParseItem(nt, _,_,_) -> nt
 
@@ -54,22 +62,43 @@ let debug_str item =
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "|" ^^ (show_bps bps) ^^ "]")
 
-let create i = Table (Hashtbl.create i)
-let get_tbl cht =
-  match cht with 
-    Table t -> t
+let create i with_history =
+  if with_history then
+    TableWithHistory (Hashtbl.create i)
+  else
+    Table (Hashtbl.create i)
 
-let add s elt =
- Hashtbl.add (get_tbl s) elt ()
+let add c item =
+  let ParseItem(nt, ranges, bp, w) = item in
+  let prop = Proposition(nt, ranges) in
+  match c with
+  | Table tbl -> Hashtbl.replace tbl prop ()
+  | TableWithHistory tbl ->
+    if Hashtbl.mem tbl prop then
+      let existing = Hashtbl.find tbl prop in
+      Hashtbl.replace tbl prop ((bp,w)::existing)
+    else
+      Hashtbl.add tbl prop [(bp,w)]
 
-let mem s elt =
-  Hashtbl.mem (get_tbl s) elt 
-let length s =
-  Hashtbl.length (get_tbl s)
-let iter f s = 
-  Hashtbl.iter f (get_tbl s)
-let find s elt =
-  Hashtbl.find (get_tbl s) elt
-let fold f s a = 
-  Hashtbl.fold f (get_tbl s) a
+let mem c item =
+  let ParseItem(nt, ranges, bp, w) = item in
+  let prop = Proposition(nt,ranges) in
+  match c with
+  | Table tbl -> Hashtbl.mem tbl prop
+  | TableWithHistory tbl -> (Hashtbl.mem tbl prop) && (List.mem (bp,w) (Hashtbl.find tbl prop))
 
+let length c =
+  match c with
+  | Table tbl -> Hashtbl.length tbl
+  | TableWithHistory tbl -> Hashtbl.length tbl
+
+let item_list c =
+  match c with
+  | Table tbl ->
+    let item_from_prop prop =
+      match prop with Proposition(nt,ranges) -> ParseItem(nt,ranges,None,(0,0)) in
+    Hashtbl.fold (fun prop _ items -> (item_from_prop prop)::items) tbl []
+  | TableWithHistory tbl ->
+    let items_from_prop prop =
+      match prop with Proposition(nt,ranges) -> map_tr (fun (bp,w) -> ParseItem(nt,ranges,bp,w)) (Hashtbl.find tbl prop) in
+    Hashtbl.fold (fun prop _ items -> (items_from_prop prop)@items) tbl []

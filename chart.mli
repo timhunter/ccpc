@@ -9,8 +9,9 @@ val to_string: item -> string list -> string
 val debug_str : item -> string
 type chart 
 
-val create : int -> chart 
+val create : int -> bool -> chart 
 val add : chart -> item -> unit
 val mem : chart -> item -> bool
 val length : chart -> int
-val fold : (item -> unit -> 'a -> 'a) -> chart -> 'a -> 'a
+
+val item_list : chart -> item list
