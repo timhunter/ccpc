@@ -65,15 +65,11 @@ let add s elt =
 let mem s elt =
   Hashtbl.mem (get_tbl s) elt 
 let length s =
-  match s with
-    Table t -> Hashtbl.length t
+  Hashtbl.length (get_tbl s)
 let iter f s = 
-  match s with 
-    Table t -> Hashtbl.iter f t
+  Hashtbl.iter f (get_tbl s)
 let find s elt =
-  match s with 
-    Table t -> Hashtbl.find t elt
+  Hashtbl.find (get_tbl s) elt
 let fold f s a = 
-  match s with 
-    Table t -> Hashtbl.fold f t a
+  Hashtbl.fold f (get_tbl s) a
 
