@@ -223,6 +223,8 @@ let run_parser sentence debug gram_file =
   let result = make_trees goal_items [] in
   (if debug then 
     List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
+  if debug then
+    Printf.printf "\nChart contains %d items, of which %d are goals" (List.length chart) (List.length goal_items) ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "\nSUCCESS!\n";)
   else 
