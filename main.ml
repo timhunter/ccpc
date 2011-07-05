@@ -97,10 +97,17 @@ let make_new_rule sit_nonterm rights func range_lists weight =
        On page 293, where he says "check whether f is well-defined", it should read something like 
        "check whether f is well-defined and evaluates to the ranges in the trigger item".
  *)
-let intersection_rules_per_rule all_items item rule =
+let intersection_rules_per_rule prefix all_items item rule =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   match Rule.get_expansion rule with
-  | PublicTerminating str -> ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
+  | PublicTerminating str ->
+    ( match (Chart.get_ranges item) with
+      | [(RangeVal i, RangeVal j)] -> if (i < j) && (not (List.map (List.nth prefix) (range i j) = [str])) then
+                                         ([],[])
+                                      else
+                                         ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
+      | _ -> ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
+    )
   | PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
     let items_headed_by nt = List.filter (fun item -> (Chart.get_nonterm item) = nt) all_items in
     let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
@@ -114,25 +121,25 @@ let intersection_rules_per_rule all_items item rule =
     let new_agenda_items = concatmap_tr snd results_to_combine in
     (new_rules, new_agenda_items)
 
-let new_intersection_grammar_rules orig_grammar chart item =
+let new_intersection_grammar_rules orig_grammar prefix chart item =
   let relevant_rules = List.filter (fun rule -> (Rule.get_nonterm rule = Chart.get_nonterm item)) orig_grammar in
-  let results_to_combine = map_tr (intersection_rules_per_rule chart item) relevant_rules in               (* (rule list * item list) list *)
+  let results_to_combine = map_tr (intersection_rules_per_rule prefix chart item) relevant_rules in               (* (rule list * item list) list *)
   let new_rules = concatmap_tr fst results_to_combine in
   let new_agenda_items = concatmap_tr snd results_to_combine in
   (new_rules, new_agenda_items)
 
-let rec build_intersection_grammar orig_grammar chart (agenda,i) grammar_so_far =
+let rec build_intersection_grammar orig_grammar prefix chart (agenda,i) grammar_so_far =
   if (i >= List.length agenda) then
     grammar_so_far
   else
     let trigger = List.nth agenda i in
-    let (new_rules, new_agenda_items) = new_intersection_grammar_rules orig_grammar chart trigger in
-    build_intersection_grammar orig_grammar chart (uniques (agenda @ new_agenda_items), i+1) (grammar_so_far @ new_rules)
+    let (new_rules, new_agenda_items) = new_intersection_grammar_rules orig_grammar prefix chart trigger in
+    build_intersection_grammar orig_grammar prefix chart (uniques (agenda @ new_agenda_items), i+1) (grammar_so_far @ new_rules)
 
 let intersection_grammar orig_grammar symbols =
   let chart = uniques (Parser.deduce (-1) orig_grammar (Parser.Prefix symbols)) in
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence symbols)) chart in
-  uniques (build_intersection_grammar orig_grammar chart (goal_items,0) [])
+  uniques (build_intersection_grammar orig_grammar symbols chart (goal_items,0) [])
 
 (******************************************************************************************)
 (* Top-level stuff for testing *)
