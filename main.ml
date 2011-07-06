@@ -235,46 +235,45 @@ let run_parser sentence gram_file =
     Printf.printf "\nFAILED\n");
   List.iter (Util.debug "%s\n") result ;
   result
-  
-    
+
+type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
+let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }
+
+let rec process_args args acc =
+	match args with
+	| [] -> acc
+	| ("-d" :: rest)        -> process_args rest {acc with debug = true}
+	| ("-p" :: (p :: rest)) -> process_args rest {acc with prefix = Some p}
+	| ("-o" :: (o :: rest)) -> process_args rest {acc with output_file = Some o}
+	| (x::rest)             -> process_args rest {acc with sentence = Some x}
+
 let main () =
-  begin
-  let oc = open_out "maketree.pl" in
-  try
-     match Sys.argv.(2) with
-        "-p" -> let prefix = Util.split ' ' Sys.argv.(3) in 
-                let sentence = Util.split ' ' Sys.argv.(4) in
-                ignore (run_prefix_parser prefix sentence);
-      | "-d" -> (Util.set_debug_mode true ;
-                 match Sys.argv.(3) with 
-                  "-p" -> let prefix = Util.split ' ' Sys.argv.(4) in 
-                          let sentence = Util.split ' ' Sys.argv.(5) in
-                          ignore (run_prefix_parser prefix sentence);
-                  | _ ->  let sentence = Util.split ' ' Sys.argv.(3) in
-                          ignore (run_parser sentence Sys.argv.(1)); )
-      | "-o" -> (let lst = (match Sys.argv.(4) with
-                              "-d" -> (Util.set_debug_mode true ;
-                                       match Sys.argv.(5) with 
-                                         "-p" -> let prefix = Util.split ' ' Sys.argv.(6) in 
-                                                 let sentence = Util.split ' ' Sys.argv.(7) in 
-                                                 run_prefix_parser prefix sentence
-                                       | _ ->    let sentence = Util.split ' ' Sys.argv.(5) in 
-                                                 run_parser sentence Sys.argv.(1)) 
-                            | "-p" -> let prefix = Util.split ' ' Sys.argv.(5) in 
-                                      let sentence = Util.split ' ' Sys.argv.(6) in 
-                                      run_prefix_parser prefix sentence
-                            | _ ->    let sentence = Util.split ' ' Sys.argv.(4) in
-                                      run_parser sentence Sys.argv.(1)) in 
-                   Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth lst 0) (Sys.argv.(3));
-                   close_out oc;
-                   let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
-                   (if exit_code = 1 then Printf.printf "Error running tree drawer");
-                let exit_code = Sys.command "rm maketree.pl" in 
-                if exit_code = 1 then Printf.printf "Error deleting prolog tree file";)
-       | _ -> let sentence = Util.split ' ' Sys.argv.(2) in
-              ignore (run_parser sentence Sys.argv.(1));
-  with _ -> Printf.printf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
-            Printf.printf "\nFlags in parentheses are optional\n"
-  end
+	match List.tl (Array.to_list Sys.argv) with
+	| [] ->
+		Printf.eprintf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
+		Printf.eprintf "\nFlags in parentheses are optional\n"
+	| (x::xs) ->
+		(* first arg is the grammar; the rest go to process_args *)
+		let grammar_file = x in
+		let options = process_args xs default_options in
+		Util.set_debug_mode options.debug ;
+		let result = match (options.prefix, options.sentence) with
+			| (None, None) -> Printf.eprintf "Warning: There doesn't seem to be much to do\n" ; []
+			| (None, Some s) -> run_parser (Util.split ' ' s) grammar_file
+			| (Some p, None) -> failwith "To be implemented soon: output resulting intersection grammar"
+			| (Some p, Some s) -> run_prefix_parser (Util.split ' ' p) (Util.split ' ' s)
+		in
+		match options.output_file with
+		| None -> ignore result
+		| Some o ->
+			(*** I don't really understand what's going on here, it's just copied from the previous version of the main function ***)
+			let oc = open_out "maketree.pl" in
+			Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o;
+			close_out oc;
+			let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
+			if exit_code = 1 then Printf.eprintf "Error running tree drawer" ;
+			let exit_code = Sys.command "rm maketree.pl" in 
+			if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ;
+			()
 
 let _ = if (!Sys.interactive) then () else main () ;;
