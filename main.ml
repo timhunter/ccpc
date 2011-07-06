@@ -175,25 +175,6 @@ let print_tree item sentence =
 	in
 	List.fold_right (Printf.sprintf("%s\n%s")) (print_item item) ""
 
-let run_prefix_parser prefix sentence =
-  let (new_rules, new_start_symbol) = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
-  let is_goal item = Parser.is_goal new_start_symbol (List.length sentence) item in
-  let chart = Parser.deduce (-1) new_rules (Parser.Sentence sentence) in
-  let goal_items = List.filter (is_goal) chart in 
-  print_int (List.length goal_items);
-  let rec make_trees goals acc =
-    match goals with
-      [] -> acc
-    | h::t ->  make_trees t ((print_tree h sentence)::acc) in
-  let result = make_trees goal_items [] in
-  List.iter (fun x -> Util.debug "\n%s" (Chart.to_string x sentence)) chart ;
-  (if (List.length goal_items)>0 then 
-    (Printf.printf "\nSUCCESS!\n";)
-  else 
-    Printf.printf "\nFAILED\n");
-  List.iter (Util.debug "%s\n") result ;
-  result
-
 let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = List.filter (Parser.is_goal start_symbol (List.length sentence)) chart in 
@@ -210,6 +191,10 @@ let run_parser sentence (rules, start_symbol) =
     Printf.printf "\nFAILED\n");
   List.iter (Util.debug "%s\n") result ;
   result
+
+let run_prefix_parser prefix sentence =
+  let (new_rules, new_start_symbol) = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
+  run_parser sentence (new_rules, new_start_symbol)
 
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
 let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }
