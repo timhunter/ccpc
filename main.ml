@@ -139,7 +139,9 @@ let rec build_intersection_grammar orig_grammar prefix chart (agenda,i) grammar_
 let intersection_grammar orig_grammar symbols =
   let chart = uniques (Parser.deduce (-1) orig_grammar (Parser.Prefix symbols)) in
   let goal_items = List.filter (Parser.is_goal "S" (List.length symbols)) chart in
-  uniques (build_intersection_grammar orig_grammar symbols chart (goal_items,0) [])
+  let new_start_symbol = Printf.sprintf "S_0%d" (List.length symbols) in
+  let new_rules = build_intersection_grammar orig_grammar symbols chart (goal_items,0) [] in
+  (new_rules, new_start_symbol)
 
 (******************************************************************************************)
 (* Top-level stuff for testing *)
@@ -177,18 +179,10 @@ let print_tree item sentence =
 	in
 	List.fold_right (Printf.sprintf("%s\n%s")) (print_item item) ""
 
-(*
- * Bit of a hack here: the start symbol that makes a goal item a goal item depends on the length of the 
- * prefix, but the span that makes a goal item a goal item depends on the length of the sentence. So I 
- * have to put together a start symbol by hand out here and look at the insides of the items directly. 
- * Not sure what the best approach to fixing this is.
- *)
-
 let run_prefix_parser prefix sentence =
-  let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
-  let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
-  let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
-  let chart = parse new_grammar sentence in
+  let (new_rules, new_start_symbol) = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
+  let is_goal item = Parser.is_goal new_start_symbol (List.length sentence) item in
+  let chart = parse new_rules sentence in
   let goal_items = List.filter (is_goal) chart in 
   print_int (List.length goal_items);
   let rec make_trees goals acc =
