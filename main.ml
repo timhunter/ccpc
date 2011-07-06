@@ -136,11 +136,11 @@ let rec build_intersection_grammar orig_grammar prefix chart (agenda,i) grammar_
     let (new_rules, new_agenda_items) = new_intersection_grammar_rules orig_grammar prefix chart trigger in
     build_intersection_grammar orig_grammar prefix chart (uniques (agenda @ new_agenda_items), i+1) (grammar_so_far @ new_rules)
 
-let intersection_grammar orig_grammar symbols =
-  let chart = uniques (Parser.deduce (-1) orig_grammar (Parser.Prefix symbols)) in
-  let goal_items = List.filter (Parser.is_goal "S" (List.length symbols)) chart in
-  let new_start_symbol = Printf.sprintf "S_0%d" (List.length symbols) in
-  let new_rules = build_intersection_grammar orig_grammar symbols chart (goal_items,0) [] in
+let intersection_grammar (rules, start_symbol) symbols =
+  let chart = uniques (Parser.deduce (-1) rules (Parser.Prefix symbols)) in
+  let goal_items = List.filter (Parser.is_goal start_symbol (List.length symbols)) chart in
+  let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
+  let new_rules = build_intersection_grammar rules symbols chart (goal_items,0) [] in
   (new_rules, new_start_symbol)
 
 (******************************************************************************************)
@@ -192,8 +192,8 @@ let run_parser sentence (rules, start_symbol) =
   List.iter (Util.debug "%s\n") result ;
   result
 
-let run_prefix_parser prefix sentence =
-  let (new_rules, new_start_symbol) = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
+let run_prefix_parser prefix sentence (rules, start_symbol) =
+  let (new_rules, new_start_symbol) = intersection_grammar (rules, start_symbol) prefix in
   run_parser sentence (new_rules, new_start_symbol)
 
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
@@ -222,7 +222,7 @@ let main () =
 			| (None, None) -> Printf.eprintf "Warning: There doesn't seem to be much to do\n" ; []
 			| (None, Some s) -> run_parser (Util.split ' ' s) (grammar,"S")
 			| (Some p, None) -> failwith "To be implemented soon: output resulting intersection grammar"
-			| (Some p, Some s) -> run_prefix_parser (Util.split ' ' p) (Util.split ' ' s)
+			| (Some p, Some s) -> run_prefix_parser (Util.split ' ' p) (Util.split ' ' s) (grammar,"S")
 		in
 		match options.output_file with
 		| None -> ignore result
