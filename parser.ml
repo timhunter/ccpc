@@ -9,10 +9,8 @@ open Rational
     type tables = {sRule_map: Tables.map ; lRule_map: Tables.map ; rRule_map: Tables.map ; item_map: Tables.map}
 
     
-    let is_goal input item =
-      match input with
-      | Sentence strings -> (get_nonterm item = "S") && (get_ranges item = [(RangeVal 0, RangeVal (List.length strings))])
-      | Prefix strings -> failwith("Help! Start symbol isn't going to be S!")
+    let is_goal start_symbol length item =
+      (get_nonterm item = start_symbol) && (get_ranges item = [(RangeVal 0, RangeVal length)])
 
     let get_axioms_parse grammar symbols =
       let indices = range 0 (List.length symbols) in

@@ -138,7 +138,7 @@ let rec build_intersection_grammar orig_grammar prefix chart (agenda,i) grammar_
 
 let intersection_grammar orig_grammar symbols =
   let chart = uniques (Parser.deduce (-1) orig_grammar (Parser.Prefix symbols)) in
-  let goal_items = List.filter (Parser.is_goal (Parser.Sentence symbols)) chart in
+  let goal_items = List.filter (Parser.is_goal "S" (List.length symbols)) chart in
   uniques (build_intersection_grammar orig_grammar symbols chart (goal_items,0) [])
 
 (******************************************************************************************)
@@ -157,7 +157,7 @@ let timed_parse rules symbols =
   let t = Sys.time () in
   let chart = parse rules symbols in 
   let duration = (Sys.time ()) -. t in
-  let goal_items = List.filter (Parser.is_goal (Parser.Sentence symbols)) chart in 
+  let goal_items = List.filter (Parser.is_goal "S" (List.length symbols)) chart in 
   let d = if (List.length goal_items) > 0 then duration else 0. -. duration in
     (d, chart)
 
@@ -221,7 +221,7 @@ let run_prefix_parser prefix sentence =
 
 let run_parser sentence gram_file =
   let chart = parse (get_input_grammar gram_file) sentence in 
-  let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
+  let goal_items = List.filter (Parser.is_goal "S" (List.length sentence)) chart in 
   let rec make_trees goals acc =
     match goals with
       [] -> acc
