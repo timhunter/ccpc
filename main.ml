@@ -194,10 +194,9 @@ let run_prefix_parser prefix sentence =
   List.iter (Util.debug "%s\n") result ;
   result
 
-let run_parser sentence gram_file =
-  let rules = get_input_grammar gram_file in
+let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
-  let goal_items = List.filter (Parser.is_goal "S" (List.length sentence)) chart in 
+  let goal_items = List.filter (Parser.is_goal start_symbol (List.length sentence)) chart in 
   let rec make_trees goals acc =
     match goals with
       [] -> acc
@@ -231,11 +230,12 @@ let main () =
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
+		let grammar = get_input_grammar grammar_file in
 		let options = process_args xs default_options in
 		Util.set_debug_mode options.debug ;
 		let result = match (options.prefix, options.sentence) with
 			| (None, None) -> Printf.eprintf "Warning: There doesn't seem to be much to do\n" ; []
-			| (None, Some s) -> run_parser (Util.split ' ' s) grammar_file
+			| (None, Some s) -> run_parser (Util.split ' ' s) (grammar,"S")
 			| (Some p, None) -> failwith "To be implemented soon: output resulting intersection grammar"
 			| (Some p, Some s) -> run_prefix_parser (Util.split ' ' p) (Util.split ' ' s)
 		in
