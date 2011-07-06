@@ -192,10 +192,6 @@ let run_parser sentence (rules, start_symbol) =
   List.iter (Util.debug "%s\n") result ;
   result
 
-let run_prefix_parser prefix sentence (rules, start_symbol) =
-  let (new_rules, new_start_symbol) = intersection_grammar (rules, start_symbol) prefix in
-  run_parser sentence (new_rules, new_start_symbol)
-
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
 let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }
 
@@ -215,26 +211,30 @@ let main () =
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
-		let grammar = get_input_grammar grammar_file in
 		let options = process_args xs default_options in
+		if (options.sentence = None) && (options.prefix = None) then failwith "No prefix or sentence given; nothing to do!" ;
 		Util.set_debug_mode options.debug ;
-		let result = match (options.prefix, options.sentence) with
-			| (None, None) -> Printf.eprintf "Warning: There doesn't seem to be much to do\n" ; []
-			| (None, Some s) -> run_parser (Util.split ' ' s) (grammar,"S")
-			| (Some p, None) -> failwith "To be implemented soon: output resulting intersection grammar"
-			| (Some p, Some s) -> run_prefix_parser (Util.split ' ' p) (Util.split ' ' s) (grammar,"S")
+		let input_grammar = (get_input_grammar grammar_file, "S") in
+		let grammar_for_parsing =
+			match options.prefix with
+			| None -> input_grammar ;
+			| Some p -> intersection_grammar input_grammar (Util.split ' ' p)
 		in
-		match options.output_file with
-		| None -> ignore result
-		| Some o ->
-			(*** I don't really understand what's going on here, it's just copied from the previous version of the main function ***)
-			let oc = open_out "maketree.pl" in
-			Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o;
-			close_out oc;
-			let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
-			if exit_code = 1 then Printf.eprintf "Error running tree drawer" ;
-			let exit_code = Sys.command "rm maketree.pl" in 
-			if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ;
-			()
+		match options.sentence with
+		| None -> failwith "To be implemented soon: output resulting intersection grammar"
+		| Some s ->
+			let result = run_parser (Util.split ' ' s) grammar_for_parsing in
+			match options.output_file with
+			| None -> ignore result
+			| Some o ->
+				(*** I don't really understand what's going on here, it's just copied from the previous version of the main function ***)
+				let oc = open_out "maketree.pl" in
+				Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o;
+				close_out oc;
+				let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
+				if exit_code = 1 then Printf.eprintf "Error running tree drawer" ;
+				let exit_code = Sys.command "rm maketree.pl" in 
+				if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ;
+				()
 
 let _ = if (!Sys.interactive) then () else main () ;;
