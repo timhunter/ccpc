@@ -153,14 +153,6 @@ let parse rules symbols =
 (*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
-let timed_parse rules symbols =
-  let t = Sys.time () in
-  let chart = parse rules symbols in 
-  let duration = (Sys.time ()) -. t in
-  let goal_items = List.filter (Parser.is_goal "S" (List.length symbols)) chart in 
-  let d = if (List.length goal_items) > 0 then duration else 0. -. duration in
-    (d, chart)
-
 
 let parse_with_intersection prefix sentence =
   let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
