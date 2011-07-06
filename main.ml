@@ -149,10 +149,6 @@ let intersection_grammar orig_grammar symbols =
 
 
 
-let parse rules symbols = 
-(*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
-  Parser.deduce (-1) rules (Parser.Sentence symbols)
-
 
 let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item)) : string =
 	match r with
@@ -182,7 +178,7 @@ let print_tree item sentence =
 let run_prefix_parser prefix sentence =
   let (new_rules, new_start_symbol) = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
   let is_goal item = Parser.is_goal new_start_symbol (List.length sentence) item in
-  let chart = parse new_rules sentence in
+  let chart = Parser.deduce (-1) new_rules (Parser.Sentence sentence) in
   let goal_items = List.filter (is_goal) chart in 
   print_int (List.length goal_items);
   let rec make_trees goals acc =
@@ -199,7 +195,8 @@ let run_prefix_parser prefix sentence =
   result
 
 let run_parser sentence gram_file =
-  let chart = parse (get_input_grammar gram_file) sentence in 
+  let rules = get_input_grammar gram_file in
+  let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = List.filter (Parser.is_goal "S" (List.length sentence)) chart in 
   let rec make_trees goals acc =
     match goals with
