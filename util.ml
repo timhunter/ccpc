@@ -1,3 +1,19 @@
+(********************************************************************)
+(***** Stuff for global debug settings ******************************)
+
+let _debug_mode = ref false
+
+let set_debug_mode b =
+	_debug_mode := b
+
+let debug fmt =
+	if (!_debug_mode) then
+		Printf.ksprintf print_string fmt
+	else
+		Printf.ksprintf ignore fmt
+
+(********************************************************************)
+(********************************************************************)
 
 let reverse_tr lst =
   let rec reverse' lst acc =

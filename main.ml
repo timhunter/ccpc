@@ -199,7 +199,7 @@ let print_tree item sentence =
  * Not sure what the best approach to fixing this is.
  *)
 
-let run_prefix_parser prefix sentence debug =
+let run_prefix_parser prefix sentence =
   let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
   let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
   let chart = parse_with_intersection prefix sentence in 
@@ -211,16 +211,15 @@ let run_prefix_parser prefix sentence debug =
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_items [] in
-  (if debug then 
-    List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
+  List.iter (fun x -> Util.debug "\n%s" (Chart.to_string x sentence)) chart ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "\nSUCCESS!\n";)
   else 
     Printf.printf "\nFAILED\n");
-  if debug then List.iter (Printf.printf "%s\n") result ;
+  List.iter (Util.debug "%s\n") result ;
   result
 
-let run_parser sentence debug gram_file =
+let run_parser sentence gram_file =
   let chart = parse (get_input_grammar gram_file) sentence in 
   let goal_items = List.filter (Parser.is_goal (Parser.Sentence sentence)) chart in 
   let rec make_trees goals acc =
@@ -228,15 +227,13 @@ let run_parser sentence debug gram_file =
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_items [] in
-  (if debug then 
-    List.iter (fun x -> Printf.printf "\n%s" (Chart.to_string x sentence)) chart);
-  if debug then
-    Printf.printf "\nChart contains %d items, of which %d are goals" (List.length chart) (List.length goal_items) ;
+  List.iter (fun x -> Util.debug "\n%s" (Chart.to_string x sentence)) chart ;
+  Util.debug "\nChart contains %d items, of which %d are goals" (List.length chart) (List.length goal_items) ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "\nSUCCESS!\n";)
   else 
     Printf.printf "\nFAILED\n");
-  if debug then List.iter (Printf.printf "%s\n") result ;
+  List.iter (Util.debug "%s\n") result ;
   result
   
     
@@ -247,25 +244,27 @@ let main () =
      match Sys.argv.(2) with
         "-p" -> let prefix = Util.split ' ' Sys.argv.(3) in 
                 let sentence = Util.split ' ' Sys.argv.(4) in
-                ignore (run_prefix_parser prefix sentence false);
-      | "-d" -> (match Sys.argv.(3) with 
+                ignore (run_prefix_parser prefix sentence);
+      | "-d" -> (Util.set_debug_mode true ;
+                 match Sys.argv.(3) with 
                   "-p" -> let prefix = Util.split ' ' Sys.argv.(4) in 
                           let sentence = Util.split ' ' Sys.argv.(5) in
-                          ignore (run_prefix_parser prefix sentence true);
+                          ignore (run_prefix_parser prefix sentence);
                   | _ ->  let sentence = Util.split ' ' Sys.argv.(3) in
-                          ignore (run_parser sentence true Sys.argv.(1)); )
+                          ignore (run_parser sentence Sys.argv.(1)); )
       | "-o" -> (let lst = (match Sys.argv.(4) with
-                              "-d" -> (match Sys.argv.(5) with 
+                              "-d" -> (Util.set_debug_mode true ;
+                                       match Sys.argv.(5) with 
                                          "-p" -> let prefix = Util.split ' ' Sys.argv.(6) in 
                                                  let sentence = Util.split ' ' Sys.argv.(7) in 
-                                                 run_prefix_parser prefix sentence true
+                                                 run_prefix_parser prefix sentence
                                        | _ ->    let sentence = Util.split ' ' Sys.argv.(5) in 
-                                                 run_parser sentence true Sys.argv.(1)) 
+                                                 run_parser sentence Sys.argv.(1)) 
                             | "-p" -> let prefix = Util.split ' ' Sys.argv.(5) in 
                                       let sentence = Util.split ' ' Sys.argv.(6) in 
-                                      run_prefix_parser prefix sentence false
+                                      run_prefix_parser prefix sentence
                             | _ ->    let sentence = Util.split ' ' Sys.argv.(4) in
-                                      run_parser sentence false Sys.argv.(1)) in 
+                                      run_parser sentence Sys.argv.(1)) in 
                    Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth lst 0) (Sys.argv.(3));
                    close_out oc;
                    let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
@@ -273,7 +272,7 @@ let main () =
                 let exit_code = Sys.command "rm maketree.pl" in 
                 if exit_code = 1 then Printf.printf "Error deleting prolog tree file";)
        | _ -> let sentence = Util.split ' ' Sys.argv.(2) in
-              ignore (run_parser sentence false Sys.argv.(1));
+              ignore (run_parser sentence Sys.argv.(1));
   with _ -> Printf.printf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
             Printf.printf "\nFlags in parentheses are optional\n"
   end

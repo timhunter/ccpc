@@ -2,6 +2,9 @@ type range_item = RangeVal of int | EpsVar
 exception RangesNotAdjacentException
 exception EmptyListException
 
+val set_debug_mode : bool -> unit
+val debug : ('a, unit, string, unit) format4 -> 'a
+
 val reverse_tr : 'a list -> 'a list
 val map_tr : ('a -> 'b) -> 'a list -> 'b list
 val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
