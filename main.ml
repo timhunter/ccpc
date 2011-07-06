@@ -144,8 +144,6 @@ let intersection_grammar orig_grammar symbols =
 (******************************************************************************************)
 (* Top-level stuff for testing *)
 
-(*let derivations rules =
-  MCFG_Derivation_Deducer.deduce 1 rules MCFG_Deriver.null_input*)
 
 
 
@@ -153,11 +151,6 @@ let parse rules symbols =
 (*  MCFG_ParseGen_Deducer.deduce (-1) rules (Parser.Sentence symbols)*)
   Parser.deduce (-1) rules (Parser.Sentence symbols)
 
-
-let parse_with_intersection prefix sentence =
-  let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
-  parse new_grammar sentence
-  
 
 let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item)) : string =
 	match r with
@@ -194,8 +187,8 @@ let print_tree item sentence =
 let run_prefix_parser prefix sentence =
   let intersection_start_symbol = Printf.sprintf "S_0%d" (List.length prefix) in
   let is_goal item = ((Chart.get_nonterm item) = intersection_start_symbol) && (Chart.get_ranges item = [(RangeVal 0, RangeVal (List.length sentence))]) in
-  let chart = parse_with_intersection prefix sentence in 
-
+  let new_grammar = intersection_grammar (get_input_grammar Sys.argv.(1)) prefix in
+  let chart = parse new_grammar sentence in
   let goal_items = List.filter (is_goal) chart in 
   print_int (List.length goal_items);
   let rec make_trees goals acc =
