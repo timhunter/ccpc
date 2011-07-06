@@ -183,12 +183,12 @@ let run_parser sentence (rules, start_symbol) =
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_items [] in
-  List.iter (fun x -> Util.debug "\n%s" (Chart.to_string x sentence)) chart ;
-  Util.debug "\nChart contains %d items, of which %d are goals" (List.length chart) (List.length goal_items) ;
+  List.iter (fun x -> Util.debug "%s\n" (Chart.to_string x sentence)) chart ;
+  Util.debug "Chart contains %d items, of which %d are goals\n" (List.length chart) (List.length goal_items) ;
   (if (List.length goal_items)>0 then 
-    (Printf.printf "\nSUCCESS!\n";)
+    (Printf.printf "SUCCESS!\n";)
   else 
-    Printf.printf "\nFAILED\n");
+    Printf.printf "FAILED\n");
   List.iter (Util.debug "%s\n") result ;
   result
 
@@ -206,8 +206,8 @@ let rec process_args args acc =
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"";
-		Printf.eprintf "\nFlags in parentheses are optional\n"
+		Printf.eprintf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"\n";
+		Printf.eprintf "Flags in parentheses are optional\n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
