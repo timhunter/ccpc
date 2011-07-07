@@ -103,15 +103,15 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 
     (**********************************************************)
 
-    let component_to_string prev tup = 
-      let tup = match tup with
-        | Component (a,b) -> (a,b)
-        | Epsilon -> (333, 333) in 
-      String.concat "" [(string_of_int (fst tup)); ","; (string_of_int(snd tup)); ";"; prev]
-    
+    let component_to_string comp =
+      match comp with
+        | Component (a,b) -> Printf.sprintf "%d,%d" a b
+        | Epsilon         -> "eps"
+
     let stringrecipe_to_string lst =
-      String.concat "" ["["; (List.fold_left component_to_string "" (List.rev (Nelist.to_list lst))); "]"]
-  
+      let component_strings = List.map component_to_string (Nelist.to_list lst) in
+      "[" ^ (String.concat ";" component_strings) ^ "]"
+
     let print_rule rule =
       let left = get_nonterm rule in
       let rhs_output = 
@@ -124,6 +124,6 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-      Printf.printf "%s  --->  %s %s\n" left rhs_output recipe
+      Printf.printf "%s --> %s %s\n" left rhs_output recipe
 
 

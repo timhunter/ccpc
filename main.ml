@@ -192,6 +192,9 @@ let run_parser sentence (rules, start_symbol) =
   List.iter (Util.debug "%s\n") result ;
   result
 
+let print_grammar (rules, start_symbol) =
+	List.iter Rule.print_rule rules
+
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
 let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }
 
@@ -221,7 +224,7 @@ let main () =
 			| Some p -> intersection_grammar input_grammar (Util.split ' ' p)
 		in
 		match options.sentence with
-		| None -> failwith "To be implemented soon: output resulting intersection grammar"
+		| None -> print_grammar grammar_for_parsing
 		| Some s ->
 			let result = run_parser (Util.split ' ' s) grammar_for_parsing in
 			match options.output_file with
