@@ -21,47 +21,6 @@ let get_input_grammar grammar_file =
   with _ -> print_string ("Can't parse input mcfg file "^grammar_file^"\n"); []
 
 (******************************************************************************************)
-
-module type DEDUCTIVE_SYSTEM =
-  sig
-    type prim  (* eg. a list of these makes up a grammar *)
-    type item  (* the things we deduce *)
-    type input (* once-off input, eg. a sentence or a prefix *)
-    val get_axioms : Rule.r list -> input -> item list
-    val is_goal : input -> item -> bool
-    val max_arity : Rule.r list -> int
-    val rule_arity : Rule.r -> int
-    val build_nary : Rule.r list -> item list -> item list
-  end ;;
-
-module Deducer = functor (D : DEDUCTIVE_SYSTEM) ->
-  struct
-
-    (*** TODO: Clever things for getting stuff from the chart quickly ***)
-    (***       Probably requires sacrificing some generality; TBD.    ***)
-    let rec consequences max_depth prims recent_items old_items =
-            let all_existing_items = recent_items @ old_items in
-      if max_depth = 0 then
-        all_existing_items
-      else
-             match recent_items with
-            [] -> old_items
-          | (i::is) ->
-            let rules_of_arity n = List.filter (fun rule -> D.rule_arity rule = n) prims in
-            let new_items n = concatmap_tr (D.build_nary (rules_of_arity n)) (all_lists all_existing_items n) in
-              let all_new_items = concatmap_tr new_items (range 1 ((D.max_arity prims)+1)) in
-            let useful_new_items = List.filter (fun x -> not (List.mem x all_existing_items)) all_new_items in
-                  consequences (max_depth-1) prims (is @ useful_new_items) (i :: old_items)
-
-    let deduce max_depth prims input =
-      let axioms = D.get_axioms prims input in
-      consequences max_depth prims axioms []
-
-  end;;
-
-(*module MCFG_Derivation_Deducer = Deducer(MCFG_Deriver)*)
-
-(******************************************************************************************)
 (* Extract the intersection grammar *)
 (* See Albro's dissertation, appendix C section C.4 *)
 
