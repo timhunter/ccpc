@@ -1,10 +1,10 @@
 EXE=mcfg
 
-#COMPILER_BYTECODE=ocamlc
-COMPILER_BYTECODE=ocamlcp
-
-#COMPILER_NATIVE=ocamlopt
-COMPILER_NATIVE=ocamlopt -p
+# For profiling, use: 'ocamlcp' instead of 'ocamlc'
+#                     'ocamlopt -p' instead of 'ocamlopt'
+# But profiling is incompatible with preprocessing so I'm leaving it aside.
+COMPILER_BYTECODE=ocamlc
+COMPILER_NATIVE=ocamlopt
 
 LEX=ocamllex
 YACC=ocamlyacc
@@ -30,11 +30,14 @@ $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt)
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx $(EXE)_bc $(EXE)_nt
 
-%.cmx: %.ml
-	$(COMPILER_NATIVE) $(FLAGS) -c $*.ml
+debug.cmo: debug.ml
+	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' -dtypes debug.ml
 
-%.cmo: %.ml
-	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
+%.cmx: %.ml debug.cmo
+	$(COMPILER_NATIVE) $(FLAGS) -pp 'camlp5o -I . pr_o.cmo debug.cmo' -dtypes -c $*.ml
+
+%.cmo: %.ml debug.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -pp 'camlp5o -I . pr_o.cmo debug.cmo' -dtypes -c $*.ml
 
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli

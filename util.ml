@@ -12,6 +12,15 @@ let debug fmt =
 	else
 		Printf.ksprintf ignore fmt
 
+(* Faster version of the above which only evaluates its 
+   argument if necessary. Intended to be invoked via the 
+   <:DEBUG< ... >> quotation. *)
+let debug_fast s =
+	if (!_debug_mode) then
+		print_string (Lazy.force s)
+	else
+		()
+
 (********************************************************************)
 (********************************************************************)
 

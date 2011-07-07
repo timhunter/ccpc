@@ -120,10 +120,13 @@ open Rational
       List.flatten (left_items @ right_items)
   
     let rec consequences max_depth prims chart q tables =
+      <:DEBUG< "===== Size of queue is %d\n" (Queue.length q) >> ;
+      (* Queue.iter (fun item -> <:DEBUG< "%s\n" (Chart.debug_str item) >>) q ; *)
       if (Queue.is_empty q)
       then chart
       else
         let trigger = Queue.pop q in
+          <:DEBUG< "      Trigger item: %s\n" (Chart.debug_str trigger) >> ;
           let left_rules = filter_rules tables.lRule_map trigger in 
 
           let right_rules = filter_rules tables.rRule_map trigger in
@@ -134,6 +137,8 @@ open Rational
           let possible_items = filter_chart tables.item_map left_rules right_rules in    (* Limits the chart to other items the trigger might combine with *)
           let all_new_items = build_items possible_rules trigger possible_items in 
          
+          <:DEBUG< "%d new items; already in chart?\n" (List.length all_new_items) >> ;
+          List.iter (fun item -> <:DEBUG< "%s %B\n" (Chart.debug_str item) (Chart.mem chart item) >>) all_new_items ; <:DEBUG< "\n" >> ;
           List.iter (fun item -> if (not (Chart.mem chart item)) then (add_item tables.item_map item; Queue.add item q; Chart.add chart item)) all_new_items; 
           consequences (max_depth -1) prims chart q tables
        
@@ -171,7 +176,7 @@ open Rational
         Queue.add (List.nth axioms_list i) queue 
       done;
       let chart = consequences max_depth prims axioms queue tables in
-      (* Printf.printf "Chart contains %d propositions\n" (Chart.length chart) ; *)
+      <:DEBUG< "Chart contains %d propositions\n" (Chart.length chart) >> ;
       let chart_as_list = Chart.item_list chart in
       chart_as_list
 

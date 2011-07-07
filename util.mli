@@ -4,6 +4,7 @@ exception EmptyListException
 
 val set_debug_mode : bool -> unit
 val debug : ('a, unit, string, unit) format4 -> 'a
+val debug_fast : string Lazy.t -> unit
 
 val reverse_tr : 'a list -> 'a list
 val map_tr : ('a -> 'b) -> 'a list -> 'b list
