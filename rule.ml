@@ -116,7 +116,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
       let left = get_nonterm rule in
       let rhs_output = 
         match (get_expansion rule) with
-        | PublicTerminating s -> s
+        | PublicTerminating s -> Printf.sprintf "%S" s
         | PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (Nelist.to_list rights)
       in
       let recipe =
