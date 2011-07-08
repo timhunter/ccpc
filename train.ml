@@ -39,40 +39,52 @@ let read_sentences filename =
 	in
 	reverse_tr (get_all_lines channel [])
 
-(* Find the rule matching a certain parent nonterm and a certain list of child nonterms *)
-let find_rule rules parent children =
+(* Find the rule matching a certain parent nonterm and a certain right-hand side *)
+(* HACK WARNING: the last argument here is EITHER (i) a list of nonterminals, if we're looking for a nonterminating rule; 
+                                               OR (ii) a list containing a single terminal, if we're looking for a terminating rule. *)
+let find_rule rules parent rhs =
 	let is_target r =
 		if (Rule.get_nonterm r) <> parent then
 			false
 		else
 			match (Rule.get_expansion r) with
-			| PublicTerminating _ -> (children = [])
-			| PublicNonTerminating (nts, f) -> ((Nelist.to_list nts) = children)
+			| PublicTerminating s -> (rhs = [s])
+			| PublicNonTerminating (nts, f) -> ((Nelist.to_list nts) = rhs)
 	in
 	let results = List.filter is_target rules in
 	if (List.length results) = 1 then
 		List.hd results
 	else
-		let description = Printf.sprintf "item with parent %s and children %s" parent (String.concat "," children) in
+		let description = Printf.sprintf "item with parent %s and expansion %s" parent (String.concat "," rhs) in
 		if (List.length results) < 1 then
 			failwith (Printf.sprintf "Something's wrong: Couldn't find a rule for %s" description)
 		else
 			failwith (Printf.sprintf "Don't know what to do: Two distinct rules possible for %s" description)
 
-let rec process_item rules rule_uses nonterm_uses item =
+let get_single_yield sentence item =
+	match (Chart.get_ranges item) with
+	| ((r1,r2)::[]) -> (
+		match (r1,r2) with
+		| (EpsVar, EpsVar) -> " "
+		| (RangeVal i, RangeVal j) -> String.concat " " (List.map (List.nth sentence) (Util.range i j))
+		| _ -> failwith "Should never mix EpsVar with RangeVal"
+	)
+	| _ -> failwith (Printf.sprintf "Something's wrong: Item passed to get_single_yield that has multiple yields: %s" (Chart.debug_str item))
+
+let rec process_item sentence rules rule_uses nonterm_uses item =
 	let nt = Chart.get_nonterm item in
-	let children =
+	let children  =
 		match (Chart.get_backpointer item) with
 		| None -> []
 		| Some (Some x, None) -> [!x]
-		| Some (Some x, Some y) -> [!x;!y]
+		| Some (Some x, Some y) -> [!x; !y]
 		| _ -> failwith "Invalid parent backpointer"
 	in
-	let child_nts = List.map Chart.get_nonterm children in
-	let r = find_rule rules nt child_nts in
+	let rhs = if (children = []) then [get_single_yield sentence item] else (List.map Chart.get_nonterm children) in
+	let r = find_rule rules nt rhs in
 	increment rule_uses r ;
 	increment nonterm_uses nt ;
-	List.iter (process_item rules rule_uses nonterm_uses) children
+	List.iter (process_item sentence rules rule_uses nonterm_uses) children
 
 let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : string) =
 	let split_sentence = Util.split ' ' sentence in
@@ -81,7 +93,7 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
 	else
-		List.iter (process_item rules rule_uses nonterm_uses) goal_items
+		List.iter (process_item split_sentence rules rule_uses nonterm_uses) goal_items
 
 let run_training grammar_file sentence_file =
 
