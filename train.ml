@@ -79,29 +79,19 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 	let chart = Parser.deduce (-1) rules (Parser.Sentence split_sentence) in
 	let goal_items = List.filter (Parser.is_goal _START_SYMBOL_ (List.length split_sentence)) chart in
 	if (goal_items = []) then
-		Printf.printf "Warning: no parse found for sentence \"%s\"\n" sentence
+		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
 	else
-		Printf.printf "Found %d goal items\n" (List.length goal_items) ;
 		List.iter (process_item rules rule_uses nonterm_uses) goal_items
 
 let run_training grammar_file sentence_file =
 
 	let grammar = get_input_grammar grammar_file in
 	let (sentences : string list) = read_sentences sentence_file in
-	Printf.printf "%d rules in the grammar from %s\n" (List.length grammar) grammar_file ;
-	Printf.printf "%d sentences to parse from %s\n" (List.length sentences) sentence_file ;
 
 	let rule_uses = ref (Hashtbl.create (List.length grammar)) in
 	let nonterm_uses = ref (Hashtbl.create ((List.length grammar)/10)) in
 	List.iter (process_sentence grammar rule_uses nonterm_uses) sentences ;
 
-	Printf.printf "===== Rule uses:\n" ;
-	Hashtbl.iter (fun rule n -> (Printf.printf "%2d\t%s\n" n (Rule.to_string rule))) (!rule_uses) ;
-
-	Printf.printf "===== Nonterminal uses:\n" ;
-	Hashtbl.iter (fun nonterm n -> (Printf.printf "%2d\t%s\n" n nonterm)) (!nonterm_uses) ;
-
-	Printf.printf "===== Weighted grammar:\n" ;
 	let print_weighted_rule r =
 		let num = try Hashtbl.find !rule_uses r with Not_found -> 0 in
 		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0 in
