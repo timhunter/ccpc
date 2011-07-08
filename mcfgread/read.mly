@@ -16,12 +16,12 @@ mcfgrule:
 |  rule mcfgrule {$1::$2};
 
 rule:
-	INT SLASH INT CAT ARROW children stringyield NEWLINE {Rule.create_rule ($4, $6, $7, ($1,$3))}
-|  INT SLASH INT CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($4, $7, ($1,$3))}
-|  INT SLASH INT CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($4, " ", ($1,$3))}
-|   CAT ARROW children stringyield NEWLINE {Rule.create_rule ($1, $3, $4, (0,0))}
-|  CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($1, $4, (0,0))}
-|  CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($1, " ", (0,0))};
+	INT SLASH INT CAT ARROW children stringyield NEWLINE {Rule.create_rule ($4, $6, $7, Some ($1,$3))}
+|  INT SLASH INT CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($4, $7, Some ($1,$3))}
+|  INT SLASH INT CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($4, " ", Some ($1,$3))}
+|   CAT ARROW children stringyield NEWLINE {Rule.create_rule ($1, $3, $4, None)}
+|  CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($1, $4, None)}
+|  CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($1, " ", None)};
 
 children:
    CAT {[ $1 ]}

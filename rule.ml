@@ -18,7 +18,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
     type component = Component of int * int | Epsilon
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
-    type r = Terminating of (string * string * Rational.rat) | NonTerminating of (string * string Nelist.t * tuplerecipe * Rational.rat) 
+    type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option)) 
 
     (**********************************************************)
 
@@ -124,7 +124,11 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-      let (w1,w2) = get_weight rule in
-      Printf.sprintf "%d / %d    %s --> %s %s" w1 w2 left rhs_output recipe
+      let weight_str =
+        match (get_weight rule) with
+        | Some (w1,w2) -> Printf.sprintf "%d / %d     " w1 w2
+        | None -> ""
+      in
+      Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe
 
 

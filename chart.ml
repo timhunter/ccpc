@@ -4,9 +4,9 @@ open Rational
 type proposition = Proposition of string * ((range_item * range_item) list)
 
 type backpointer = item ref option * item ref option
-and item = ParseItem of string * ((range_item * range_item) list) * backpointer option * Rational.rat  (*range_item defined in Util*) 
+and item = ParseItem of string * ((range_item * range_item) list) * backpointer option * (Rational.rat option)  (*range_item defined in Util*) 
 
-type history = backpointer option * Rational.rat
+type history = backpointer option * Rational.rat option
 
 (* An item is basically a proposition with a history. *)
 (* We don't actually store items ever internally; we store propositions, and (perhaps) a list of histories for each one. *)
@@ -96,7 +96,7 @@ let item_list c =
   match c with
   | Table tbl ->
     let item_from_prop prop =
-      match prop with Proposition(nt,ranges) -> ParseItem(nt,ranges,None,(0,0)) in
+      match prop with Proposition(nt,ranges) -> ParseItem(nt,ranges,None,None) in
     Hashtbl.fold (fun prop _ items -> (item_from_prop prop)::items) tbl []
   | TableWithHistory tbl ->
     let items_from_prop prop =

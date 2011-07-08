@@ -14,7 +14,7 @@ open Rational
 
     let get_axioms_parse grammar symbols =
       let indices = range 0 (List.length symbols) in
-      let make_axiom nt term (w1, w2) i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None (w1,w2)) else None in
+      let make_axiom nt term w i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None w) else None in
       let get_axiom symbols rule =
         match Rule.get_expansion rule with
         | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str (Rule.get_weight rule)) indices
