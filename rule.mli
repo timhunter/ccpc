@@ -4,7 +4,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		type component = Component of int * int | Epsilon
 		type tuplerecipe 
 		type r 
-		val print_rule : r -> unit
+		val to_string : r -> string
 		val create_terminating : string * string * Rational.rat -> r
 		val create_nonterminating : string * (string list) * (component list list) *Rational.rat -> r
 		val create_rule : string * (string list) * tuplerecipe * Rational.rat -> r

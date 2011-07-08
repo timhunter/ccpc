@@ -112,7 +112,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
       let component_strings = List.map component_to_string (Nelist.to_list lst) in
       "[" ^ (String.concat ";" component_strings) ^ "]"
 
-    let print_rule rule =
+    let to_string rule =
       let left = get_nonterm rule in
       let rhs_output = 
         match (get_expansion rule) with
@@ -124,6 +124,6 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-      Printf.printf "%s --> %s %s\n" left rhs_output recipe
+      Printf.sprintf "%s --> %s %s" left rhs_output recipe
 
 
