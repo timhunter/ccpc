@@ -1,8 +1,8 @@
-type 'a expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * 'a)
  
 
 		type component = Component of int * int | Epsilon
 		type tuplerecipe 
+		type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
 		type r 
 		val to_string : r -> string
 		val create_terminating : string * string * (Rational.rat option) -> r
@@ -15,13 +15,11 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
 		val nonterm_degree : r -> int
 		val get_nonterm : r -> string
 		val get_weight : r -> Rational.rat option
-		val get_expansion : r -> tuplerecipe expansion
+		val get_expansion : r -> expansion
 		val apply :  tuplerecipe ->
            (Util.range_item * Util.range_item) list list ->
            (Util.range_item * Util.range_item ->
             Util.range_item * Util.range_item ->
             Util.range_item * Util.range_item) ->
            (Util.range_item * Util.range_item) list
-
-		(*val eval_str : tuplerecipe expansion -> string list list -> string list*)
 

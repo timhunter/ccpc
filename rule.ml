@@ -1,23 +1,10 @@
 open Util
 open Rational
 
-(****
- This type is meant to be understood as part of the RULE interface.
- (For some reason that I don't understand, I can't put it inside the RULE signature, 
- and so I'm forced to leave the type variable unbound; ideally this type declaration 
- would just refer to tuplerecipe in the sig.)
- PublicTerminating and PublicNonTerminating are used outside this file to pattern-match 
- on the result of get_expansion. In different implementations of the RULE interface, the 
- r type (and maybe the tuplerecipe type) declared inside the struct will differ, but 
- this type here should stay the same.
- ****)
-type 'a expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * 'a)
-
-
-    
     type component = Component of int * int | Epsilon
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
+    type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
     type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option)) 
 
     (**********************************************************)
@@ -39,11 +26,6 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
                                              None -> acc
                                              | Some a -> (a::acc)) [] res in *)
       res
-
-    (*let eval_str exp yields =
-      match exp with
-      | PublicTerminating s -> [s]
-      | PublicNonTerminating (_, srecipes) -> Nelist.to_list (Nelist.map (fun strfunc -> makestr strfunc yields (^)) srecipes) *)
 
     let create_tuplerecipe lst =
       Nelist.from_list [(Nelist.from_list lst)]
