@@ -26,6 +26,8 @@ $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc) main.cmo
 $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) main.cmx
 
+train: $(OCAMLINT) $(OCAMLOBJ_bc) train.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(OCAMLOBJ_bc) train.cmo
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx $(EXE)_bc $(EXE)_nt
