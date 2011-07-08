@@ -27,19 +27,19 @@ train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) train.cmx
 
 clean:
-	rm -f *.o *.cmo *.cmi *.cmx *.annot
-	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/*.annot
-	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx kbest/*.annot
+	rm -f *.o *.cmo *.cmi *.cmx
+	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
+	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx
 	rm -f $(EXE)_bc $(EXE)_nt train
 
 debug.cmo: debug.ml
-	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' -dtypes debug.ml
+	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml
 
 %.cmx: %.ml debug.cmo
-	$(COMPILER_NATIVE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -dtypes -c $*.ml
+	$(COMPILER_NATIVE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -c $*.ml
 
 %.cmo: %.ml debug.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -dtypes -c $*.ml
+	$(COMPILER_BYTECODE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -c $*.ml
 
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
