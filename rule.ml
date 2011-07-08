@@ -124,6 +124,7 @@ type 'a expansion = PublicTerminating of string | PublicNonTerminating of (strin
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-      Printf.sprintf "%s --> %s %s" left rhs_output recipe
+      let (w1,w2) = get_weight rule in
+      Printf.sprintf "%d / %d    %s --> %s %s" w1 w2 left rhs_output recipe
 
 
