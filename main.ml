@@ -4,7 +4,6 @@
        They still need to be written with an initial capital. *)
 open Util
 open Rule
-(*open Deriver*)
 open Parser
 open Read 
 open Chart
