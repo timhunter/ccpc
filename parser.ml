@@ -14,7 +14,7 @@ open Rational
 
     let get_axioms_parse grammar symbols =
       let indices = range 0 (List.length symbols) in
-      let make_axiom nt term w i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] None w) else None in
+      let make_axiom nt term w i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] [] w) else None in
       let get_axiom symbols rule =
         match Rule.get_expansion rule with
         | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str (Rule.get_weight rule)) indices
@@ -24,8 +24,8 @@ open Rational
       
     let get_axioms_intersect grammar prefix =
       let len = List.length prefix in
-      let situated_axiom nt weight index = create_item nt [(RangeVal index, RangeVal (index+1))] None weight in
-      let unsituated_axiom nt weight = create_item nt [(RangeVal len, RangeVal len)] None weight in
+      let situated_axiom nt weight index = create_item nt [(RangeVal index, RangeVal (index+1))] [] weight in
+      let unsituated_axiom nt weight = create_item nt [(RangeVal len, RangeVal len)] [] weight in
       let get_axiom rule =
         let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
@@ -44,7 +44,7 @@ open Rational
         match gram with 
           | [] -> acc
           | h::t -> (match Rule.get_expansion h with 
-                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] None (Rule.get_weight h))::acc))
+                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] [] (Rule.get_weight h))::acc))
                                                        else get_empties t acc
                       | PublicNonTerminating _ -> get_empties t acc) in 
       (get_empties grammar []) @ from_symbols 
@@ -74,8 +74,8 @@ open Rational
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), None)) (Rule.get_weight rule))
-                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) (Some (Some (ref h), Some (ref t))) (Rule.get_weight rule)) 
+                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) [h] (Rule.get_weight rule))
+                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) [h;t] (Rule.get_weight rule)) 
                      | _ -> failwith "List can only have one or two items"
                with
                     RangesNotAdjacentException -> None

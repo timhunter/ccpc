@@ -74,11 +74,7 @@ let get_single_yield sentence item =
 let rec process_item sentence rules rule_uses nonterm_uses item =
 	let nt = Chart.get_nonterm item in
 	let children  =
-		match (Chart.get_backpointer item) with
-		| None -> []
-		| Some (Some x, None) -> [!x]
-		| Some (Some x, Some y) -> [!x; !y]
-		| _ -> failwith "Invalid parent backpointer"
+		Chart.get_antecedents item
 	in
 	let rhs = if (children = []) then [get_single_yield sentence item] else (List.map Chart.get_nonterm children) in
 	let r = find_rule rules nt rhs in

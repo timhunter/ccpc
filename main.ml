@@ -48,7 +48,7 @@ let result_matches f input_ranges expected_result =
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
-  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y None weight) rights range_lists in
+  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y [] weight) rights range_lists in
   (Rule.create_rule (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
 (* NB: There is a "bug" in Albro's dissertation where he describes this algorithm.
@@ -116,11 +116,7 @@ let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item))
 
 let print_tree item sentence =
 	let get_children item =
-		match (Chart.get_backpointer item) with
-		| None -> []
-		| Some (Some x, None) -> [!x]
-		| Some (Some x, Some y) -> [!x;!y]
-		| _ -> failwith "Invalid parent backpointer"
+		Chart.get_antecedents item
 	in
 	let rec print_item item =      (* print_item returns a list of strings, each representing one line *)
 		let yields_list : (string list) = map_tr (get_yield sentence) (Chart.get_ranges item) in
