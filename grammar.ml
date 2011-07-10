@@ -30,7 +30,7 @@ let result_matches f input_ranges expected_result =
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
-  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y [] weight) rights range_lists in
+  let new_agenda_items = List.map2 (fun x y -> Chart.create_item x y [] None) rights range_lists in
   (Rule.create_rule (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
 (* NB: There is a "bug" in Albro's dissertation where he describes this algorithm.
