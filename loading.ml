@@ -10,5 +10,6 @@
 #load "chart.cmo";;
 #load "tables.cmo";;
 #load "parser.cmo";;
+#load "grammar.cmo";;
 #use "main.ml";;
    
