@@ -12,9 +12,10 @@ open Rational
     let is_goal start_symbol length item =
       (get_nonterm item = start_symbol) && (get_ranges item = [(RangeVal 0, RangeVal length)])
 
+    (* return type is (item, Rational.rat option) *)
     let get_axioms_parse grammar symbols =
       let indices = range 0 (List.length symbols) in
-      let make_axiom nt term w i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)] [] w) else None in
+      let make_axiom nt term w i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)], w) else None in
       let get_axiom symbols rule =
         match Rule.get_expansion rule with
         | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str (Rule.get_weight rule)) indices
@@ -22,10 +23,11 @@ open Rational
       in
       concatmap_tr (get_axiom symbols) grammar 
       
+    (* return type is (item, Rational.rat option) *)
     let get_axioms_intersect grammar prefix =
       let len = List.length prefix in
-      let situated_axiom nt weight index = create_item nt [(RangeVal index, RangeVal (index+1))] [] weight in
-      let unsituated_axiom nt weight = create_item nt [(RangeVal len, RangeVal len)] [] weight in
+      let situated_axiom nt weight index = (create_item nt [(RangeVal index, RangeVal (index+1))], weight) in
+      let unsituated_axiom nt weight = (create_item nt [(RangeVal len, RangeVal len)], weight) in
       let get_axiom rule =
         let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
@@ -44,7 +46,7 @@ open Rational
         match gram with 
           | [] -> acc
           | h::t -> (match Rule.get_expansion h with 
-                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar] [] (Rule.get_weight h))::acc))
+                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar], Rule.get_weight h)::acc))
                                                        else get_empties t acc
                       | PublicNonTerminating _ -> get_empties t acc) in 
       (get_empties grammar []) @ from_symbols 
@@ -74,8 +76,8 @@ open Rational
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-                     [h] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) [h] (Rule.get_weight rule))
-                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges) [h;t] (Rule.get_weight rule)) 
+                     | [h] ->   Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h], Rule.get_weight rule))
+                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h;t], Rule.get_weight rule))
                      | _ -> failwith "List can only have one or two items"
                with
                     RangesNotAdjacentException -> None
@@ -135,11 +137,26 @@ open Rational
           
           let possible_rules = single_rules @ left_rules @ right_rules in
           let possible_items = filter_chart tables.item_map left_rules right_rules in    (* Limits the chart to other items the trigger might combine with *)
-          let all_new_items = build_items possible_rules trigger possible_items in 
+          let all_new_items = ( build_items possible_rules trigger possible_items : ((item * route) list) ) in 
          
-          <:DEBUG< "%d new items; already in chart?\n" (List.length all_new_items) >> ;
-          List.iter (fun item -> <:DEBUG< "%s %B\n" (Chart.debug_str item) (Chart.mem chart item) >>) all_new_items ; <:DEBUG< "\n" >> ;
-          List.iter (fun item -> if (not (Chart.mem chart item)) then (add_item tables.item_map item; Queue.add item q; Chart.add chart item)) all_new_items; 
+          <:DEBUG< "%d new items\n" (List.length all_new_items) >> ;
+          let process (item,route) =
+            if not (Chart.mem chart item) then (
+              <:DEBUG< "  %s \tnew item (hence new route)\n" (Chart.debug_str item) >> ;
+              add_item tables.item_map item ;
+              Queue.add item q ;
+              Chart.add chart item route
+            ) else (
+              if not (Chart.mem_route chart item route) then (
+                <:DEBUG< "  %s \told item, new route\n" (Chart.debug_str item) >> ;
+                Chart.add chart item route
+              ) else (
+                <:DEBUG< "  %s \told item, old route\n" (Chart.debug_str item) >> ;
+                ()
+              )
+            )
+          in
+          List.iter process all_new_items ;
           consequences (max_depth -1) prims chart q tables
        
     (* Produces a length-three array of rule lists; nullary, unary and binary rules *)
@@ -160,24 +177,20 @@ open Rational
       let left_map = build_rule_map (Array.get arity_map 2) 0 in 
       let right_map = build_rule_map (Array.get arity_map 2) 1 in
       let single_map = build_rule_map (Array.get arity_map 1) 0 in
-      let axioms_list = get_axioms prims input in   
+      let axioms_list : ((item * Rational.rat option) list) = get_axioms prims input in   
       let axioms =
         let track_history = (match input with | Prefix _ -> false | Sentence _ -> true) in
         let tbl = Chart.create 100 track_history in 
         let rec add lst  =
           match lst with 
             | [] -> tbl
-            | h::t -> Chart.add tbl h ; add t in 
+            | (item,weight)::t -> Chart.add tbl item ([],weight) ; add t in 
         add axioms_list in
-      let item_map = build_item_map axioms_list in 
+      let item_map = build_item_map (map_tr fst axioms_list) in 
       let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
       let queue = Queue.create () in 
-      for i=0 to (List.length axioms_list)-1 do
-        Queue.add (List.nth axioms_list i) queue 
-      done;
+      List.iter (fun (item,_) -> Queue.add item queue) axioms_list ;
       let chart = consequences max_depth prims axioms queue tables in
       <:DEBUG< "Chart contains %d propositions\n" (Chart.length chart) >> ;
-      let chart_as_list = Chart.item_list chart in
-      chart_as_list
-
+      chart
 

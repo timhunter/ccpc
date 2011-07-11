@@ -94,10 +94,10 @@ let convert_item parser_item =
 (**************************************************************)
 
 let intersection_grammar (rules, start_symbol) symbols =
-  let chart = (uniques (Parser.deduce (-1) rules (Parser.Prefix symbols))) in
-  let goal_items = List.filter (Parser.is_goal start_symbol (List.length symbols)) chart in
+  let chart = Parser.deduce (-1) rules (Parser.Prefix symbols) in
+  let goal_items = Chart.goal_items chart start_symbol (List.length symbols) in
   let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
-  let chart' = List.map convert_item chart in
+  let chart' = List.map convert_item (Chart.item_list chart) in
   let goal_items' = List.map convert_item goal_items in
   let new_rules = build_intersection_grammar rules symbols chart' (goal_items',0) [] in
   (new_rules, new_start_symbol)

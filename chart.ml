@@ -1,24 +1,22 @@
 open Util
 open Rational
 
-type proposition = Proposition of string * ((range_item * range_item) list)
+type item = ParseItem of string * ((range_item * range_item) list)  (*range_item defined in Util*) 
 
-type item = ParseItem of string * ((range_item * range_item) list) * (item list) * (Rational.rat option)  (*range_item defined in Util*) 
+type route = (item list) * Rational.rat option
 
-type history = (item list) * Rational.rat option
+type chart = Table of (item, unit) Hashtbl.t | TableWithHistory of (item, route list) Hashtbl.t
 
-(* An item is basically a proposition with a history. *)
-(* We don't actually store items ever internally; we store propositions, and (perhaps) a list of histories for each one. *)
+let get_nonterm = function ParseItem(nt,_) -> nt
 
-type chart = Table of (proposition, unit) Hashtbl.t | TableWithHistory of (proposition, history list) Hashtbl.t
+let create_item str ranges = ParseItem(str, ranges)
 
-let get_nonterm = function ParseItem(nt, _,_,_) -> nt
+let get_ranges = function ParseItem(_,rs) -> rs
 
-let create_item str ranges bp weight = ParseItem(str, ranges, bp, weight)
-
-let get_ranges = function ParseItem(_, rs,_,_) -> rs
-
-let get_antecedents = function ParseItem(_,_,ants,_) -> ants
+let get_routes prop c =
+  match c with
+  | Table tbl -> failwith "No histories stored in this table"
+  | TableWithHistory tbl -> Hashtbl.find tbl prop
 
 let get_string sentence range_list =
   let find_words (first, last) =
@@ -39,20 +37,19 @@ let get_string sentence range_list =
   
 
 let to_string item sentence =
-  let ParseItem (nt, ranges, _,_) = item in
+  let ParseItem (nt, ranges) = item in
   let words = get_string sentence ranges in
   Printf.sprintf "'{%s, %s}'" nt (List.fold_left (fun x y -> x ^ (y ^ " ")) "" words) 
 
 let debug_str item =
-	let ParseItem (nt, ranges, antecedents, _) = item in
+	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match r with
 		| (RangeVal x, RangeVal y) -> Printf.sprintf "%d:%d" x y
 		| (EpsVar, EpsVar)         -> Printf.sprintf "eps"
 		| _ -> failwith "Should not mix EpsVar with RangeVal"
 	in
-	let show_antecedents = String.concat " " (List.map (fun item -> get_nonterm item) antecedents) in
-	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "|" ^^ show_antecedents ^^ "]")
+	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
 
 let create i with_history =
   if with_history then
@@ -60,37 +57,46 @@ let create i with_history =
   else
     Table (Hashtbl.create i)
 
-let add c item =
-  let ParseItem(nt, ranges, bp, w) = item in
-  let prop = Proposition(nt, ranges) in
+let add c item route =
   match c with
-  | Table tbl -> Hashtbl.replace tbl prop ()
+  | Table tbl -> Hashtbl.replace tbl item ()
   | TableWithHistory tbl ->
-    if Hashtbl.mem tbl prop then
-      let existing = Hashtbl.find tbl prop in
-      Hashtbl.replace tbl prop ((bp,w)::existing)
+    if Hashtbl.mem tbl item then
+      let existing = Hashtbl.find tbl item in
+      Hashtbl.replace tbl item (route::existing)
     else
-      Hashtbl.add tbl prop [(bp,w)]
+      Hashtbl.add tbl item [route]
 
 let mem c item =
-  let ParseItem(nt, ranges, bp, w) = item in
-  let prop = Proposition(nt,ranges) in
   match c with
-  | Table tbl -> Hashtbl.mem tbl prop
-  | TableWithHistory tbl -> (Hashtbl.mem tbl prop) && (List.mem (bp,w) (Hashtbl.find tbl prop))
+  | Table tbl -> Hashtbl.mem tbl item
+  | TableWithHistory tbl -> Hashtbl.mem tbl item
 
+let mem_route c item route =
+  if not (mem c item) then
+    failwith "mem_route: Asked about a route for an *item* we don't have"
+  else
+    match c with
+    | Table tbl -> true (* There's never a new route to an existing item in this kind of table *)
+    | TableWithHistory tbl -> List.mem route (Hashtbl.find tbl item)
+  
 let length c =
   match c with
   | Table tbl -> Hashtbl.length tbl
   | TableWithHistory tbl -> Hashtbl.length tbl
 
+let goal_items c (start_symbol : string) (length : int) : (item list) =
+  let check_item (i : item)  _ (acc : item list) : item list =
+    if (get_nonterm i = start_symbol) && (get_ranges i = [(RangeVal 0, RangeVal length)]) then
+      i::acc
+    else
+      acc
+  in
+  match c with
+  | Table tbl -> Hashtbl.fold check_item tbl []
+  | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
+
 let item_list c =
   match c with
-  | Table tbl ->
-    let item_from_prop prop =
-      match prop with Proposition(nt,ranges) -> ParseItem(nt,ranges,[],None) in
-    Hashtbl.fold (fun prop _ items -> (item_from_prop prop)::items) tbl []
-  | TableWithHistory tbl ->
-    let items_from_prop prop =
-      match prop with Proposition(nt,ranges) -> map_tr (fun (bp,w) -> ParseItem(nt,ranges,bp,w)) (Hashtbl.find tbl prop) in
-    Hashtbl.fold (fun prop _ items -> (items_from_prop prop)@items) tbl []
+  | Table tbl -> Hashtbl.fold (fun i _ acc -> i::acc) tbl []
+  | TableWithHistory tbl -> Hashtbl.fold (fun i _ acc -> i::acc) tbl []
