@@ -30,38 +30,13 @@ let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item))
 	| (EpsVar, EpsVar) -> ""
 	| _ -> failwith "Should never mix EpsVar with RangeVal"
 
-(**********************************************************************************************)
-(*** NB: This section duplicated in train.ml and main.ml for now ***)
-
-type derivation_tree = Leaf of Chart.item | NonLeaf of (Chart.item * derivation_tree list)
-
-let make_derivation_tree item children =
-	match children with
-	| [] -> Leaf (item)
-	| _ -> NonLeaf (item, children)
-
-let rec one_from_each (lists : 'a list list) : ('a list list) =
-	let prepend_one_of xs ys = map_tr (fun x -> x::ys) xs in
-	match lists with
-	| [] -> [[]]
-	| (l::ls) -> List.concat (map_tr (prepend_one_of l) (one_from_each ls))
-
-let rec get_derivations chart (item : Chart.item) : (derivation_tree list) =
-	let (routes : item list list) = map_tr fst (Chart.get_routes item chart) in
-	let route_to_childrens (route : item list) : (derivation_tree list list) = one_from_each (map_tr (get_derivations chart) route) in
-	let (childrens : derivation_tree list list) = List.concat (map_tr route_to_childrens routes) in
-	map_tr (fun children -> make_derivation_tree item children) childrens
-
-(**********************************************************************************************)
-
 let print_tree tree sentence =
-	let get_children t = (match t with Leaf(_) -> [] | NonLeaf(_,ts) -> ts) in
 	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
-		let item = (match t with Leaf(i) -> i | NonLeaf(i,_) -> i) in
+		let item = Derivation.get_root_item t in
 		let yields_list : (string list) = map_tr (get_yield sentence) (Chart.get_ranges item) in
 		let yields_string : string = List.fold_left (^^) "" (map_tr (Printf.sprintf "'%s'") yields_list) in
 		let first_line = Printf.sprintf "%s (%s) " (Chart.get_nonterm item) yields_string in
-		let children : (derivation_tree list) = get_children t in
+		let children = Derivation.get_children t in
 		let children_printed : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_tree' children : (string list list))) in
 		let all_lines : (string list) = first_line :: children_printed in
 		all_lines
@@ -71,7 +46,7 @@ let print_tree tree sentence =
 let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = Chart.goal_items chart start_symbol (List.length sentence) in
-  let goal_derivations = List.concat (map_tr (get_derivations chart) goal_items) in
+  let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
   <:DEBUG< "%d goal items, %d goal derivations\n" (List.length goal_items) (List.length goal_derivations) >> ;
   let rec make_trees goals acc =
     match goals with

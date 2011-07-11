@@ -71,41 +71,15 @@ let get_single_yield sentence item =
 	)
 	| _ -> failwith (Printf.sprintf "Something's wrong: Item passed to get_single_yield that has multiple yields: %s" (Chart.debug_str item))
 
-(**********************************************************************************************)
-(*** NB: This section duplicated in train.ml and main.ml for now ***)
-
-type derivation_tree = Leaf of Chart.item | NonLeaf of (Chart.item * derivation_tree list)
-
-let make_derivation_tree item children =
-	match children with
-	| [] -> Leaf (item)
-	| _ -> NonLeaf (item, children)
-
-let rec one_from_each (lists : 'a list list) : ('a list list) =
-	let prepend_one_of xs ys = map_tr (fun x -> x::ys) xs in
-	match lists with
-	| [] -> [[]]
-	| (l::ls) -> List.concat (map_tr (prepend_one_of l) (one_from_each ls))
-
-let rec get_derivations chart (item : Chart.item) : (derivation_tree list) =
-	let (routes : item list list) = map_tr fst (Chart.get_routes item chart) in
-	let route_to_childrens (route : item list) : (derivation_tree list list) = one_from_each (map_tr (get_derivations chart) route) in
-	let (childrens : derivation_tree list list) = List.concat (map_tr route_to_childrens routes) in
-	map_tr (fun children -> make_derivation_tree item children) childrens
-
-(**********************************************************************************************)
-
 let rec process_tree sentence rules rule_uses nonterm_uses tree =
-	let get_item = function Leaf(i) -> i | NonLeaf(i,_) -> i in
-	let get_children = function Leaf(_) -> [] | NonLeaf(_,ts) -> ts in
-	let item = get_item tree in
-	let children = get_children tree in
+	let item = Derivation.get_root_item tree in
+	let children = Derivation.get_children tree in
 	let nt = Chart.get_nonterm item in
 	let rhs =
 		if (children = []) then
 			[get_single_yield sentence item]
 		else
-			List.map (fun c -> Chart.get_nonterm (get_item c)) children
+			List.map (fun c -> Chart.get_nonterm (Derivation.get_root_item c)) children
 	in
 	let r = find_rule rules nt rhs in
 	increment rule_uses r ;
@@ -116,7 +90,7 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 	let split_sentence = Util.split ' ' sentence in
 	let chart = Parser.deduce (-1) rules (Parser.Sentence split_sentence) in
 	let goal_items = Chart.goal_items chart _START_SYMBOL_ (List.length split_sentence) in
-	let goal_derivations = List.concat (map_tr (get_derivations chart) goal_items) in
+	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
 	else
