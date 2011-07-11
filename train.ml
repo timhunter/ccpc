@@ -23,13 +23,6 @@ let increment counter_tbl key =
 	let n = try (Hashtbl.find !counter_tbl key) with Not_found -> 0 in
 	Hashtbl.replace !counter_tbl key (n+1)
 
-(*** NB: This is just copied from main.ml for now. ***
- *** Should be put in some shared file sometime.   ***)
-let get_input_grammar grammar_file =
-    let channel = open_in grammar_file in 
-    let lexbuf = Lexing.from_channel channel in 
-    Read.mcfgrule Lexer.token lexbuf
-
 let read_sentences filename =
 	let channel = open_in filename in
 	let rec get_all_lines ch acc =
@@ -98,7 +91,7 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 
 let run_training grammar_file sentence_file =
 
-	let grammar = get_input_grammar grammar_file in
+	let grammar = Grammar.get_input_grammar grammar_file in
 	let (sentences : string list) = read_sentences sentence_file in
 
 	let rule_uses = ref (Hashtbl.create (List.length grammar)) in

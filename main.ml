@@ -10,20 +10,6 @@ open Read
 open Chart
 open Rational
 
-(******************************************************************************************)
-
-
-let get_input_grammar grammar_file =
-  try 
-    let channel = open_in grammar_file in 
-    let lexbuf = Lexing.from_channel channel in 
-    Read.mcfgrule Lexer.token lexbuf  
-  with _ -> print_string ("Can't parse input mcfg file "^grammar_file^"\n"); []
-
-
-
-
-
 let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item)) : string =
 	match r with
 	| (RangeVal i, RangeVal j) -> List.fold_left (^^) "" (map_tr (List.nth sentence) (range i j))
@@ -87,7 +73,7 @@ let main () =
 		let options = process_args xs default_options in
 		if (options.sentence = None) && (options.prefix = None) then failwith "No prefix or sentence given; nothing to do!" ;
 		Util.set_debug_mode options.debug ;
-		let input_grammar = (get_input_grammar grammar_file, "S") in
+		let input_grammar = (Grammar.get_input_grammar grammar_file, "S") in
 		let grammar_for_parsing =
 			match options.prefix with
 			| None -> input_grammar ;

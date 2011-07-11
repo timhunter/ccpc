@@ -1,6 +1,13 @@
 open Util
 open Rule
 
+let get_input_grammar grammar_file =
+  try 
+    let channel = open_in grammar_file in 
+    let lexbuf = Lexing.from_channel channel in 
+    Read.mcfgrule Lexer.token lexbuf  
+  with _ -> print_string ("Can't parse input mcfg file "^grammar_file^"\n"); []
+
 (******************************************************************************************)
 (* Extract the intersection grammar *)
 (* See Albro's dissertation, appendix C section C.4 *)
