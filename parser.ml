@@ -179,8 +179,7 @@ open Rational
       let single_map = build_rule_map (Array.get arity_map 1) 0 in
       let axioms_list : ((item * Rational.rat option) list) = get_axioms prims input in   
       let axioms =
-        let track_history = (match input with | Prefix _ -> false | Sentence _ -> true) in
-        let tbl = Chart.create 100 track_history in 
+        let tbl = Chart.create 100 in 
         let rec add lst  =
           match lst with 
             | [] -> tbl

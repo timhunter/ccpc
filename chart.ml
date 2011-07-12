@@ -5,7 +5,7 @@ type item = ParseItem of string * ((range_item * range_item) list)  (*range_item
 
 type route = (item list) * Rational.rat option
 
-type chart = Table of (item, unit) Hashtbl.t | TableWithHistory of (item, route list) Hashtbl.t
+type chart = TableWithHistory of (item, route list) Hashtbl.t
 
 let get_nonterm = function ParseItem(nt,_) -> nt
 
@@ -15,7 +15,6 @@ let get_ranges = function ParseItem(_,rs) -> rs
 
 let get_routes prop c =
   match c with
-  | Table tbl -> failwith "No histories stored in this table"
   | TableWithHistory tbl -> Hashtbl.find tbl prop
 
 let get_string sentence range_list =
@@ -51,15 +50,10 @@ let debug_str item =
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
 
-let create i with_history =
-  if with_history then
-    TableWithHistory (Hashtbl.create i)
-  else
-    Table (Hashtbl.create i)
+let create i = TableWithHistory (Hashtbl.create i)
 
 let add c item route =
   match c with
-  | Table tbl -> Hashtbl.replace tbl item ()
   | TableWithHistory tbl ->
     if Hashtbl.mem tbl item then
       let existing = Hashtbl.find tbl item in
@@ -69,7 +63,6 @@ let add c item route =
 
 let mem c item =
   match c with
-  | Table tbl -> Hashtbl.mem tbl item
   | TableWithHistory tbl -> Hashtbl.mem tbl item
 
 let mem_route c item route =
@@ -77,12 +70,10 @@ let mem_route c item route =
     failwith "mem_route: Asked about a route for an *item* we don't have"
   else
     match c with
-    | Table tbl -> true (* There's never a new route to an existing item in this kind of table *)
     | TableWithHistory tbl -> List.mem route (Hashtbl.find tbl item)
   
 let length c =
   match c with
-  | Table tbl -> Hashtbl.length tbl
   | TableWithHistory tbl -> Hashtbl.length tbl
 
 let goal_items c (start_symbol : string) (length : int) : (item list) =
@@ -93,10 +84,8 @@ let goal_items c (start_symbol : string) (length : int) : (item list) =
       acc
   in
   match c with
-  | Table tbl -> Hashtbl.fold check_item tbl []
   | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
 
 let item_list c =
   match c with
-  | Table tbl -> Hashtbl.fold (fun i _ acc -> i::acc) tbl []
   | TableWithHistory tbl -> Hashtbl.fold (fun i _ acc -> i::acc) tbl []

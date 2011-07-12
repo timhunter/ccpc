@@ -9,7 +9,7 @@ val get_routes : item -> chart -> route list
 val to_string: item -> string list -> string 
 val debug_str : item -> string
 
-val create : int -> bool -> chart 
+val create : int -> chart 
 val add : chart -> item -> route -> unit
 val mem : chart -> item -> bool
 val mem_route : chart -> item -> route -> bool
