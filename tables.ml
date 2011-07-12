@@ -1,9 +1,7 @@
 open Parser
 open Rule
 
-type map_value = RuleVal of Rule.r list | ItemVal of Chart.item list
-type map = Map of (string, map_value) Hashtbl.t 
-  
+type 'a map = Map of (string, 'a list) Hashtbl.t
 
 (*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar. *)
 (* daughter is an index into the right-hand side of a rule. *)
@@ -16,12 +14,9 @@ let build_rule_map grammar daughter =
       | PublicNonTerminating (rights, recipes) -> 
           let key = Nelist.nth rights daughter in
           if Hashtbl.mem map key then 
-            let prev_value = 
-              match Hashtbl.find map key with
-                RuleVal rv -> rv
-                | _ -> failwith "Should not encounter ItemVal here" in
-            Hashtbl.add map key (RuleVal (rule::prev_value))
-          else Hashtbl.add map key (RuleVal [rule])
+            let prev_value = Hashtbl.find map key in
+            Hashtbl.add map key (rule::prev_value)
+          else Hashtbl.add map key [rule]
     else () in
   let tbl = Hashtbl.create 100 in 
   List.iter (load_map tbl) grammar;
@@ -32,12 +27,9 @@ let build_item_map items =
   let load_map map item =
     let key = Chart.get_nonterm item in
     if Hashtbl.mem map key then
-      let prev_value = 
-        match Hashtbl.find map key with 
-          ItemVal iv -> iv 
-          | _ -> failwith "Should not have encountered RuleVal here" in
-      Hashtbl.add map key (ItemVal (item::prev_value))
-    else Hashtbl.add map key (ItemVal [item]) in
+      let prev_value = Hashtbl.find map key in
+      Hashtbl.add map key (item::prev_value)
+    else Hashtbl.add map key [item] in
   let tbl = Hashtbl.create 100 in 
   List.iter (load_map tbl) items;
   Map tbl

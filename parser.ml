@@ -6,7 +6,7 @@ open Rational
 
     type prim = Rule.r
     type input = Prefix of (string list) | Sentence of (string list)
-    type tables = {sRule_map: Tables.map ; lRule_map: Tables.map ; rRule_map: Tables.map ; item_map: Tables.map}
+    type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
 
     
     let is_goal start_symbol length item =
@@ -57,12 +57,9 @@ open Rational
     let add_item item_map item =
       let key = get_nonterm item in 
       if Tables.mem item_map key then 
-        let prev_value =
-          match Tables.find item_map key with  
-            ItemVal iv -> iv 
-            | _ -> failwith "Should not have encountered RuleVal here" in
-        Tables.add item_map key (ItemVal (item::prev_value))
-      else Tables.add item_map key (ItemVal [item])
+        let prev_value = Tables.find item_map key in
+        Tables.add item_map key (item::prev_value)
+      else Tables.add item_map key [item]
      
     let build_items rules trigger items = 
      let build' rules item_list = 
@@ -93,9 +90,7 @@ open Rational
     (* Filter rules based on current items using the map*)
     let filter_rules rule_map trigger = 
       try
-         match Tables.find rule_map (get_nonterm trigger) with
-           RuleVal rlist -> rlist
-           | _ -> failwith "Should only encounter a Rule list here"
+         Tables.find rule_map (get_nonterm trigger)
       with _ -> []
     
     (*produce a chart which contains only relevant items based on the given rules*)
@@ -105,9 +100,7 @@ open Rational
         match nonterms with 
           | [] -> acc
           | h::t -> if (Tables.mem item_map h) then
-                      let itm = match Tables.find item_map h with
-                         ItemVal iv -> iv 
-                         | _ -> failwith "Error: Should not have encountered RuleVal here" in 
+                      let itm = Tables.find item_map h in
                       get_items t (itm::acc)
                     else 
                       get_items t acc in 
