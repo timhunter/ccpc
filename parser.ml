@@ -34,7 +34,7 @@ open Rational
         | PublicTerminating str -> (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
         | PublicNonTerminating _ -> []
       in
-      uniques (concatmap_tr get_axiom grammar)
+      concatmap_tr get_axiom grammar
 
     let get_axioms grammar input =
       let from_symbols =  match input with
