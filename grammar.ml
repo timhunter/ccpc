@@ -15,7 +15,7 @@ let get_input_grammar grammar_file =
 let rec build_symbol sym ranges =
   match ranges with
     [] -> sym
-  | ((RangeVal p, RangeVal q)::rs) -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
+  | ((RangeVal p, RangeVal q)::rs) -> build_symbol ((Printf.sprintf "<%d," p) ^ sym ^ (Printf.sprintf ",%d>" q)) rs
   | ((EpsVar, EpsVar)::rs) -> build_symbol (sym ^ (Printf.sprintf "Epsilon")) rs
   | _ -> failwith "Should not be mixing RangeVal with EpsVar!"
 
