@@ -44,7 +44,7 @@ let make_new_rule sit_nonterm rights func range_lists weight =
        On page 293, where he says "check whether f is well-defined", it should read something like 
        "check whether f is well-defined and evaluates to the ranges in the trigger item".
  *)
-let intersection_rules_per_rule prefix all_items item rule =
+let intersection_rules_per_rule prefix chart item rule =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   match Rule.get_expansion rule with
   | PublicTerminating str ->
@@ -56,14 +56,10 @@ let intersection_rules_per_rule prefix all_items item rule =
       | _ -> ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
     )
   | PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
-    let items_headed_by nt = List.filter (fun item -> (Chart.get_nonterm item) = nt) all_items in
-    let items_grouped = Nelist.to_list (Nelist.map items_headed_by nts') in
-    let item_combinations = cartesian items_grouped in
-    let ranges_from_item_comb items = map_tr Chart.get_ranges items in
-    let function_inputs = map_tr ranges_from_item_comb item_combinations in
-    let defined_function_inputs = List.filter (fun input -> result_matches func input (Chart.get_ranges item)) function_inputs in
-    (* results_to_combine :: (Rule.r * Parser.item list) list *)
-    let results_to_combine = map_tr (fun x -> (make_new_rule sit_nonterm (Nelist.to_list nts') func x (Rule.get_weight rule))) defined_function_inputs in
+    let route_matches_rule rule route = ((map_tr Chart.get_nonterm (fst route)) = Nelist.to_list nts') in
+    let matching_routes = List.filter (route_matches_rule rule) (Chart.get_routes item chart) in
+    let new_rule_for_route (items, _) = make_new_rule sit_nonterm (Nelist.to_list nts') func (map_tr Chart.get_ranges items) (Rule.get_weight rule) in
+    let results_to_combine = (map_tr new_rule_for_route matching_routes) in
     let new_rules = map_tr fst results_to_combine in
     let new_agenda_items = concatmap_tr snd results_to_combine in
     (new_rules, new_agenda_items)
@@ -87,7 +83,7 @@ let intersection_grammar (rules, start_symbol) symbols =
   let chart = Parser.deduce (-1) rules (Parser.Prefix symbols) in
   let goal_items = Chart.goal_items chart start_symbol (List.length symbols) in
   let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
-  let new_rules = build_intersection_grammar rules symbols (Chart.item_list chart) (goal_items,0) [] in
+  let new_rules = build_intersection_grammar rules symbols chart (goal_items,0) [] in
   (new_rules, new_start_symbol)
 
 
