@@ -39,7 +39,7 @@ let run_parser sentence (rules, start_symbol) =
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_derivations [] in
-  List.iter (fun x -> Util.debug "%s\n" (Chart.to_string x sentence)) (Chart.item_list chart) ;
+  Chart.iter_items chart (fun x -> <:DEBUG< "%s\n" (Chart.to_string x sentence) >>) ;
   Util.debug "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "SUCCESS!\n";)

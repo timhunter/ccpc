@@ -86,6 +86,6 @@ let goal_items c (start_symbol : string) (length : int) : (item list) =
   match c with
   | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
 
-let item_list c =
-  match c with
-  | TableWithHistory tbl -> Hashtbl.fold (fun i _ acc -> i::acc) tbl []
+let iter_items c f =
+  let TableWithHistory tbl = c in
+  Hashtbl.iter (fun item _ -> f item) tbl

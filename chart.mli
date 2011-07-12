@@ -16,4 +16,4 @@ val mem_route : chart -> item -> route -> bool
 val length : chart -> int
 
 val goal_items : chart -> string -> int -> item list
-val item_list : chart -> item list
+val iter_items : chart -> (item -> unit) -> unit
