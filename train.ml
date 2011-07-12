@@ -19,9 +19,10 @@ let _START_SYMBOL_ = "S"
 type rule_counter = (Rule.r, int) Hashtbl.t
 type nonterm_counter = (string, int) Hashtbl.t
 
-let increment counter_tbl key =
-	let n = try (Hashtbl.find !counter_tbl key) with Not_found -> 0 in
-	Hashtbl.replace !counter_tbl key (n+1)
+
+let increment counter_tbl key weight =
+	let n = try (Hashtbl.find !counter_tbl key) with Not_found -> 0.0 in
+	Hashtbl.replace !counter_tbl key (n +. weight)
 
 let read_sentences filename =
 	let channel = open_in filename in
@@ -32,7 +33,7 @@ let read_sentences filename =
 	in
 	reverse_tr (get_all_lines channel [])
 
-let rec process_tree sentence chart rule_uses nonterm_uses tree =
+let rec process_tree weight sentence chart rule_uses nonterm_uses tree =
 	let item = Derivation.get_root_item tree in
 	let children = Derivation.get_children tree in
 	let nt = Chart.get_nonterm item in
@@ -41,19 +42,20 @@ let rec process_tree sentence chart rule_uses nonterm_uses tree =
 		| (is,rule,w)::[] -> rule
 		| _ -> failwith "That's weird: there should be exactly one route from these particular antecedents"
 	in
-	increment rule_uses r ;
-	increment nonterm_uses nt ;
-	List.iter (process_tree sentence chart rule_uses nonterm_uses) children
+	increment rule_uses r weight;
+	increment nonterm_uses nt weight;
+	List.iter (process_tree weight sentence chart rule_uses nonterm_uses) children
 
 let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : string) =
-	let split_sentence = Util.split ' ' sentence in
+        let w = float_of_string (List.hd (Util.split ' ' sentence)) in
+	let split_sentence = List.tl (Util.split ' ' sentence) in
 	let chart = Parser.deduce (-1) rules (Parser.Sentence split_sentence) in
 	let goal_items = Chart.goal_items chart _START_SYMBOL_ (List.length split_sentence) in
 	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
 	else
-		List.iter (process_tree split_sentence chart rule_uses nonterm_uses) goal_derivations
+		List.iter (process_tree w split_sentence chart rule_uses nonterm_uses) goal_derivations
 
 let run_training grammar_file sentence_file =
 
@@ -65,9 +67,9 @@ let run_training grammar_file sentence_file =
 	List.iter (process_sentence grammar rule_uses nonterm_uses) sentences ;
 
 	let print_weighted_rule r =
-		let num = try Hashtbl.find !rule_uses r with Not_found -> 0 in
-		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0 in
-		Printf.printf "%d / %d    %s\n" num denom (Rule.to_string r)
+		let num = try Hashtbl.find !rule_uses r with Not_found -> 0.0 in
+		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0.0 in
+		Printf.printf "%f / %f    %s\n" num denom (Rule.to_string r)
 	in
 	List.iter print_weighted_rule grammar
 
