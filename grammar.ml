@@ -56,9 +56,9 @@ let intersection_rules_per_rule prefix chart item rule =
       | _ -> ([Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule))], [])
     )
   | PublicNonTerminating (nts', func) -> (* ((nt,nts), func) -> *)
-    let route_matches_rule rule route = ((map_tr Chart.get_nonterm (fst route)) = Nelist.to_list nts') in
+    let route_matches_rule rule (items,_,_) = ((map_tr Chart.get_nonterm items) = Nelist.to_list nts') in
     let matching_routes = List.filter (route_matches_rule rule) (Chart.get_routes item chart) in
-    let new_rule_for_route (items, _) = make_new_rule sit_nonterm (Nelist.to_list nts') func (map_tr Chart.get_ranges items) (Rule.get_weight rule) in
+    let new_rule_for_route (items,_,_) = make_new_rule sit_nonterm (Nelist.to_list nts') func (map_tr Chart.get_ranges items) (Rule.get_weight rule) in
     let results_to_combine = (map_tr new_rule_for_route matching_routes) in
     let new_rules = map_tr fst results_to_combine in
     let new_agenda_items = concatmap_tr snd results_to_combine in

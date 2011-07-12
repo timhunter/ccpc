@@ -3,7 +3,7 @@ open Rational
 
 type item = ParseItem of string * ((range_item * range_item) list)  (*range_item defined in Util*) 
 
-type route = (item list) * Rational.rat option
+type route = (item list) * Rule.r * Rational.rat option
 
 type chart = TableWithHistory of (item, route list) Hashtbl.t
 

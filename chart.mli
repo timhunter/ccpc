@@ -1,6 +1,6 @@
 type item
 type chart 
-type route = (item list) * Rational.rat option
+type route = (item list) * Rule.r * Rational.rat option
 
 val get_nonterm: item -> string
 val create_item: string -> (Util.range_item * Util.range_item) list -> item
