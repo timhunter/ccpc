@@ -21,8 +21,8 @@ type nonterm_counter = (string, int) Hashtbl.t
 
 
 let increment counter_tbl key weight =
-	let n = try (Hashtbl.find !counter_tbl key) with Not_found -> 0.0 in
-	Hashtbl.replace !counter_tbl key (n +. weight)
+	let n = try (Hashtbl.find !counter_tbl key) with Not_found -> 0 in
+	Hashtbl.replace !counter_tbl key (n + weight)
 
 let read_sentences filename =
 	let channel = open_in filename in
@@ -47,7 +47,7 @@ let rec process_tree weight sentence chart rule_uses nonterm_uses tree =
 	List.iter (process_tree weight sentence chart rule_uses nonterm_uses) children
 
 let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : string) =
-        let w = float_of_string (List.hd (Util.split ' ' sentence)) in
+        let w = int_of_string (List.hd (Util.split ' ' sentence)) in
 	let split_sentence = List.tl (Util.split ' ' sentence) in
 	let chart = Parser.deduce (-1) rules (Parser.Sentence split_sentence) in
 	let goal_items = Chart.goal_items chart _START_SYMBOL_ (List.length split_sentence) in
@@ -67,9 +67,9 @@ let run_training grammar_file sentence_file =
 	List.iter (process_sentence grammar rule_uses nonterm_uses) sentences ;
 
 	let print_weighted_rule r =
-		let num = try Hashtbl.find !rule_uses r with Not_found -> 0.0 in
-		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0.0 in
-		Printf.printf "%f / %f    %s\n" num denom (Rule.to_string r)
+		let num = try Hashtbl.find !rule_uses r with Not_found -> 0 in
+		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0 in
+		if (num <> 0) then Printf.printf "%d / %d    %s\n" num denom (Rule.to_string r)
 	in
 	List.iter print_weighted_rule grammar
 
