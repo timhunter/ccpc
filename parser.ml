@@ -93,23 +93,14 @@ open Rational
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
     let filter_chart item_map left_rules right_rules =
-      let rec get_items nonterms acc =   (*Get items out of the map which have the nonterminal as the key*)
-        match nonterms with 
-          | [] -> acc
-          | h::t -> if (Tables.mem item_map h) then
-                      let itm = Tables.find item_map h in
-                      get_items t (itm::acc)
-                    else 
-                      get_items t acc in 
+      let get_items nonterms = concatmap_tr (fun nt -> try (Tables.find item_map nt) with Not_found -> []) nonterms in
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
         match Rule.get_expansion rule with
           | PublicNonTerminating (nts, recipes) -> List.nth (Nelist.to_list nts) daughter
           | _ -> failwith "Error filtering chart" in
       let left_nts = List.map (get_nts 1) left_rules in   (*For right_rules, collect all the left daughters, opposite for left_rules*)
       let right_nts = List.map (get_nts 0) right_rules in 
-      let left_items = get_items left_nts [] in
-      let right_items = get_items right_nts [] in 
-      List.flatten (left_items @ right_items)
+      get_items (left_nts @ right_nts)
   
     let rec consequences max_depth prims chart q tables =
       <:DEBUG< "===== Size of queue is %d\n" (Queue.length q) >> ;
