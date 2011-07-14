@@ -33,14 +33,14 @@ let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = Chart.goal_items chart start_symbol (List.length sentence) in
   let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-  (*<:DEBUG< "%d goal items, %d goal derivations\n" (List.length goal_items) (List.length goal_derivations) >> ;*)
+  <:DEBUG< "%d goal items, %d goal derivations\n" (List.length goal_items) (List.length goal_derivations) >> ;
   let rec make_trees goals acc =
     match goals with
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_derivations [] in
-  (*Chart.iter_items chart (fun x -> <:DEBUG< "%s\n" (Chart.to_string x sentence) >>) ;*)
-  Util.debug "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) ;
+  <:DEBUG< "%s\n" (String.concat "\n" (Chart.map_items chart (fun i -> Chart.to_string i sentence))) >> ;
+  <:DEBUG< "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) >> ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "SUCCESS!\n";)
   else 

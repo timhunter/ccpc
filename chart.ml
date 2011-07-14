@@ -5,7 +5,7 @@ type item = ParseItem of string * ((range_item * range_item) list)  (*range_item
 
 type route = (item list) * Rule.r * Rational.rat option
 
-type chart = TableWithHistory of (item, route list) Hashtbl.t
+type chart = TableWithHistory of (item, route) Hashtbl.t
 
 let get_nonterm = function ParseItem(nt,_) -> nt
 
@@ -15,7 +15,7 @@ let get_ranges = function ParseItem(_,rs) -> rs
 
 let get_routes prop c =
   match c with
-  | TableWithHistory tbl -> Hashtbl.find tbl prop
+  | TableWithHistory tbl -> Hashtbl.find_all tbl prop
 
 let get_string sentence range_list =
   let find_words (first, last) =
@@ -55,11 +55,7 @@ let create i = TableWithHistory (Hashtbl.create i)
 let add c item route =
   match c with
   | TableWithHistory tbl ->
-    if Hashtbl.mem tbl item then
-      let existing = Hashtbl.find tbl item in
-      Hashtbl.replace tbl item (route::existing)
-    else
-      Hashtbl.add tbl item [route]
+    Hashtbl.add tbl item route
 
 let mem c item =
   match c with
@@ -70,11 +66,7 @@ let mem_route c item route =
     failwith "mem_route: Asked about a route for an *item* we don't have"
   else
     match c with
-    | TableWithHistory tbl -> List.mem route (Hashtbl.find tbl item)
-  
-let length c =
-  match c with
-  | TableWithHistory tbl -> Hashtbl.length tbl
+    | TableWithHistory tbl -> List.mem route (Hashtbl.find_all tbl item)
 
 let goal_items c (start_symbol : string) (length : int) : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
@@ -86,6 +78,25 @@ let goal_items c (start_symbol : string) (length : int) : (item list) =
   match c with
   | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
 
-let iter_items c f =
-  let TableWithHistory tbl = c in
-  Hashtbl.iter (fun item _ -> f item) tbl
+(*** WARNING: Functions below here are very slow. Not recommended outside of debugging contexts. ***)
+
+let all_items c =
+  let (TableWithHistory tbl) = c in
+  let t = Hashtbl.create 10000 in
+  let add_if_new x _ acc =
+    let is_new = not (Hashtbl.mem t x) in
+    if is_new then (
+      Hashtbl.add t x () ;
+      x::acc
+    ) else (
+      acc
+    )
+  in
+  (** reverse just for backwards compatibility with earlier debugging output *)
+  reverse_tr (Hashtbl.fold add_if_new tbl [])
+
+let length c = List.length (all_items c)
+
+let iter_items c f = List.iter f (all_items c)
+
+let map_items c f = List.map f (all_items c)

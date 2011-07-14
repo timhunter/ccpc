@@ -17,3 +17,4 @@ val length : chart -> int
 
 val goal_items : chart -> string -> int -> item list
 val iter_items : chart -> (item -> unit) -> unit
+val map_items : chart -> (item -> 'a) -> 'a list
