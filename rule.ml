@@ -97,6 +97,14 @@ open Rational
       let component_strings = List.map component_to_string (Nelist.to_list lst) in
       "[" ^ (String.concat ";" component_strings) ^ "]"
 
+
+    let rule_recipe rule =
+      let recipe = 
+        match (get_expansion rule) with
+          | PublicTerminating s -> []
+          | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
+	String.concat "" recipe
+
     let to_string rule =
       let left = get_nonterm rule in
       let rhs_output = 
@@ -104,15 +112,16 @@ open Rational
         | PublicTerminating s -> Printf.sprintf "%S" s
         | PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (Nelist.to_list rights)
       in
-      let recipe =
+      (*let recipe =
         match (get_expansion rule) with
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
+*)
       let weight_str =
         match (get_weight rule) with
         | Some (w1,w2) -> Printf.sprintf "%d / %d     " w1 w2
         | None -> ""
       in
       (*Printf.sprintf "%s %s %s -> %s %s" (rule_type rule) weight_str left rhs_output recipe*)
-	Printf.sprintf "%s %s %s -> %s" (rule_type rule) weight_str left rhs_output
+	Printf.sprintf "%s %s --> %s" weight_str left rhs_output
