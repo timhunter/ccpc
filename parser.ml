@@ -56,11 +56,8 @@ open Rational
 (*Add an item to the given item map*)
     let add_item item_map item =
       let key = get_nonterm item in 
-      if Tables.mem item_map key then 
-        let prev_value = Tables.find item_map key in
-        Tables.add item_map key (item::prev_value)
-      else Tables.add item_map key [item]
-     
+      Tables.add item_map key item
+
     let build_items rules trigger items = 
      let build' rules item_list = 
        let combine' items rule =
