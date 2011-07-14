@@ -38,10 +38,6 @@ let build_item_map items =
   List.iter (load_map map) items;
   map
 
-let mem map value =
-  match map with
-    Map tbl -> Hashtbl.mem tbl value
-
 let find map nt =
   match map with
     Map tbl -> Hashtbl.find tbl nt
