@@ -86,9 +86,7 @@ open Rational
 
     (* Filter rules based on current items using the map*)
     let filter_rules rule_map trigger = 
-      try
          Tables.find rule_map (get_nonterm trigger)
-      with _ -> []
     
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
@@ -122,20 +120,17 @@ open Rational
          
           <:DEBUG< "%d new items\n" (List.length all_new_items) >> ;
           let process (item,route) =
-            if not (Chart.mem chart item) then (
+            match (Chart.get_status chart item route) with
+            | NewItem ->
               <:DEBUG< "  %s \tnew item (hence new route)\n" (Chart.debug_str item) >> ;
               add_item tables.item_map item ;
               Queue.add item q ;
               Chart.add chart item route
-            ) else (
-              if not (Chart.mem_route chart item route) then (
-                <:DEBUG< "  %s \told item, new route\n" (Chart.debug_str item) >> ;
-                Chart.add chart item route
-              ) else (
-                <:DEBUG< "  %s \told item, old route\n" (Chart.debug_str item) >> ;
-                ()
-              )
-            )
+            | OldItemNewRoute ->
+              <:DEBUG< "  %s \told item, new route\n" (Chart.debug_str item) >> ;
+              Chart.add chart item route
+            | OldItemOldRoute ->
+              <:DEBUG< "  %s \told item, old route\n" (Chart.debug_str item) >> ;
           in
           List.iter process all_new_items ;
           consequences (max_depth -1) prims chart q tables

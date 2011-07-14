@@ -1,6 +1,7 @@
 type item
 type chart 
 type route = (item list) * Rule.r * Rational.rat option
+type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 
 val get_nonterm: item -> string
 val create_item: string -> (Util.range_item * Util.range_item) list -> item
@@ -11,8 +12,7 @@ val debug_str : item -> string
 
 val create : int -> chart 
 val add : chart -> item -> route -> unit
-val mem : chart -> item -> bool
-val mem_route : chart -> item -> route -> bool
+val get_status : chart -> item -> route -> item_route_status
 val length : chart -> int
 
 val goal_items : chart -> string -> int -> item list

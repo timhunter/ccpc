@@ -7,6 +7,8 @@ type route = (item list) * Rule.r * Rational.rat option
 
 type chart = TableWithHistory of (item, route) Hashtbl.t
 
+type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
+
 let get_nonterm = function ParseItem(nt,_) -> nt
 
 let create_item str ranges = ParseItem(str, ranges)
@@ -57,16 +59,10 @@ let add c item route =
   | TableWithHistory tbl ->
     Hashtbl.add tbl item route
 
-let mem c item =
-  match c with
-  | TableWithHistory tbl -> Hashtbl.mem tbl item
-
-let mem_route c item route =
-  if not (mem c item) then
-    failwith "mem_route: Asked about a route for an *item* we don't have"
-  else
-    match c with
-    | TableWithHistory tbl -> List.mem route (Hashtbl.find_all tbl item)
+let get_status c item route =
+  match (get_routes item c) with
+  | [] -> NewItem
+  | rs -> if (List.mem route rs) then OldItemOldRoute else OldItemNewRoute
 
 let goal_items c (start_symbol : string) (length : int) : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
