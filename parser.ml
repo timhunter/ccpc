@@ -93,7 +93,7 @@ open Rational
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
     let filter_chart item_map left_rules right_rules =
-      let get_items nonterms = concatmap_tr (fun nt -> try (Tables.find item_map nt) with Not_found -> []) nonterms in
+      let get_items nonterms = concatmap_tr (fun nt -> Tables.find item_map nt) nonterms in
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
         match Rule.get_expansion rule with
           | PublicNonTerminating (nts, recipes) -> List.nth (Nelist.to_list nts) daughter

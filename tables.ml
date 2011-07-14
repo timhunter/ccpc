@@ -1,16 +1,11 @@
 open Parser
 open Rule
 
-type 'a map = Map of (string, 'a list) Hashtbl.t
+type 'a map = Map of (string, 'a) Hashtbl.t
 
 let add map key value =
   let (Map tbl) = map in
-  try (
-    let previous = Hashtbl.find tbl key in
-    Hashtbl.replace tbl key (value::previous)
-  ) with Not_found -> (
-    Hashtbl.add tbl key [value]
-  )
+  Hashtbl.add tbl key value
 
 (*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar. *)
 (* daughter is an index into the right-hand side of a rule. *)
@@ -40,6 +35,6 @@ let build_item_map items =
 
 let find map nt =
   match map with
-    Map tbl -> Hashtbl.find tbl nt
+    Map tbl -> Hashtbl.find_all tbl nt
 
 
