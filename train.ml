@@ -69,7 +69,7 @@ let run_training grammar_file sentence_file =
 	let print_weighted_rule r =
 		let num = try Hashtbl.find !rule_uses r with Not_found -> 0 in
 		let denom = try Hashtbl.find !nonterm_uses (Rule.get_nonterm r) with Not_found -> 0 in
-		if (num <> 0) then Printf.printf "%d / %d    %s %s\n" num denom (Rule.to_string r) (Rule.rule_recipe r)
+		if (num <> 0) then Printf.printf "%d / %d    %s\n" num denom (Rule.to_string r)
 	in
 	List.iter print_weighted_rule grammar
 

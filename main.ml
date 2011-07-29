@@ -49,7 +49,7 @@ let run_parser sentence (rules, start_symbol) =
   result
 
 let print_grammar (rules, start_symbol) =
-	List.iter (fun r -> Printf.printf "%s %s\n" (rule_type r) (Rule.to_string r)) rules
+	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
 let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }

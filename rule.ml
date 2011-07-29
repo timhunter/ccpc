@@ -6,6 +6,7 @@ open Rational
     type tuplerecipe = stringrecipe Nelist.t
     type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
     type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option)) 
+
     (**********************************************************)
 
     let getstr yields pair =
@@ -59,11 +60,6 @@ open Rational
       | Terminating _ -> 0
       | NonTerminating (left, rights, _, _) -> Nelist.length rights
     
-    let rule_type rule =
-      match rule with
-      | Terminating _ -> "Term "
-      | NonTerminating _ -> "Nonterm "
-
     let max_arity rules = List.fold_left max 0 (map_tr rule_arity rules)
 
     (* How many components does the tuple produced by this rule have? *)
@@ -79,7 +75,8 @@ open Rational
 
     let get_weight rule =
       match rule with 
-        Terminating (_,_,w) -> w      | NonTerminating (_,_,_,w) -> w
+        Terminating (_,_,w) -> w
+      | NonTerminating (_,_,_,w) -> w
 
     let get_expansion rule =
       match rule with
@@ -97,14 +94,6 @@ open Rational
       let component_strings = List.map component_to_string (Nelist.to_list lst) in
       "[" ^ (String.concat ";" component_strings) ^ "]"
 
-
-    let rule_recipe rule =
-      let recipe = 
-        match (get_expansion rule) with
-          | PublicTerminating s -> []
-          | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
-	String.concat "" recipe
-
     let to_string rule =
       let left = get_nonterm rule in
       let rhs_output = 
@@ -112,16 +101,16 @@ open Rational
         | PublicTerminating s -> Printf.sprintf "%S" s
         | PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (Nelist.to_list rights)
       in
-      (*let recipe =
+      let recipe =
         match (get_expansion rule) with
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-*)
       let weight_str =
         match (get_weight rule) with
         | Some (w1,w2) -> Printf.sprintf "%d / %d     " w1 w2
         | None -> ""
       in
-      (*Printf.sprintf "%s %s %s -> %s %s" (rule_type rule) weight_str left rhs_output recipe*)
-	Printf.sprintf "%s %s --> %s" weight_str left rhs_output
+      Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe
+
+
