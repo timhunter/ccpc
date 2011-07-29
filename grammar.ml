@@ -16,7 +16,7 @@ let rec build_symbol sym ranges =
   match ranges with
     [] -> sym
   | ((RangeVal p, RangeVal q)::rs) -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
-  | ((EpsVar, EpsVar)::rs) -> build_symbol (sym ^ (Printf.sprintf "Epsilon")) rs
+  | ((EpsVar, EpsVar)::rs) -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
   | _ -> failwith "Should not be mixing RangeVal with EpsVar!"
 
 let make_new_rule sit_nonterm rights func range_lists weight =
