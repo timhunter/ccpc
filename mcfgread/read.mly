@@ -3,8 +3,7 @@ open Rule
 open Util
 open Rational
 %}
-
-%token ARROW NEWLINE EOF QUOTE LBRAC RBRAC COMMA INT CONCAT EPSILON SLASH
+%token ARROW NEWLINE EOF QUOTE LBRAC RBRAC COMMA INT CONCAT EPSILON SLASH 
 %token <string> CAT TERM
 %token <int> INT
 %start mcfgrule
@@ -16,10 +15,10 @@ mcfgrule:
 |  rule mcfgrule {$1::$2};
 
 rule:
-	INT SLASH INT CAT ARROW children stringyield NEWLINE {Rule.create_rule ($4, $6, $7, Some ($1,$3))}
+   INT SLASH INT CAT ARROW children stringyield NEWLINE {Rule.create_rule ($4, $6, $7, Some ($1,$3))}
 |  INT SLASH INT CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($4, $7, Some ($1,$3))}
 |  INT SLASH INT CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($4, " ", Some ($1,$3))}
-|   CAT ARROW children stringyield NEWLINE {Rule.create_rule ($1, $3, $4, None)}
+|  CAT ARROW children stringyield NEWLINE {Rule.create_rule ($1, $3, $4, None)}
 |  CAT ARROW QUOTE TERM QUOTE NEWLINE {Rule.create_terminating ($1, $4, None)}
 |  CAT ARROW QUOTE QUOTE NEWLINE {Rule.create_terminating ($1, " ", None)};
 
