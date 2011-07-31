@@ -87,13 +87,13 @@ let main () =
 			| None -> ignore result
 			| Some o ->
 				(*** I don't really understand what's going on here, it's just copied from the previous version of the main function ***)
-				let oc = open_out "maketree.pl" in
-				Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o;
-				close_out oc;
-				let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in
-				if exit_code = 1 then Printf.eprintf "Error running tree drawer" ;
-				let exit_code = Sys.command "rm maketree.pl" in 
-				if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ;
+				(* let oc = open_out "maketree.pl" in *)
+				(* Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o; *)
+				(* close_out oc; *)
+				(* let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in *)
+				(* if exit_code = 1 then Printf.eprintf "Error running tree drawer" ; *)
+				(* let exit_code = Sys.command "rm maketree.pl" in  *)
+				(* if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ; *)
 				()
 
 let _ = if (!Sys.interactive) then () else main () ;;

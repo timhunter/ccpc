@@ -1,0 +1,327 @@
+Sat Jul 30 08:44:39 EDT 2011
+
+
+	the original "larsonian" grammar marked July 21st 2002 does not have any lexical entries with the +dat dative movement licensor feature
+	   --> running this through Guillaumin's hmg2mcfg works fine
+	
+	the "stackable" variant includes a whole 2nd set of dative-marked homophonic variants of every verb.
+           --> running this  through hmg2mcfg yields 48 error messages of the form
+		    How did you manage to get this? move impossible: (: +dat v;: -wh_rel)
+		    How did you manage to get this? move impossible: (: +dat v)
+		    How did you manage to get this? move impossible: (: +dat v;: -f;: -wh_rel)
+		    How did you manage to get this? move impossible: (: +dat v;: -f)
+
+	Both grammars get basic dative sentences right:
+
+		    accepted as category c: John give -ed the book to Mary
+		    accepted as category c: John give -ed Mary the book
+
+		    accepted as category C: John give -ed Mary the book
+		    accepted as category C: John give -ed the book to Mary
+
+        but Stabler's larsonian1 cleans up all these duplicated lexical entries, relocating the ambiguity inside the choice between covert and over Preposition.
+
+	I believe the original point behind those +dat marked was comparability between the Chomskyan "adjunction" analysis and the Kaynian "promotion" analyses.
+
+
+
+Sat Jul 30 10:17:46 EDT 2011
+      tikz_qtree output -- has this ever worked?
+
+
+ERROR: Syntax error: Operator expected
+ERROR: tikz_qtree(S 
+ERROR: ** here **
+ERROR: ('I know that the man who Stephen explain -ed the accident to be -s kind') 
+    t158 ('' '' 'I know that the man who Stephen explain -ed the accident to be -s kind') 
+        t0 ('' '' '') 
+etc
+
+prolog is: Welcome to SWI-Prolog (Multi-threaded, 64 bits, Version 5.10.4)
+
+
+I was able to use the toplevel like this:
+       -I mcfgread -I kbest  -I +camlp5 camlp5o.cma
+
+
+is there a way to load main.ml into the toplevel?  I think I am getting thwarted by a name-clash with something in camlp5.
+
+        Objective Caml version 3.12.0
+
+	Camlp5 parsing version 6.02.3
+
+# #use "debug.ml";;
+- : unit = ()
+# #use "loading.ml";;
+The files grammar.cmo
+and /usr/local/lib/ocaml/camlp5/camlp5o.cma
+disagree over interface Grammar
+File "main.ml", line 1, characters 0-1:
+Error: The files /usr/local/lib/ocaml/camlp5/camlp5o.cma and grammar.cmi
+       make inconsistent assumptions over interface Grammar
+
+
+test with
+      ./mcfg_nt grammars/mcfgs/larsonian1.mcfg -o /tmp/result "I know that the man who Stephen explain -ed the accident to be -s kind"
+      prolog -q -s tikz_qtreeSWI.pl < maketree.pl
+
+./mcfg_nt grammars/mcfgs/larsonian1.mcfg -o result.tex "I know that the man who Stephen explain -ed the accident to be -s kind"
+
+TODO: how to rescale this diagram? there must be a tikz option for that.
+get yields at nodes?
+
+
+Sat Jul 30 14:15:05 EDT 2011
+	  ./mcfg_nt grammars/mcfgs/larsonian1.mcfg -p "John love"
+	  this works
+
+	       ./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -p "John love"
+	  but this quietly yields nothing.
+	  Q. why?
+	  A. because John was never mentioned in the training, nor was love.
+
+
+./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -p "I know that the girl who" > know-girl-who.chart
+ this works because it is a prefix of the training sentences whose rules-uses we kept.
+
+rules like this need to be flagged
+      580716 / 580716      E_eps --> " " 
+      12286 / 12286      t1_tmp1_eps --> " " 
+      2787 / 2787      t49_tmp1_6-6 --> " " 
+      2787 / 2787      t49_tmp1_eps --> " " 
+
+
+./mcfg_nt grammars/wmcfg/mini.wmcfg -p "he remember -ed that the" > remember-that-the.chart
+
+
+Sat Jul 30 18:39:10 EDT 2011
+
+by far the slowest step seems to be the TopoSort
+
+For an example like "he remembered -ed that the" using rules observed with a 2 - example minicorpus
+	1430 he remember - ed that the man who sell - ed the house leave - ed the town
+	929 they have - ed forget - en that the letter which Dick write - ed yesterday be - s long
+we get a graph projection with 331 vertices, 1334 edges. This takes 85 seconds to TopoSort the SCCs on my machine.
+
+
+first error
+
+CalculateZ[g, gp, mySortedSCCs]
+
+goes fine through
+first 320,
+second 318,
+third 311,
+fourth 329,
+fifth 328,
+then 307 it breaks
+
+Part::pspec: "Part specification \!\(vertexNumber$73729[\"man\"]\) is neither an integer nor a list of integers."
+
+the sixth symbol, t11_tmp1_5-5, could rewrite two waysd
+
+1430 / 2359      t11_tmp1_5-5 --> "man" 
+929 / 2359      t11_tmp1_5-5 --> "letter" 
+
+fIXeD.
+
+
+MapThread[{#1, #2} &, {CalculateZ[g, gp, mySortedSCCs],    vertices}] // TableForm
+yields a lot of symbols with Z values far outside of [0,1]
+
+the first one it happens on in vertex 283 which seems to have a weight of 4
+"t54_5-5_eps_eps_5-5"
+
+
+here's an example of where it goes wrong:
+{120.\[VeryThinSpace]-Subscript[x, 247]==0}{120.}
+vertex 247 somehow gets set equal to 120
+
+t139_5-5_5-5_5-5
+
+Sat Jul 30 20:29:24 EDT 2011
+  having made sure the rule probs add up to 1,
+  the Zs get calculated, and they end up all 1.0.
+  is this right? would it be different at other prefixes or with a bigger set of observations?
+
+
+Sat Jul 30 23:14:15 EDT 2011
+the one I did was remember5
+
+{0.371399, -- making the chart into a grammar, squishing weights inside the [0,1] interval
+0.091193, -- extracting the graph projection
+83.3819, -- topological sorting of the SCCs
+1.23299, -- calculating Z
+0.090501, -- tilting the rule probabilities by Z ratios
+0.533485} -- working out the entropy of the  tilted grammar
+
+total: 85.715
+Hstart = 55.2941
+
+The very first Hstart should be the one for mini.wmcfg itself.
+
+
+Sun Jul 31 08:05:10 EDT 2011
+
+ideas
+  - ask Jiwon to recode TopoSortSCCs following Ocamlgraph
+   is there a faster way? quickly create a derived graph, then topo sort that.
+      create SCC graph: each node is an SCC, an  edge exists between nodes i,j if there exists any edge in the underlying graph between any member of scc i and scc j
+
+      MakeGraph takes a set S and a predicate P and returns a directed graph with vertex set S and edges (i,j) if P(i,j)....ie same vertices
+
+      FunctionalGraph[f,n]
+takes a nonnegative integer n and a function f from {0,1,\[Ellipsis],n-1} onto itself and produces the directed graph with vertex set {0,1,\[Ellipsis],n-1} and edge set {x,f[x]} for each vertex x.
+
+For directed graphs the components {Subscript[c, 1],Subscript[c, 2],\[Ellipsis]} are given in an order such that there are no edges from Subscript[c, i] to Subscript[c, i+1], Subscript[c, i+2], etc.
+
+Contracting Vertices p231
+
+0.324475,0.081998,67.7338,1.82167,0.0964,0.475114
+0.327542,0.083722,69.894,1.18025,0.091351,0.484989
+0.334346,0.08512,73.1225,1.18429,0.092686,0.499217
+0.319238,0.082609,71.7298,1.19433,0.090284,0.477729
+0.365709,0.093382,86.3537,1.24072,0.090807,0.492508
+0.63627,0.128455,135.875,1.78242,0.131961,0.764297
+0.490668,0.124555,133.737,1.78604,0.129954,0.745162
+0.402995,0.103293,102.206,1.49141,0.107692,0.61621
+0.407088,0.103302,104.34,1.55304,0.106989,0.617123}
+0.424225,0.103878,111.084,1.66121,0.108183,0.633446
+0.409672,0.101246,107.235,1.63765,0.105844,0.621314
+0.404404,0.099404,104.861,1.61259,0.101381,0.604081
+0.399649,0.099099,107.805,1.68468,0.104603,0.622126
+0.414646,0.100883,112.203,1.77274,0.106767,0.637593
+
+that's
+0.965491
+0.975244
+0.976117
+0.975829
+0.978677
+0.979731
+0.98049
+0.978806
+0.978639
+0.978803
+0.978464
+0.978362
+0.978288
+0.978189
+
+error messages
+
+at the beginning I get some
+
+Part::partw: Part 307 of {0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,<<255>>} does not exist. >>
+
+??variable capture??? ---> yes it was, in CalculateZ.
+
+
+$RecursionLimit::reclim: Recursion depth of 256 exceeded. >>
+General::stop: Further output of $RecursionLimit::reclim will be suppressed during this calculation. >>
+
+FindRoot::vloc: The variable {0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,<<61>>}[[160]] cannot be localized so that it can be assigned to numerical values. >>
+
+FindRoot::vloc: The variable {0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,<<61>>}[[136]] cannot be localized so that it can be assigned to numerical values. >>
+
+FindRoot::vloc: The variable {0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,<<61>>}[[134]] cannot be localized so that it can be assigned to numerical values. >>
+
+FindRoot::vloc: The variable {0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,<<61>>}[[122]] cannot be localized so that it can be assigned to numerical values. >>
+
+
+remember1:  no error through SCCs
+with Zs, we have trouble: solutions that are zero
+{-Subscript[x, 285]==0}{0.}
+
+
+why  are the first couple SCCS {{294}, {292}, {285}, {303}, {302}, {281}, {5}, {36}, {203}, {201}}  etc all zero?
+these guys are all terminals
+{"man", "letter", "EMPTY"}
+
+when I run it manually it seems to get the right answer - 1
+
+Sun Jul 31 11:05:17 EDT 2011
+
+vertex and edge counts seem pretty constant, in a way that would be consistent with recopying the grammar in the chart.
+
+doing remember1.chart
+vertices305
+edges1258
+doing remember2.chart
+vertices309
+edges1262
+doing remember3.chart
+vertices314
+edges1255
+doing remember4.chart
+vertices311
+edges1220
+doing remember5.chart
+vertices331
+edges1334
+doing remember6.chart
+vertices376
+edges1672
+doing remember7.chart
+vertices377
+edges1627
+doing remember8.chart
+vertices354
+edges1395
+doing remember9.chart
+vertices359
+edges1388
+doing remember10.chart
+vertices366
+edges1398
+doing remember11.chart
+vertices365
+edges1376
+doing remember12.chart
+vertices363
+edges1351
+doing remember13.chart
+vertices368
+edges1344
+doing remember14.chart
+vertices375
+edges1354
+doing remember15.chart
+vertices111
+edges174
+
+the entropy values were: {48.0396, 58.3656, 57.3656, 51.3656, 55.2941, 74.9708, 72.0036, 62.2941, 61.2941, 57.2941, 40.7248, 24.5693, 23.5693, 19.5693, 3.},
+runtime values in seconds were: {{69.0428, 73.6054, 73.7881, 71.3637, 86.6392, 137.778, 135.881, 105.848, 106.463, 115.187, 108.584, 105.985, 108.701, 114.882,  1.81261}}
+
+
+idea: compile the Mathematica
+
+p45 of Combinatorica book: l[[i]] = 5
+ Mathematica rewrites the entire list l when doing this so modifiying an element of a list is in fact a linear-time op
+
+learn more about the "Compile"
+
+
+info on BFS p277
+
+p284 The strong connectivity algorithm in Combinatorica is based on DFS Tarjan 72
+
+
+infor on topo sort p352
+
+
+
+Sun Jul 31 14:33:02 EDT 2011
+
+my simplified version of Jiwon's TopoSCC function seems to be much slower
+whereas hers takes 86 seconds, mine takes 743.
+
+switching to "Select" takes it down to 430 seconds.
+    Select[list,crit,n] picks out the first n elements for which crit is True
+still five times slower.
+
+
+
+what is the difference between these slow methods, which build G^{SCC} and the one p554 of Cormen Leisersohn & Riverse, which just has 2 invocations of DFS?
+
+
