@@ -39,19 +39,27 @@ GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
 larsonian1.mcfg: grammars/mg/larsonian1.pl
 	$(GUILLAUMIN) -pl grammars/mg/larsonian1.pl -o grammars/mcfgs/larsonian1.mcfg
 
+# my post-thesis revision
+lstack.mcfg: grammars/mg/larsonian-stackable.pl
+	$(GUILLAUMIN) -pl grammars/mg/larsonian-stackable.pl -o grammars/mcfgs/lstack.mcfg
+
+sleep.mcfg: grammars/mg/sleep.pl
+	$(GUILLAUMIN) -pl grammars/mg/sleep.pl -o grammars/mcfgs/sleep.mcfg
+
 # John: for some reason I could not get output redirection to sent the result immediately to the right directory
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 # and counts from Figure 13 of the Cog Sci article, ie from the Brown corpus
-larsonian1.wmcfg: train fig13.txt grammars/mcfgs/larsonian1.mcfg
+larsonian1.wmcfg: larsonian1.mcfg
 	./train grammars/mcfgs/larsonian1.mcfg fig13.txt > larsonian1.wmcfg
 	mv larsonian1.wmcfg grammars/wmcfg/
 
-# same thing only with just two sentences
-#1430 he remember -ed that the man who sell -ed the house leave -ed the town
-#929 they have -ed forget -en that the letter which Dick write -ed yesterday be -s long
-mini.wmcfg: train mini.txt grammars/mcfgs/larsonian1.mcfg
-	./train grammars/mcfgs/larsonian1.mcfg mini.txt > mini.wmcfg
-	mv mini.wmcfg grammars/wmcfg/
+lstack.wmcfg: lstack.mcfg
+	./train grammars/mcfgs/lstack.mcfg fig13.txt > lstack.wmcfg
+	mv lstack.wmcfg grammars/wmcfg/
+
+sleep.wmcfg: sleep.mcfg
+	./train grammars/mcfgs/sleep.mcfg johnmary.txt > sleep.wmcfg
+	mv sleep.wmcfg grammars/wmcfg/
 
 debug.cmo: debug.ml
 	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml
