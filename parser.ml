@@ -31,7 +31,10 @@ open Rational
       let get_axiom rule =
         let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
-        | PublicTerminating str -> (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
+        | PublicTerminating str -> (* conditional added by John to deal with potential double-counting of epsilons at position (len,len) *)
+	        if str = " "
+		then (map_tr (situated_axiom nt rule) (find_in_list str prefix))
+	        else (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
         | PublicNonTerminating _ -> []
       in
       concatmap_tr get_axiom grammar

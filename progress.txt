@@ -443,3 +443,211 @@ I get a very reasonable-looking set of Zs, same as Jiwon.
 
 
 this "thicket" SCC of length 332 appears in nearly every prefix
+
+Wed Aug  3 00:19:51 EDT 2011
+
+here is an example of how the epsilon at 5-5 and eps seem to be interchangeable
+for the left dtr, you can either have 5-5 or eps in the last component
+
+and for the right daughter you can have anything as long as it's not all eps and the last component is 5-5.
+{{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_eps,t53_5-5_eps_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_eps,t53_5-5_5-5_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_eps,t53_eps_eps_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_eps,t53_eps_5-5_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_5-5,t53_5-5_eps_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_5-5,t53_5-5_5-5_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_5-5,t53_eps_eps_5-5},
+{Binary,1,t77_eps_5-5_5-5,t8_eps_5-5_5-5,t53_eps_5-5_5-5}}
+
+
+Wed Aug  3 08:36:29 EDT 2011
+
+why is the thicket blowing up?
+do we get the same result if we divide up nonterminals who rewrite uniformly as 1s?
+
+
+Thu Aug  4 14:39:30 EDT 2011
+
+the very simple "sleep.pl" grammar derives just two sentences
+    john sleeps
+and
+   mary sleeps
+
+supplying giving the prefix  "john sleeps" leaves 1 bit of entropy: the choice between situated and nonsituated epsilon at the end 
+    E_eps --> EMPTY 
+and
+    E_2-2 --> EMPTY 
+
+4 / 4      t1_tmp1_1-2 --> "sleeps"
+4 / 4      t1_tmp2_1-2_2-2 --> t1_tmp1_1-2 E_2-2 [0,0][1,0]
+4 / 4      t1_tmp2_1-2_eps --> t1_tmp1_1-2 E_eps [0,0][1,0]
+
+
+I can make negative Zs appear by adding recursive postmodification to sleep.pl
+
+      [tuesday]::[date].
+      [on]::[=date,p_on].
+      [v]<<[p_on].
+
+parsing "john sleeps" as a prefix,
+the first variable to go negative, Z=-2.5 is "t6_0-1_1-1_1-1"
+then S_0-1 gets Z=-1
+
+
+this t6_0-1_1-1_1-1 is variable number 2. 
+
+from 
+
+60 / 80     t6 --> t4 [0,3;0,0][0,1][0,2]
+
+20 / 80     t6 --> t5 t6 [1,0][1,1][1,2;0,0;0,1;0,2]
+
+
+we two unary rewrites and four binary:
+
+Unary	3/4	t6_0-1_1-1_1-1	t4_eps_1-1_1-1_0-1 (Z=1)	
+Unary	3/4	t6_0-1_1-1_1-1	t4_1-1_1-1_1-1_0-1	 (Z=1)
+Binary	1/4	t6_0-1_1-1_1-1	t5_1-1_1-1_1-1 (Z=8)	t6_0-1_1-1_eps (Z=1.5)
+Binary	1/4	t6_0-1_1-1_1-1	t5_eps_1-1_1-1 (Z=8)	t6_0-1_1-1_eps (Z=1.5)
+Binary	1/4	t6_0-1_1-1_1-1	t5_1-1_1-1_1-1 (Z=8)	t6_0-1_1-1_1-1 (recursive!)
+Binary	1/4	t6_0-1_1-1_1-1	t5_eps_1-1_1-1 (Z=8)	t6_0-1_1-1_1-1
+
+this yields an equation with a coef on x > 1, which implies a negative soln.
+ie with equal prob we are going back around again accumulating Z=8, blows up.
+
+
+Q. can we make Z go up arbitrarily high by using more  empties?
+  not sure how I can increase the empties themselves.
+
+
+adding recursive modification pushes the Z of t9_eps_0-1_1-1 
+
+
+
+Fri Aug  5 07:30:34 EDT 2011
+
+wrote to jy249 saying: 
+My guess is that we are double-counting probability mass due to rules that use e.g. (2,2)
+epsilons and "eps" epsilons.  I think this is leading to negative Zs.
+
+Fri Aug  5 08:23:26 EDT 2011
+
+sentence 1..4 ok
+
+division by zero error at sentence 6
+   couldn't find a z for t137_0-15_15-15_eps number 4
+
+     t137 --> t136 [0,3;0,0][0,1][0,2] (* move' *)
+
+in fact, there are three:
+
+
+9  = t136_eps_15-15_eps_0-15
+4 = t137_0-15_15-15_eps
+and
+20 =  t80_15-15_15-15_15-15_0-15
+
+these all get set to zero in CalculateZ as solutions to systems like this:
+
+{3.26527*10^-15-Subscript[x, 9]==0}
+
+should be 3.26... 10^{-15}
+
+A. increased WorkingPrecision
+
+
+
+also in sentence 6, this prefix:
+      the fact that the cat which
+gives this error:
+FindRoot::lstol: The line search decreased the step size to within tolerance specified by AccuracyGoal and PrecisionGoal but was unable to find a sufficient decrease in the merit function. You may need more than 17.954589770191003` digits of working precision to meet these tolerances.
+---> 20 isn't enough, either. find out 
+
+
+error:   First::first: "{} has a length of zero and no first element."
+
+trying: ./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -p "he remember -ed that the girl who s mother send -ed the clothe -s" | sed -e 's/" "/EMPTY/' > prefix14.chart
+
+that was due to clothes being plural rather than singular....fixed
+
+
+
+stored outcome of test run in variable named
+   results6through24
+clearly, the most problematic one is sentence 6
+
+  entOfSentence["grammars/wmcfg/larsonian1.wmcfg",keenanhawkins[[6]]]
+
+which takes 4 minutes, 14 seconds on my computer.
+
+
+Fri Aug  5 11:18:39 EDT 2011
+
+    setting WorkingPrecision to 16, which is the first whole number up from MachinePrecision
+    avoids an lstol error, but does yield FindRoot::bddir: "The search direction {1.716127634954749*10^-20,1.716127634954749*10^-20} is not a descent direction for the merit function. The step will be taken without the line search"
+
+
+
+Fri Aug  5 16:42:35 EDT 2011
+
+ new design runs getCharts first, creating a large number of files named "prefix<SentenceNumber>-<PrefixNumber>.chart"
+ then a function kh takes a number, that's the Keenan-Hawkins sentence number, and maps entOfGrammar across all prefixes of it.
+
+  in serial takes 95 seconds for the first K-H sentence
+  in parallel it takes 56 seconds.
+
+now timing all of them....for some reason it craps out at sentence 6.
+
+adding DistributeDefinitions statement
+
+within 60 secs we are up to prefix 6 again. which then seems to stop. NB, I left it running all night.
+
+just doing the first two prefixes of each sentence goes all the way through fine.
+
+both 
+  prefix6-18.chart
+and
+  prefix7-1.chart
+seem to run fine through entOfGrammarFile locally.
+
+and if we just set doKH to do kh[6] and kh[7] it continues smoothly (225 seconds)
+
+asking doKH for 8-24 craps out after the first one. something is preventing it from continuing..?
+
+  - trying again after adding pfix and i to the list of module-local variables
+  - it continues on to prefix9 ok but craps out in there.
+
+
+Sat Aug  6 10:05:23 EDT 2011
+
+I still can't figure out why doKH based on ParallelTable  is crapping out after calculating an unpredictable number prefix-entropies.
+Brainstorm possible reasons for crapping-out:
+  - Could we be running out of some resource, like file descriptors?
+
+44863  sed          0.0   00:00.00 1    0    14    23    136K   240K   396K   17M    2378M  44445 44862 sleeping 501  215
+44862  sh           0.0   00:
+
+are still running. get rid of the sed command in entOfGrammarFile.
+
+
+  - Could there be a problem with Table such that it refuses to construct a matrix with unlike row-lengths?
+       No, this works fine: Table[{x,y},{x,1,5},{y,1,x}]
+
+I have re-written it in the For-loop style, avoiding parallel anything. I'm expecting this to take about 2 hours.
+  (seems to be going fine past sentence 6), but stops at 8-2)
+
+[ another alternative, to safely collect intermediate results, would be to output the Hstart number to a file that has a related filename. ]
+
+
+
+
+
+Questions I might want to answer once this thing is working reliably through the entire Keenan-Hawkins set:
+  which entropy (reduction) values are different between thesis-style naive renormalization and Z-ratio renormalization?
+  -> calls for implementing the "add up & chop"  method, comparing
+
+  what is the difference between larsonian1 and larsonian-stackable, and the chomskyan grammar?
+  -> the latter both should derive stackable RCs
+
+  output prefix probabilities, ie Z values
+  -> use zsOfSentence from extrastuff.nb

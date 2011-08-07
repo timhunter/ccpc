@@ -9,6 +9,9 @@ COMPILER_NATIVE=ocamlopt
 LEX=ocamllex
 YACC=ocamlyacc
 
+# Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
+GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+
 FLAGS= -I mcfgread -I kbest
 OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo
 
@@ -32,34 +35,16 @@ clean:
 	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx
 	rm -f $(EXE)_bc $(EXE)_nt train
 
-# I am trying here to automate the process, end to end
-
-# added by John; start from Stabler's revision of larsonian grammar
-GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
-larsonian1.mcfg: grammars/mg/larsonian1.pl
-	$(GUILLAUMIN) -pl grammars/mg/larsonian1.pl -o grammars/mcfgs/larsonian1.mcfg
-
-# my post-thesis revision
-lstack.mcfg: grammars/mg/larsonian-stackable.pl
-	$(GUILLAUMIN) -pl grammars/mg/larsonian-stackable.pl -o grammars/mcfgs/lstack.mcfg
-
-sleep.mcfg: grammars/mg/sleep.pl
-	$(GUILLAUMIN) -pl grammars/mg/sleep.pl -o grammars/mcfgs/sleep.mcfg
-
-# John: for some reason I could not get output redirection to sent the result immediately to the right directory
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
-# and counts from Figure 13 of the Cog Sci article, ie from the Brown corpus
-larsonian1.wmcfg: larsonian1.mcfg
-	./train grammars/mcfgs/larsonian1.mcfg fig13.txt > larsonian1.wmcfg
-	mv larsonian1.wmcfg grammars/wmcfg/
 
-lstack.wmcfg: lstack.mcfg
-	./train grammars/mcfgs/lstack.mcfg fig13.txt > lstack.wmcfg
-	mv lstack.wmcfg grammars/wmcfg/
+%.mcfg: grammars/mg/%.pl
+	$(GUILLAUMIN) -pl $< -o grammars/mcfgs/$@
 
-sleep.wmcfg: sleep.mcfg
-	./train grammars/mcfgs/sleep.mcfg johnmary.txt > sleep.wmcfg
-	mv sleep.wmcfg grammars/wmcfg/
+# John: I could not get output redirection to send the result immediately to the right directory
+# hence the mv command
+%.wmcfg: %.mcfg %.train
+	./train grammars/mcfgs/$*.mcfg $*.train > $@
+	mv $@ grammars/wmcfg/$@
 
 debug.cmo: debug.ml
 	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml

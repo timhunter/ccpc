@@ -17,7 +17,7 @@ keenanhawkins = {{"they","have","-ed","forget","-en","that","the","boy","who","t
 {"they","have","-ed","forget","-en","that","the","girl","who","s","friend","buy","-ed","the","cake","be","-ed","wait","-ing"},
 {"the","fact","that","the","boy","who","s","brother","tell","-s","lies","be","-s","always","honest","surprise","-ed","us"},
 {"I","know","that","the","boy","who","s","father","sell","-ed","the","dog","be","-ed","very","sad"},
-{"he","remember","-ed","that","the","girl","who","s","mother","send","-ed","the","clothe","-s","come","-ed","too","late"},
+{"he","remember","-ed","that","the","girl","who","s","mother","send","-ed","the","clothe","come","-ed","too","late"},
 {"they","have","-ed","forget","-en","that","the","man","who","s","house","Patrick","buy","-ed","be","-ed","so","ill"},
 {"the","fact","that","the","sailor","who","s","ship","Jim","take","-ed","have","-ed","one","leg","be","-s","important"},
 {"I","know","that","the","woman","who","s","car","Jenny","sell","-ed","be","-ed","very","angry"},
