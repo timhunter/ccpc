@@ -42,3 +42,9 @@ let clean =[
  1.0, "ADJ", ["good"];
  1.0, "NP/NP", [""]
 ]
+
+let weight (w,_,_) = w
+let lhs (_,lhs,_) = lhs
+let rhs (_,_,rhs) = rhs
+
+let prgrammar2 = List.iter (fun r -> Printf.printf "%f\t%s -> %s\n" (weight r) (lhs r) (List.fold_right (interdigitate " ") (rhs r) ""));;

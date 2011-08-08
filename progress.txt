@@ -651,3 +651,12 @@ Questions I might want to answer once this thing is working reliably through the
 
   output prefix probabilities, ie Z values
   -> use zsOfSentence from extrastuff.nb
+
+
+
+Mon Aug  8 15:25:05 EDT 2011
+  I re-did the subj-obj example from JPR 03 and it comes out the same as in the paper.
+
+  It *is* true that there is a bump on the embedded V "sent" in the obj example but not in the subj example
+
+  however this is also consistent with there just being a lot of entropy reduction after any NP.
