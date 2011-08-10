@@ -643,13 +643,13 @@ I have re-written it in the For-loop style, avoiding parallel anything. I'm expe
 
 
 Questions I might want to answer once this thing is working reliably through the entire Keenan-Hawkins set:
-  which entropy (reduction) values are different between thesis-style naive renormalization and Z-ratio renormalization?
+ (1)  which entropy (reduction) values are different between thesis-style naive renormalization and Z-ratio renormalization?
   -> calls for implementing the "add up & chop"  method, comparing
 
-  what is the difference between larsonian1 and larsonian-stackable, and the chomskyan grammar?
+  (2) what is the difference between larsonian1 and larsonian-stackable, and the chomskyan grammar?
   -> the latter both should derive stackable RCs
 
-  output prefix probabilities, ie Z values
+  (3) output prefix probabilities, ie Z values
   -> use zsOfSentence from extrastuff.nb
 
 
@@ -660,3 +660,164 @@ Mon Aug  8 15:25:05 EDT 2011
   It *is* true that there is a bump on the embedded V "sent" in the obj example but not in the subj example
 
   however this is also consistent with there just being a lot of entropy reduction after any NP.
+
+
+Tue Aug  9 16:50:04 EDT 2011
+  (3) is done
+re: (1) using grammars/wmcfg/larsonian-stackable.wmcfg
+            and the training sentence weights from the 2006 article
+
+and
+
+oldStyle[filename_] := Module[{grammar,graph,SCCs,z,gprime},
+		    grammar = LocallyNormalize[ChartToGrammar[Import[filename,"Table"]]];
+		    entropyOfGrammar[grammar]
+];
+
+I get
+
+{14.8941, 21.8496, 21.7141, 26.4565, 26.4565, 26.4565, 34.8866, 42.781, 41.7933, 33.8948, 32.722, 34.8866, 13.312, 15.0483, 14.2778, 3.13918, 0.}
+{34.8866, 39.7685, 39.7685, 48.1986, 56.093, 55.1053, 49.455, 48.2823, 48.5306, 48.1986, 26.624, 28.3603, 27.5898, 16.4512, 13.312, 14.1077, 0.}
+{14.8941, 27.6293, 26.4565, 34.8866, 42.781, 41.7933, 33.8948, 32.722, 34.8866, 16.6181, 13.312, 15.0483, 14.2778, 0.}
+{14.8941, 27.6293, 26.4565, 26.4565, 34.8866, 27.7791, 41.7933, 33.8948, 32.722, 34.8866, 13.312, 20.5828, 19.41, 21.5746, 0.}
+
+vs.
+
+eastlansing/results/stackable.math:
+{18.23,16.13,11.94,10.94,18.23,18.23,18.23,20.41,17.99,24.75,20.08,19.08,20.41,17.99,3.93,2.93,0.00,0.00},
+{18.23,20.41,28.60,28.60,30.78,28.36,35.12,31.22,30.22,30.78,30.78,28.36,14.30,13.30,10.37,10.37,13.92,0.00},
+{18.23,16.13,19.23,18.23,20.41,17.99,24.75,20.08,19.08,20.41,10.37,10.37,3.93,2.93,0.00},
+{18.23,16.13,19.23,18.23,18.23,20.41,17.99,24.75,20.08,19.08,20.41,17.99,9.71,8.71,10.05,0.00},
+
+some peaks are shifted earlier: story <- be
+ticket <- be
+house <- leave
+
+but many others are similar but different magnitude: 
+get,right
+man,sell,house,town
+tell,story, young
+ticket,very, matter
+
+
+Wed Aug 10 09:53:06 EDT 2011
+  could the difference have to do with # of lexical entries for the same category? 
+
+20 mary sleeps
+20 joseph sleeps
+20 john sleeps
+20 matthew sleeps
+20 mark sleeps
+20 luke sleeps
+
+20 / 120     t0_tmp1 --> "luke" 
+20 / 120     t0_tmp1 --> "mark" 
+20 / 120     t0_tmp1 --> "matthew" 
+20 / 120     t0_tmp1 --> "john" 
+20 / 120     t0_tmp1 --> "joseph" 
+20 / 120     t0_tmp1 --> "mary" 
+
+parsing "john sleeps"
+
+brings down to zero from 2.58496250072116, the unconditioned H of the grammar.
+
+A. Yes. The entropy does seeem to be sensitive to the number of lexical entries.
+
+20 mary sleeps
+20 john sleeps
+ ===> H_{G} = 1
+
+20 mary sleeps
+20 john sleeps
+20 joseph sleeps
+ ==> H_{G} = 1.58, precisely Log2[3]
+
+
+
+fix: eliminate preterminal rules indexing into (n,n) 
+
+    N.B. reminder to SetPrecision in oldStyle to try and speed up the calculation
+    -> now accomplished in in LocallyNormalize
+
+in a typical prefix-chart like prefix7-2.chart, there are 140 rules of the form
+
+41 / 11353      t13_tmp1_2-2 --> "ship" 
+4 / 11353      t13_tmp1_2-2 --> "sailor" 
+167 / 1597      t27_tmp1_2-2 --> "give" 
+929 / 1597      t27_tmp1_2-2 --> "show" 
+
+t<catnumber>_tmp1_<n>-<n> --> "word"
+
+these appear to be exactly the preterminal rules.
+
+we call unlexicalize.csh first, which emits a sed command that looks for preterminals situated at the right edge:
+
+postprocess =   StringJoin["./unlexicalize.csh ", ToString[prefixnumber]];
+	PrintTemporary[postprocess];
+	Run[postprocess];
+
+
+then, for each prefix, coalesce duplicate rules into just one using sort(1) and uniq(1)
+
+unlexicalizer =  StringJoin["unlexicalize", ToString[prefixnumber], ".sed"];
+ cmd  = StringJoin["./mcfg_nt " , unconditionedgrammarfilename,  " -p \"", fragstring, "\" | ", cleanupEpsilon,
+" | sed -E -f ",  unlexicalizer, " | sort -k4 | uniq > ", dest];
+
+
+the numbers I get now are:
+
+{
+{8.07966, 10.7148, 10.3768, 12.9808, 12.9808, 12.9808, 17.194,  21.526, 21.526, 17.1812, 16.1812, 17.194, 7.29785, 6.45487, 6.45487,  0., 0.},
+{17.194, 20.2786, 20.2786, 24.4919, 28.8238, 28.8238,  25.9855, 24.9855, 24.4919, 24.4919, 14.5957, 13.7527, 13.7527,  7.29785, 7.29785, 7.0012, 0.}, {8.07966, 13.9808, 12.9808, 17.194,  21.526, 21.526, 17.1812, 16.1812, 17.194, 7.29785, 7.29785, 6.45487,  6.45487, 0.},
+{8.07966, 13.9808, 12.9808, 12.9808, 17.194, 14.7973, 21.526, 17.1812, 16.1812, 17.194, 7.29785, 9.88339, 8.88339,  9.89616, 0.}
+}
+
+which still don't agree with eastlansing/results/stackable.math
+The conclusion regarding question (1) is that, although old style and new style differ re:uncertainty due to word-choice within a preterminal category,
+that is not the *only* difference between them.
+
+Wed Aug 10 15:18:30 EDT 2011
+
+do the unconditioned grammar like this:
+
+sed -E -f unlexicalizeUnsituated.sed grammars/wmcfg/larsonian1.wmcfg | sort -k 4 | uniq > grammars/wmcfg/larsonian1-unlexicalized.wmcfg
+
+
+  here are my simulated "Old Style" entropy-of-prefix values for the first four sentences of keenanhawkins using larsonian-stackable.wmcfg
+  These forgo Z-ratio renormalization in favor of just local renormalization. They reflect an "unlexicalization" intended to simulate the thesis code's blindness to specific word choice. 
+  ie in the thesis code item.ml:168 the function "itemify" which doesn't keep track of the choice of particular word, only the Minimalist Grammar feature list that categorizes that word.
+
+15.0234	8.07966	10.7148	10.3768	12.9808	12.9808	12.9808	17.194	21.526	21.526	17.1812	16.1812	17.194	7.29785	6.45487	6.45487	0.	0.
+15.0234	17.194	20.2786	20.2786	24.4919	28.8238	28.8238	25.9855	24.9855	24.4919	24.4919	14.5957	13.7527	13.7527	7.29785	7.29785	7.0012	0.
+15.0234	8.07966	13.9808	12.9808	17.194	21.526	21.526	17.1812	16.1812	17.194	7.29785	7.29785	6.45487	6.45487	0.			
+15.0234	8.07966	13.9808	12.9808	12.9808	17.194	14.7973	21.526	17.1812	16.1812	17.194	7.29785	9.88339	8.88339	9.89616	0.		
+
+ here are the results from
+     1. downloading http://courses.cit.cornell.edu/jth99/eastlansing.tar.gz
+     2. add larsonian-stackable.pl to the tests/ directory
+     3. change the training weights in runme.ml to be the ones from the published 06 article, ie the Brown corpus RC counts obtained with Tregex, ie 1430, 929, 167, 41, 34, 4
+     4. change all calls in train and test to refer to the -stackable grammar
+
+
+{17.61,15.67,11.42,10.42,17.61,17.61,17.61,19.53,17.08,22.78,19.64,18.64,19.53,17.08,4.25,3.25,0.00,0.00},
+{17.61,19.53,28.02,28.02,29.94,27.49,33.19,30.85,29.85,29.94,29.94,27.49,14.66,13.66,10.41,10.41,13.48,0.00},
+{17.61,15.67,18.61,17.61,19.53,17.08,22.78,19.64,18.64,19.53,10.41,10.41,4.25,3.25,0.00},
+{17.61,15.67,18.61,17.61,17.61,19.53,17.08,22.78,19.64,18.64,19.53,17.08,9.23,8.23,9.11,0.00},
+
+
+now trying with larsonian1....
+
+
+here's the simulated OldStyle:
+15.1377	11.2733	11.9288	11.676	16.226	16.226	16.226	21.9887	27.6534	27.6534	22.2608	20.7608	21.9887	10.8154	7.09233	7.09233	0.	0.
+15.1377	21.9887	27.0414	27.0414	32.8041	38.4688	38.4688	34.6902	33.1902	32.8041	32.8041	21.6308	17.9077	17.9077	10.8154	10.8154	11.3416	0.
+15.1377	11.2733	18.1179	16.4817	21.8982	27.2226	27.2226	22.2608	20.7608	21.9887	10.8154	10.8154	7.09233	7.09233	0.			
+15.1377	11.2733	18.1179	16.7541	16.4817	21.8982	19.301	27.2226	22.2608	20.7608	21.9887	10.8154	11.4454	9.94543	11.1733	0.		
+
+here's the eastlansing version:
+{17.43,15.51,10.48,10.10,17.43,17.43,17.43,19.42,17.07,22.79,20.12,18.62,19.42,17.07,4.83,3.83,0.00,0.00},
+{17.43,19.42,28.18,28.18,30.18,27.82,33.54,31.65,30.15,30.18,30.18,27.82,15.58,14.58,10.75,10.75,13.13,0.00},
+{17.43,15.51,18.56,17.06,18.94,16.73,22.11,20.12,18.62,19.42,10.75,10.75,4.83,3.83,0.00},
+{17.43,15.51,18.56,17.06,17.06,18.94,16.73,22.11,20.12,18.62,19.42,17.07,9.37,7.87,8.67,0.00},
+
+these are different, and not just in one direction.
