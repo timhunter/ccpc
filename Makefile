@@ -10,7 +10,8 @@ LEX=ocamllex
 YACC=ocamlyacc
 
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
-GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+# GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I kbest
 OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo
