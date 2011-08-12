@@ -4,8 +4,8 @@ type route = (item list) * Rule.r * Rational.rat option
 type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 
 val get_nonterm: item -> string
-val create_item: string -> (Util.range_item * Util.range_item) list -> item
-val get_ranges: item -> (Util.range_item * Util.range_item) list
+val create_item: string -> Util.range list -> item
+val get_ranges: item -> Util.range list
 val get_routes : item -> chart -> route list
 val to_string: item -> string list -> string 
 val debug_str : item -> string

@@ -1,4 +1,4 @@
-type range_item = RangeVal of int | EpsVar
+type range = Pair of (int * int) | VarRange of int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
 exception RangesNotAdjacentException
 exception EmptyListException
 
@@ -10,7 +10,7 @@ val reverse_tr : 'a list -> 'a list
 val map_tr : ('a -> 'b) -> 'a list -> 'b list
 val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
 val optlistmap : ('a -> 'b option) -> 'a list -> 'b list
-val concat_ranges : (range_item * range_item) -> (range_item * range_item) -> (range_item * range_item)
+val concat_ranges : range -> range -> range
 val range : int -> int -> int list
 val (^^) : string -> string -> string
 val find_in_list : 'a -> 'a list -> int list

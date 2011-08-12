@@ -111,20 +111,14 @@ let rec split sep str =
 
 exception RangesNotAdjacentException
 
-type range_item = RangeVal of int | EpsVar
+type range = Pair of (int * int) | VarRange of int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
 
-let concat_ranges (i,j) (k,l) =
-  match (i,j) with 
-    | (EpsVar, EpsVar) -> (match (k,l) with
-                            | (EpsVar, EpsVar) -> (EpsVar, EpsVar)
-                            | (RangeVal a, RangeVal b) -> (RangeVal a, RangeVal b)
-                            | _ -> failwith "Should never mix EpsVar with RangeVal")
-    | (RangeVal a, RangeVal b) -> (match (k,l) with 
-                                    | (EpsVar, EpsVar) -> (RangeVal a, RangeVal b)
-                                    | (RangeVal c, RangeVal d) -> if (b = c) then (RangeVal a, RangeVal d) else (raise RangesNotAdjacentException)
-                                    | _ -> failwith "Should never mix EpsVar with RangeVal")
-    | _ -> failwith "Should never mix EpsVar with RangeVal"
-    
+let concat_ranges range1 range2 =
+	match (range1,range2) with
+	| (Pair (i,j), Pair (k,l)) -> if (j = k) then (Pair (i,l)) else (raise RangesNotAdjacentException)
+	| (Pair (i,j), VarRange k) -> if (j < k) then (Pair (i,j)) else (raise RangesNotAdjacentException)
+	| (VarRange k, Pair (i,j)) -> if (i < k) then (Pair (i,j)) else (raise RangesNotAdjacentException)
+	| (VarRange k, VarRange l) -> if (k < l) then (VarRange k) else (VarRange l)
 
 
 

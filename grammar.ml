@@ -15,9 +15,8 @@ let get_input_grammar grammar_file =
 let rec build_symbol sym ranges =
   match ranges with
     [] -> sym
-  | ((RangeVal p, RangeVal q)::rs) -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
-  | ((EpsVar, EpsVar)::rs) -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
-  | _ -> failwith "Should not be mixing RangeVal with EpsVar!"
+  | (Pair (p,q))::rs -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
+  | (VarRange _)::rs -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
@@ -32,10 +31,10 @@ let new_intersection_grammar_rules prefix chart item =
     | PublicTerminating str -> (
         assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
         match (Chart.get_ranges item) with
-        | [(RangeVal i, RangeVal j)] -> if (i < j) && not (List.map (List.nth prefix) (range i j) = [str]) then (* I think maybe this could become an assert *)
-                                           None
-                                        else
-                                           Some (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
+        | [Pair (i,j)] -> if (i < j) && not (List.map (List.nth prefix) (range i j) = [str]) then (* I think maybe this could become an assert *)
+                             None
+                          else
+                             Some (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
         | _ -> Some (Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule)), [])
       )
     | PublicNonTerminating (nts,func) -> (

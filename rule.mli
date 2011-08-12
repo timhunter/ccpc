@@ -17,9 +17,9 @@
 		val get_weight : r -> Rational.rat option
 		val get_expansion : r -> expansion
 		val apply :  tuplerecipe ->
-           (Util.range_item * Util.range_item) list list ->
-           (Util.range_item * Util.range_item ->
-            Util.range_item * Util.range_item ->
-            Util.range_item * Util.range_item) ->
-           (Util.range_item * Util.range_item) list
+           Util.range list list ->
+           (Util.range ->
+            Util.range ->
+            Util.range) ->
+           Util.range list
 

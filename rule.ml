@@ -14,7 +14,7 @@ open Rational
         | Component (i,j) ->
               let relevant_yield = List.nth yields i in
              (List.nth relevant_yield j)
-        | Epsilon -> (EpsVar, EpsVar) 
+        | Epsilon -> failwith "Don't know what this case is meant to be; not used as far as I can tell (TH, 12-Aug-2011)"
 
     let makestr list_of_pairs yields concat =
       let pieces_to_concatenate = Nelist.map (getstr yields) list_of_pairs in

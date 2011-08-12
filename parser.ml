@@ -10,12 +10,12 @@ open Rational
 
     
     let is_goal start_symbol length item =
-      (get_nonterm item = start_symbol) && (get_ranges item = [(RangeVal 0, RangeVal length)])
+      (get_nonterm item = start_symbol) && (get_ranges item = [Pair (0,length)])
 
     (* return type is (item, Rational.rat option) *)
     let get_axioms_parse grammar symbols =
       let indices = range 0 (List.length symbols) in
-      let make_axiom nt term r i = if (List.nth symbols i) = term then Some (create_item nt [RangeVal i, RangeVal (i+1)], r, Rule.get_weight r) else None in
+      let make_axiom nt term r i = if (List.nth symbols i) = term then Some (create_item nt [Pair (i,i+1)], r, Rule.get_weight r) else None in
       let get_axiom symbols rule =
         match Rule.get_expansion rule with
         | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str rule) indices
@@ -26,20 +26,18 @@ open Rational
     (* return type is (item, Rational.rat option) *)
     let get_axioms_intersect grammar prefix =
       let len = List.length prefix in
-      let situated_axiom nt rule index = (create_item nt [(RangeVal index, RangeVal (index+1))], rule, Rule.get_weight rule) in
-      let unsituated_axiom nt rule = (create_item nt [(RangeVal len, RangeVal len)], rule, Rule.get_weight rule) in
+      let situated_axiom nt rule index = (create_item nt [Pair (index,index+1)], rule, Rule.get_weight rule) in
+      let unsituated_axiom nt rule = (create_item nt [Pair (len,len)], rule, Rule.get_weight rule) in
       let get_axiom rule =
         let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
-        | PublicTerminating str -> (* conditional added by John to deal with potential double-counting of epsilons at position (len,len) *)
-	        if str = " "
-		then (map_tr (situated_axiom nt rule) (find_in_list str prefix))
-	        else (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
+        | PublicTerminating str -> (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
         | PublicNonTerminating _ -> []
       in
       concatmap_tr get_axiom grammar
 
     let get_axioms grammar input =
+      let epsilon_max = match input with | Prefix s -> (List.length s) - 1 | Sentence s -> List.length s in
       let from_symbols =  match input with
         | Prefix strings -> get_axioms_intersect grammar strings
         | Sentence strings -> get_axioms_parse grammar strings in 
@@ -49,7 +47,7 @@ open Rational
         match gram with 
           | [] -> acc
           | h::t -> (match Rule.get_expansion h with 
-                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [EpsVar, EpsVar], h, Rule.get_weight h)::acc))
+                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [VarRange (epsilon_max+1)], h, Rule.get_weight h)::acc))
                                                        else get_empties t acc
                       | PublicNonTerminating _ -> get_empties t acc) in 
       (get_empties grammar []) @ from_symbols 

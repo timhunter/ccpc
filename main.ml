@@ -10,11 +10,10 @@ open Read
 open Chart
 open Rational
 
-let get_yield (sentence : string list) (r : (Util.range_item * Util.range_item)) : string =
+let get_yield (sentence : string list) (r : Util.range) : string =
 	match r with
-	| (RangeVal i, RangeVal j) -> List.fold_left (^^) "" (map_tr (List.nth sentence) (range i j))
-	| (EpsVar, EpsVar) -> ""
-	| _ -> failwith "Should never mix EpsVar with RangeVal"
+	| Pair (i,j) -> List.fold_left (^^) "" (map_tr (List.nth sentence) (range i j))
+	| VarRange _ -> ""
 
 let print_tree tree sentence =
 	let rec print_tree' t =      (* returns a list of strings, each representing one line *)

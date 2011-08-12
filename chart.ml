@@ -1,7 +1,7 @@
 open Util
 open Rational
 
-type item = ParseItem of string * ((range_item * range_item) list)  (*range_item defined in Util*) 
+type item = ParseItem of string * (range list)  (*range defined in Util*) 
 
 type route = (item list) * Rule.r * Rational.rat option
 
@@ -30,9 +30,9 @@ let get_string sentence range_list =
     match lst with 
       [] -> acc
     | h::t -> match h with 
-                  (RangeVal x, RangeVal y) -> get' t ((find_words (x,y))::acc)
-                | (EpsVar, EpsVar) -> get' t acc 
-                | _ -> failwith "Should not mix EpsVar with RangeVal" in
+                | Pair (x,y) -> get' t ((find_words (x,y))::acc)
+                | VarRange _ -> get' t acc
+    in
   List.flatten (get' range_list [])
 
   
@@ -46,9 +46,8 @@ let debug_str item =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match r with
-		| (RangeVal x, RangeVal y) -> Printf.sprintf "%d:%d" x y
-		| (EpsVar, EpsVar)         -> Printf.sprintf "eps"
-		| _ -> failwith "Should not mix EpsVar with RangeVal"
+		| Pair (x,y) -> Printf.sprintf "%d:%d" x y
+		| VarRange _ -> Printf.sprintf "eps"
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
 
@@ -66,7 +65,7 @@ let get_status c item route =
 
 let goal_items c (start_symbol : string) (length : int) : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
-    if (get_nonterm i = start_symbol) && (get_ranges i = [(RangeVal 0, RangeVal length)]) then
+    if (get_nonterm i = start_symbol) && (get_ranges i = [Pair (0,length)]) then
       i::acc
     else
       acc
