@@ -821,3 +821,354 @@ here's the eastlansing version:
 {17.43,15.51,18.56,17.06,17.06,18.94,16.73,22.11,20.12,18.62,19.42,17.07,9.37,7.87,8.67,0.00},
 
 these are different, and not just in one direction.
+
+
+Thu Aug 11 12:00:09 EDT 2011
+
+using the eastlansing distribution, this training set
+
+
+let sleep_train = [
+  (20.0,"mary sleeps");
+  (20.0,"john sleeps ");
+  (10.0,"mary sleeps on tuesday");
+  (10.0,"john sleeps on tuesday");
+  (2.0,"mary sleeps on tuesday on tuesday");
+  (2.0,"john sleeps on tuesday on tuesday")
+];;
+
+and this grammar
+
+[mary]::[n,-f].   [john]::[n,-f].
+[sleeps]::[=n,+f,v].
+[tuesday]::[date]. [on]::[=date,p_on].  [v]<<[p_on].
+startCategory(v).
+
+
+yields these observations 
+
+
+  [(("v", ["+f v,-f"]), 64.);   this is t6 rewriting as t4
+   (("+f v,-f", ["::=n +f v"; "::n -f"]), 64.); t4 rewriting as t1 and t0
+   (("v", ["p_on"; "v"]), 28.);  t6 rewriting as t5 and t6 [recursive]
+   (("p_on", ["::=date p_on"; "::date"]), 28.)]   t5 rewriting as t3 and t2
+
+
+simulating unlexicalization we have
+
+/train grammars/mcfgs/sleep.mcfg sleep.train | sed -E -f unlexicalizeUnsituated.sed | sort -k 4 | uniq
+
+
+
+368 / 368     E --> " " 
+64 / 64     S --> t6 [0,0;0,1;0,2]
+64 / 64     t0 --> E t0_tmp2 [0,0][1,0][1,1]
+64 / 64     t0_tmp2 --> t0_tmp1 E [0,0][1,0]
+64 / 64     t1 --> E t1_tmp2 [0,0][1,0][1,1]
+64 / 64     t1_tmp2 --> t1_tmp1 E [0,0][1,0]
+28 / 28     t2 --> E t2_tmp2 [0,0][1,0][1,1]
+28 / 28     t2_tmp2 --> t2_tmp1 E [0,0][1,0]
+28 / 28     t3 --> E t3_tmp2 [0,0][1,0][1,1]
+28 / 28     t3_tmp2 --> t3_tmp1 E [0,0][1,0]
+64 / 64     t4 --> t1 t0 [0,0][0,1][0,2][1,0;1,1;1,2]            (("+f v,-f", ["::=n +f v"; "::n -f"]), 64.); t4 rewriting as t1 and t0
+28 / 28     t5 --> t3 t2 [0,0][0,1][0,2;1,0;1,1;1,2]             (("p_on", ["::=date p_on"; "::date"]), 28.)]   t5 rewriting as t3 and t2
+64 / 92     t6 --> t4 [0,3;0,0][0,1][0,2]                             (("v", ["+f v,-f"]), 64.);   this is t6 rewriting as t4
+28 / 92     t6 --> t5 t6 [1,0][1,1][1,2;0,0;0,1;0,2]             (("v", ["p_on"; "v"]), 28.);  t6 rewriting as t5 and t6 [recursive]
+64 / 64 t0_tmp1  --> terminal0 
+64 / 64 t1_tmp1  --> terminal1 
+28 / 28 t2_tmp1  --> terminal2 
+28 / 28 t3_tmp1  --> terminal3 
+
+this does seem to line up OK,  yields this PCFG:
+
+1.00  	 & +f v,-f & $\rightarrow$ & ::=n +f v & ::n -f & \\ 
+1.00  	 & p_on & $\rightarrow$ & ::=date p_on & ::date & \\ 
+0.70  	 & v & $\rightarrow$ & +f v,-f & \\ 
+0.30  	 & v & $\rightarrow$ & p_on & v & \\ 
+
+
+yields these entropy values:
+{
+{1.27,1.27,0.00},
+{1.27,1.27,0.00},
+{1.27,1.27,1.27,2.00,0.00},
+{1.27,1.27,1.27,2.00,0.00},
+{1.27,1.27,1.27,2.00,2.00,2.00,0.00},
+{1.27,1.27,1.27,2.00,2.00,2.00,0.00},
+}
+
+
+consider "mary *" ie where mary spans 0_1
+eastlansing says the entropy of this prefix grammar is 1.27
+oldstyle simulation says its 2.0
+
+
+the eastlansing PCFG is:
+1.00  	 & TOP & $\rightarrow$ & (0,1,1,1,1,1):v, & \\ 
+
+28.00  	 & (0,1,1,1,1,1):v, & $\rightarrow$ & (1,1,1,1,1,1):p_on, & (0,1,1,1,1,1):v, & \\                       t6 -> t5 t6
+64.00  	 & (0,1,1,1,1,1):v, & $\rightarrow$ & (1,1,1,1,1,1):+f,v,(0,1,-1,-1,-1,-1):-f, & \\                   t6 -> t4
+  "a v can either be formed by first adjoing a p_on, or not"
+
+64.00  	 & (1,1,1,1,1,1):+f,v,(0,1,-1,-1,-1,-1):-f, & $\rightarrow$ & (1,1,1,1,1,1)::=n,+f,v, & (0,0,0,1,1,1)::n,-f, & \\    t4 -> t1 t2
+
+28.00  	 & (1,1,1,1,1,1):p_on, & $\rightarrow$ & (1,1,1,1,?_C214,?_C214)::=date,p_on, & (1,1,1,1,1,1)::date, & \\         t5 -> t3 t2
+
+
+the first rule gets instantiated two different ways:
+
+      28 / 92      t6_0-1_1-1_1-1 --> t5_eps_1-1_1-1     t6_0-1_1-1_1-1 [1,0][1,1][1,2;0,0;0,1;0,2]
+      28 / 92      t6_0-1_1-1_1-1 --> t5_eps_1-1_1-1     t6_0-1_1-1_eps [1,0][1,1][1,2;0,0;0,1;0,2]
+            the two ways to instantiate (("v", ["p_on"; "v"]), 28.)
+
+      64 / 92      t6_0-1_1-1_eps --> t4_eps_1-1_eps_0-1 [0,3;0,0][0,1][0,2]
+            the one way to instantiate (("v", ["+f v,-f"]), 64.)
+
+
+so, what is the difference between t6_0-1_1-1_1-1 and t6_0-1_1-1_eps ? the one with the situated complement must be made from something that has postmodification, whereas the one that has an unsituated EPS complement must be made from the other kind:
+
+ t6_0-1_1-1_1-1 --> t5_eps_1-1_1-1     t6_0-1_1-1_1-1           ("v", ["p_on"; "v"])
+ t6_0-1_1-1_eps --> t4_eps_1-1_eps_0-1                                   ("v", ["+f v,-f"])
+
+
+this gives you a locally-normalized grammar where the two t6 rewrites don't alternate correctly. There's a distinction between the first adjunction and successive.
+
+
+Binary	0.5	t6_0-1_1-1_1-1	t5_eps_1-1_1-1	t6_0-1_1-1_eps
+              complement  is set to 1-1       "1_on tuesday_1"       unset
+Binary	0.5	t6_0-1_1-1_1-1	t5_eps_1-1_1-1	t6_0-1_1-1_1-1
+                 remains set                                                    comes in set
+
+Unary	1.	t6_0-1_1-1_eps	t4_eps_1-1_eps_0-1	
+                      unset complement    unary
+
+
+in this version of t6 -> t4, ie       "v" rewriting as "+f v,-f"    we have the unheard v sleeps t1 at 1-1 combining with mary t0 spanning 0-1
+
+Unary	0.5	S_0-1	t6_0-1_1-1_eps	(* using an unsituated axiom *)
+Unary	0.5	S_0-1	t6_0-1_1-1_1-1	(* using a situated axiom at (1,1) *)
+Binary	0.5	t6_0-1_1-1_1-1	t5_eps_1-1_1-1	t6_0-1_1-1_eps
+Binary	0.5	t6_0-1_1-1_1-1	t5_eps_1-1_1-1	t6_0-1_1-1_1-1
+Unary	1.	t6_0-1_1-1_eps	t4_eps_1-1_eps_0-1	
+Binary	1.	t5_eps_1-1_1-1	t3_eps_1-1_eps	t2_eps_1-1_eps
+Binary	1.	t4_eps_1-1_eps_0-1	t1_eps_1-1_eps	t0_eps_0-1_eps
+Binary	1.	t3_eps_1-1_eps	E_eps	t3_tmp2_1-1_eps
+Binary	1.	t2_eps_1-1_eps	E_eps	t2_tmp2_1-1_eps
+Binary	1.	t1_eps_1-1_eps	E_eps	t1_tmp2_1-1_eps
+Binary	1.	t0_eps_0-1_eps	E_eps	t0_tmp2_0-1_eps
+Preterminal	1.	E_eps	 	
+Binary	1.	t3_tmp2_1-1_eps	t3_tmp1_1-1	E_eps
+Binary	1.	t2_tmp2_1-1_eps	t2_tmp1_1-1	E_eps
+Binary	1.	t1_tmp2_1-1_eps	t1_tmp1_1-1	E_eps
+Binary	1.	t0_tmp2_0-1_eps	t0_tmp1_0-1	E_eps
+Preterminal	1.	t3_tmp1_1-1	on	
+Preterminal	1.	t2_tmp1_1-1	tuesday	
+Preterminal	1.	t1_tmp1_1-1	sleeps	
+Preterminal	1.	t0_tmp1_0-1	mary	
+
+another thing that is different between eastlansing and mcfgcky2 is the instantiation of
+
+t6 --> t5 t6 [1,0][1,1][1,2;0,0;0,1;0,2]  ie "right-adjoin1"
+
+both use the same operation
+28 / 92      t6_0-1_1-1_1-1 --> t5_eps_1-1_1-1 t6_0-1_1-1_eps [1,0][1,1][1,2;0,0;0,1;0,2]   in the third component, t6's complement's right boundary = t5's specifier's left boundary (which is also eps) = t5's head's left boundary which is 1. that means both eps's are 1.
+28 / 92      t6_0-1_1-1_1-1 --> t5_eps_1-1_1-1 t6_0-1_1-1_1-1 [1,0][1,1][1,2;0,0;0,1;0,2]
+
+
+so if t5_eps_1-1_1-1  has his complement field set and t6_0-1_1-1_eps doesn't, the result has it set. but then we know that 
+
+
+Fri Aug 12 19:23:06 EDT 2011
+
+ with Tim's new fix, oldStyle gets the same values as eastlansing on sleep.pl
+
+we get slightly different values with keenanhawkins. using larsonian1, on which Guillaumin does not raise any warnings,
+there is extra entropy reduced at 
+
+1 "boy" before who
+2 "girl" before who
+3 "girl" before who (and -s)
+4        "house" has a higher entropy reduction before "leave"
+5 "letter" before which
+6 "cat" before which
+7 -s
+8 "sweet" before which
+9 "to" before "be"
+10 "boy" before "who"
+11 "to" before "be" and -s
+12 "to" before "be"
+13 "box" before which
+14  "girl"  before who
+15       "Joe" has a slightly higher entropy reduction before "on"
+16 "for" before "be"
+17 "girl" before who
+18  "girl" before who
+19 "boy" before who
+20 "boy" before who
+21 "girl before who
+23 "sailor" before who
+24 "woman" before who
+25 ?lost count?  "girl" before who
+
+
+could these disparities reflect the fact that there is actually lexical choice at (n,n) ?
+
+  if s="*" then
+        (List.map (function y -> (n,n,y)) (List.filter (function x -> (not (Item.C185.synonymous "" x))) lexicon))
+
+List.length (List.filter (function x -> (not (Item.C185.synonymous "" x))) grammar.Grammar.C185.lexicon);;
+- : int = 188
+
+A. No. Unlexicalizing gives much higher prefix-entropy numbers. I don't believe there were obs-ervations of any of those distinctions.
+
+
+note: these pre-WH entropy reductions of yore seem to be followed by a smaller reduction on the actual WH in the simulated oldstyle.
+
+
+try the combination: entOfGrammarFile with unlexicalized charts (DONE, looks a lot like the old east lansing))
+ now try it with lexicalized  (DONE, we get higher entropies as expected)
+they both look pretty much the same.
+
+
+Fri Aug 12 21:56:18 EDT 2011
+
+Jiwon: why are we getting Greater::nord ????
+
+ using oldStyle now handily replicates the Korean diagrams from the CogSci Paper
+       		{0, 0, 0, 6.33737, 0, 20.7952}
+		{0, 0, 0, 14.8544, 0, 20.7952}
+
+
+{11.2579, 19.5952, 23.7639, 17.4266, 20.7952, 0.}
+{11.2579, 19.5952, 32.281, 17.4266, 20.7952, 0.}
+
+
+ the new-style method using Z ratios does derive a subject advantage, but the difference is earlier in the string, at the ka NOM marker.
+
+{4.4331571394002, 6.9231961424441, 6.6259901135430, 7.2963487472413, 2.7244591917776, 0.*10^-14}
+{4.4331571394002, 1.3057028523234, 7.3339067713981, 7.2963487472413, 2.7244591917776, 0.*10^-14}
+
+ surprisal is just junk.
+
+
+Q. why is entropyOfGrammarFile['/tmp/prefix8-2.chart"] = 1.3 
+         but oldStyle is 19.59
+
+in the Z-ratio renormalized version we've become virtually certain that "kica ka" is a complement
+
+0.01330176782553416	S_0-2	t106_0-2_2-2_2-2
+0.986698232174466	S_0-2	t106_eps_eps_0-2
+
+but in the oldStyle these are even:
+
+{
+ {"Unary", 0.5, "S_0-2", "t106_0-2_2-2_2-2"},
+ {"Unary", 0.5, "S_0-2", "t106_eps_eps_0-2"}
+}
+
+t106 : (: C-Decl)
+
+they come in as even:
+
+1301 / 1301      S_0-2 --> t106_0-2_2-2_2-2 [0,0;0,1;0,2]
+1301 / 1301      S_0-2 --> t106_eps_eps_0-2 [0,0;0,1;0,2]
+
+
+upshot: Korean result is pushed forward, to case marker, under  Z
+             derivation of the AH yield a nice graph with surprisal
+	     maybe show individual predictions on an English sentence? contrast surprisal and entropy reduction?
+
+
+
+how to unlexicalize a regular old grammar
+sed -E -f unlexicalizeUnsituated.sed grammars/wmcfg/korean.wmcfg | sort -k 4 | uniq > grammars/wmcfg/korean-unlexicalized.wmcfg
+
+
+Sat Aug 13 07:43:34 EDT 2011
+
+ Q. where is this "nord" error coming from?  in the Korean "/tmp/prefix3-4.chart"
+          /tmp/prefix1-3.chart
+	  /tmp/prefix3-6.chart
+    	  /tmp/prefix2-6.chart
+    	  /tmp/prefix5-3.chart
+    	  /tmp/prefix4-6.chart
+    	  /tmp/prefix7-2.chart
+    	  /tmp/prefix7-6.chart
+    	  /tmp/prefix8-6.chart
+ A. imaginary eigenvalues in the fertility matrix. changed the test to look at the maximum of the Absolute Value.
+
+
+the choice of first morpheme seems quite informative since the decison between the frequent "ul"-marked inititial sentences is quite unbalanced.
+
+changing the training set so that "reporter" and "senator" can occur in every NP position eliminates this while keeping the bump on the NOM marker, 2nd morpheme.
+
+upshot: I've noticed that in switching from oldStyle to new, the SRC/ORC contrast in Korean is pushed forward Korean result is pushed forward, to case marker. How is it with the English RCs?
+A. very similar shapes to oldstyle, just sparser overall.
+
+
+3 to 4?
+the 8-5 to 8-6 transition loses an alternative
+
+ok: korean. prefix4-4.chart vs prefix8-4.chart
+
+oldStyle obliterates some distinction that exists in charts 4-3 and 8-3 in 4-4 and 8-4
+SRC: 23.76 -> 17.42
+ORC: 32.281 -> 17.42
+
+newStyle
+SRC: 6.25 -> 7.29  (goes up)
+ORC:  7.33 -> 7.29 (goes down)
+
+
+distinctions in 8-3
+"t156_3-3_3-3_3-3_0-3_3-3"  t156 : (: +wh C-Rel;: -epp;: -wh) is three ways ambiguous 0.3/0.3/0.3
+      Binary	0.333333	t156_3-3_3-3_3-3_0-3_3-3	t23_3-3_3-3_3-3	t127_0-2_eps_2-3_3-3
+      Binary	0.333333	t156_3-3_3-3_3-3_0-3_3-3	t23_3-3_3-3_3-3	t127_0-3_3-3_3-3_3-3
+      Binary	0.333333	t156_3-3_3-3_3-3_0-3_3-3	t23_3-3_3-3_3-3	t127_eps_eps_0-3_3-3
+
+this is it. So what I really want to know is, what is the entropy of the category "t156_3-3_3-3_3-3_0-3_3-3" before and after?
+
+In[197]:= {entropyOfT156three[LocallyNormalize[eightthree]],entropyOfT156four[LocallyNormalize[eightfour]]}
+Out[197]= {19.7177,16.2252}
+In[198]:= {entropyOfT156three[LocallyNormalize[fourthree]],entropyOfT156four[LocallyNormalize[fourfour]]}
+Out[198]= {18.3939,16.2252}
+
+In[206]:= {entropyOfT156three[GloballyNormalize[fourthree]],entropyOfT156four[GloballyNormalize[fourfour]]}
+Out[206]= {6.0538317283507,9.4577991572290}
+In[207]:= {entropyOfT156three[GloballyNormalize[eightthree]],entropyOfT156four[GloballyNormalize[eightfour]]}
+Out[207]= {4.9390229098699,9.4577991572290}
+
+Sat Aug 13 22:58:42 EDT 2011
+  the English SRC/ORC contrast works fine newStyle.
+
+Q. what is the nonterminal that controls the distinction between SRC and ORC in the korean grammar?
+
+SRC example:   uywon ul kongkyekhan kica ka yumyenghaycyessta
+ORC example:   kica ka kongkyekhan uywon i yumyenghaycyessta
+
+the T-rel movement rule is either checking +nom on the -wh mover,  or checking the +nom on the other, nonmoving argument
+t127 : (: T-Rel -epp;: -wh)
+
+t151 : (: +nom T-Rel -epp;: -wh;: -nom)  ORC and kica ka is in the specifier
+t109 : (: +nom T-Rel -epp;: -nom -wh)    SRC and kica is in the complement
+the prior after the first word of prefix 8 is 72/27  on t127. but this does not seem to change.
+
+
+the entropy of
+
+t127_0-1_1-1_1-1_1-1
+t127_0-2_ 2-2_ 2-2_ 2-2
+
+does seem to change, downwardly from 5.7 to 3.63
+
+t156 : (: +wh C-Rel;: -epp;: -wh)
+
+t156_2-2_2-2_2-2_0-2_2-2  uses t127
+
+and has a choice between this version: t127_0-2_2-2_2-2_2-2 and this version
+t127_eps_eps_0-2_2-2  84/15
+
+after the second word it becomes more likely we've just seen the kica ka in the specifier of t127 .27/.72 ---> .84/.15
+
+
+these ratios are both halfs under oldstyle
