@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    327691,       7397]
-NotebookOptionsPosition[    320018,       7184]
-NotebookOutlinePosition[    320418,       7202]
-CellTagsIndexPosition[    320375,       7199]
+NotebookDataLength[    328021,       7407]
+NotebookOptionsPosition[    320315,       7192]
+NotebookOutlinePosition[    320714,       7210]
+CellTagsIndexPosition[    320671,       7207]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -78,7 +78,7 @@ conflict with this. Please see the Compatibility Guide for details.\"\>"}]], \
   3.521808980884643*^9, 3.5218196517475157`*^9, 3.521872940723523*^9, 
   3.5218908866896*^9, 3.521992087902547*^9, 3.522070745273219*^9, 
   3.522070911325873*^9, 3.522193841349139*^9, 3.522194417991398*^9, 
-  3.52227894029781*^9, 3.522593709410049*^9}]
+  3.52227894029781*^9, 3.522593709410049*^9, 3.522925878847588*^9}]
 }, Open  ]],
 
 Cell["\<\
@@ -2441,7 +2441,7 @@ been superseded by preloaded functionaliy. The package now being loaded may \
 conflict with this. Please see the Compatibility Guide for details.\"\>"}]], \
 "Message", "MSG",
  ShowCellLabel->True,
- CellChangeTimes->{3.52259403480015*^9}],
+ CellChangeTimes->{3.522925910734741*^9}],
 
 Cell[BoxData[
  RowBox[{
@@ -2453,7 +2453,7 @@ been superseded by preloaded functionaliy. The package now being loaded may \
 conflict with this. Please see the Compatibility Guide for details.\"\>"}]], \
 "Message", "MSG",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940350151176`*^9}]
+ CellChangeTimes->{3.522925910960091*^9}]
 }, Open  ]],
 
 Cell[TextData[{
@@ -2574,171 +2574,171 @@ Cell[BoxData[
 
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594077040195*^9}],
+ CellChangeTimes->{3.522925969259563*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594077120769*^9}],
+ CellChangeTimes->{3.522925969354166*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940781578817`*^9}],
+ CellChangeTimes->{3.522925969975973*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940782252483`*^9}],
+ CellChangeTimes->{3.522925970040884*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940784728403`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.522594078548469*^9}],
+ CellChangeTimes->{3.522925970265819*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594078651456*^9}],
+ CellChangeTimes->{3.522925970349844*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594078845881*^9}],
+ CellChangeTimes->{3.522925970407608*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940789419823`*^9}],
+ CellChangeTimes->{3.522925970611372*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594079169889*^9}],
+ CellChangeTimes->{3.522925970691592*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594079327917*^9}],
+ CellChangeTimes->{3.522925970896192*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.522925971043885*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594079498973*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.522594079609723*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5225940797208567`*^9}],
+ CellChangeTimes->{3.522925971120768*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594079876897*^9}],
+ CellChangeTimes->{3.522925971415915*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.522925971482535*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.522925971547585*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594080014758*^9}],
+ CellChangeTimes->{3.522925971772273*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.52259408027842*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5225940803596983`*^9}],
+ CellChangeTimes->{3.522925971849691*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940804448967`*^9}],
+ CellChangeTimes->{3.5229259719408493`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5229259720968637`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594080678643*^9}],
+ CellChangeTimes->{3.522925972224298*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594080767372*^9}],
+ CellChangeTimes->{3.522925972408072*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594080997761*^9}],
+ CellChangeTimes->{3.522925972540887*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594081083405*^9}],
+ CellChangeTimes->{3.522925972602702*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594081230966*^9}],
+ CellChangeTimes->{3.522925972848743*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940813929462`*^9}],
+ CellChangeTimes->{3.5229259729209013`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594081713986*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5225940818068743`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix7-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.522594081891404*^9}],
+ CellChangeTimes->{3.522925973154378*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594081973871*^9}],
+ CellChangeTimes->{3.522925973329172*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.522925973396207*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5229259735006647`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594082255513*^9}],
+ CellChangeTimes->{3.52292597369776*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594082349822*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix7-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.522594082606402*^9}],
+ CellChangeTimes->{3.5229259738070087`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940827002707`*^9}],
+ CellChangeTimes->{3.522925974051003*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.522925974110162*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940830424767`*^9}],
+ CellChangeTimes->{3.522925974499362*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594083480701*^9}],
+ CellChangeTimes->{3.5229259749294443`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940839303713`*^9}],
+ CellChangeTimes->{3.5229259753813753`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940840049887`*^9}],
+ CellChangeTimes->{3.522925975440299*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940842423058`*^9}],
+ CellChangeTimes->{3.522925975694577*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940845111027`*^9}],
+ CellChangeTimes->{3.522925975963882*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594084928711*^9}],
+ CellChangeTimes->{3.522925976369063*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940852958307`*^9}],
+ CellChangeTimes->{3.522925976736343*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594085755343*^9}]
+ CellChangeTimes->{3.522925977163563*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2769,171 +2769,167 @@ Cell[BoxData[
 
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594085995306*^9}],
+ CellChangeTimes->{3.522925977347941*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594086099337*^9}],
+ CellChangeTimes->{3.522925977437809*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594087616704*^9}],
+ CellChangeTimes->{3.5229259789632273`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940877004223`*^9}],
+ CellChangeTimes->{3.522925979021575*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594089421503*^9}],
+ CellChangeTimes->{3.522925980789892*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940895077543`*^9}],
+ CellChangeTimes->{3.5229259808473263`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594089591427*^9}],
+ CellChangeTimes->{3.522925980912088*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594091148571*^9}],
+ CellChangeTimes->{3.52292598251268*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594091374957*^9}],
+ CellChangeTimes->{3.522925982671899*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594093138711*^9}],
+ CellChangeTimes->{3.522925984326941*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594093529558*^9}],
+ CellChangeTimes->{3.522925984728359*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594093956752*^9}],
+ CellChangeTimes->{3.5229259850931673`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594095649495*^9}],
+ CellChangeTimes->{3.522925986770359*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594095845866*^9}],
+ CellChangeTimes->{3.522925986915794*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594095942102*^9}],
+ CellChangeTimes->{3.522925987075945*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594097492806*^9}],
+ CellChangeTimes->{3.522925988536015*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594097891179*^9}],
+ CellChangeTimes->{3.522925989012498*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225940980857573`*^9}],
+ CellChangeTimes->{3.522925989173366*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594099418247*^9}],
+ CellChangeTimes->{3.522925990308754*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594099710062*^9}],
+ CellChangeTimes->{3.52292599093337*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.52259410128115*^9}],
+ CellChangeTimes->{3.522925992404606*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix5-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594101461136*^9}],
+ CellChangeTimes->{3.522925992725691*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225941015862103`*^9}],
+ CellChangeTimes->{3.522925992822003*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594103199684*^9}],
+ CellChangeTimes->{3.5229259944272337`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594104726719*^9}],
+ CellChangeTimes->{3.52292599583317*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.52259410499724*^9}],
+ CellChangeTimes->{3.522925996208721*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594105735135*^9}],
+ CellChangeTimes->{3.522925996959004*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594107678722*^9}],
+ CellChangeTimes->{3.5229259988865013`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594108444969*^9}],
+ CellChangeTimes->{3.5229259995148497`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225941086180267`*^9}],
+ CellChangeTimes->{3.522925999685709*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix6-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594109819089*^9}],
+ CellChangeTimes->{3.522926000967351*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5225941102703323`*^9}],
+ CellChangeTimes->{3.52292600125931*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594111881392*^9}],
+ CellChangeTimes->{3.522926002885705*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594115314845*^9}],
+ CellChangeTimes->{3.5229260063266497`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594118784399*^9}],
+ CellChangeTimes->{3.52292600972479*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix7-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594122650165*^9}],
+ CellChangeTimes->{3.5229260135660553`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594122805174*^9}],
+ CellChangeTimes->{3.522926013702982*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594124359071*^9}],
+ CellChangeTimes->{3.522926015245905*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594125987692*^9}],
+ CellChangeTimes->{3.522926016874486*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.52259412946996*^9}],
+ CellChangeTimes->{3.522926020332192*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix8-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.522594132583054*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix8-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.522594136284046*^9}]
+ CellChangeTimes->{3.522926023498115*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -3063,6 +3059,8 @@ Cell[BoxData[
    3.52182788615578*^9, 3.5221880854807167`*^9, 3.522189994901554*^9, {
    3.522228696043244*^9, 3.522228705347522*^9}, 3.522279360169183*^9}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"entropyreductionsOld", "=", 
@@ -3073,6 +3071,11 @@ Cell[BoxData[
    3.52182788615578*^9, 3.5221880854807167`*^9, 3.522189994901554*^9, {
    3.522228696043244*^9, 3.522228727238143*^9}, {3.522279364151217*^9, 
    3.5222793653281*^9}}],
+
+Cell[BoxData["\<\"/tmp/prefix8-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5229260285324078`*^9}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -3653,7 +3656,7 @@ Cell[BoxData[
       RowBox[{"72", "*", "6"}]}], ",", 
      RowBox[{"ChartLabels", "\[Rule]", 
       RowBox[{"korean", "[", 
-       RowBox[{"[", "#", "]"}], "]"}]}]}], "]"}], "&"}], "/@", 
+       RowBox[{"[", "#", "]"}], "]"}]}]}], "]"}], "&"}], "/@", " ", 
   RowBox[{"Range", "[", 
    RowBox[{"1", ",", "8"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.521704683011252*^9, 3.52170472324225*^9}, {
@@ -3674,7 +3677,9 @@ Cell[BoxData[
    3.522184384481703*^9}, 3.52218670451223*^9, 3.5221899949225197`*^9, {
    3.522195177612728*^9, 3.522195186459857*^9}, {3.522229682377659*^9, 
    3.522229686044094*^9}, {3.5222793921665697`*^9, 3.522279394992303*^9}, {
-   3.522594199193893*^9, 3.522594202240719*^9}}],
+   3.522594199193893*^9, 3.522594202240719*^9}, 3.522926069071231*^9, {
+   3.5229261946201553`*^9, 3.5229261991925163`*^9}, {3.5229272761242247`*^9, 
+   3.522927277359536*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -4228,17 +4233,17 @@ Cell[BoxData[
 -52.21213043603264}}],
                 
                 StatusArea[#, 
-                 3.12745428707680466439127603406333832936`13.604526305001038]& ,
+                 3.12745428707680466216866158046805423965`13.604526305001038]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680466439127603406333832936`13.\
+                 "3.12745428707680466216866158046805423965`13.\
 604526305001038"],
                StyleBox[
-               "3.12745428707680466439127603406333832936`13.604526305001038", {
+               "3.12745428707680466216866158046805423965`13.604526305001038", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680466439127603406333832936`13.604526305001038, {
+               3.12745428707680466216866158046805423965`13.604526305001038, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -4261,17 +4266,17 @@ Cell[BoxData[
 -93.66269075913793}}],
                 
                 StatusArea[#, 
-                 1.30570285232343610186747651091820898728`13.34281691295028]& ,
+                 1.30570285232343610403588085588921785529`13.34281691295028]& ,
                 
                 TagBoxNote->
-                 "1.30570285232343610186747651091820898728`13.34281691295028"],
+                 "1.30570285232343610403588085588921785529`13.34281691295028"],
                StyleBox[
-               "1.30570285232343610186747651091820898728`13.34281691295028", {
+               "1.30570285232343610403588085588921785529`13.34281691295028", {
                 
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               1.30570285232343610186747651091820898728`13.34281691295028, {
+               1.30570285232343610403588085588921785529`13.34281691295028, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -4713,17 +4718,17 @@ Cell[BoxData[
 -52.21213043603264}}],
                 
                 StatusArea[#, 
-                 3.12745428707680472982287714356353092171`13.601314513897021]& ,
+                 3.1274542870768048451819882960212027001`13.601314513897021]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680472982287714356353092171`13.\
-601314513897021"],
+                 "3.1274542870768048451819882960212027001`13.601314513897021"],
                StyleBox[
-               "3.12745428707680472982287714356353092171`13.601314513897021", {
+               "3.1274542870768048451819882960212027001`13.601314513897021", {
+                
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680472982287714356353092171`13.601314513897021, {
+               3.1274542870768048451819882960212027001`13.601314513897021, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -4746,17 +4751,17 @@ Cell[BoxData[
 -93.66269075913793}}],
                 
                 StatusArea[#, 
-                 1.30570285232343599350146937099204080823`13.338610744898972]& ,
+                 1.30570285232343587819656832715864425154`13.338610744898972]& ,
                 
                 TagBoxNote->
-                 "1.30570285232343599350146937099204080823`13.\
+                 "1.30570285232343587819656832715864425154`13.\
 338610744898972"],
                StyleBox[
-               "1.30570285232343599350146937099204080823`13.338610744898972", {
+               "1.30570285232343587819656832715864425154`13.338610744898972", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               1.30570285232343599350146937099204080823`13.338610744898972, {
+               1.30570285232343587819656832715864425154`13.338610744898972, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -5184,7 +5189,7 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.8318098863268073, 4.616666666666667}, {
-                   5.403699441790448, 5.616666666666667}, "RoundingRadius" -> 
+                   5.403699441790449, 5.616666666666667}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688074`, 
@@ -5192,16 +5197,16 @@ Cell[BoxData[
 -52.212130436032666`}}],
                 
                 StatusArea[#, 
-                 4.5718895554636411677259383301574757752`13.652554324027077]& ,
+                 4.57188955546364141150879681352314776177`13.652554324027077]& ,
                 TagBoxNote->
-                 "4.5718895554636411677259383301574757752`13.652554324027077"],
+                 "4.57188955546364141150879681352314776177`13.\
+652554324027077"],
                StyleBox[
-               "4.5718895554636411677259383301574757752`13.652554324027077", {
-                
+               "4.57188955546364141150879681352314776177`13.652554324027077", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               4.5718895554636411677259383301574757752`13.652554324027077, {
+               4.57188955546364141150879681352314776177`13.652554324027077, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -5224,17 +5229,17 @@ Cell[BoxData[
 -93.66269075913796}}],
                 
                 StatusArea[#, 
-                 2.7244591917776223709713595555470533327`13.586414470417338]& ,
+                 2.72445919177762212724271118080565656783`13.586414470417338]& ,
                 
                 TagBoxNote->
-                 "2.7244591917776223709713595555470533327`13.586414470417338"],
+                 "2.72445919177762212724271118080565656783`13.\
+586414470417338"],
                StyleBox[
-               "2.7244591917776223709713595555470533327`13.586414470417338", {
-                
+               "2.72445919177762212724271118080565656783`13.586414470417338", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               2.7244591917776223709713595555470533327`13.586414470417338, {
+               2.72445919177762212724271118080565656783`13.586414470417338, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -5499,17 +5504,17 @@ Cell[BoxData[
                   29.393660200080973`}}],
                 
                 StatusArea[#, 
-                 3.12745428707680414180582889605020113776`13.811130340657437]& ,
+                 3.12745428707680408277102060421448470606`13.811130340657437]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680414180582889605020113776`13.\
+                 "3.12745428707680408277102060421448470606`13.\
 811130340657437"],
                StyleBox[
-               "3.12745428707680414180582889605020113776`13.811130340657437", {
+               "3.12745428707680408277102060421448470606`13.811130340657437", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680414180582889605020113776`13.811130340657437, {
+               3.12745428707680408277102060421448470606`13.811130340657437, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -5532,17 +5537,17 @@ Cell[BoxData[
 -54.80279045622673}}],
                 
                 StatusArea[#, 
-                 1.30570285232343590665687535490313564424`13.61225693638851]& ,
+                 1.30570285232343596569168364673885207594`13.61225693638851]& ,
                 
                 TagBoxNote->
-                 "1.30570285232343590665687535490313564424`13.61225693638851"],
+                 "1.30570285232343596569168364673885207594`13.61225693638851"],
                StyleBox[
-               "1.30570285232343590665687535490313564424`13.61225693638851", {
+               "1.30570285232343596569168364673885207594`13.61225693638851", {
                 
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               1.30570285232343590665687535490313564424`13.61225693638851, {
+               1.30570285232343596569168364673885207594`13.61225693638851, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}}, {}}, {}}, {}}, {}}, {{{{{{}, {{{}, {}}, {}}, {{{}, \
@@ -5887,17 +5892,17 @@ Cell[BoxData[
                   72.1395505332833}}],
                 
                 StatusArea[#, 
-                 3.12745428707680414180582889605020113776`13.811130340657437]& ,
+                 3.12745428707680408277102060421448470606`13.811130340657437]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680414180582889605020113776`13.\
+                 "3.12745428707680408277102060421448470606`13.\
 811130340657437"],
                StyleBox[
-               "3.12745428707680414180582889605020113776`13.811130340657437", {
+               "3.12745428707680408277102060421448470606`13.811130340657437", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680414180582889605020113776`13.811130340657437, {
+               3.12745428707680408277102060421448470606`13.811130340657437, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -5938,7 +5943,7 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.7838098863268073, 3.516666666666667}, {
-                   0.8888042150826697, 4.5166666666666675`}, "RoundingRadius" -> 
+                   0.8888042150826695, 4.5166666666666675`}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
@@ -5946,17 +5951,17 @@ Cell[BoxData[
 -10.761570112927316`}}],
                 
                 StatusArea[#, 
-                 0.10499432875586249460514443043734900129`12.062356552589124]& ,
+                 0.10499432875586227977048395243464540272`12.062356552589124]& ,
                 
                 TagBoxNote->
-                 "0.10499432875586249460514443043734900129`12.\
+                 "0.10499432875586227977048395243464540272`12.\
 062356552589124"],
                StyleBox[
-               "0.10499432875586249460514443043734900129`12.062356552589124", {
+               "0.10499432875586227977048395243464540272`12.062356552589124", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               0.10499432875586249460514443043734900129`12.062356552589124, {
+               0.10499432875586227977048395243464540272`12.062356552589124, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -5971,7 +5976,7 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.7838098863268073, 4.616666666666667}, {
-                   3.9112641734036115`, 5.616666666666667}, "RoundingRadius" -> 
+                   3.911264173403612, 5.616666666666667}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
@@ -5979,17 +5984,17 @@ Cell[BoxData[
 -52.21213043603264}}],
                 
                 StatusArea[#, 
-                 3.12745428707680438960023541761223953017`13.604526305001055]& ,
+                 3.12745428707680453385333446680860447487`13.604526305001055]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680438960023541761223953017`13.\
+                 "3.12745428707680453385333446680860447487`13.\
 604526305001055"],
                StyleBox[
-               "3.12745428707680438960023541761223953017`13.604526305001055", {
+               "3.12745428707680453385333446680860447487`13.604526305001055", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680438960023541761223953017`13.604526305001055, {
+               3.12745428707680453385333446680860447487`13.604526305001055, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6012,17 +6017,17 @@ Cell[BoxData[
 -93.66269075913793}}],
                 
                 StatusArea[#, 
-                 1.3057028523234360609388444995904166035`13.342816912950287]& ,
+                 1.3057028523234361057706043318660249497`13.342816912950287]& ,
                 
                 TagBoxNote->
-                 "1.3057028523234360609388444995904166035`13.342816912950287"],
+                 "1.3057028523234361057706043318660249497`13.342816912950287"],
                StyleBox[
-               "1.3057028523234360609388444995904166035`13.342816912950287", {
+               "1.3057028523234361057706043318660249497`13.342816912950287", {
                 
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               1.3057028523234360609388444995904166035`13.342816912950287, {
+               1.3057028523234361057706043318660249497`13.342816912950287, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -6373,17 +6378,17 @@ Cell[BoxData[
                   72.13955053328331}}],
                 
                 StatusArea[#, 
-                 3.12745428707680414180582889605020113776`13.811130340657437]& ,
+                 3.12745428707680408277102060421448470606`13.811130340657437]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680414180582889605020113776`13.\
+                 "3.12745428707680408277102060421448470606`13.\
 811130340657437"],
                StyleBox[
-               "3.12745428707680414180582889605020113776`13.811130340657437", {
+               "3.12745428707680408277102060421448470606`13.811130340657437", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680414180582889605020113776`13.811130340657437, {
+               3.12745428707680408277102060421448470606`13.811130340657437, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6424,25 +6429,25 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.8918071000727313, 3.516666666666667}, {
-                   3.2379528698743227`, 4.5166666666666675`}, 
+                   3.2379528698743223`, 4.5166666666666675`}, 
                    "RoundingRadius" -> 0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
-                  244.64649886878965`}, {-49.44389767938672, \
+                  244.64649886878962`}, {-49.44389767938672, \
 -10.761570112927316`}}],
                 
                 StatusArea[#, 
-                 2.34614576980159115994397506232971295503`13.336858205215472]& ,
+                 2.34614576980159084097169591709430847004`13.33685820521548]& ,
                 
                 TagBoxNote->
-                 "2.34614576980159115994397506232971295503`13.\
-336858205215472"],
+                 "2.34614576980159084097169591709430847004`13.33685820521548"],
                StyleBox[
-               "2.34614576980159115994397506232971295503`13.336858205215472", {
+               "2.34614576980159084097169591709430847004`13.33685820521548", {
+                
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               2.34614576980159115994397506232971295503`13.336858205215472, {
+               2.34614576980159084097169591709430847004`13.33685820521548, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6457,24 +6462,25 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.8918071000727313, 4.616666666666667}, {
-                   2.583880708132108, 5.616666666666667}, "RoundingRadius" -> 
+                   2.5838807081321087`, 5.616666666666667}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
                   238.85985582781714`}, {-90.89445800249202, \
 -52.21213043603264}}],
                 StatusArea[#, 
-                 1.69207360805937653033381024014758509111`13.278090228327327]& ,
+                 1.692073608059377286619035657411203033`13.278090228327327]& ,
+                
                 
                 TagBoxNote->
-                 "1.69207360805937653033381024014758509111`13.\
-278090228327327"],
+                 "1.692073608059377286619035657411203033`13.278090228327327"],
+               
                StyleBox[
-               "1.69207360805937653033381024014758509111`13.278090228327327", {
+               "1.692073608059377286619035657411203033`13.278090228327327", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               1.69207360805937653033381024014758509111`13.278090228327327, {
+               1.692073608059377286619035657411203033`13.278090228327327, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6497,17 +6503,17 @@ Cell[BoxData[
 -93.66269075913793}}],
                 
                 StatusArea[#, 
-                 3.29568739353716701060478116991347974363`13.674929161634026]& ,
+                 3.29568739353716663351926557945503759584`13.674929161634026]& ,
                 
                 TagBoxNote->
-                 "3.29568739353716701060478116991347974363`13.\
+                 "3.29568739353716663351926557945503759584`13.\
 674929161634026"],
                StyleBox[
-               "3.29568739353716701060478116991347974363`13.674929161634026", {
+               "3.29568739353716663351926557945503759584`13.674929161634026", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.29568739353716701060478116991347974363`13.674929161634026, {
+               3.29568739353716663351926557945503759584`13.674929161634026, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -6857,17 +6863,17 @@ Cell[BoxData[
                   253.55453211893675`}, {33.45722296682389, 
                   72.13955053328326}}],
                 StatusArea[#, 
-                 3.12745428707680414180582889605020113776`13.811130340657437]& ,
+                 3.12745428707680408277102060421448470606`13.811130340657437]& ,
                 
                 TagBoxNote->
-                 "3.12745428707680414180582889605020113776`13.\
+                 "3.12745428707680408277102060421448470606`13.\
 811130340657437"],
                StyleBox[
-               "3.12745428707680414180582889605020113776`13.811130340657437", {
+               "3.12745428707680408277102060421448470606`13.811130340657437", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               3.12745428707680414180582889605020113776`13.811130340657437, {
+               3.12745428707680408277102060421448470606`13.811130340657437, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6908,7 +6914,7 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.8318098863268071, 3.516666666666667}, {
-                   0.8693679104836766, 4.5166666666666675`}, "RoundingRadius" -> 
+                   0.8693679104836771, 4.5166666666666675`}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
@@ -6916,17 +6922,17 @@ Cell[BoxData[
 -10.761570112927359`}}],
                 
                 StatusArea[#, 
-                 0.03755802415686953094888997362055249596`11.488553389250136]& ,
+                 0.03755802415687006746633502807242166454`11.488553389250153]& ,
                 
                 TagBoxNote->
-                 "0.03755802415686953094888997362055249596`11.\
-488553389250136"],
+                 "0.03755802415687006746633502807242166454`11.\
+488553389250153"],
                StyleBox[
-               "0.03755802415686953094888997362055249596`11.488553389250136", {
+               "0.03755802415687006746633502807242166454`11.488553389250153", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               0.03755802415686953094888997362055249596`11.488553389250136, {
+               0.03755802415687006746633502807242166454`11.488553389250153, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6941,7 +6947,7 @@ Cell[BoxData[
                     Opacity[0.66]}], {}, {}], 
                   
                   RectangleBox[{0.8318098863268071, 4.616666666666667}, {
-                   5.403699441790451, 5.616666666666667}, "RoundingRadius" -> 
+                   5.40369944179045, 5.616666666666667}, "RoundingRadius" -> 
                    0]},
                  
                  ImageSizeCache->{{222.88990825688072`, 
@@ -6949,17 +6955,17 @@ Cell[BoxData[
 -52.21213043603268}}],
                 
                 StatusArea[#, 
-                 4.57188955546364318336619719795876903845`13.652554324027044]& ,
+                 4.57188955546364232391913506869940420075`13.652554324027044]& ,
                 
                 TagBoxNote->
-                 "4.57188955546364318336619719795876903845`13.\
+                 "4.57188955546364232391913506869940420075`13.\
 652554324027044"],
                StyleBox[
-               "4.57188955546364318336619719795876903845`13.652554324027044", {
+               "4.57188955546364232391913506869940420075`13.652554324027044", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               4.57188955546364318336619719795876903845`13.652554324027044, {
+               4.57188955546364232391913506869940420075`13.652554324027044, {
                  GrayLevel[0]}], "Tooltip"]& ]}, 
             {RGBColor[0.5, 0, 0.5], EdgeForm[Opacity[0.7]], 
              TagBox[
@@ -6982,17 +6988,17 @@ Cell[BoxData[
 -93.66269075913797}}],
                 
                 StatusArea[#, 
-                 2.72445919177762198656747930081145625536`13.586414470417338]& ,
+                 2.72445919177762236967031694856444801189`13.586414470417338]& ,
                 
                 TagBoxNote->
-                 "2.72445919177762198656747930081145625536`13.\
+                 "2.72445919177762236967031694856444801189`13.\
 586414470417338"],
                StyleBox[
-               "2.72445919177762198656747930081145625536`13.586414470417338", {
+               "2.72445919177762236967031694856444801189`13.586414470417338", {
                  GrayLevel[0]}, StripOnInput -> False]],
               Annotation[#, 
                Style[
-               2.72445919177762198656747930081145625536`13.586414470417338, {
+               2.72445919177762236967031694856444801189`13.586414470417338, {
                  GrayLevel[0]}], 
                "Tooltip"]& ]}}}, {}, {}}, {}, {}}}, {}, {}}, {{{{{{{{}, {{{}, \
 {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}, {{{}, {}}, {}}}, \
@@ -7179,12 +7185,14 @@ Cell[BoxData[
     FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
     ImageSize->432,
     PlotRangePadding->None]}], "}"}]], "Output",
- CellChangeTimes->{3.522594205663007*^9}]
+ CellChangeTimes->{
+  3.522594205663007*^9, {3.522926049912489*^9, 3.5229260711601877`*^9}, 
+   3.522926200050288*^9, 3.5229272793988943`*^9}]
 }, Open  ]]
 },
 CellGrouping->Manual,
-WindowSize->{1768, 1549},
-WindowMargins->{{3, Automatic}, {0, Automatic}},
+WindowSize->{1440, 852},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 ShowSelection->True,
 FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (February 23, \
 2011)",
@@ -7208,189 +7216,191 @@ Cell[766, 25, 443, 10, 27, "Input"],
 Cell[1212, 37, 507, 12, 27, "Input"],
 Cell[CellGroupData[{
 Cell[1744, 53, 320, 9, 27, "Input"],
-Cell[2067, 64, 883, 16, 70, "Message"]
+Cell[2067, 64, 905, 16, 70, "Message"]
 }, Open  ]],
-Cell[2965, 83, 710, 11, 43, "Subsubtitle"],
-Cell[3678, 96, 328, 8, 27, "Input"]
+Cell[2987, 83, 710, 11, 43, "Subsubtitle"],
+Cell[3700, 96, 328, 8, 27, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[4043, 109, 174, 2, 37, "Section"],
-Cell[4220, 113, 406, 9, 26, "Subsubtitle"],
-Cell[4629, 124, 8744, 189, 562, "Input"],
+Cell[4065, 109, 174, 2, 37, "Section"],
+Cell[4242, 113, 406, 9, 26, "Subsubtitle"],
+Cell[4651, 124, 8744, 189, 562, "Input"],
 Cell[CellGroupData[{
-Cell[13398, 317, 133, 1, 26, "Subsubtitle"],
-Cell[13534, 320, 3462, 86, 208, "Input"]
+Cell[13420, 317, 133, 1, 26, "Subsubtitle"],
+Cell[13556, 320, 3462, 86, 208, "Input"]
 }, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[17045, 412, 133, 2, 37, "Section"],
-Cell[17181, 416, 4094, 95, 283, "Input"]
+Cell[17067, 412, 133, 2, 37, "Section"],
+Cell[17203, 416, 4094, 95, 283, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[21312, 516, 168, 2, 37, "Section"],
-Cell[21483, 520, 534, 11, 60, "Subsubtitle"],
-Cell[22020, 533, 1846, 46, 178, "Input"],
-Cell[23869, 581, 3012, 78, 133, "Input"],
-Cell[26884, 661, 1664, 43, 163, "Input"],
-Cell[28551, 706, 1854, 48, 103, "Input"],
-Cell[30408, 756, 1523, 30, 88, "Input"]
+Cell[21334, 516, 168, 2, 37, "Section"],
+Cell[21505, 520, 534, 11, 60, "Subsubtitle"],
+Cell[22042, 533, 1846, 46, 178, "Input"],
+Cell[23891, 581, 3012, 78, 133, "Input"],
+Cell[26906, 661, 1664, 43, 163, "Input"],
+Cell[28573, 706, 1854, 48, 103, "Input"],
+Cell[30430, 756, 1523, 30, 88, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[31968, 791, 115, 1, 37, "Section"],
-Cell[32086, 794, 233, 5, 26, "Subsubtitle"],
-Cell[32322, 801, 22196, 466, 1078, "Input"]
+Cell[31990, 791, 115, 1, 37, "Section"],
+Cell[32108, 794, 233, 5, 26, "Subsubtitle"],
+Cell[32344, 801, 22196, 466, 1078, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[54555, 1272, 145, 2, 37, "Section"],
-Cell[54703, 1276, 6203, 140, 430, "Input"]
+Cell[54577, 1272, 145, 2, 37, "Section"],
+Cell[54725, 1276, 6203, 140, 430, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[60943, 1421, 129, 2, 37, "Section"],
-Cell[61075, 1425, 2234, 51, 193, "Input"],
-Cell[63312, 1478, 4323, 100, 238, "Input"],
-Cell[67638, 1580, 3081, 71, 208, "Input"]
+Cell[60965, 1421, 129, 2, 37, "Section"],
+Cell[61097, 1425, 2234, 51, 193, "Input"],
+Cell[63334, 1478, 4323, 100, 238, "Input"],
+Cell[67660, 1580, 3081, 71, 208, "Input"]
 }, Closed]],
-Cell[70734, 1654, 225, 3, 37, "Section"],
-Cell[70962, 1659, 690, 14, 26, "Subsubtitle"],
-Cell[71655, 1675, 1531, 23, 27, "Input"],
-Cell[73189, 1700, 736, 15, 26, "Subsubtitle"],
+Cell[70756, 1654, 225, 3, 37, "Section"],
+Cell[70984, 1659, 690, 14, 26, "Subsubtitle"],
+Cell[71677, 1675, 1531, 23, 27, "Input"],
+Cell[73211, 1700, 736, 15, 26, "Subsubtitle"],
 Cell[CellGroupData[{
-Cell[73950, 1719, 296, 5, 27, "Input"],
-Cell[74249, 1726, 821, 15, 27, "Output"]
+Cell[73972, 1719, 296, 5, 27, "Input"],
+Cell[74271, 1726, 821, 15, 27, "Output"]
 }, Open  ]],
-Cell[75085, 1744, 748, 15, 26, "Subsubtitle"],
-Cell[75836, 1761, 1750, 27, 27, "Input"],
-Cell[77589, 1790, 716, 14, 26, "Subsubtitle"],
-Cell[78308, 1806, 949, 21, 58, "Input"],
-Cell[79260, 1829, 1023, 17, 26, "Subsubtitle"],
-Cell[80286, 1848, 3870, 78, 223, "Input"],
-Cell[84159, 1928, 6376, 134, 343, "Input"],
-Cell[90538, 2064, 802, 12, 26, "Subsubtitle"],
-Cell[91343, 2078, 1480, 25, 27, "Input"],
-Cell[92826, 2105, 270, 5, 27, "Input"],
-Cell[93099, 2112, 430, 8, 27, "Input"],
-Cell[93532, 2122, 610, 11, 26, "Subsubtitle"],
-Cell[94145, 2135, 1167, 28, 103, "Input"],
-Cell[95315, 2165, 799, 18, 26, "Subsubtitle"],
-Cell[96117, 2185, 3064, 53, 88, "Input"],
-Cell[99184, 2240, 3104, 53, 73, "Input"],
-Cell[102291, 2295, 711, 12, 26, "Subsubtitle"],
-Cell[103005, 2309, 3450, 85, 193, "Input"],
-Cell[106458, 2396, 713, 12, 26, "Subsubtitle"],
+Cell[75107, 1744, 748, 15, 26, "Subsubtitle"],
+Cell[75858, 1761, 1750, 27, 27, "Input"],
+Cell[77611, 1790, 716, 14, 26, "Subsubtitle"],
+Cell[78330, 1806, 949, 21, 58, "Input"],
+Cell[79282, 1829, 1023, 17, 43, "Subsubtitle"],
+Cell[80308, 1848, 3870, 78, 223, "Input"],
+Cell[84181, 1928, 6376, 134, 343, "Input"],
+Cell[90560, 2064, 802, 12, 26, "Subsubtitle"],
+Cell[91365, 2078, 1480, 25, 27, "Input"],
+Cell[92848, 2105, 270, 5, 27, "Input"],
+Cell[93121, 2112, 430, 8, 27, "Input"],
+Cell[93554, 2122, 610, 11, 26, "Subsubtitle"],
+Cell[94167, 2135, 1167, 28, 103, "Input"],
+Cell[95337, 2165, 799, 18, 26, "Subsubtitle"],
+Cell[96139, 2185, 3064, 53, 88, "Input"],
+Cell[99206, 2240, 3104, 53, 73, "Input"],
+Cell[102313, 2295, 711, 12, 26, "Subsubtitle"],
+Cell[103027, 2309, 3450, 85, 193, "Input"],
+Cell[106480, 2396, 713, 12, 26, "Subsubtitle"],
 Cell[CellGroupData[{
-Cell[107196, 2412, 1040, 19, 43, "Input"],
-Cell[108239, 2433, 417, 10, 23, "Message"],
-Cell[108659, 2445, 420, 10, 23, "Message"]
+Cell[107218, 2412, 1040, 19, 43, "Input"],
+Cell[108261, 2433, 418, 10, 23, "Message"],
+Cell[108682, 2445, 418, 10, 23, "Message"]
 }, Open  ]],
-Cell[109094, 2458, 1008, 20, 26, "Subsubtitle"],
-Cell[110105, 2480, 3872, 66, 88, "Input"],
+Cell[109115, 2458, 1008, 20, 26, "Subsubtitle"],
+Cell[110126, 2480, 3872, 66, 88, "Input"],
 Cell[CellGroupData[{
-Cell[114002, 2550, 1424, 22, 27, "Input"],
-Cell[115429, 2574, 118, 2, 20, "Print"],
-Cell[115550, 2578, 118, 2, 20, "Print"],
-Cell[115671, 2582, 120, 2, 20, "Print"],
-Cell[115794, 2586, 120, 2, 20, "Print"],
-Cell[115917, 2590, 120, 2, 20, "Print"],
-Cell[116040, 2594, 118, 2, 20, "Print"],
-Cell[116161, 2598, 118, 2, 20, "Print"],
-Cell[116282, 2602, 118, 2, 20, "Print"],
-Cell[116403, 2606, 120, 2, 20, "Print"],
-Cell[116526, 2610, 118, 2, 20, "Print"],
-Cell[116647, 2614, 118, 2, 20, "Print"],
-Cell[116768, 2618, 118, 2, 20, "Print"],
-Cell[116889, 2622, 118, 2, 20, "Print"],
-Cell[117010, 2626, 120, 2, 20, "Print"],
-Cell[117133, 2630, 118, 2, 20, "Print"],
-Cell[117254, 2634, 118, 2, 20, "Print"],
-Cell[117375, 2638, 117, 2, 20, "Print"],
-Cell[117495, 2642, 120, 2, 20, "Print"],
-Cell[117618, 2646, 120, 2, 20, "Print"],
-Cell[117741, 2650, 118, 2, 20, "Print"],
-Cell[117862, 2654, 118, 2, 20, "Print"],
-Cell[117983, 2658, 118, 2, 20, "Print"],
-Cell[118104, 2662, 118, 2, 20, "Print"],
-Cell[118225, 2666, 118, 2, 20, "Print"],
-Cell[118346, 2670, 120, 2, 20, "Print"],
-Cell[118469, 2674, 118, 2, 20, "Print"],
-Cell[118590, 2678, 120, 2, 20, "Print"],
-Cell[118713, 2682, 118, 2, 20, "Print"],
-Cell[118834, 2686, 118, 2, 20, "Print"],
-Cell[118955, 2690, 118, 2, 20, "Print"],
-Cell[119076, 2694, 118, 2, 20, "Print"],
-Cell[119197, 2698, 118, 2, 20, "Print"],
-Cell[119318, 2702, 120, 2, 20, "Print"],
-Cell[119441, 2706, 120, 2, 20, "Print"],
-Cell[119564, 2710, 118, 2, 20, "Print"],
-Cell[119685, 2714, 120, 2, 20, "Print"],
-Cell[119808, 2718, 120, 2, 20, "Print"],
-Cell[119931, 2722, 120, 2, 20, "Print"],
-Cell[120054, 2726, 120, 2, 20, "Print"],
-Cell[120177, 2730, 118, 2, 20, "Print"],
-Cell[120298, 2734, 120, 2, 20, "Print"],
-Cell[120421, 2738, 118, 2, 20, "Print"]
+Cell[114023, 2550, 1424, 22, 27, "Input"],
+Cell[115450, 2574, 118, 2, 20, "Print"],
+Cell[115571, 2578, 118, 2, 20, "Print"],
+Cell[115692, 2582, 118, 2, 20, "Print"],
+Cell[115813, 2586, 118, 2, 20, "Print"],
+Cell[115934, 2590, 118, 2, 20, "Print"],
+Cell[116055, 2594, 118, 2, 20, "Print"],
+Cell[116176, 2598, 118, 2, 20, "Print"],
+Cell[116297, 2602, 118, 2, 20, "Print"],
+Cell[116418, 2606, 118, 2, 20, "Print"],
+Cell[116539, 2610, 118, 2, 20, "Print"],
+Cell[116660, 2614, 118, 2, 20, "Print"],
+Cell[116781, 2618, 118, 2, 20, "Print"],
+Cell[116902, 2622, 118, 2, 20, "Print"],
+Cell[117023, 2626, 118, 2, 20, "Print"],
+Cell[117144, 2630, 118, 2, 20, "Print"],
+Cell[117265, 2634, 118, 2, 20, "Print"],
+Cell[117386, 2638, 118, 2, 20, "Print"],
+Cell[117507, 2642, 120, 2, 20, "Print"],
+Cell[117630, 2646, 120, 2, 20, "Print"],
+Cell[117753, 2650, 118, 2, 20, "Print"],
+Cell[117874, 2654, 118, 2, 20, "Print"],
+Cell[117995, 2658, 118, 2, 20, "Print"],
+Cell[118116, 2662, 118, 2, 20, "Print"],
+Cell[118237, 2666, 118, 2, 20, "Print"],
+Cell[118358, 2670, 120, 2, 20, "Print"],
+Cell[118481, 2674, 118, 2, 20, "Print"],
+Cell[118602, 2678, 118, 2, 20, "Print"],
+Cell[118723, 2682, 118, 2, 20, "Print"],
+Cell[118844, 2686, 120, 2, 20, "Print"],
+Cell[118967, 2690, 117, 2, 20, "Print"],
+Cell[119087, 2694, 120, 2, 20, "Print"],
+Cell[119210, 2698, 118, 2, 20, "Print"],
+Cell[119331, 2702, 118, 2, 20, "Print"],
+Cell[119452, 2706, 118, 2, 20, "Print"],
+Cell[119573, 2710, 120, 2, 20, "Print"],
+Cell[119696, 2714, 120, 2, 20, "Print"],
+Cell[119819, 2718, 118, 2, 20, "Print"],
+Cell[119940, 2722, 118, 2, 20, "Print"],
+Cell[120061, 2726, 118, 2, 20, "Print"],
+Cell[120182, 2730, 118, 2, 20, "Print"],
+Cell[120303, 2734, 118, 2, 20, "Print"],
+Cell[120424, 2738, 118, 2, 20, "Print"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[120576, 2745, 1428, 22, 27, "Input"],
-Cell[122007, 2769, 118, 2, 20, "Print"],
-Cell[122128, 2773, 118, 2, 20, "Print"],
-Cell[122249, 2777, 118, 2, 20, "Print"],
-Cell[122370, 2781, 120, 2, 20, "Print"],
-Cell[122493, 2785, 118, 2, 20, "Print"],
-Cell[122614, 2789, 120, 2, 20, "Print"],
-Cell[122737, 2793, 118, 2, 20, "Print"],
-Cell[122858, 2797, 118, 2, 20, "Print"],
-Cell[122979, 2801, 118, 2, 20, "Print"],
-Cell[123100, 2805, 118, 2, 20, "Print"],
-Cell[123221, 2809, 118, 2, 20, "Print"],
-Cell[123342, 2813, 118, 2, 20, "Print"],
-Cell[123463, 2817, 118, 2, 20, "Print"],
-Cell[123584, 2821, 118, 2, 20, "Print"],
-Cell[123705, 2825, 118, 2, 20, "Print"],
-Cell[123826, 2829, 118, 2, 20, "Print"],
-Cell[123947, 2833, 118, 2, 20, "Print"],
-Cell[124068, 2837, 120, 2, 20, "Print"],
-Cell[124191, 2841, 118, 2, 20, "Print"],
-Cell[124312, 2845, 118, 2, 20, "Print"],
-Cell[124433, 2849, 117, 2, 20, "Print"],
-Cell[124553, 2853, 118, 2, 20, "Print"],
-Cell[124674, 2857, 120, 2, 20, "Print"],
-Cell[124797, 2861, 118, 2, 20, "Print"],
-Cell[124918, 2865, 118, 2, 20, "Print"],
-Cell[125039, 2869, 117, 2, 20, "Print"],
-Cell[125159, 2873, 118, 2, 20, "Print"],
-Cell[125280, 2877, 118, 2, 20, "Print"],
-Cell[125401, 2881, 118, 2, 20, "Print"],
-Cell[125522, 2885, 120, 2, 20, "Print"],
-Cell[125645, 2889, 118, 2, 20, "Print"],
-Cell[125766, 2893, 120, 2, 20, "Print"],
-Cell[125889, 2897, 118, 2, 20, "Print"],
-Cell[126010, 2901, 118, 2, 20, "Print"],
-Cell[126131, 2905, 118, 2, 20, "Print"],
-Cell[126252, 2909, 118, 2, 20, "Print"],
-Cell[126373, 2913, 118, 2, 20, "Print"],
-Cell[126494, 2917, 118, 2, 20, "Print"],
-Cell[126615, 2921, 118, 2, 20, "Print"],
-Cell[126736, 2925, 117, 2, 20, "Print"],
-Cell[126856, 2929, 118, 2, 20, "Print"],
-Cell[126977, 2933, 118, 2, 20, "Print"]
+Cell[120579, 2745, 1428, 22, 27, "Input"],
+Cell[122010, 2769, 118, 2, 20, "Print"],
+Cell[122131, 2773, 118, 2, 20, "Print"],
+Cell[122252, 2777, 120, 2, 20, "Print"],
+Cell[122375, 2781, 118, 2, 20, "Print"],
+Cell[122496, 2785, 118, 2, 20, "Print"],
+Cell[122617, 2789, 120, 2, 20, "Print"],
+Cell[122740, 2793, 118, 2, 20, "Print"],
+Cell[122861, 2797, 117, 2, 20, "Print"],
+Cell[122981, 2801, 118, 2, 20, "Print"],
+Cell[123102, 2805, 118, 2, 20, "Print"],
+Cell[123223, 2809, 118, 2, 20, "Print"],
+Cell[123344, 2813, 120, 2, 20, "Print"],
+Cell[123467, 2817, 118, 2, 20, "Print"],
+Cell[123588, 2821, 118, 2, 20, "Print"],
+Cell[123709, 2825, 118, 2, 20, "Print"],
+Cell[123830, 2829, 118, 2, 20, "Print"],
+Cell[123951, 2833, 118, 2, 20, "Print"],
+Cell[124072, 2837, 118, 2, 20, "Print"],
+Cell[124193, 2841, 118, 2, 20, "Print"],
+Cell[124314, 2845, 117, 2, 20, "Print"],
+Cell[124434, 2849, 118, 2, 20, "Print"],
+Cell[124555, 2853, 118, 2, 20, "Print"],
+Cell[124676, 2857, 118, 2, 20, "Print"],
+Cell[124797, 2861, 120, 2, 20, "Print"],
+Cell[124920, 2865, 117, 2, 20, "Print"],
+Cell[125040, 2869, 118, 2, 20, "Print"],
+Cell[125161, 2873, 118, 2, 20, "Print"],
+Cell[125282, 2877, 120, 2, 20, "Print"],
+Cell[125405, 2881, 120, 2, 20, "Print"],
+Cell[125528, 2885, 118, 2, 20, "Print"],
+Cell[125649, 2889, 118, 2, 20, "Print"],
+Cell[125770, 2893, 117, 2, 20, "Print"],
+Cell[125890, 2897, 118, 2, 20, "Print"],
+Cell[126011, 2901, 120, 2, 20, "Print"],
+Cell[126134, 2905, 117, 2, 20, "Print"],
+Cell[126254, 2909, 120, 2, 20, "Print"],
+Cell[126377, 2913, 118, 2, 20, "Print"],
+Cell[126498, 2917, 118, 2, 20, "Print"],
+Cell[126619, 2921, 118, 2, 20, "Print"],
+Cell[126740, 2925, 118, 2, 20, "Print"],
+Cell[126861, 2929, 118, 2, 20, "Print"]
 }, Open  ]],
-Cell[127110, 2938, 296, 7, 27, "Input"],
-Cell[127409, 2947, 220, 3, 34, "Subsection"],
-Cell[127632, 2952, 1381, 27, 67, "Input"],
-Cell[129016, 2981, 298, 6, 27, "Input"],
-Cell[129317, 2989, 177, 2, 34, "Subsection"],
-Cell[129497, 2993, 648, 14, 21, "Input"],
-Cell[130148, 3009, 2244, 44, 73, "Input"],
-Cell[132395, 3055, 457, 8, 27, "Input"],
-Cell[132855, 3065, 483, 9, 27, "Input"],
+Cell[126994, 2934, 296, 7, 27, "Input"],
+Cell[127293, 2943, 220, 3, 34, "Subsection"],
+Cell[127516, 2948, 1381, 27, 67, "Input"],
+Cell[128900, 2977, 298, 6, 27, "Input"],
+Cell[129201, 2985, 177, 2, 34, "Subsection"],
+Cell[129381, 2989, 648, 14, 21, "Input"],
+Cell[130032, 3005, 2244, 44, 73, "Input"],
+Cell[132279, 3051, 457, 8, 27, "Input"],
 Cell[CellGroupData[{
-Cell[133363, 3078, 1087, 21, 27, "Input"],
-Cell[134453, 3101, 21098, 527, 468, "Output"]
+Cell[132761, 3063, 483, 9, 27, "Input"],
+Cell[133247, 3074, 120, 2, 20, "Print"]
 }, Open  ]],
-Cell[155566, 3631, 255, 3, 34, "Subsection"],
 Cell[CellGroupData[{
-Cell[155846, 3638, 2064, 38, 21, "Input"],
-Cell[157913, 3678, 162089, 3503, 923, "Output"]
+Cell[133404, 3081, 1087, 21, 27, "Input"],
+Cell[134494, 3104, 21098, 527, 468, "Output"]
+}, Open  ]],
+Cell[155607, 3634, 255, 3, 34, "Subsection"],
+Cell[CellGroupData[{
+Cell[155887, 3641, 2197, 40, 21, "Input"],
+Cell[158087, 3683, 162212, 3506, 1233, "Output"]
 }, Open  ]]
 }
 ]
