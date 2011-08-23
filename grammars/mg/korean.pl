@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   File   : korean.pl
 %   Author : Jiwon Yun
-%   Last Updated: August 9, 2011
+%   Last Updated: August 23, 2011
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % With this grammar, you can parse the followings:
@@ -56,6 +56,7 @@
 [silhehanta]::[='Case',+acc,'V-Decl'].	% hate
 [kongkyekhayssta]::[='Case',+acc,'V-Decl'].	% attacked
 [hyeppakhayssta]::[='Case',+acc,'V-Decl'].	% threatened
+[koylophyessta]::[='Case',+acc,'V-Decl'].	% troubled
 [ttaylyessta]::[='Case',+acc,'V-Decl'].	% beat
 
 % adnominal forms of predicates
