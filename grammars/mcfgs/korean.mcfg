@@ -177,6 +177,7 @@ t41 --> t8 t47 [0,0][0,1][0,2][1,0;1,1;1,2] (* r3' *)
 t8 --> E t8_tmp2 [0,0][1,0][1,1]
 t8_tmp2 --> t8_tmp1 E [0,0][1,0]
 t8_tmp1 --> "ttaylyessta"
+t8_tmp1 --> "koylophyessta"
 t8_tmp1 --> "hyeppakhayssta"
 t8_tmp1 --> "kongkyekhayssta"
 t8_tmp1 --> "silhehanta"
