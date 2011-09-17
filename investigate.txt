@@ -1,0 +1,459 @@
+Friday September 9th
+
+considering just the basic declarative constructions in the Korean grammar, what if we zeroed out all but the declaratives?
+
+
+   ./train grammars/mcfgs/koreanabs.mcfg koreanabsdecl.train > grammars/wmcfg/koreanabsdecl.wmcfg
+   ../guillaumin/hmg2mcfg/hmg2mcfg -pl grammars/mg/koreanabs.pl -dict koreanabs.dict
+
+
+this grammar only uses these categories
+
+set result=`egrep -o 't[0-9]+ ' grammars/wmcfg/*absdecl* | sort | uniq`
+foreach cat ( $result )
+foreach? grep "$cat " koreanabs.dict
+foreach? end
+
+t0 : (:: N)
+t11 : (:: =V-Decl =Case v-Decl)
+t131 : (: T-Decl)
+t148 : (: C-Decl)
+t15 : (:: =v-Decl +nom T-Decl)
+t18 : (:: =T-Decl C-Decl)
+t2 : (:: =N D -f)
+t29 : (: D -f)
+t3 : (:: =D +f Case -nom)
+t32 : (: +f Case -acc;: -f)
+t33 : (: +f Case -nom;: -f)
+t4 : (:: =D +f Case -acc)
+t40 : (: +acc V-Decl;: -acc)
+t42 : (: Case -nom)
+t43 : (: Case -acc)
+t46 : (: V-Decl)
+t5 : (:: Case -nom)
+t58 : (: =Case v-Decl)
+t6 : (:: Case -acc)
+t7 : (:: =Case +acc V-Decl)
+t77 : (: v-Decl;: -nom)
+t86 : (: +nom T-Decl;: -nom
+
+
+consider the parse trees from the prolog system (parsing/mgcky-swi/setup.pl modified)
+the correct header to make latex pictures is:
+      \documentclass{article}
+      \usepackage[landscape]{geometry}
+      \usepackage{epic,eepicemu}
+      \pagestyle{empty}
+      \bigskip\bigskip
+      \tiny
+      \hspace{-3cm}\setlength{\unitlength}{0.22mm}\begin{picture}(........
+
+
+korean(1) vs korean(5) is the distinction between pro- (ie absent) subject and pro-object declarative sentences.
+in korean(1),  t77, the declarative little v with an as-yet-unmoved Nom feature
+    can rewrite with first daughter t58 but second dtr either
+	t5   => a lexical ie pro, nominative CaseP
+	     44/46 times (shown in red)
+	t42  => a derived ie actually present nominative CaseP
+	     2/46 times (shown in blue)
+
+
+the initial entropy on the koreanabsdecl grammar (ie the one specialized to just those 22 categories)
+is 0.51 bits. 
+
+It doesn't matter whether you calculate it oldStyle or newStyle since --- in the absence of any prefix string --- there is no renormalization to be done.
+
+korean(1) 44 Noun Acc Vdecl
+korean(5) 2  Noun Nom Vdecl
+
+
+at the first prefix, the oldStyle method yields a higher entropy of 1.129 bits. So no Reduction is accorded.
+by contrast, the newStyle method does derive some entropy reduction, down to 0.27 bits. why is this?
+
+
+after the first word, we're down to two decisions on newStyle.
+
+Decision "A":   rewrite t40 so that the second dtr is derived (t43, implying overt) or lexical (t6, implying pro)
+
+Binary	0.0434782608695652	(: +acc V-Decl;: -acc)_1-1_1-1_1-1_1-1	(:: =Case +acc V-Decl)_1-1_1-1_1-1	(:: Case -acc)_1-1_1-1_1-1
+Binary	0.956521739130435	(: +acc V-Decl;: -acc)_1-1_1-1_1-1_1-1	(:: =Case +acc V-Decl)_1-1_1-1_1-1	(: Case -acc)_1-1_1-1_1-1
+
+
+Decision "B":  is the Noun we've seen the _complement_ of TP or the _specifier_ of TP ?
+
+Binary	0.0453648915187377	(: C-Decl)_eps_eps_0-1	(:: =T-Decl C-Decl)_eps_eps_eps	(: T-Decl)_0-1_1-1_1-1
+Binary	0.954635108481262	(: C-Decl)_eps_eps_0-1	(:: =T-Decl C-Decl)_eps_eps_eps	(: T-Decl)_eps_eps_0-1
+
+
+Decision "B" is weighted equiprobably on oldStyle, but it inherits the weights of decision "A" under newStyle.
+
+the first of these rules, in which the observed Noun is in the specifier of TP, is the derivation corresponding to korean(5), the very rare pro-object sentence.
+   	    	                 (: T-Decl)_0-1_1-1_1-1	     	 	      	         t131
+rewrites unarily as    (: +nom T-Decl;: -nom)_1-1_1-1_1-1_0-1     t86     ---> ie this Noun spanning 0-1 
+rewrites binarily as   (:: =v-Decl +nom T-Decl)_1-1_1-1_1-1	(: v-Decl;: -nom)_1-1_1-1_1-1_0-1           ie t15 and t77
+
+
+
+the second of these rules, in which the observed Noun is in the complement of TP, is the derivation corresponding to korean(1), the more common pro-subject sentence.
+
+
+This distinction seems like it would obtain no matter how we encode empty categories.
+it gets down to whether the empty tense morpheme is in the future or the past:
+
+(:: =v-Decl +nom T-Decl)_eps_eps_eps	E_eps
+(:: =v-Decl +nom T-Decl)_1-1_1-1_1-1	E_1-1
+
+
+how v-Decl; : -nom divides up the string
+
+      (: v-Decl;: -nom)_eps_eps_0-1_eps
+      (: v-Decl;: -nom)_1-1_1-1_1-1_0-1
+
+
+
+why do both of these end up as the same parent category (: C-Decl) if only the second has _eps_eps_0-1?
+Q. could these be collapsed further?
+A. No, 1-1 doesn't unify with 0-1. 
+
+(: C-Decl)_eps_eps_0-1	(:: =T-Decl C-Decl)_eps_eps_eps	(: T-Decl)_0-1_1-1_1-1
+(: C-Decl)_eps_eps_0-1	(:: =T-Decl C-Decl)_eps_eps_eps	(: T-Decl)_eps_eps_0-1
+
+
+
+
+simple.pl presents a simplified version of this issue. parsing just the intial noun
+
+	  ./mcfg_nt grammars/wmcfg/simple.wmcfg -p "noun" | sed -e 's/\" \"/EMPTY/'
+
+as expected, we get
+
+In[105]:= newStyle["/tmp/noun.chart"]
+Out[105]= 0.27807605445714
+In[106]:= oldStyle["/tmp/noun.chart"]
+Out[106]= 1.12901
+
+which reflect these rules, which would be weighted equiprobably on the oldStyle grammar
+
+      0.04536489151873767	S_0-1	(: t)_0-1_1-1_1-1
+      0.954635108481262		S_0-1	(: t)_eps_eps_0-1
+
+should these have been unified together in a more perfect parser? No, 1-1 doesn't unify with 0-1. 
+
+
+
+
+Sat Sep 10 11:19:56 EDT 2011
+
+are the entropy values newStyle always equal-or-lower? 
+    keenanabs:  yes
+    keenanhawkins: no. in a lot of cases the conditional entropy values are higher
+
+
+are the divergences in weighting between Global and Local always:
+    equiprobable on local
+and
+    skewed on global
+?
+
+
+On the LocalNormalization method, if two situated rules differ solely in the way that they divide up the string --- in other words, they are Instances of the same unsituated rule --- then they will be weighted equiprobably. Whereas on GlobalNormalization, they will inherit any weight-differences introduced by children, or assume the same weight-difference if they are mutually accessible.
+
+
+
+koreanabs1-1   yes it sure looks that way.  on case where local has exactly the unconditioned weighting
+      526 / 1038     t174 --> t25 t163 [0,0][0,1][0,2;1,0;1,1;1,2][1,3]
+      512 / 1038     t174 --> t23 t171 [0,0][0,1][0,2;1,0;1,1;1,2][1,3]
+                         and global is different, but within a thousandth: 0.504379 vs 0.495621
+
+koreanabs1-2   yes, I'm seeing a lot of 0.5s but also unconditioned weights that are slightly different
+   for instance
+   0.562272	t174_2-2_2-2_2-2_0-2	t25_2-2_2-2_2-2,t163_2-2_2-2_2-2_0-2
+   0.437728	t174_2-2_2-2_2-2_0-2 	t23_2-2_2-2_2-2,t171_2-2_2-2_2-2_0-2
+
+decide between fact-clause and relative CP
+   Binary	0.562271578929287	(: +epp D -f;: -epp)_2-2_2-2_2-2_0-2	(:: =N-Dep +epp D -f)_2-2_2-2_2-2	(: N-Dep;: -epp)_2-2_2-2_2-2_0-2
+   Binary	0.437728421070713	(: +epp D -f;: -epp)_2-2_2-2_2-2_0-2	(:: =C-Rel +epp D -f)_2-2_2-2_2-2	(: C-Rel;: -epp)_2-2_2-2_2-2_0-2
+
+
+koreanabs1-3   no differences (end of sentence)
+
+
+
+koreanabs2-1 
+		this was halfandhalf on local renormalization:
+
+      Binary,	0.00959605,	t158_1-1_1-1_1-1_0-1,	t27_1-1_1-1_1-1,t129_0-1_1-1_1-1
+      Binary,	0.990404,	t158_1-1_1-1_1-1_0-1,	t27_1-1_1-1_1-1,t129_eps_eps_0-1
+
+Binary	0.00959605357735769	(: C-Emb;: -epp)_1-1_1-1_1-1_0-1	(:: =T-Emb C-Emb)_1-1_1-1_1-1	(: T-Emb -epp)_0-1_1-1_1-1
+Binary	0.990403946422642	(: C-Emb;: -epp)_1-1_1-1_1-1_0-1	(:: =T-Emb C-Emb)_1-1_1-1_1-1	(: T-Emb -epp)_eps_eps_0-1
+
+ again a specifier/complement ambiguity in the second daughter,  T-Emb -epp.
+
+koreanabs2-2  again equiprobable on local, skewed on global
+koreanabs2-3 at the Vadj, global and local derive the same conditional Entropy; no differences between their charts
+koreanabs2-4  again equiprobable on local, skewed on global
+koreanabs2-5  same pattern, here the specifier/complement decision is extreme
+	      0.990674,	     S_0-5, t148_0-3_eps_3-5
+	      0.00932551,   S_0-5, t148_0-5_5-5_5-5
+
+             [ senator ACC attack.ADV ]_{C-Decl}  reporter NOM  99%
+as opposed to
+   	   [ senator ACC attack.ADV  reporter NOM ]_{C-Decl}  1%
+koreanabs2-6  both methods derive the same result
+
+
+
+koreanabs3-1  same issue as with other noun-initial sentences, where the noun could either be part of the SPECIFIER or the COMPLEMENT of an embedded Tense phrase 
+      Binary,0.00959605,  t158_1-1_1-1_1-1_0-1,  t27_1-1_1-1_1-1,  t129_0-1_1-1_1-1
+      Binary,0.990404,	t158_1-1_1-1_1-1_0-1,  t27_1-1_1-1_1-1,  t129_eps_eps_0-1
+
+      0.00959605357735769	(: C-Emb;: -epp)_1-1_1-1_1-1_0-1	(:: =T-Emb C-Emb)_1-1_1-1_1-1	(: T-Emb -epp)_0-1_1-1_1-1
+      0.990403946422642	(: C-Emb;: -epp)_1-1_1-1_1-1_0-1	(:: =T-Emb C-Emb)_1-1_1-1_1-1	(: T-Emb -epp)_eps_eps_0-1
+
+
+
+koreanabs3-2 again equiprobable on local, skewed on global
+
+why are these unbalanced?
+
+Binary,0.787258,t38_2-2_2-2_2-2_0-2,t8_2-2_2-2_2-2,t43_0-1_1-2_2-2
+Binary,0.212742,t38_2-2_2-2_2-2_0-2,t8_2-2_2-2_2-2,t43_0-2_2-2_2-2
+
+
+Binary,0.787258,t36_2-2_2-2_2-2_0-2,t9_2-2_2-2_2-2,t43_0-1_1-2_2-2
+Binary,0.212742,t36_2-2_2-2_2-2_0-2,t9_2-2_2-2_2-2,t43_0-2_2-2_2-2
+
+they all involve a derived casemarked element:
+     	 t43 , "(: Case -acc)"
+
+the question is, is it this one
+    	     	 t43_0-1_1-2_2-2    inside prob = 0.7598
+or this one
+		 t43_0-2_2-2_2-2    inside prob = 0.2053
+
+these inside probs only add up to 0.95, but are scaled up to 78.7 and 21.2, respectively, at their ancestors, t38 and t36.
+
+ie is the accusative marker I just saw as the second token actually my head, or is my head yet to come? the weight is on the first possibility.
+both situated versions of t8 and t9 have Z=1. 
+
+koreanabs3-3 again equiprobable on local, skewed on global
+
+koreanabs3-4 at "fact", same pattern
+
+here's an interesting one
+Binary,0.761035,t32_4-4_4-4_4-4_0-4,t4_4-4_4-4_4-4,t29_0-3_eps_3-4
+Binary,0.238965,t32_4-4_4-4_4-4_0-4,t4_4-4_4-4_4-4,t29_0-4_4-4_4-4
+
+	t29_0-3_eps_3-4    inside prob = 0.09
+vs
+	t29_0-4_4-4_4-4   inside prob = 0.02
+
+t29 , "(: D -f)"   this entirely reflects the inside prob.
+
+koreanabs3-5 at Nom 
+
+we have division about how t148 should be split up, is what we've seen part of the complement or the specifier?
+
+t148 , "(: C-Decl)"
+t160 , "(: C-Adj)"
+
+0.595280650810652	S_0-5	(: C-Decl)_eps_eps_0-5
+0.4047193491893476	S_0-5	(: C-Decl)_0-5_5-5_5-5
+
+if it *is* in the specifier
+1.00000000000000	(: C-Decl)_0-5_5-5_5-5	(: C-Adj)_eps_eps_0-5	(: C-Decl)_5-5_5-5_5-5
+
+
+then we have to decide where it came from, whether the relevant T-Adj classifies the observed prefix as Spec or Comp
+0.996984949075748	(: C-Adj)_eps_eps_0-5	(:: =T-Adj C-Adj)_eps_eps_eps	(: T-Adj)_eps_eps_0-5
+0.003015050924251912	(: C-Adj)_eps_eps_0-5	(:: =T-Adj C-Adj)_eps_eps_eps	(: T-Adj)_0-5_5-5_5-5
+
+
+
+and we have to know whether the future C-Decl will just be made of Tense, or another derived C-Adj
+0.857048748353096	(: C-Decl)_5-5_5-5_5-5	(:: =T-Decl C-Decl)_5-5_5-5_5-5
+0.1429512516469038	(: C-Decl)_5-5_5-5_5-5	(: C-Adj)_5-5_5-5_5-5
+
+thissecond would be the adjunction rule: 
+% Adjunct CPs can left-adjoin another CP
+ ['C-Adj']>>['C-Decl'].
+
+koreanabs3-6: both methods derive the same result
+
+
+koreanabs4-1 (this is the SRC)   as expected, skewed on Global equiprobably on local
+koreanabs4-2  same pattern
+
+
+Sat Sep 17 08:33:40 EDT 2011
+ why would conditional entropies be higher oldStyle on the larsonian1 grammar?
+
+  Also: rewrite the Mathematica notebook so that string manipulation fns pass through unharmed
+
+METHOD
+make larsonian1.wmcfg
+
+[jth99@hays ~/mcfgcky2_repos]$ head larsonian1.train
+1430 they have -ed forget -en that the boy who tell -ed the story be -s so young
+1430 the fact that the girl who pay -ed for the ticket be -s very poor doesnt matter
+1430 I know that the girl who get -ed the right answer be -s clever
+1430 he remember -ed that the man who sell -ed the house leave -ed the town
+929 they have -ed forget -en that the letter which Dick write -ed yesterday be -s long
+929 the fact that the cat which David show -ed to the man like -s eggs be -s strange
+
+yields a 362-line mcfg in  grammars/wmcfg/larsonian1.wmcfg
+which really does have literal words as terminals, including " "
+
+if we ask about the set of Relevant Categories obtainable from the prolog version of the grammar (2477 lines)
+  ../guillaumin/hmg2mcfg/hmg2mcfg -pl grammars/mg/larsonian1.pl -dict larsonian1.dict
+
+we find that only 132 categories are actually used in derivations of the training sentences (shorter decoder ring)
+
+2011-09-17 08:51                    subset.csh                    Page 1
+    1	#!/bin/csh
+    2	rm larsonian1trained.dict
+    3	
+    4	set result=`egrep -o 't[0-9]+ ' grammars/wmcfg/larsonian1.wmcfg | sort -k 1.2 -n | uniq `
+    5	
+    6	foreach cat ($result)
+    7	grep "$cat " larsonian1.dict >> larsonian1trained.dict # this space after the category is crucial for making sure we find LHS elements, not RHS elements
+    8	end
+
+
+Keenan-Hawkins prefixes where oldStyle delivers a higher conditional entropy number:
+
+sentence-initial
+	"the have -d"
+	"I"
+	"he"
+
+{
+{they,have,-ed, , , , , , , , , , , , , , },
+{ , , , , , , , , , , , , , , , , },
+{I, , , , , , , , , , , , , },
+{he, , , , ,man, , , , , , , ,the, },                      4
+
+{they,have,-ed, , , , , , , , , , , , , },                5
+{ , , , , , , , , , , , , , , , , , },
+{I, , , ,dog, , , , , , , , , },                                7,1 and 7,5
+{he, , , , , , , , , , , , , , },
+{they,have,-ed, , , , ,man, , , , , , , , , , },       9  and 9,8
+{ , , , , , , , , , , , , , , , , , },
+{I, , , ,man, , , , , , , , , , },
+{he, , , , ,dog, , , , , , , , , , },
+{they,have,-ed, , , , , , , , , , , , , , , },
+{ , , , , , , , , , , , , , , , , },
+{I, , , ,ship, , , , , , , , , , },
+{he, , , , , , , ,pay,-ed, , , , , , },
+{they,have,-ed, , , , , , , , , , , , , , , , },
+{ , , , , , , , , , , , , , , , , , },
+{I, , , , , , , , , , ,dog, , , , },
+{he, , , , , , , , , , , , , , , , },
+{they,have,-ed, , , , ,man, , , , , , , , , , },
+{ , , , , , , , , , , , , , , , , , },
+{I, , , , , , , , , , , , , , },
+{he, , , , , , , , , , , , , , , }
+}
+
+
+
+analyze this using dereference
+
+sed -E 's/(t[0-9]+) (:) (\(.*\))/\1 , "\3"/' larsonian1trained.dict |  egrep -v '^$' | tail -r  > larsonian1trained-dict.csv
+
+at the ****first prefix*** there are four different ways little v might interact with tense.
+
+here's what local normalization gets.
+Binary,0.0797091,t136_1-1_1-1_1-1_0-1,t41_1-1_1-1_1-1,t80_1-1_1-1_1-1_0-1
+Binary,0.623855,t136_1-1_1-1_1-1_0-1,t42_1-1_1-1_1-1,t80_1-1_1-1_1-1_0-1
+Binary,0.106982,t136_1-1_1-1_1-1_0-1,t46_1-1_1-1_1-1,t80_1-1_1-1_1-1_0-1
+Binary,0.189455,t136_1-1_1-1_1-1_0-1,t44_1-1_1-1_1-1,t127_1-1_1-1_1-1_0-1
+
+here's what global normalization arrives at:
+Binary	0.0718783477360274	(: +case T;: -case)_1-1_1-1_1-1_0-1	(:: ==>v +case T)_1-1_1-1_1-1	(: v;: -case)_1-1_1-1_1-1_0-1
+Binary	0.562566119415732	(: +case T;: -case)_1-1_1-1_1-1_0-1	(:: =>v +case T)_1-1_1-1_1-1	(: v;: -case)_1-1_1-1_1-1_0-1
+Binary	0.0964717605106718	(: +case T;: -case)_1-1_1-1_1-1_0-1	(:: =v +case T)_1-1_1-1_1-1	(: v;: -case)_1-1_1-1_1-1_0-1
+Binary	0.2690837723375685	(: +case T;: -case)_1-1_1-1_1-1_0-1	(:: =>Have +case T)_1-1_1-1_1-1	(: Have;: -case)_1-1_1-1_1-1_0-1
+
+i.e. the rewrites involving category t80 are pushed down in probability compared with local.
+
+uncertainty about (: +case T;: -case)_1-1_1-1_1-1-_0-1 is just slightly higher under global (30.89) than under local (30.69).
+
+from the unconditioned grammar we have
+1096 / 23639     t136 --> t41 t80 [0,0][0,2][1,0;1,1;0,1;1,2][1,3]
+8578 / 23639     t136 --> t42 t80 [0,0][1,1;0,1][0,2;1,0;1,2][1,3]
+1471 / 23639     t136 --> t46 t80 [0,0][0,1][0,2;1,0;1,1;1,2][1,3]
+2605 / 23639     t136 --> t44 t127 [0,0][1,1;0,1][0,2;1,0;1,2][1,3]
+=13750, which divides each of the numerators to yield exactly the locally-renormalized values,
+0.0797091
+0.623855
+0.106982
+0.189455
+
+
+
+Q. is this because Z(t41_1-1_1-1_1-1)  > Z(t42_1-1_1-1_1-1)  ???
+A. no, it's because of t80 the little verb     (: v;: -case)   which has a very low inside probability 
+
+    category	   		       Z
+t41_1-1_1-1_1-1			1.0
+t80....					0.08239133867766876
+t42....					1.0
+t46...					1.0
+t44...					1.0
+
+CONCLUSION: a case of flatter distribution on rewrites because Z << 1. 
+
+
+
+
+at the ****second prefix****, the word "have", in addition to the classic case where flat half-and-half is sharpened by global normalization, we also have a different pattern. 
+
+under local we consider decision between (: Have;: -case) and (: v;: -case)
+
+Binary,0.232943,t136_eps_1-2_2-2_0-1,t44_eps_2-2_2-2,t127_2-2_1-2_2-2_0-1
+Binary,0.767057,t136_eps_1-2_2-2_0-1,t42_eps_2-2_2-2,t80_2-2_1-2_2-2_0-1
+
+this is just the weighted division of the unconditioned grammars' numerators,
+2605
+8578
+=11183   -yields->
+			  0.232943
+			  0.767057
+
+
+
+under global, the same decision is weighted much more heavily 
+
+Binary	0.999672325293178		(: +case T;: -case)_eps_1-2_2-2_0-1	(:: =>Have +case T)_eps_2-2_2-2	(: Have;: -case)_2-2_1-2_2-2_0-1
+Binary	0.0003276747068218025	(: +case T;: -case)_eps_1-2_2-2_0-1	(:: =>v +case T)_eps_2-2_2-2	(: v;: -case)_2-2_1-2_2-2_0-1
+
+the entropyis of the various daughters of t136... are about the same under local and global, but the parent entropy isn't.
+DTRs
+ t44...   almost zero on both   [these are both terminals, yeah?]
+ t127...  30.644 on both
+ t42....  0.543 on both            [these are both terminals, yeah?]...A. no. can be realized as "-ed" or EMPTY
+ t80...  17.62 on both
+
+
+the difference in little-h between these distributions is small: 0.77 bits
+but the difference in big H is nearly 10 bits
+GLOBAL, ie sharp  0.999672325293178  * (0 + 30.644) + 0.0003276747068218025 * (0.543+ 17.62)   = about 30
+vs
+LOCAL, ie flatter   0.232943 * (0 + 30.644) + 0.767057 * (0.543 + 17.62)   = about 21
+
+
+CONCLUSION: a case where sharpening the distribution amplifies entropy from a daughter category (on which both grammars agree)
+
+
+
+at the ****third prefix*** , "-ed",  we're in the same situation with the same rules
+
+Binary,0.999713, 	   t136_eps_1-3_3-3_0-1,t44_eps_2-3_3-3, t127_3-3_1-2_3-3_0-1
+Binary,0.000286707   t136_eps_1-3_3-3_0-1,t42_eps_2-3_3-3, t80_3-3_1-2_3-3_0-1
+
+
+0.999713292546174		(: +case T;: -case)_eps_1-3_3-3_0-1	(:: =>Have +case T)_eps_2-3_3-3	(: Have;: -case)_3-3_1-2_3-3_0-1
+0.0002867074538258057	(: +case T;: -case)_eps_1-3_3-3_0-1	(:: =>v +case T)_eps_2-3_3-3	(: v;: -case)_3-3_1-2_3-3_0-1
+
