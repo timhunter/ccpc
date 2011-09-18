@@ -14,6 +14,7 @@
 		val max_arity: r list -> int
 		val nonterm_degree : r -> int
 		val get_nonterm : r -> string
+		val get_rhs : r -> string list
 		val get_weight : r -> Rational.rat option
 		val get_expansion : r -> expansion
 		val apply :  tuplerecipe ->

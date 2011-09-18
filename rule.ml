@@ -4,8 +4,8 @@ open Rational
     type component = Component of int * int | Epsilon
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
-    type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
-    type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option)) 
+    type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)    
+    type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option))
 
     (**********************************************************)
 
@@ -39,8 +39,8 @@ open Rational
     (* Input to these creation functions should be aggressively verified *)
 
     let create_terminating (nonterm, term, weight) = Terminating (nonterm, term, weight)
-
-    (* TODO: Still need to make sure the ``rights'' and the ``recipes'' are compatible *)
+    
+   (* TODO: Still need to make sure the ``rights'' and the ``recipes'' are compatible *)
     let create_nonterminating (nonterm, rights, recipes, weight) =
       let checked_rights =
         try Nelist.from_list rights
@@ -59,7 +59,7 @@ open Rational
       match rule with
       | Terminating _ -> 0
       | NonTerminating (left, rights, _, _) -> Nelist.length rights
-    
+
     let max_arity rules = List.fold_left max 0 (map_tr rule_arity rules)
 
     (* How many components does the tuple produced by this rule have? *)
@@ -72,6 +72,11 @@ open Rational
       match rule with
       | Terminating (nt, _, _) -> nt
       | NonTerminating (nt, _, _, _) -> nt
+
+   let get_rhs rule =
+      match rule with
+      | Terminating (_,rhs, _) -> rhs :: []
+      | NonTerminating (_,rhs, _, _) -> Nelist.to_list rhs
 
     let get_weight rule =
       match rule with 
@@ -100,7 +105,7 @@ open Rational
         match (get_expansion rule) with
         | PublicTerminating s -> Printf.sprintf "%S" s
         | PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (Nelist.to_list rights)
-      in
+     in
       let recipe =
         match (get_expansion rule) with
           | PublicTerminating s -> []

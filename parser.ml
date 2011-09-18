@@ -49,7 +49,7 @@ open Rational
           | h::t -> (match Rule.get_expansion h with 
                       | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [VarRange (epsilon_max+1)], h, Rule.get_weight h)::acc))
                                                        else get_empties t acc
-                      | PublicNonTerminating _ -> get_empties t acc) in 
+                      | PublicNonTerminating _ -> get_empties t acc) in
       (get_empties grammar []) @ from_symbols 
   
   

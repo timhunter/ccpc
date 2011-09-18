@@ -10,25 +10,20 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     63056,       1353]
-NotebookOptionsPosition[     60901,       1275]
-NotebookOutlinePosition[     61304,       1293]
-CellTagsIndexPosition[     61261,       1290]
+NotebookDataLength[    156036,       3165]
+NotebookOptionsPosition[    151928,       3035]
+NotebookOutlinePosition[    152506,       3058]
+CellTagsIndexPosition[    152463,       3055]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-
-Cell[CellGroupData[{
 Cell[BoxData[
- RowBox[{"SetDirectory", "[", "\"\<projects/mcfgcky2_repos\>\"", 
-  "]"}]], "Input",
- CellChangeTimes->{{3.523051642952073*^9, 3.5230516768628893`*^9}}],
-
-Cell[BoxData["\<\"/Volumes/mechanical/Users/john/projects/mcfgcky2_repos\"\>"]\
-, "Output",
- CellChangeTimes->{{3.523051664370411*^9, 3.523051677358169*^9}}]
-}, Open  ]],
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.523051642952073*^9, 3.5230516768628893`*^9}, {
+   3.524588092440588*^9, 3.5245880926129923`*^9}, 3.524588132444261*^9}],
 
 Cell[CellGroupData[{
 
@@ -54,14 +49,15 @@ Cell[BoxData[
  RowBox[{
   RowBox[{"result", "=", 
    RowBox[{"Import", "[", 
-    RowBox[{"\"\<koreanabs-dict.csv\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+    RowBox[{"\"\<korean-dict.csv\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.523051640205068*^9, 3.523051642008802*^9}, {
   3.5230516796488037`*^9, 3.523051683635797*^9}, {3.523051728658558*^9, 
   3.5230517607705917`*^9}, {3.5230521325896482`*^9, 3.523052134039363*^9}, {
   3.523052171003335*^9, 3.5230521713851957`*^9}, {3.523052289535405*^9, 
   3.523052297337846*^9}, {3.523055170683071*^9, 3.52305517214624*^9}, {
-  3.523967067066722*^9, 3.523967067877907*^9}}],
+  3.523967067066722*^9, 3.523967067877907*^9}, {3.524588155382131*^9, 
+  3.524588155618822*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -87,133 +83,137 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{
-   RowBox[{"\<\"t254\"\>", 
+   RowBox[{"\<\"t255\"\>", 
     "\[Rule]", "\<\"(: +nom T-Rel -epp;: -nom;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t242\"\>", 
+   RowBox[{"\<\"t243\"\>", 
     "\[Rule]", "\<\"(: +nom T-Emb -epp;: -nom;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t232\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc;: -wh)\"\>"}],
+   RowBox[{"\<\"t233\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc;: -wh)\"\>"}],
     ",", 
-   RowBox[{"\<\"t228\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc;: -wh)\"\>"}],
+   RowBox[{"\<\"t229\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc;: -wh)\"\>"}],
     ",", 
-   RowBox[{"\<\"t217\"\>", "\[Rule]", "\<\"(: v-Rel;: -nom;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t213\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t187\"\>", "\[Rule]", "\<\"(: Case -acc;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t186\"\>", "\[Rule]", "\<\"(: Case -nom;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t185\"\>", "\[Rule]", "\<\"(: +f Case -nom;: -f;: -wh)\"\>"}],
+   RowBox[{"\<\"t218\"\>", "\[Rule]", "\<\"(: v-Rel;: -nom;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t214\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t188\"\>", "\[Rule]", "\<\"(: Case -acc;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t187\"\>", "\[Rule]", "\<\"(: Case -nom;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t186\"\>", "\[Rule]", "\<\"(: +f Case -nom;: -f;: -wh)\"\>"}],
     ",", 
-   RowBox[{"\<\"t184\"\>", "\[Rule]", "\<\"(: +f Case -acc;: -f;: -wh)\"\>"}],
+   RowBox[{"\<\"t185\"\>", "\[Rule]", "\<\"(: +f Case -acc;: -f;: -wh)\"\>"}],
     ",", 
-   RowBox[{"\<\"t181\"\>", "\[Rule]", "\<\"(: D -f;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t177\"\>", "\[Rule]", "\<\"(: +epp D -f;: -epp;: -wh)\"\>"}], 
+   RowBox[{"\<\"t182\"\>", "\[Rule]", "\<\"(: D -f;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t178\"\>", "\[Rule]", "\<\"(: +epp D -f;: -epp;: -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t174\"\>", "\[Rule]", "\<\"(: +epp D -f;: -epp)\"\>"}], ",", 
-   RowBox[{"\<\"t171\"\>", "\[Rule]", "\<\"(: C-Rel;: -epp)\"\>"}], ",", 
-   RowBox[{"\<\"t163\"\>", "\[Rule]", "\<\"(: N-Dep;: -epp)\"\>"}], ",", 
-   RowBox[{"\<\"t162\"\>", "\[Rule]", "\<\"(: N-Dep;: -epp;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t160\"\>", "\[Rule]", "\<\"(: C-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t159\"\>", "\[Rule]", "\<\"(: C-Emb;: -epp;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t158\"\>", "\[Rule]", "\<\"(: C-Emb;: -epp)\"\>"}], ",", 
-   RowBox[{"\<\"t155\"\>", "\[Rule]", "\<\"(: +wh C-Rel;: -epp;: -wh)\"\>"}], 
+   RowBox[{"\<\"t175\"\>", "\[Rule]", "\<\"(: +epp D -f;: -epp)\"\>"}], ",", 
+   RowBox[{"\<\"t172\"\>", "\[Rule]", "\<\"(: C-Rel;: -epp)\"\>"}], ",", 
+   RowBox[{"\<\"t164\"\>", "\[Rule]", "\<\"(: N-Dep;: -epp)\"\>"}], ",", 
+   RowBox[{"\<\"t163\"\>", "\[Rule]", "\<\"(: N-Dep;: -epp;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t161\"\>", "\[Rule]", "\<\"(: C-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t160\"\>", "\[Rule]", "\<\"(: C-Emb;: -epp;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t159\"\>", "\[Rule]", "\<\"(: C-Emb;: -epp)\"\>"}], ",", 
+   RowBox[{"\<\"t156\"\>", "\[Rule]", "\<\"(: +wh C-Rel;: -epp;: -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t150\"\>", 
+   RowBox[{"\<\"t151\"\>", 
     "\[Rule]", "\<\"(: +nom T-Rel -epp;: -wh;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t148\"\>", "\[Rule]", "\<\"(: C-Decl)\"\>"}], ",", 
-   RowBox[{"\<\"t136\"\>", 
+   RowBox[{"\<\"t139\"\>", 
     "\[Rule]", "\<\"(: +nom T-Emb -epp;: -wh;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t131\"\>", "\[Rule]", "\<\"(: T-Decl)\"\>"}], ",", 
-   RowBox[{"\<\"t129\"\>", "\[Rule]", "\<\"(: T-Emb -epp)\"\>"}], ",", 
-   RowBox[{"\<\"t128\"\>", "\[Rule]", "\<\"(: T-Emb -epp;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t125\"\>", "\[Rule]", "\<\"(: T-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t122\"\>", "\[Rule]", "\<\"(: T-Rel -epp;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t117\"\>", "\[Rule]", "\<\"(: v-Rel;: -wh;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t113\"\>", "\[Rule]", "\<\"(: v-Emb;: -wh;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t104\"\>", 
+   RowBox[{"\<\"t134\"\>", "\[Rule]", "\<\"(: T-Emb -epp)\"\>"}], ",", 
+   RowBox[{"\<\"t133\"\>", "\[Rule]", "\<\"(: T-Emb -epp;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t130\"\>", "\[Rule]", "\<\"(: T-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t127\"\>", "\[Rule]", "\<\"(: T-Rel -epp;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t122\"\>", "\[Rule]", "\<\"(: v-Rel;: -wh;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t118\"\>", "\[Rule]", "\<\"(: v-Emb;: -wh;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t109\"\>", 
     "\[Rule]", "\<\"(: +nom T-Rel -epp;: -nom -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t98\"\>", "\[Rule]", "\<\"(: +nom T-Adj;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t92\"\>", 
+   RowBox[{"\<\"t106\"\>", "\[Rule]", "\<\"(: C-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t101\"\>", "\[Rule]", "\<\"(: +nom T-Adj;: -nom)\"\>"}], ",", 
+   
+   RowBox[{"\<\"t95\"\>", 
     "\[Rule]", "\<\"(: +nom T-Emb -epp;: -nom -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t90\"\>", "\[Rule]", "\<\"(: +nom T-Emb -epp;: -nom)\"\>"}], 
+   RowBox[{"\<\"t93\"\>", "\[Rule]", "\<\"(: +nom T-Emb -epp;: -nom)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t86\"\>", "\[Rule]", "\<\"(: +nom T-Decl;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t91\"\>", "\[Rule]", "\<\"(: =Case v-Emb;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t90\"\>", "\[Rule]", "\<\"(: =Case v-Rel;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t87\"\>", "\[Rule]", "\<\"(: T-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t85\"\>", "\[Rule]", "\<\"(: V-Emb;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t84\"\>", "\[Rule]", "\<\"(: V-Rel;: -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t80\"\>", "\[Rule]", "\<\"(: v-Rel;: -nom -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t78\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t76\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t74\"\>", "\[Rule]", "\<\"(: v-Adj;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t69\"\>", "\[Rule]", "\<\"(: +nom T-Decl;: -nom)\"\>"}], ",", 
    
-   RowBox[{"\<\"t84\"\>", "\[Rule]", "\<\"(: =Case v-Emb;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t83\"\>", "\[Rule]", "\<\"(: =Case v-Rel;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t80\"\>", "\[Rule]", "\<\"(: V-Emb;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t79\"\>", "\[Rule]", "\<\"(: V-Rel;: -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t77\"\>", "\[Rule]", "\<\"(: v-Decl;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t71\"\>", "\[Rule]", "\<\"(: v-Rel;: -nom -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t69\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t67\"\>", "\[Rule]", "\<\"(: v-Emb;: -nom -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t65\"\>", "\[Rule]", "\<\"(: v-Adj;: -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t61\"\>", "\[Rule]", "\<\"(: =Case v-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t60\"\>", "\[Rule]", "\<\"(: =Case v-Emb)\"\>"}], ",", 
-   RowBox[{"\<\"t59\"\>", "\[Rule]", "\<\"(: =Case v-Rel)\"\>"}], ",", 
-   RowBox[{"\<\"t58\"\>", "\[Rule]", "\<\"(: =Case v-Decl)\"\>"}], ",", 
-   RowBox[{"\<\"t54\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc -wh)\"\>"}], 
+   RowBox[{"\<\"t66\"\>", "\[Rule]", "\<\"(: =Case v-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t65\"\>", "\[Rule]", "\<\"(: =Case v-Emb)\"\>"}], ",", 
+   RowBox[{"\<\"t64\"\>", "\[Rule]", "\<\"(: =Case v-Rel)\"\>"}], ",", 
+   RowBox[{"\<\"t60\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t52\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc -wh)\"\>"}], 
+   RowBox[{"\<\"t58\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t49\"\>", "\[Rule]", "\<\"(: V-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t48\"\>", "\[Rule]", "\<\"(: V-Emb)\"\>"}], ",", 
-   RowBox[{"\<\"t47\"\>", "\[Rule]", "\<\"(: V-Rel)\"\>"}], ",", 
-   RowBox[{"\<\"t46\"\>", "\[Rule]", "\<\"(: V-Decl)\"\>"}], ",", 
-   RowBox[{"\<\"t45\"\>", "\[Rule]", "\<\"(: Case -acc -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t44\"\>", "\[Rule]", "\<\"(: Case -nom -wh)\"\>"}], ",", 
-   RowBox[{"\<\"t43\"\>", "\[Rule]", "\<\"(: Case -acc)\"\>"}], ",", 
-   RowBox[{"\<\"t42\"\>", "\[Rule]", "\<\"(: Case -nom)\"\>"}], ",", 
-   RowBox[{"\<\"t40\"\>", "\[Rule]", "\<\"(: +acc V-Decl;: -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t53\"\>", "\[Rule]", "\<\"(: V-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t52\"\>", "\[Rule]", "\<\"(: V-Emb)\"\>"}], ",", 
+   RowBox[{"\<\"t51\"\>", "\[Rule]", "\<\"(: V-Rel)\"\>"}], ",", 
+   RowBox[{"\<\"t50\"\>", "\[Rule]", "\<\"(: V-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t49\"\>", "\[Rule]", "\<\"(: Case -acc -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t48\"\>", "\[Rule]", "\<\"(: Case -nom -wh)\"\>"}], ",", 
+   RowBox[{"\<\"t47\"\>", "\[Rule]", "\<\"(: Case -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t46\"\>", "\[Rule]", "\<\"(: Case -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t45\"\>", "\[Rule]", "\<\"(: v-Decl;: -nom)\"\>"}], ",", 
+   RowBox[{"\<\"t43\"\>", "\[Rule]", "\<\"(: =Case v-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t41\"\>", "\[Rule]", "\<\"(: +acc V-Decl;: -acc)\"\>"}], ",", 
    
-   RowBox[{"\<\"t38\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc)\"\>"}], ",", 
-   RowBox[{"\<\"t36\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc)\"\>"}], ",", 
-   RowBox[{"\<\"t34\"\>", "\[Rule]", "\<\"(: +acc V-Adj;: -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t39\"\>", "\[Rule]", "\<\"(: +acc V-Rel;: -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t37\"\>", "\[Rule]", "\<\"(: +acc V-Emb;: -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t35\"\>", "\[Rule]", "\<\"(: +acc V-Adj;: -acc)\"\>"}], ",", 
+   RowBox[{"\<\"t34\"\>", "\[Rule]", "\<\"(: D -f)\"\>"}], ",", 
    RowBox[{"\<\"t33\"\>", "\[Rule]", "\<\"(: +f Case -nom;: -f)\"\>"}], ",", 
    RowBox[{"\<\"t32\"\>", "\[Rule]", "\<\"(: +f Case -acc;: -f)\"\>"}], ",", 
    RowBox[{"\<\"t31\"\>", "\[Rule]", "\<\"(: +f Case -nom -wh;: -f)\"\>"}], 
    ",", 
    RowBox[{"\<\"t30\"\>", "\[Rule]", "\<\"(: +f Case -acc -wh;: -f)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t29\"\>", "\[Rule]", "\<\"(: D -f)\"\>"}], ",", 
-   RowBox[{"\<\"t28\"\>", "\[Rule]", "\<\"(:: =T-Adj C-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t27\"\>", "\[Rule]", "\<\"(:: =T-Emb C-Emb)\"\>"}], ",", 
-   RowBox[{"\<\"t26\"\>", "\[Rule]", "\<\"(:: =v-Emb +nom T-Emb -epp)\"\>"}], 
+   RowBox[{"\<\"t29\"\>", "\[Rule]", "\<\"(:: =T-Adj C-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t28\"\>", "\[Rule]", "\<\"(:: =T-Emb C-Emb)\"\>"}], ",", 
+   RowBox[{"\<\"t27\"\>", "\[Rule]", "\<\"(:: =v-Emb +nom T-Emb -epp)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t25\"\>", "\[Rule]", "\<\"(:: =N-Dep +epp D -f)\"\>"}], ",", 
-   RowBox[{"\<\"t24\"\>", "\[Rule]", "\<\"(:: =C-Emb N-Dep)\"\>"}], ",", 
-   RowBox[{"\<\"t23\"\>", "\[Rule]", "\<\"(:: =C-Rel +epp D -f)\"\>"}], ",", 
-   RowBox[{"\<\"t22\"\>", "\[Rule]", "\<\"(:: =T-Rel +wh C-Rel)\"\>"}], ",", 
-   RowBox[{"\<\"t21\"\>", "\[Rule]", "\<\"(:: =v-Rel +nom T-Rel -epp)\"\>"}], 
+   RowBox[{"\<\"t26\"\>", "\[Rule]", "\<\"(:: =N-Dep +epp D -f)\"\>"}], ",", 
+   RowBox[{"\<\"t25\"\>", "\[Rule]", "\<\"(:: =C-Emb N-Dep)\"\>"}], ",", 
+   RowBox[{"\<\"t24\"\>", "\[Rule]", "\<\"(:: =C-Rel +epp D -f)\"\>"}], ",", 
+   RowBox[{"\<\"t23\"\>", "\[Rule]", "\<\"(:: =T-Rel +wh C-Rel)\"\>"}], ",", 
+   RowBox[{"\<\"t22\"\>", "\[Rule]", "\<\"(:: =v-Rel +nom T-Rel -epp)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t20\"\>", "\[Rule]", "\<\"(:: =D +f Case -acc -wh)\"\>"}], 
+   RowBox[{"\<\"t21\"\>", "\[Rule]", "\<\"(:: =D +f Case -acc -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t19\"\>", "\[Rule]", "\<\"(:: =D +f Case -nom -wh)\"\>"}], 
+   RowBox[{"\<\"t20\"\>", "\[Rule]", "\<\"(:: =D +f Case -nom -wh)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t18\"\>", "\[Rule]", "\<\"(:: =T-Decl C-Decl)\"\>"}], ",", 
-   RowBox[{"\<\"t17\"\>", "\[Rule]", "\<\"(:: =v-Adj +nom T-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t19\"\>", "\[Rule]", "\<\"(:: =T-Decl C-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t18\"\>", "\[Rule]", "\<\"(:: =v-Adj +nom T-Adj)\"\>"}], ",", 
    
-   RowBox[{"\<\"t15\"\>", "\[Rule]", "\<\"(:: =v-Decl +nom T-Decl)\"\>"}], 
+   RowBox[{"\<\"t16\"\>", "\[Rule]", "\<\"(:: =v-Decl +nom T-Decl)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t14\"\>", "\[Rule]", "\<\"(:: =V-Adj =Case v-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t13\"\>", "\[Rule]", "\<\"(:: =V-Emb =Case v-Emb)\"\>"}], ",", 
-   RowBox[{"\<\"t12\"\>", "\[Rule]", "\<\"(:: =V-Rel =Case v-Rel)\"\>"}], ",", 
-   RowBox[{"\<\"t11\"\>", "\[Rule]", "\<\"(:: =V-Decl =Case v-Decl)\"\>"}], 
+   RowBox[{"\<\"t15\"\>", "\[Rule]", "\<\"(:: =V-Adj =Case v-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t14\"\>", "\[Rule]", "\<\"(:: =V-Emb =Case v-Emb)\"\>"}], ",", 
+   RowBox[{"\<\"t13\"\>", "\[Rule]", "\<\"(:: =V-Rel =Case v-Rel)\"\>"}], ",", 
+   RowBox[{"\<\"t12\"\>", "\[Rule]", "\<\"(:: =V-Decl =Case v-Decl)\"\>"}], 
    ",", 
-   RowBox[{"\<\"t10\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Adj)\"\>"}], ",", 
-   RowBox[{"\<\"t9\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Emb)\"\>"}], ",", 
-   RowBox[{"\<\"t8\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Rel)\"\>"}], ",", 
-   RowBox[{"\<\"t7\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t11\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Adj)\"\>"}], ",", 
+   RowBox[{"\<\"t10\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Emb)\"\>"}], ",", 
+   RowBox[{"\<\"t9\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Rel)\"\>"}], ",", 
+   RowBox[{"\<\"t8\"\>", "\[Rule]", "\<\"(:: =Case +acc V-Decl)\"\>"}], ",", 
+   RowBox[{"\<\"t7\"\>", "\[Rule]", "\<\"(:: V-Decl)\"\>"}], ",", 
    RowBox[{"\<\"t6\"\>", "\[Rule]", "\<\"(:: Case -acc)\"\>"}], ",", 
    RowBox[{"\<\"t5\"\>", "\[Rule]", "\<\"(:: Case -nom)\"\>"}], ",", 
    RowBox[{"\<\"t4\"\>", "\[Rule]", "\<\"(:: =D +f Case -acc)\"\>"}], ",", 
    RowBox[{"\<\"t3\"\>", "\[Rule]", "\<\"(:: =D +f Case -nom)\"\>"}], ",", 
    RowBox[{"\<\"t2\"\>", "\[Rule]", "\<\"(:: =N D -f)\"\>"}], ",", 
-   RowBox[{"\<\"t1\"\>", "\[Rule]", "\<\"(:: D -f)\"\>"}], ",", 
-   RowBox[{"\<\"t0\"\>", "\[Rule]", "\<\"(:: N)\"\>"}]}], "}"}]], "Output",
+   RowBox[{"\<\"t1\"\>", "\[Rule]", "\<\"(:: N)\"\>"}], ",", 
+   RowBox[{"\<\"t0\"\>", "\[Rule]", "\<\"(:: D -f)\"\>"}]}], "}"}]], "Output",\
+
  CellChangeTimes->{
   3.523051828347172*^9, 3.5230519194765263`*^9, 3.5230524700220737`*^9, 
    3.523052526324531*^9, 3.523052587359817*^9, 3.523052626660677*^9, 
    3.523052656828959*^9, 3.523053062158846*^9, 3.523053157769717*^9, {
    3.523054252799758*^9, 3.5230542604154654`*^9}, 3.5230543897755327`*^9, 
-   3.523055177274329*^9, 3.5239660221970577`*^9, 3.523967100476267*^9}]
+   3.523055177274329*^9, 3.5239660221970577`*^9, 3.523967100476267*^9, 
+   3.5245881737337027`*^9}]
 }, Open  ]]
 }, Open  ]],
 
@@ -221,6 +221,188 @@ Cell[CellGroupData[{
 
 Cell["example : read in a prefix chart", "Subsubtitle",
  CellChangeTimes->{{3.52305487507198*^9, 3.523054884747662*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"entsNew", "=", 
+   RowBox[{"doSentences", "[", 
+    RowBox[{"korean", ",", "1", ",", "8", ",", "newStyle"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.524588248127865*^9, 3.5245882484048758`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588257302312*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588257346508*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588259652418*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588259964291*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588262192067*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588262358066*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588262442889*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588264849807*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882652277937`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882673416348`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588268349605*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882684637527`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588271307233*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882715672207`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882718473177`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588274159029*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588274213051*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588274487167*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588276810161*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588276965547*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588279653871*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588279696966*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588279832872*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588282444105*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.52458828511163*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588285338306*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588286308869*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.52458828909046*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588291211681*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588291492571*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588292095983*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588293706699*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245882960605373`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245883007054787`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588305495309*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix7-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245883106593018`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588310869381*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245883129622717`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5245883152538633`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588319970796*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588324469469*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix8-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.524588330091688*^9}]
+}, Closed]]
+}, Closed]],
 
 Cell[BoxData[
  RowBox[{
@@ -329,6 +511,8 @@ Cell[CellGroupData[{
 Cell["can be mapped across all rules", "Subsubtitle",
  CellChangeTimes->{{3.523054947899591*^9, 3.52305495443865*^9}}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{
   RowBox[{"decode", "/@", 
@@ -338,6 +522,1457 @@ Cell[BoxData[
   "TableForm"}]], "Input",
  CellChangeTimes->{{3.52305466425852*^9, 3.523054672579673*^9}, {
   3.5230548226494627`*^9, 3.523054825477384*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[GridBox[{
+    {"\<\"Unary\"\>", 
+     "0.85464368229964559592940691818943102257`15.698970004336017", \
+"\<\"S_0-3\"\>", "\<\"(: C-Decl)_eps_eps_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.14535631770035438466091326323960354531`15.698970004336017", \
+"\<\"S_0-3\"\>", "\<\"(: C-Decl)_0-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.9999999999999999943604421721672947841`15.522878745280334", "\<\"(: \
+C-Decl)_0-3_3-3_3-3\"\>", "\<\"(: C-Adj)_eps_eps_0-3\"\>", "\<\"(: \
+C-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99881756044886280590797546537071801866`15.522878745280343", "\<\"(: \
+C-Decl)_eps_eps_0-3\"\>", "\<\"(:: =T-Decl C-Decl)_eps_eps_eps\"\>", "\<\"(: \
+T-Decl)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.00118243955113715134228199571535597057`15.522878745280343", "\<\"(: \
+C-Decl)_eps_eps_0-3\"\>", "\<\"(:: =T-Decl C-Decl)_eps_eps_eps\"\>", "\<\"(: \
+T-Decl)_eps_eps_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.01401597519753697777246048643693691557`15.522878745280337", "\<\"(: \
+C-Adj)_eps_eps_0-3\"\>", "\<\"(:: =T-Adj C-Adj)_eps_eps_eps\"\>", "\<\"(: \
+T-Adj)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.98598402480246302938573721360256643093`15.522878745280334", "\<\"(: \
+C-Adj)_eps_eps_0-3\"\>", "\<\"(:: =T-Adj C-Adj)_eps_eps_eps\"\>", "\<\"(: \
+T-Adj)_eps_eps_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.85704874835309617918313570487483530962`15.522878745280334", "\<\"(: \
+C-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =T-Decl C-Decl)_3-3_3-3_3-3\"\>", "\<\"(: \
+T-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.14295125164690380494608719738741967906`15.52287874528033", "\<\"(: \
+C-Decl)_3-3_3-3_3-3\"\>", "\<\"(: C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: \
+C-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Decl C-Decl)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =T-Decl C-Decl)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Decl)_eps_eps_0-3\"\>", "\<\"(: +nom \
+T-Decl;: -nom)_eps_eps_0-3_eps\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Decl)_0-3_3-3_3-3\"\>", "\<\"(: +nom \
+T-Decl;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Adj C-Adj)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =T-Adj C-Adj)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Adj)_eps_eps_0-3\"\>", "\<\"(: +nom \
+T-Adj;: -nom)_eps_eps_0-3_eps\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Adj)_0-3_3-3_3-3\"\>", "\<\"(: +nom \
+T-Adj;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: C-Adj)_3-3_3-3_3-3\"\>", "\<\"(:: \
+=T-Adj C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: T-Adj)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Decl C-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =T-Decl C-Decl)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Decl)_3-3_3-3_3-3\"\>", "\<\"(: +nom \
+T-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"E_eps\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Decl C-Decl)_tmp2_eps_eps\"\>", "\<\
+\"(:: =T-Decl C-Decl)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Decl;: \
+-nom)_eps_eps_0-3_eps\"\>", "\<\"(:: =v-Decl +nom T-Decl)_eps_eps_eps\"\>", "\
+\<\"(: v-Decl;: -nom)_eps_eps_0-3_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Decl;: \
+-nom)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3\"\>", "\
+\<\"(: v-Decl;: -nom)_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Adj C-Adj)_tmp2_eps_eps\"\>", \
+"\<\"(:: =T-Adj C-Adj)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Adj;: \
+-nom)_eps_eps_0-3_eps\"\>", "\<\"(:: =v-Adj +nom T-Adj)_eps_eps_eps\"\>", "\<\
+\"(: v-Adj;: -nom)_eps_eps_0-3_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Adj;: \
+-nom)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3\"\>", "\<\
+\"(: v-Adj;: -nom)_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Adj C-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =T-Adj C-Adj)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Adj)_3-3_3-3_3-3\"\>", "\<\"(: +nom \
+T-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"E_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Decl C-Decl)_tmp2_3-3_3-3\"\>", "\<\
+\"(:: =T-Decl C-Decl)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Decl;: \
+-nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3\"\>", "\
+\<\"(: v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Decl C-Decl)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\<\"\
+\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Decl +nom T-Decl)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =v-Decl +nom T-Decl)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000003044551411673424969093`15.522878745280343", "\<\"(: \
+v-Decl;: -nom)_eps_eps_0-3_eps\"\>", "\<\"(: =Case v-Decl)_eps_eps_0-3\"\>", \
+"\<\"(:: Case -nom)_eps_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =v-Decl +nom T-Decl)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000002574237322853416398715`15.522878745280334", "\<\"(: \
+v-Decl;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Adj C-Adj)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Adj +nom T-Adj)_eps_eps_eps\"\>", "\
+\<\"E_eps\"\>", "\<\"(:: =v-Adj +nom T-Adj)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.000000000000000001427456200852738352`15.522878745280334", "\<\"(: \
+v-Adj;: -nom)_eps_eps_0-3_eps\"\>", "\<\"(: =Case v-Adj)_eps_eps_0-3\"\>", \
+"\<\"(:: Case -nom)_eps_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3\"\>", "\
+\<\"E_3-3\"\>", "\<\"(:: =v-Adj +nom T-Adj)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99999999999999991891224621845462941993`15.522878745280334", "\<\"(: \
+v-Adj;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Adj C-Adj)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =T-Adj C-Adj)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Adj;: \
+-nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3\"\>", "\<\
+\"(: v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Decl C-Decl)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\
+\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.03382013835511145648345988343634843982`15.522878745280337", "\<\"(: \
+v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.96617986164488850567469479738338821836`15.522878745280334", "\<\"(: \
+v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Decl +nom \
+T-Decl)_tmp2_eps_eps\"\>", "\<\"(:: =v-Decl +nom T-Decl)_tmp1_eps\"\>", \
+"\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000002407024285060794895144`15.522878745280343", "\<\"(: \
+=Case v-Decl)_eps_eps_0-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_eps_eps_eps\"\>", "\<\"(: V-Decl)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -nom)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: Case -nom)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Decl +nom \
+T-Decl)_tmp2_3-3_3-3\"\>", "\<\"(:: =v-Decl +nom T-Decl)_tmp1_3-3\"\>", \
+"\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.9646425826287471176018447348193697156`15.522878745280334", "\<\"(: \
+=Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: V-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.03535741737125287847269337949598763571`15.522878745280334", "\<\"(: \
+=Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_3-3_3-3_3-3\"\>", "\<\"(: V-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -nom)_0-3_3-3_3-3\"\>", "\<\"(: +f \
+Case -nom;: -f)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Adj +nom T-Adj)_tmp2_eps_eps\"\>", \
+"\<\"(:: =v-Adj +nom T-Adj)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: =Case v-Adj)_eps_eps_0-3\"\>", "\<\"(:: \
+=V-Adj =Case v-Adj)_eps_eps_eps\"\>", "\<\"(: V-Adj)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Adj +nom T-Adj)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =v-Adj +nom T-Adj)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", "\<\"(:: \
+=V-Adj =Case v-Adj)_3-3_3-3_3-3\"\>", "\<\"(: V-Adj)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Adj C-Adj)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "0.98617511520737327188940092165898617511`15.52287874528033", "\<\"(: \
+v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.01382488479262672598053015998167259053`15.52287874528033", "\<\"(: \
+v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -nom)_3-3_3-3_3-3\"\>", "\<\"(: +f \
+Case -nom;: -f)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -nom)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: Case -nom)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Decl +nom T-Decl)_tmp1_eps\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Decl =Case \
+v-Decl)_eps_eps_eps\"\>", "\<\"E_eps\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Decl)_0-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Decl;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -nom)_tmp2_eps_eps\"\>", "\<\"(:: \
+Case -nom)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Decl +nom T-Decl)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Decl =Case \
+v-Decl)_3-3_3-3_3-3\"\>", "\<\"E_3-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Decl)_3-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: V-Decl)_3-3_3-3_3-3\"\>", "\<\"E_3-3\"\
+\>", "\<\"(:: V-Decl)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +f Case -nom;: -f)_3-3_3-3_3-3_0-3\"\>",
+      "\<\"(:: =D +f Case -nom)_3-3_3-3_3-3\"\>", "\<\"(: D -f)_0-3_3-3_3-3\"\
+\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Adj +nom T-Adj)_tmp1_eps\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Adj =Case v-Adj)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =V-Adj =Case v-Adj)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Adj)_0-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Adj;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Adj +nom T-Adj)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Adj =Case v-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =V-Adj =Case v-Adj)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Adj)_3-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Adj;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +f Case -nom;: \
+-f)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =D +f Case -nom)_3-3_3-3_3-3\"\>", "\<\"(: \
+D -f)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -nom)_tmp2_3-3_3-3\"\>", "\<\"(:: \
+Case -nom)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Decl =Case \
+v-Decl)_tmp2_eps_eps\"\>", "\<\"(:: =V-Decl =Case v-Decl)_tmp1_eps\"\>", \
+"\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.9999999999999999632510610800267833736`15.522878745280343", "\<\"(: \
++acc V-Decl;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =Case +acc \
+V-Decl)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: Case -nom)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Decl =Case \
+v-Decl)_tmp2_3-3_3-3\"\>", "\<\"(:: =V-Decl =Case v-Decl)_tmp1_3-3\"\>", \
+"\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.04347826086956522221836097663111592906`15.522878745280337", "\<\"(: \
++acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.95652173913043474142786878664547534108`15.522878745280334", "\<\"(: \
++acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Decl)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: V-Decl)_tmp2_3-3_3-3\"\>", "\<\"(:: \
+V-Decl)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -nom)_3-3_3-3_3-3\"\>", "\<\
+\"E_3-3\"\>", "\<\"(:: =D +f Case -nom)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.99999999999999993362233896233101017244`15.698970004336017", "\<\"(: D \
+-f)_0-3_3-3_3-3\"\>", "\<\"(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Adj =Case v-Adj)_tmp2_eps_eps\"\>", \
+"\<\"(:: =V-Adj =Case v-Adj)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000003152556757150406811921`15.522878745280334", "\<\"(: \
++acc V-Adj;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =Case +acc \
+V-Adj)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Adj =Case v-Adj)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =V-Adj =Case v-Adj)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.01382488479262672964546961929745160878`15.52287874528033", "\<\"(: \
++acc V-Adj;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Adj)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.98617511520737322943191666691852317319`15.52287874528033", "\<\"(: \
++acc V-Adj;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Adj)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.66166883963494143180320069822615729197`15.522878745280334", "\<\"(: D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(:: =N D -f)_3-3_3-3_3-3\"\>", "\<\"(:: \
+N)_3-3_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.33833116036505862544493570845511745563`15.698970004336017", "\<\"(: D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\
+\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: Case -nom)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Decl =Case v-Decl)_tmp1_eps\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Decl)_3-3_3-3_3-3\"\>", "\
+\<\"E_3-3\"\>", "\<\"(:: =Case +acc V-Decl)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -acc)_0-3_3-3_3-3\"\>", "\<\"(: +f \
+Case -acc;: -f)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Decl =Case v-Decl)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>", "\<\"(: +f \
+Case -acc;: -f)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: Case -acc)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.58087649402390438247011952191235059761`16.", "\<\"(:: \
+V-Decl)_tmp1_3-3\"\>", "\<\"yumyenghaycyessta\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.41912350597609561752988047808764940239`16.", "\<\"(:: \
+V-Decl)_tmp1_3-3\"\>", "\<\"palkhyecyessta\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -nom)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =D +f Case -nom)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.55483554112056709898978818406835218066`15.522878745280346", "\<\"(: \
++epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =N-Dep +epp D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.44516445887943301530547431274630275205`15.522878745280334", "\<\"(: \
++epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =C-Rel +epp D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Adj =Case v-Adj)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Adj)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =Case +acc V-Adj)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Adj =Case v-Adj)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.50674373795761079803193252838035906784`15.52287874528033", "\<\"(: \
++epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =N-Dep +epp D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.49325626204238919918716201495071921731`15.522878745280334", "\<\"(: \
++epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =C-Rel +epp D \
+-f)_3-3_3-3_3-3\"\>", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N D -f)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =N D -f)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: N)_3-3_3-3_3-3\"\>", "\<\"E_3-3\"\>", \
+"\<\"(:: N)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Decl)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =Case +acc V-Decl)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +f Case -acc;: \
+-f)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =D +f Case -acc)_3-3_3-3_3-3\"\>", "\<\"(: \
+D -f)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +f Case -acc;: \
+-f)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =D +f Case -acc)_3-3_3-3_3-3\"\>", "\<\"(: \
+D -f)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: Case -acc)_tmp2_3-3_3-3\"\>", "\<\"(:: \
+Case -acc)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.47578347578347578347578347578347578348`16.", "\<\"(:: =D +f Case \
+-nom)_tmp1_3-3\"\>", "\<\"i\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.52421652421652421652421652421652421652`16.", "\<\"(:: =D +f Case \
+-nom)_tmp1_3-3\"\>", "\<\"ka\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =C-Rel +epp D -f)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =C-Rel +epp D -f)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\
+\"(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N-Dep +epp D -f)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =N-Dep +epp D -f)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\
+\"(:: =C-Emb N-Dep)_3-3_3-3_3-3\"\>", "\<\"(: C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Adj)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =Case +acc V-Adj)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\
+\"(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\
+\"(:: =C-Emb N-Dep)_3-3_3-3_3-3\"\>", "\<\"(: C-Emb;: -epp)_3-3_3-3_3-3_3-3\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N D -f)_tmp2_3-3_3-3\"\>", "\<\"(:: \
+=N D -f)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: N)_tmp2_3-3_3-3\"\>", "\<\"(:: \
+N)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Decl)_tmp1_3-3\"\>", \
+"\<\"kongkyekhayssta\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc)_3-3_3-3_3-3\"\>", "\<\
+\"E_3-3\"\>", "\<\"(:: =D +f Case -acc)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: Case -acc)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =C-Rel +epp D -f)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =C-Rel +epp D -f)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.89822550380420614019519813808045048509`15.522878745280337", "\<\"(: \
++wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"(:: =T-Rel +wh \
+C-Rel)_3-3_3-3_3-3\"\>", "\<\"(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.1017744961957939021550533870628351097`15.522878745280337", "\<\"(: \
++wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"(:: =T-Rel +wh \
+C-Rel)_3-3_3-3_3-3\"\>", "\<\"(: T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N-Dep +epp D -f)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =N-Dep +epp D -f)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =C-Emb N-Dep)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =C-Emb N-Dep)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99706268599393270223940653686602038763`15.522878745280337", "\<\"(: \
+C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"(: T-Emb -epp)_eps_eps_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.00293731400606733812324920689217163204`15.522878745280337", "\<\"(: \
+C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"(: T-Emb -epp)_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Adj)_tmp1_3-3\"\>", "\<\"kongkyekhayse\"\
+\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +wh C-Rel;: -epp;: \
+-wh)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3\"\>", "\
+\<\"(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: C-Emb;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\
+\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", "\<\"(: T-Emb -epp)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =N D -f)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.36256157635467980295566502463054187192`16.", "\<\"(:: \
+N)_tmp1_3-3\"\>", "\<\"kica\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.63743842364532019704433497536945812808`16.", "\<\"(:: \
+N)_tmp1_3-3\"\>", "\<\"uywon\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =D +f Case -acc)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =C-Rel +epp D -f)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\
+\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =T-Rel +wh C-Rel)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.99999999999999999024722246513496467749`15.698970004336017", "\<\"(: \
+T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.99999999999999995727140313639201736361`15.698970004336026", "\<\"(: \
+T-Rel -epp;: -wh)_eps_eps_0-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -nom \
+-wh)_eps_eps_0-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =N-Dep +epp D -f)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\
+\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =C-Emb N-Dep)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =C-Emb N-Dep)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =T-Emb C-Emb)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Emb -epp)_0-3_3-3_3-3\"\>", "\<\"(: \
++nom T-Emb -epp;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Emb -epp)_eps_eps_0-3\"\>", "\<\"(: \
++nom T-Emb -epp;: -nom)_eps_eps_0-3_eps\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.27148437499999999999999999998629354177`15.698970004336012", "\<\"(: \
+T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "0.728515625`15.698970004336017", "\<\"(: T-Rel -epp;: \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -nom \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: T-Emb -epp)_3-3_3-3_3-3\"\>", "\<\"(: \
++nom T-Emb -epp;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =D +f Case -acc)_tmp1_3-3\"\>", "\<\"ul\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Rel +wh C-Rel)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =T-Rel +wh C-Rel)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +nom T-Rel -epp;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_3-3_3-3_3-3\"\>", "\<\"(: v-Rel;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +nom T-Rel -epp;: -nom \
+-wh)_eps_eps_0-3_3-3\"\>", "\<\"(:: =v-Rel +nom T-Rel -epp)_eps_eps_eps\"\>", \
+"\<\"(: v-Rel;: -nom -wh)_eps_eps_0-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =C-Emb N-Dep)_tmp1_3-3\"\>", "\<\"sasil\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =T-Emb C-Emb)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =T-Emb C-Emb)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_0-3\
+\"\>", "\<\"(:: =v-Emb +nom T-Emb -epp)_3-3_3-3_3-3\"\>", "\<\"(: v-Emb;: \
+-nom)_3-3_3-3_3-3_0-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +nom T-Emb -epp;: -nom)_eps_eps_0-3_eps\
+\"\>", "\<\"(:: =v-Emb +nom T-Emb -epp)_eps_eps_eps\"\>", "\<\"(: v-Emb;: \
+-nom)_eps_eps_0-3_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Rel -epp;: -nom \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =v-Rel +nom T-Rel -epp)_3-3_3-3_3-3\"\>", \
+"\<\"(: v-Rel;: -nom -wh)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Rel -epp;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_3-3_3-3_3-3\"\>", "\<\"(: v-Rel;: -wh;: \
+-nom)_3-3_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_3-3\
+\"\>", "\<\"(:: =v-Emb +nom T-Emb -epp)_3-3_3-3_3-3\"\>", "\<\"(: v-Emb;: \
+-nom)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Rel +wh C-Rel)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\
+\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_3-3_3-3_3-3\"\>", "\<\"E_3-3\"\>", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99999999999999999655124572158353679585`15.522878745280337", "\<\"(: \
+v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_0-3\"\>", "\<\"(: =Case v-Rel;: \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: Case -nom)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_eps_eps_eps\"\>", "\<\"E_eps\"\>", "\<\"(:: =v-Rel +nom T-Rel \
+-epp)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000002911773479184415617533`15.522878745280343", "\<\"(: \
+v-Rel;: -nom -wh)_eps_eps_0-3_3-3\"\>", "\<\"(: =Case \
+v-Rel)_eps_eps_0-3\"\>", "\<\"(: Case -nom -wh)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =T-Emb C-Emb)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Emb +nom T-Emb \
+-epp)_3-3_3-3_3-3\"\>", "\<\"E_3-3\"\>", "\<\"(:: =v-Emb +nom T-Emb \
+-epp)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99999999999999997704739868456615907935`15.522878745280343", "\<\"(: \
+v-Emb;: -nom)_3-3_3-3_3-3_0-3\"\>", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Emb +nom T-Emb \
+-epp)_eps_eps_eps\"\>", "\<\"E_eps\"\>", "\<\"(:: =v-Emb +nom T-Emb \
+-epp)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000005147383315616873743087`15.522878745280334", "\<\"(: \
+v-Emb;: -nom)_eps_eps_0-3_eps\"\>", "\<\"(: =Case v-Emb)_eps_eps_0-3\"\>", \
+"\<\"(:: Case -nom)_eps_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000000000000000316808913447`15.522878745280334", "\<\"(: \
+v-Rel;: -nom -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case \
+v-Rel)_3-3_3-3_3-3\"\>", "\<\"(: Case -nom -wh)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000000000000000321226534516`15.522878745280334", "\<\"(: \
+v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Rel;: \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99049429657794683822125438598672810161`15.522878745280334", "\<\"(: \
+v-Emb;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.00950570342205323114789693286367372603`15.522878745280334", "\<\"(: \
+v-Emb;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp2_3-3_3-3\"\
+\>", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: =Case v-Rel;: \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_3-3_3-3_3-3\"\>", "\<\
+\"(: V-Rel;: -wh)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp2_eps_eps\"\
+\>", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.69594817766172705127575484575397355572`15.522878745280337", "\<\"(: \
+=Case v-Rel)_eps_eps_0-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_eps_eps_eps\"\>", \
+"\<\"(: V-Rel)_0-2_2-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.30405182233827294872424515424602644428`15.522878745280337", "\<\"(: \
+=Case v-Rel)_eps_eps_0-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_eps_eps_eps\"\>", \
+"\<\"(: V-Rel)_0-3_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -nom -wh)_3-3_3-3_3-3\"\>", \
+"\<\"(: +f Case -nom -wh;: -f)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp2_3-3_3-3\"\
+\>", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", "\<\"(:: \
+=V-Emb =Case v-Emb)_3-3_3-3_3-3\"\>", "\<\"(: V-Emb)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp2_eps_eps\"\
+\>", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.69594817766172705941401858033757923918`15.522878745280334", "\<\"(: \
+=Case v-Emb)_eps_eps_0-3\"\>", "\<\"(:: =V-Emb =Case v-Emb)_eps_eps_eps\"\>", \
+"\<\"(: V-Emb)_0-2_2-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.30405182233827294058598141966242076082`15.522878745280334", "\<\"(: \
+=Case v-Emb)_eps_eps_0-3\"\>", "\<\"(:: =V-Emb =Case v-Emb)_eps_eps_eps\"\>", \
+"\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: =Case v-Rel)_3-3_3-3_3-3\"\>", "\<\"(:: \
+=V-Rel =Case v-Rel)_3-3_3-3_3-3\"\>", "\<\"(: V-Rel)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp1_3-3\"\>", \
+"\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Rel =Case v-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Rel;: -wh)_3-3_3-3_3-3_3-3\"\>", \
+"\<\"(: +acc V-Rel;: -acc -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Rel +nom T-Rel -epp)_tmp1_eps\"\>", \
+"\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Rel =Case v-Rel)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =V-Rel =Case v-Rel)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Rel)_0-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Rel;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Rel)_0-2_2-3_3-3\"\>", "\<\"(: +acc \
+V-Rel;: -acc)_eps_2-3_3-3_0-2\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +f Case -nom -wh;: \
+-f)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =D +f Case -nom -wh)_3-3_3-3_3-3\"\>", "\<\
+\"(: D -f)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp1_3-3\"\>", \
+"\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Emb =Case v-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =V-Emb =Case v-Emb)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Emb)_3-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Emb;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =v-Emb +nom T-Emb -epp)_tmp1_eps\"\>", \
+"\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Emb =Case v-Emb)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =V-Emb =Case v-Emb)_tmp2_eps_eps\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Emb)_0-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Emb;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Emb)_0-2_2-3_3-3\"\>", "\<\"(: +acc \
+V-Emb;: -acc)_eps_2-3_3-3_0-2\"\>", "\<\"\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: V-Rel)_3-3_3-3_3-3\"\>", "\<\"(: +acc \
+V-Rel;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Rel =Case v-Rel)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =V-Rel =Case v-Rel)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +acc V-Rel;: -acc \
+-wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc V-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -acc -wh)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Rel =Case v-Rel)_tmp2_eps_eps\"\>", \
+"\<\"(:: =V-Rel =Case v-Rel)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +acc V-Rel;: \
+-acc)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =Case +acc V-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -acc)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +acc V-Rel;: \
+-acc)_eps_2-3_3-3_0-2\"\>", "\<\"(:: =Case +acc V-Rel)_eps_2-3_3-3\"\>", \
+"\<\"(: Case -acc)_0-1_1-2_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -nom -wh)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =D +f Case -nom -wh)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Emb =Case v-Emb)_tmp2_3-3_3-3\"\>", \
+"\<\"(:: =V-Emb =Case v-Emb)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.00950570342205323383524444442229574801`15.522878745280334", "\<\"(: \
++acc V-Emb;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Emb)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99049429657794681302207712721127146265`15.522878745280334", "\<\"(: \
++acc V-Emb;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
+V-Emb)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =V-Emb =Case v-Emb)_tmp2_eps_eps\"\>", \
+"\<\"(:: =V-Emb =Case v-Emb)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000001850303027301330015791`15.522878745280334", "\<\"(: \
++acc V-Emb;: -acc)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =Case +acc \
+V-Emb)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_0-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99999999999999998004321028959523655557`15.522878745280334", "\<\"(: \
++acc V-Emb;: -acc)_eps_2-3_3-3_0-2\"\>", "\<\"(:: =Case +acc \
+V-Emb)_eps_2-3_3-3\"\>", "\<\"(: Case -acc)_0-1_1-2_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(: +acc V-Rel;: \
+-acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc V-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Rel =Case v-Rel)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Rel)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =Case +acc V-Rel)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -acc -wh)_3-3_3-3_3-3\"\>", \
+"\<\"(: +f Case -acc -wh;: -f)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Rel =Case v-Rel)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Rel)_eps_2-3_3-3\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =Case +acc V-Rel)_tmp2_2-3_3-3\"\>"},
+    {"\<\"Unary\"\>", 
+     "1.`15.698970004336017", "\<\"(: Case -acc)_0-1_1-2_eps\"\>", "\<\"(: +f \
+Case -acc;: -f)_eps_1-2_eps_0-1\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -nom \
+-wh)_tmp2_3-3_3-3\"\>", "\<\"(:: =D +f Case -nom -wh)_tmp1_3-3\"\>", \
+"\<\"E_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Emb =Case v-Emb)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Emb)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =Case +acc V-Emb)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =V-Emb =Case v-Emb)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\
+\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Emb)_eps_2-3_3-3\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =Case +acc V-Emb)_tmp2_2-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Rel)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =Case +acc V-Rel)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.00000000000000000000000000000631088724`15.522878745280334", "\<\"(: \
++f Case -acc -wh;: -f)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =D +f Case -acc \
+-wh)_3-3_3-3_3-3\"\>", "\<\"(: D -f)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Rel)_tmp2_2-3_3-3\"\>", "\
+\<\"(:: =Case +acc V-Rel)_tmp1_2-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280343", "\<\"(: +f Case -acc;: \
+-f)_eps_1-2_eps_0-1\"\>", "\<\"(:: =D +f Case -acc)_eps_1-2_eps\"\>", "\<\"(: \
+D -f)_eps_eps_0-1\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =D +f Case -nom -wh)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Emb)_tmp2_3-3_3-3\"\>", "\
+\<\"(:: =Case +acc V-Emb)_tmp1_3-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =Case +acc V-Emb)_tmp2_2-3_3-3\"\>", "\
+\<\"(:: =Case +acc V-Emb)_tmp1_2-3\"\>", "\<\"E_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Rel)_tmp1_3-3\"\>", \
+"\<\"kongkyekhan\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc -wh)_3-3_3-3_3-3\"\>", \
+"\<\"E_3-3\"\>", "\<\"(:: =D +f Case -acc -wh)_tmp2_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Rel)_tmp1_2-3\"\>", \
+"\<\"kongkyekhan\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc)_eps_1-2_eps\"\>", "\<\
+\"E_eps\"\>", "\<\"(:: =D +f Case -acc)_tmp2_1-2_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.99999999999999997391748071977994061638`15.522878745280334", "\<\"(: D \
+-f)_eps_eps_0-1\"\>", "\<\"(:: =N D -f)_eps_eps_eps\"\>", "\<\"(:: \
+N)_eps_0-1_eps\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Emb)_tmp1_3-3\"\>", \
+"\<\"kongkyekhan\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =Case +acc V-Emb)_tmp1_2-3\"\>", \
+"\<\"kongkyekhan\"\>", "\<\"\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc \
+-wh)_tmp2_3-3_3-3\"\>", "\<\"(:: =D +f Case -acc -wh)_tmp1_3-3\"\>", \
+"\<\"E_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =D +f Case -acc)_tmp2_1-2_eps\"\>", \
+"\<\"(:: =D +f Case -acc)_tmp1_1-2\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N D -f)_eps_eps_eps\"\>", \
+"\<\"E_eps\"\>", "\<\"(:: =N D -f)_tmp2_eps_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: N)_eps_0-1_eps\"\>", "\<\"E_eps\"\>", \
+"\<\"(:: N)_tmp2_0-1_eps\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =D +f Case -acc -wh)_tmp1_3-3\"\>", "\<\"EMPTY\"\>", \
+"\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =D +f Case -acc)_tmp1_1-2\"\>", "\<\"ul\"\>", "\<\"\"\
+\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: =N D -f)_tmp2_eps_eps\"\>", "\<\"(:: \
+=N D -f)_tmp1_eps\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Binary\"\>", 
+     "1.`15.522878745280334", "\<\"(:: N)_tmp2_0-1_eps\"\>", "\<\"(:: \
+N)_tmp1_0-1\"\>", "\<\"E_eps\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "1.`16.", "\<\"(:: =N D -f)_tmp1_eps\"\>", "\<\"EMPTY\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.99999999999999996722525537814452978811`16.", "\<\"(:: \
+N)_tmp1_0-1\"\>", "\<\"uywon\"\>", "\<\"\"\>"}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[2.0999999999999996`]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  TableForm[{{
+    "Unary", 0.85464368229964559592940691818943102257`15.698970004336017, 
+     "S_0-3", "(: C-Decl)_eps_eps_0-3"}, {
+    "Unary", 0.14535631770035438466091326323960354531`15.698970004336017, 
+     "S_0-3", "(: C-Decl)_0-3_3-3_3-3"}, {
+    "Binary", 0.9999999999999999943604421721672947841`15.522878745280334, 
+     "(: C-Decl)_0-3_3-3_3-3", "(: C-Adj)_eps_eps_0-3", 
+     "(: C-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 0.99881756044886280590797546537071801866`15.522878745280343, 
+     "(: C-Decl)_eps_eps_0-3", "(:: =T-Decl C-Decl)_eps_eps_eps", 
+     "(: T-Decl)_0-3_3-3_3-3"}, {
+    "Binary", 0.00118243955113715134228199571535597057`15.522878745280343, 
+     "(: C-Decl)_eps_eps_0-3", "(:: =T-Decl C-Decl)_eps_eps_eps", 
+     "(: T-Decl)_eps_eps_0-3"}, {
+    "Binary", 0.01401597519753697777246048643693691557`15.522878745280337, 
+     "(: C-Adj)_eps_eps_0-3", "(:: =T-Adj C-Adj)_eps_eps_eps", 
+     "(: T-Adj)_0-3_3-3_3-3"}, {
+    "Binary", 0.98598402480246302938573721360256643093`15.522878745280334, 
+     "(: C-Adj)_eps_eps_0-3", "(:: =T-Adj C-Adj)_eps_eps_eps", 
+     "(: T-Adj)_eps_eps_0-3"}, {
+    "Binary", 0.85704874835309617918313570487483530962`15.522878745280334, 
+     "(: C-Decl)_3-3_3-3_3-3", "(:: =T-Decl C-Decl)_3-3_3-3_3-3", 
+     "(: T-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 0.14295125164690380494608719738741967906`15.52287874528033, 
+     "(: C-Decl)_3-3_3-3_3-3", "(: C-Adj)_3-3_3-3_3-3", 
+     "(: C-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Decl C-Decl)_eps_eps_eps", 
+     "E_eps", "(:: =T-Decl C-Decl)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Decl)_eps_eps_0-3", 
+     "(: +nom T-Decl;: -nom)_eps_eps_0-3_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Decl)_0-3_3-3_3-3", 
+     "(: +nom T-Decl;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Adj C-Adj)_eps_eps_eps", "E_eps",
+      "(:: =T-Adj C-Adj)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Adj)_eps_eps_0-3", 
+     "(: +nom T-Adj;: -nom)_eps_eps_0-3_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Adj)_0-3_3-3_3-3", 
+     "(: +nom T-Adj;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(: C-Adj)_3-3_3-3_3-3", 
+     "(:: =T-Adj C-Adj)_3-3_3-3_3-3", "(: T-Adj)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Decl C-Decl)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =T-Decl C-Decl)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Decl)_3-3_3-3_3-3", 
+     "(: +nom T-Decl;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "E_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Decl C-Decl)_tmp2_eps_eps", 
+     "(:: =T-Decl C-Decl)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Decl;: -nom)_eps_eps_0-3_eps",
+      "(:: =v-Decl +nom T-Decl)_eps_eps_eps", 
+     "(: v-Decl;: -nom)_eps_eps_0-3_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Decl;: -nom)_3-3_3-3_3-3_0-3",
+      "(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3", 
+     "(: v-Decl;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Adj C-Adj)_tmp2_eps_eps", 
+     "(:: =T-Adj C-Adj)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Adj;: -nom)_eps_eps_0-3_eps", 
+     "(:: =v-Adj +nom T-Adj)_eps_eps_eps", 
+     "(: v-Adj;: -nom)_eps_eps_0-3_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Adj;: -nom)_3-3_3-3_3-3_0-3", 
+     "(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3", 
+     "(: v-Adj;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Adj C-Adj)_3-3_3-3_3-3", "E_3-3",
+      "(:: =T-Adj C-Adj)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Adj)_3-3_3-3_3-3", 
+     "(: +nom T-Adj;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "E_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Decl C-Decl)_tmp2_3-3_3-3", 
+     "(:: =T-Decl C-Decl)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Decl;: -nom)_3-3_3-3_3-3_3-3",
+      "(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3", 
+     "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Decl C-Decl)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Decl +nom T-Decl)_eps_eps_eps", 
+     "E_eps", "(:: =v-Decl +nom T-Decl)_tmp2_eps_eps"}, {
+    "Binary", 1.00000000000000003044551411673424969093`15.522878745280343, 
+     "(: v-Decl;: -nom)_eps_eps_0-3_eps", "(: =Case v-Decl)_eps_eps_0-3", 
+     "(:: Case -nom)_eps_eps_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Decl +nom T-Decl)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =v-Decl +nom T-Decl)_tmp2_3-3_3-3"}, {
+    "Binary", 1.00000000000000002574237322853416398715`15.522878745280334, 
+     "(: v-Decl;: -nom)_3-3_3-3_3-3_0-3", "(: =Case v-Decl)_3-3_3-3_3-3", 
+     "(: Case -nom)_0-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Adj C-Adj)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Adj +nom T-Adj)_eps_eps_eps", 
+     "E_eps", "(:: =v-Adj +nom T-Adj)_tmp2_eps_eps"}, {
+    "Binary", 1.000000000000000001427456200852738352`15.522878745280334, 
+     "(: v-Adj;: -nom)_eps_eps_0-3_eps", "(: =Case v-Adj)_eps_eps_0-3", 
+     "(:: Case -nom)_eps_eps_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =v-Adj +nom T-Adj)_tmp2_3-3_3-3"}, {
+    "Binary", 0.99999999999999991891224621845462941993`15.522878745280334, 
+     "(: v-Adj;: -nom)_3-3_3-3_3-3_0-3", "(: =Case v-Adj)_3-3_3-3_3-3", 
+     "(: Case -nom)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Adj C-Adj)_tmp2_3-3_3-3", 
+     "(:: =T-Adj C-Adj)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: +nom T-Adj;: -nom)_3-3_3-3_3-3_3-3", 
+     "(:: =v-Adj +nom T-Adj)_3-3_3-3_3-3", 
+     "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Decl C-Decl)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 0.03382013835511145648345988343634843982`15.522878745280337, 
+     "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Decl)_3-3_3-3_3-3", 
+     "(:: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.96617986164488850567469479738338821836`15.522878745280334, 
+     "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Decl)_3-3_3-3_3-3", 
+     "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Decl +nom T-Decl)_tmp2_eps_eps", 
+     "(:: =v-Decl +nom T-Decl)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.00000000000000002407024285060794895144`15.522878745280343, 
+     "(: =Case v-Decl)_eps_eps_0-3", "(:: =V-Decl =Case v-Decl)_eps_eps_eps", 
+     "(: V-Decl)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -nom)_eps_eps_eps", "E_eps", 
+     "(:: Case -nom)_tmp2_eps_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Decl +nom T-Decl)_tmp2_3-3_3-3", 
+     "(:: =v-Decl +nom T-Decl)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.9646425826287471176018447348193697156`15.522878745280334, 
+     "(: =Case v-Decl)_3-3_3-3_3-3", "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", 
+     "(:: V-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 0.03535741737125287847269337949598763571`15.522878745280334, 
+     "(: =Case v-Decl)_3-3_3-3_3-3", "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", 
+     "(: V-Decl)_3-3_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -nom)_0-3_3-3_3-3", 
+     "(: +f Case -nom;: -f)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Adj +nom T-Adj)_tmp2_eps_eps", 
+     "(:: =v-Adj +nom T-Adj)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: =Case v-Adj)_eps_eps_0-3", 
+     "(:: =V-Adj =Case v-Adj)_eps_eps_eps", "(: V-Adj)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =v-Adj +nom T-Adj)_tmp2_3-3_3-3", 
+     "(:: =v-Adj +nom T-Adj)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: =Case v-Adj)_3-3_3-3_3-3", 
+     "(:: =V-Adj =Case v-Adj)_3-3_3-3_3-3", "(: V-Adj)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Adj C-Adj)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 0.98617511520737327188940092165898617511`15.52287874528033, 
+     "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Adj)_3-3_3-3_3-3", 
+     "(:: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.01382488479262672598053015998167259053`15.52287874528033, 
+     "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Adj)_3-3_3-3_3-3", 
+     "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -nom)_3-3_3-3_3-3", 
+     "(: +f Case -nom;: -f)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -nom)_3-3_3-3_3-3", "E_3-3", 
+     "(:: Case -nom)_tmp2_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Decl +nom T-Decl)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Decl =Case v-Decl)_eps_eps_eps", 
+     "E_eps", "(:: =V-Decl =Case v-Decl)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Decl)_0-3_3-3_3-3", 
+     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -nom)_tmp2_eps_eps", 
+     "(:: Case -nom)_tmp1_eps", "E_eps"}, {
+    "Preterminal", 1.`16., "(:: =v-Decl +nom T-Decl)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =V-Decl =Case v-Decl)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Decl)_3-3_3-3_3-3", 
+     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: V-Decl)_3-3_3-3_3-3", "E_3-3", 
+     "(:: V-Decl)_tmp2_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280343, "(: +f Case -nom;: -f)_3-3_3-3_3-3_0-3", 
+     "(:: =D +f Case -nom)_3-3_3-3_3-3", "(: D -f)_0-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Adj +nom T-Adj)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Adj =Case v-Adj)_eps_eps_eps", 
+     "E_eps", "(:: =V-Adj =Case v-Adj)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Adj)_0-3_3-3_3-3", 
+     "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_0-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Adj +nom T-Adj)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Adj =Case v-Adj)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =V-Adj =Case v-Adj)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Adj)_3-3_3-3_3-3", 
+     "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: +f Case -nom;: -f)_3-3_3-3_3-3_3-3", 
+     "(:: =D +f Case -nom)_3-3_3-3_3-3", "(: D -f)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -nom)_tmp2_3-3_3-3", 
+     "(:: Case -nom)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Decl =Case v-Decl)_tmp2_eps_eps",
+      "(:: =V-Decl =Case v-Decl)_tmp1_eps", "E_eps"}, {
+    "Binary", 0.9999999999999999632510610800267833736`15.522878745280343, 
+     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_0-3", 
+     "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(: Case -acc)_0-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: Case -nom)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Decl =Case v-Decl)_tmp2_3-3_3-3",
+      "(:: =V-Decl =Case v-Decl)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.04347826086956522221836097663111592906`15.522878745280337, 
+     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 0.95652173913043474142786878664547534108`15.522878745280334, 
+     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: V-Decl)_tmp2_3-3_3-3", 
+     "(:: V-Decl)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -nom)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =D +f Case -nom)_tmp2_3-3_3-3"}, {
+    "Unary", 0.99999999999999993362233896233101017244`15.698970004336017, 
+     "(: D -f)_0-3_3-3_3-3", "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Adj =Case v-Adj)_tmp2_eps_eps", 
+     "(:: =V-Adj =Case v-Adj)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.00000000000000003152556757150406811921`15.522878745280334, 
+     "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_0-3", 
+     "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(: Case -acc)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Adj =Case v-Adj)_tmp2_3-3_3-3", 
+     "(:: =V-Adj =Case v-Adj)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.01382488479262672964546961929745160878`15.52287874528033, 
+     "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 0.98617511520737322943191666691852317319`15.52287874528033, 
+     "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 0.66166883963494143180320069822615729197`15.522878745280334, 
+     "(: D -f)_3-3_3-3_3-3", "(:: =N D -f)_3-3_3-3_3-3", 
+     "(:: N)_3-3_3-3_3-3"}, {
+    "Unary", 0.33833116036505862544493570845511745563`15.698970004336017, 
+     "(: D -f)_3-3_3-3_3-3", "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: Case -nom)_tmp1_3-3", "EMPTY"}, {
+    "Preterminal", 1.`16., "(:: =V-Decl =Case v-Decl)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Decl)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =Case +acc V-Decl)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -acc)_0-3_3-3_3-3", 
+     "(: +f Case -acc;: -f)_3-3_3-3_3-3_0-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Decl =Case v-Decl)_tmp1_3-3", "EMPTY"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -acc)_3-3_3-3_3-3", 
+     "(: +f Case -acc;: -f)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -acc)_3-3_3-3_3-3", "E_3-3", 
+     "(:: Case -acc)_tmp2_3-3_3-3"}, {
+    "Preterminal", 0.58087649402390438247011952191235059761`16., 
+     "(:: V-Decl)_tmp1_3-3", "yumyenghaycyessta"}, {
+    "Preterminal", 0.41912350597609561752988047808764940239`16., 
+     "(:: V-Decl)_tmp1_3-3", "palkhyecyessta"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -nom)_tmp2_3-3_3-3", 
+     "(:: =D +f Case -nom)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.55483554112056709898978818406835218066`15.522878745280346, 
+     "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3", 
+     "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
+     "(: N-Dep;: -epp)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 0.44516445887943301530547431274630275205`15.522878745280334, 
+     "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3", 
+     "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
+     "(: C-Rel;: -epp)_3-3_3-3_3-3_0-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Adj =Case v-Adj)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Adj)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =Case +acc V-Adj)_tmp2_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Adj =Case v-Adj)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 0.50674373795761079803193252838035906784`15.52287874528033, 
+     "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3", 
+     "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
+     "(: N-Dep;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 0.49325626204238919918716201495071921731`15.522878745280334, 
+     "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3", 
+     "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
+     "(: C-Rel;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N D -f)_3-3_3-3_3-3", "E_3-3", 
+     "(:: =N D -f)_tmp2_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: N)_3-3_3-3_3-3", "E_3-3", 
+     "(:: N)_tmp2_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Decl)_tmp2_3-3_3-3", 
+     "(:: =Case +acc V-Decl)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280343, "(: +f Case -acc;: -f)_3-3_3-3_3-3_0-3", 
+     "(:: =D +f Case -acc)_3-3_3-3_3-3", "(: D -f)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: +f Case -acc;: -f)_3-3_3-3_3-3_3-3", 
+     "(:: =D +f Case -acc)_3-3_3-3_3-3", "(: D -f)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: Case -acc)_tmp2_3-3_3-3", 
+     "(:: Case -acc)_tmp1_3-3", "E_3-3"}, {
+    "Preterminal", 0.47578347578347578347578347578347578348`16., 
+     "(:: =D +f Case -nom)_tmp1_3-3", "i"}, {
+    "Preterminal", 0.52421652421652421652421652421652421652`16., 
+     "(:: =D +f Case -nom)_tmp1_3-3", "ka"}, {
+    "Binary", 1.`15.522878745280334, "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =C-Rel +epp D -f)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: C-Rel;: -epp)_3-3_3-3_3-3_0-3", 
+     "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =N-Dep +epp D -f)_tmp2_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280343, "(: N-Dep;: -epp)_3-3_3-3_3-3_0-3", 
+     "(:: =C-Emb N-Dep)_3-3_3-3_3-3", "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Adj)_tmp2_3-3_3-3", 
+     "(:: =Case +acc V-Adj)_tmp1_3-3", "E_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: C-Rel;: -epp)_3-3_3-3_3-3_3-3", 
+     "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: N-Dep;: -epp)_3-3_3-3_3-3_3-3", 
+     "(:: =C-Emb N-Dep)_3-3_3-3_3-3", "(: C-Emb;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N D -f)_tmp2_3-3_3-3", 
+     "(:: =N D -f)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: N)_tmp2_3-3_3-3", "(:: N)_tmp1_3-3",
+      "E_3-3"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Decl)_tmp1_3-3", 
+     "kongkyekhayssta"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =D +f Case -acc)_tmp2_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: Case -acc)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =C-Rel +epp D -f)_tmp2_3-3_3-3", 
+     "(:: =C-Rel +epp D -f)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.89822550380420614019519813808045048509`15.522878745280337, 
+     "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3", 
+     "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
+     "(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3"}, {
+    "Binary", 0.1017744961957939021550533870628351097`15.522878745280337, 
+     "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3", 
+     "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
+     "(: T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N-Dep +epp D -f)_tmp2_3-3_3-3", 
+     "(:: =N-Dep +epp D -f)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =C-Emb N-Dep)_3-3_3-3_3-3", "E_3-3",
+      "(:: =C-Emb N-Dep)_tmp2_3-3_3-3"}, {
+    "Binary", 0.99706268599393270223940653686602038763`15.522878745280337, 
+     "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3", "(:: =T-Emb C-Emb)_3-3_3-3_3-3", 
+     "(: T-Emb -epp)_eps_eps_0-3"}, {
+    "Binary", 0.00293731400606733812324920689217163204`15.522878745280337, 
+     "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3", "(:: =T-Emb C-Emb)_3-3_3-3_3-3", 
+     "(: T-Emb -epp)_0-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Adj)_tmp1_3-3", 
+     "kongkyekhayse"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_3-3_3-3", 
+     "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
+     "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: C-Emb;: -epp)_3-3_3-3_3-3_3-3", 
+     "(:: =T-Emb C-Emb)_3-3_3-3_3-3", "(: T-Emb -epp)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =N D -f)_tmp1_3-3", "EMPTY"}, {
+    "Preterminal", 0.36256157635467980295566502463054187192`16., 
+     "(:: N)_tmp1_3-3", "kica"}, {
+    "Preterminal", 0.63743842364532019704433497536945812808`16., 
+     "(:: N)_tmp1_3-3", "uywon"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc)_tmp2_3-3_3-3", 
+     "(:: =D +f Case -acc)_tmp1_3-3", "E_3-3"}, {
+    "Preterminal", 1.`16., "(:: =C-Rel +epp D -f)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =T-Rel +wh C-Rel)_tmp2_3-3_3-3"}, {
+    "Unary", 0.99999999999999999024722246513496467749`15.698970004336017, 
+     "(: T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3", 
+     "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_0-3"}, {
+    "Unary", 0.99999999999999995727140313639201736361`15.698970004336026, 
+     "(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3", 
+     "(: +nom T-Rel -epp;: -nom -wh)_eps_eps_0-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =N-Dep +epp D -f)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =C-Emb N-Dep)_tmp2_3-3_3-3", 
+     "(:: =C-Emb N-Dep)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Emb C-Emb)_3-3_3-3_3-3", "E_3-3",
+      "(:: =T-Emb C-Emb)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Emb -epp)_0-3_3-3_3-3", 
+     "(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Emb -epp)_eps_eps_0-3", 
+     "(: +nom T-Emb -epp;: -nom)_eps_eps_0-3_eps"}, {
+    "Unary", 0.27148437499999999999999999998629354177`15.698970004336012, 
+     "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
+     "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3"}, {
+    "Unary", 0.728515625`15.698970004336017, 
+     "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
+     "(: +nom T-Rel -epp;: -nom -wh)_3-3_3-3_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: T-Emb -epp)_3-3_3-3_3-3", 
+     "(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =D +f Case -acc)_tmp1_3-3", "ul"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Rel +wh C-Rel)_tmp2_3-3_3-3", 
+     "(:: =T-Rel +wh C-Rel)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280343, 
+     "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_0-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_3-3_3-3_3-3", 
+     "(: v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280343, 
+     "(: +nom T-Rel -epp;: -nom -wh)_eps_eps_0-3_3-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_eps_eps_eps", 
+     "(: v-Rel;: -nom -wh)_eps_eps_0-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =C-Emb N-Dep)_tmp1_3-3", "sasil"}, {
+    "Binary", 1.`15.522878745280334, "(:: =T-Emb C-Emb)_tmp2_3-3_3-3", 
+     "(:: =T-Emb C-Emb)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_0-3", 
+     "(:: =v-Emb +nom T-Emb -epp)_3-3_3-3_3-3", 
+     "(: v-Emb;: -nom)_3-3_3-3_3-3_0-3"}, {
+    "Binary", 1.`15.522878745280343, 
+     "(: +nom T-Emb -epp;: -nom)_eps_eps_0-3_eps", 
+     "(:: =v-Emb +nom T-Emb -epp)_eps_eps_eps", 
+     "(: v-Emb;: -nom)_eps_eps_0-3_eps"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +nom T-Rel -epp;: -nom -wh)_3-3_3-3_3-3_3-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_3-3_3-3_3-3", 
+     "(: v-Rel;: -nom -wh)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_3-3_3-3_3-3", 
+     "(: v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +nom T-Emb -epp;: -nom)_3-3_3-3_3-3_3-3", 
+     "(:: =v-Emb +nom T-Emb -epp)_3-3_3-3_3-3", 
+     "(: v-Emb;: -nom)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Rel +wh C-Rel)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Rel +nom T-Rel -epp)_3-3_3-3_3-3", "E_3-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp2_3-3_3-3"}, {
+    "Binary", 0.99999999999999999655124572158353679585`15.522878745280337, 
+     "(: v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_0-3", 
+     "(: =Case v-Rel;: -wh)_3-3_3-3_3-3_3-3", "(: Case -nom)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Rel +nom T-Rel -epp)_eps_eps_eps", "E_eps", 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp2_eps_eps"}, {
+    "Binary", 1.00000000000000002911773479184415617533`15.522878745280343, 
+     "(: v-Rel;: -nom -wh)_eps_eps_0-3_3-3", "(: =Case v-Rel)_eps_eps_0-3", 
+     "(: Case -nom -wh)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =T-Emb C-Emb)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Emb +nom T-Emb -epp)_3-3_3-3_3-3", "E_3-3", 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp2_3-3_3-3"}, {
+    "Binary", 0.99999999999999997704739868456615907935`15.522878745280343, 
+     "(: v-Emb;: -nom)_3-3_3-3_3-3_0-3", "(: =Case v-Emb)_3-3_3-3_3-3", 
+     "(: Case -nom)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Emb +nom T-Emb -epp)_eps_eps_eps", "E_eps", 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp2_eps_eps"}, {
+    "Binary", 1.00000000000000005147383315616873743087`15.522878745280334, 
+     "(: v-Emb;: -nom)_eps_eps_0-3_eps", "(: =Case v-Emb)_eps_eps_0-3", 
+     "(:: Case -nom)_eps_eps_eps"}, {
+    "Binary", 1.00000000000000000000000000316808913447`15.522878745280334, 
+     "(: v-Rel;: -nom -wh)_3-3_3-3_3-3_3-3", "(: =Case v-Rel)_3-3_3-3_3-3", 
+     "(: Case -nom -wh)_3-3_3-3_3-3"}, {
+    "Binary", 1.00000000000000000000000000321226534516`15.522878745280334, 
+     "(: v-Rel;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3", 
+     "(: =Case v-Rel;: -wh)_3-3_3-3_3-3_3-3", "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.99049429657794683822125438598672810161`15.522878745280334, 
+     "(: v-Emb;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Emb)_3-3_3-3_3-3", 
+     "(:: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.00950570342205323114789693286367372603`15.522878745280334, 
+     "(: v-Emb;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Emb)_3-3_3-3_3-3", 
+     "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp2_3-3_3-3", 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: =Case v-Rel;: -wh)_3-3_3-3_3-3_3-3", 
+     "(:: =V-Rel =Case v-Rel)_3-3_3-3_3-3", 
+     "(: V-Rel;: -wh)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp2_eps_eps", 
+     "(:: =v-Rel +nom T-Rel -epp)_tmp1_eps", "E_eps"}, {
+    "Binary", 0.69594817766172705127575484575397355572`15.522878745280337, 
+     "(: =Case v-Rel)_eps_eps_0-3", "(:: =V-Rel =Case v-Rel)_eps_eps_eps", 
+     "(: V-Rel)_0-2_2-3_3-3"}, {
+    "Binary", 0.30405182233827294872424515424602644428`15.522878745280337, 
+     "(: =Case v-Rel)_eps_eps_0-3", "(:: =V-Rel =Case v-Rel)_eps_eps_eps", 
+     "(: V-Rel)_0-3_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -nom -wh)_3-3_3-3_3-3", 
+     "(: +f Case -nom -wh;: -f)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp2_3-3_3-3", 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: =Case v-Emb)_3-3_3-3_3-3", 
+     "(:: =V-Emb =Case v-Emb)_3-3_3-3_3-3", "(: V-Emb)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp2_eps_eps", 
+     "(:: =v-Emb +nom T-Emb -epp)_tmp1_eps", "E_eps"}, {
+    "Binary", 0.69594817766172705941401858033757923918`15.522878745280334, 
+     "(: =Case v-Emb)_eps_eps_0-3", "(:: =V-Emb =Case v-Emb)_eps_eps_eps", 
+     "(: V-Emb)_0-2_2-3_3-3"}, {
+    "Binary", 0.30405182233827294058598141966242076082`15.522878745280334, 
+     "(: =Case v-Emb)_eps_eps_0-3", "(:: =V-Emb =Case v-Emb)_eps_eps_eps", 
+     "(: V-Emb)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(: =Case v-Rel)_3-3_3-3_3-3", 
+     "(:: =V-Rel =Case v-Rel)_3-3_3-3_3-3", "(: V-Rel)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Rel +nom T-Rel -epp)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Rel =Case v-Rel)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =V-Rel =Case v-Rel)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Rel;: -wh)_3-3_3-3_3-3_3-3", 
+     "(: +acc V-Rel;: -acc -wh)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Rel +nom T-Rel -epp)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Rel =Case v-Rel)_eps_eps_eps", 
+     "E_eps", "(:: =V-Rel =Case v-Rel)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Rel)_0-3_3-3_3-3", 
+     "(: +acc V-Rel;: -acc)_3-3_3-3_3-3_0-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Rel)_0-2_2-3_3-3", 
+     "(: +acc V-Rel;: -acc)_eps_2-3_3-3_0-2"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +f Case -nom -wh;: -f)_3-3_3-3_3-3_3-3", 
+     "(:: =D +f Case -nom -wh)_3-3_3-3_3-3", "(: D -f)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Emb +nom T-Emb -epp)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Emb =Case v-Emb)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =V-Emb =Case v-Emb)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Emb)_3-3_3-3_3-3", 
+     "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =v-Emb +nom T-Emb -epp)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Emb =Case v-Emb)_eps_eps_eps", 
+     "E_eps", "(:: =V-Emb =Case v-Emb)_tmp2_eps_eps"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Emb)_0-3_3-3_3-3", 
+     "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_0-3"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Emb)_0-2_2-3_3-3", 
+     "(: +acc V-Emb;: -acc)_eps_2-3_3-3_0-2"}, {
+    "Unary", 1.`15.698970004336017, "(: V-Rel)_3-3_3-3_3-3", 
+     "(: +acc V-Rel;: -acc)_3-3_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Rel =Case v-Rel)_tmp2_3-3_3-3", 
+     "(:: =V-Rel =Case v-Rel)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, 
+     "(: +acc V-Rel;: -acc -wh)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Rel)_3-3_3-3_3-3", "(: Case -acc -wh)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Rel =Case v-Rel)_tmp2_eps_eps", 
+     "(:: =V-Rel =Case v-Rel)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.`15.522878745280343, "(: +acc V-Rel;: -acc)_3-3_3-3_3-3_0-3", 
+     "(:: =Case +acc V-Rel)_3-3_3-3_3-3", "(: Case -acc)_0-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280343, "(: +acc V-Rel;: -acc)_eps_2-3_3-3_0-2", 
+     "(:: =Case +acc V-Rel)_eps_2-3_3-3", "(: Case -acc)_0-1_1-2_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -nom -wh)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =D +f Case -nom -wh)_tmp2_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Emb =Case v-Emb)_tmp2_3-3_3-3", 
+     "(:: =V-Emb =Case v-Emb)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 0.00950570342205323383524444442229574801`15.522878745280334, 
+     "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Emb)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 0.99049429657794681302207712721127146265`15.522878745280334, 
+     "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Emb)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =V-Emb =Case v-Emb)_tmp2_eps_eps", 
+     "(:: =V-Emb =Case v-Emb)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.00000000000000001850303027301330015791`15.522878745280334, 
+     "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_0-3", 
+     "(:: =Case +acc V-Emb)_3-3_3-3_3-3", "(: Case -acc)_0-3_3-3_3-3"}, {
+    "Binary", 0.99999999999999998004321028959523655557`15.522878745280334, 
+     "(: +acc V-Emb;: -acc)_eps_2-3_3-3_0-2", 
+     "(:: =Case +acc V-Emb)_eps_2-3_3-3", "(: Case -acc)_0-1_1-2_eps"}, {
+    "Binary", 1.`15.522878745280334, "(: +acc V-Rel;: -acc)_3-3_3-3_3-3_3-3", 
+     "(:: =Case +acc V-Rel)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Rel =Case v-Rel)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Rel)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =Case +acc V-Rel)_tmp2_3-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -acc -wh)_3-3_3-3_3-3", 
+     "(: +f Case -acc -wh;: -f)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Rel =Case v-Rel)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Rel)_eps_2-3_3-3", 
+     "E_eps", "(:: =Case +acc V-Rel)_tmp2_2-3_3-3"}, {
+    "Unary", 1.`15.698970004336017, "(: Case -acc)_0-1_1-2_eps", 
+     "(: +f Case -acc;: -f)_eps_1-2_eps_0-1"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -nom -wh)_tmp2_3-3_3-3", 
+     "(:: =D +f Case -nom -wh)_tmp1_3-3", "E_3-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Emb =Case v-Emb)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Emb)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =Case +acc V-Emb)_tmp2_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =V-Emb =Case v-Emb)_tmp1_eps", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Emb)_eps_2-3_3-3", 
+     "E_eps", "(:: =Case +acc V-Emb)_tmp2_2-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Rel)_tmp2_3-3_3-3", 
+     "(:: =Case +acc V-Rel)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.00000000000000000000000000000631088724`15.522878745280334, 
+     "(: +f Case -acc -wh;: -f)_3-3_3-3_3-3_3-3", 
+     "(:: =D +f Case -acc -wh)_3-3_3-3_3-3", "(: D -f)_3-3_3-3_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Rel)_tmp2_2-3_3-3", 
+     "(:: =Case +acc V-Rel)_tmp1_2-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280343, "(: +f Case -acc;: -f)_eps_1-2_eps_0-1", 
+     "(:: =D +f Case -acc)_eps_1-2_eps", "(: D -f)_eps_eps_0-1"}, {
+    "Preterminal", 1.`16., "(:: =D +f Case -nom -wh)_tmp1_3-3", "EMPTY"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Emb)_tmp2_3-3_3-3", 
+     "(:: =Case +acc V-Emb)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =Case +acc V-Emb)_tmp2_2-3_3-3", 
+     "(:: =Case +acc V-Emb)_tmp1_2-3", "E_3-3"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Rel)_tmp1_3-3", "kongkyekhan"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc -wh)_3-3_3-3_3-3", 
+     "E_3-3", "(:: =D +f Case -acc -wh)_tmp2_3-3_3-3"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Rel)_tmp1_2-3", "kongkyekhan"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc)_eps_1-2_eps", 
+     "E_eps", "(:: =D +f Case -acc)_tmp2_1-2_eps"}, {
+    "Binary", 0.99999999999999997391748071977994061638`15.522878745280334, 
+     "(: D -f)_eps_eps_0-1", "(:: =N D -f)_eps_eps_eps", 
+     "(:: N)_eps_0-1_eps"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Emb)_tmp1_3-3", "kongkyekhan"}, {
+    "Preterminal", 1.`16., "(:: =Case +acc V-Emb)_tmp1_2-3", "kongkyekhan"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc -wh)_tmp2_3-3_3-3", 
+     "(:: =D +f Case -acc -wh)_tmp1_3-3", "E_3-3"}, {
+    "Binary", 1.`15.522878745280334, "(:: =D +f Case -acc)_tmp2_1-2_eps", 
+     "(:: =D +f Case -acc)_tmp1_1-2", "E_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N D -f)_eps_eps_eps", "E_eps", 
+     "(:: =N D -f)_tmp2_eps_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: N)_eps_0-1_eps", "E_eps", 
+     "(:: N)_tmp2_0-1_eps"}, {
+    "Preterminal", 1.`16., "(:: =D +f Case -acc -wh)_tmp1_3-3", "EMPTY"}, {
+    "Preterminal", 1.`16., "(:: =D +f Case -acc)_tmp1_1-2", "ul"}, {
+    "Binary", 1.`15.522878745280334, "(:: =N D -f)_tmp2_eps_eps", 
+     "(:: =N D -f)_tmp1_eps", "E_eps"}, {
+    "Binary", 1.`15.522878745280334, "(:: N)_tmp2_0-1_eps", "(:: N)_tmp1_0-1",
+      "E_eps"}, {"Preterminal", 1.`16., "(:: =N D -f)_tmp1_eps", "EMPTY"}, {
+    "Preterminal", 0.99999999999999996722525537814452978811`16., 
+     "(:: N)_tmp1_0-1", "uywon"}}]]], "Output",
+ CellChangeTimes->{3.524588389680716*^9}]
+}, Closed]],
 
 Cell[BoxData[
  RowBox[{
@@ -397,17 +2032,24 @@ C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: C-Decl)_3-3_3-3_3-3\"\>"},
      "0.9661798616448886`", "\<\"(: v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", \
 "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
+     "0.9646425826287471`", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: \
+=V-Decl =Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: V-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.035357417371252885`", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
+"\<\"(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(: \
+V-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
      "0.9861751152073732`", "\<\"(: v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", \
 "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", "\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
      "0.013824884792626729`", "\<\"(: v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\
 \"(: =Case v-Adj)_3-3_3-3_3-3\"\>", "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.0015372790161414297`", "\<\"(: +acc V-Decl;: \
+     "0.043478260869565216`", "\<\"(: +acc V-Decl;: \
 -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc V-Decl)_3-3_3-3_3-3\"\>", "\<\
 \"(:: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.9984627209838586`", "\<\"(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", \
+     "0.9565217391304348`", "\<\"(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", \
 "\<\"(:: =Case +acc V-Decl)_3-3_3-3_3-3\"\>", "\<\"(: Case \
 -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
@@ -419,11 +2061,17 @@ C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: C-Decl)_3-3_3-3_3-3\"\>"},
 "\<\"(:: =Case +acc V-Adj)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\
 \>"},
     {"\<\"Binary\"\>", 
-     "0.7598889659958362`", "\<\"(: D -f)_3-3_3-3_3-3\"\>", "\<\"(:: =N D \
+     "0.6616688396349413`", "\<\"(: D -f)_3-3_3-3_3-3\"\>", "\<\"(:: =N D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(:: N)_3-3_3-3_3-3\"\>"},
     {"\<\"Unary\"\>", 
-     "0.24011103400416378`", "\<\"(: D -f)_3-3_3-3_3-3\"\>", "\<\"(: +epp D \
+     "0.33833116036505867`", "\<\"(: D -f)_3-3_3-3_3-3\"\>", "\<\"(: +epp D \
 -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.5808764940239044`", "\<\"(:: V-Decl)_tmp1_3-3\"\>", \
+"\<\"yumyenghaycyessta\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.4191235059760956`", "\<\"(:: V-Decl)_tmp1_3-3\"\>", \
+"\<\"palkhyecyessta\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
      "0.5067437379576107`", "\<\"(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\
 \<\"(:: =N-Dep +epp D -f)_3-3_3-3_3-3\"\>", "\<\"(: N-Dep;: \
@@ -440,6 +2088,12 @@ C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: C-Decl)_3-3_3-3_3-3\"\>"},
      "0.4932562620423892`", "\<\"(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\
 \<\"(:: =C-Rel +epp D -f)_3-3_3-3_3-3\"\>", "\<\"(: C-Rel;: \
 -epp)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.4757834757834758`", "\<\"(:: =D +f Case -nom)_tmp1_3-3\"\>", "\<\"i\"\
+\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.5242165242165242`", "\<\"(:: =D +f Case -nom)_tmp1_3-3\"\>", \
+"\<\"ka\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
      "0.5`", "\<\"(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", \
 "\<\"(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3\"\>", "\<\"(: T-Rel -epp;: \
@@ -454,6 +2108,12 @@ C-Emb)_3-3_3-3_3-3\"\>", "\<\"(: T-Emb -epp)_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
      "0.5`", "\<\"(: C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =T-Emb \
 C-Emb)_3-3_3-3_3-3\"\>", "\<\"(: T-Emb -epp)_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.3625615763546798`", "\<\"(:: N)_tmp1_3-3\"\>", "\<\"kica\"\>", \
+"\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.6374384236453202`", "\<\"(:: N)_tmp1_3-3\"\>", "\<\"uywon\"\>", "\<\"\
+\"\>"},
     {"\<\"Unary\"\>", 
      "0.271484375`", "\<\"(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: \
 +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
@@ -515,23 +2175,30 @@ v-Emb)_eps_eps_eps\"\>", "\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
      "(: =Case v-Decl)_3-3_3-3_3-3", "(:: Case -nom)_3-3_3-3_3-3"}, {
     "Binary", 0.9661798616448886, "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3", 
      "(: =Case v-Decl)_3-3_3-3_3-3", "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.9646425826287471, "(: =Case v-Decl)_3-3_3-3_3-3", 
+     "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", "(:: V-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 0.035357417371252885`, "(: =Case v-Decl)_3-3_3-3_3-3", 
+     "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", "(: V-Decl)_3-3_3-3_3-3"}, {
     "Binary", 0.9861751152073732, "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", 
      "(: =Case v-Adj)_3-3_3-3_3-3", "(:: Case -nom)_3-3_3-3_3-3"}, {
     "Binary", 0.013824884792626729`, "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", 
      "(: =Case v-Adj)_3-3_3-3_3-3", "(: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.0015372790161414297`, 
-     "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
-     "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.9984627209838586, "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
+    "Binary", 0.043478260869565216`, "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3",
+      "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
+    "Binary", 0.9565217391304348, "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
     "Binary", 0.013824884792626729`, "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
     "Binary", 0.9861751152073732, "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.7598889659958362, "(: D -f)_3-3_3-3_3-3", 
+    "Binary", 0.6616688396349413, "(: D -f)_3-3_3-3_3-3", 
      "(:: =N D -f)_3-3_3-3_3-3", "(:: N)_3-3_3-3_3-3"}, {
-    "Unary", 0.24011103400416378`, "(: D -f)_3-3_3-3_3-3", 
+    "Unary", 0.33833116036505867`, "(: D -f)_3-3_3-3_3-3", 
      "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 0.5808764940239044, "(:: V-Decl)_tmp1_3-3", 
+     "yumyenghaycyessta"}, {
+    "Preterminal", 0.4191235059760956, "(:: V-Decl)_tmp1_3-3", 
+     "palkhyecyessta"}, {
     "Binary", 0.5067437379576107, "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3", 
      "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
      "(: N-Dep;: -epp)_3-3_3-3_3-3_0-3"}, {
@@ -544,6 +2211,9 @@ v-Emb)_eps_eps_eps\"\>", "\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
     "Binary", 0.4932562620423892, "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3", 
      "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
      "(: C-Rel;: -epp)_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 0.4757834757834758, "(:: =D +f Case -nom)_tmp1_3-3", 
+     "i"}, {"Preterminal", 0.5242165242165242, 
+     "(:: =D +f Case -nom)_tmp1_3-3", "ka"}, {
     "Binary", 0.5, "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3", 
      "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
      "(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3"}, {
@@ -554,6 +2224,8 @@ v-Emb)_eps_eps_eps\"\>", "\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
      "(:: =T-Emb C-Emb)_3-3_3-3_3-3", "(: T-Emb -epp)_eps_eps_0-3"}, {
     "Binary", 0.5, "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3", 
      "(:: =T-Emb C-Emb)_3-3_3-3_3-3", "(: T-Emb -epp)_0-3_3-3_3-3"}, {
+    "Preterminal", 0.3625615763546798, "(:: N)_tmp1_3-3", "kica"}, {
+    "Preterminal", 0.6374384236453202, "(:: N)_tmp1_3-3", "uywon"}, {
     "Unary", 0.271484375, "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
      "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3"}, {
     "Unary", 0.728515625, "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
@@ -576,7 +2248,8 @@ v-Emb)_eps_eps_eps\"\>", "\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
      "(:: =Case +acc V-Emb)_3-3_3-3_3-3", 
      "(: Case -acc)_3-3_3-3_3-3"}}]]], "Output",
  CellChangeTimes->{{3.5239666802466927`*^9, 3.523966684702366*^9}, 
-   3.5239667670610857`*^9, 3.5239667997916393`*^9, 3.523967112938743*^9}]
+   3.5239667670610857`*^9, 3.5239667997916393`*^9, 3.523967112938743*^9, 
+   3.524588421807805*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -602,25 +2275,25 @@ Cell[BoxData[
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {"\<\"Unary\"\>", 
-     "0.85871605845766739009469517489353196768`15.698970004336017", \
+     "0.85464368229964559592940691818943102257`15.698970004336017", \
 "\<\"S_0-3\"\>", "\<\"(: C-Decl)_eps_eps_0-3\"\>", "\<\"\"\>"},
     {"\<\"Unary\"\>", 
-     "0.14128394154233260990530482510646803232`15.698970004336017", \
+     "0.14535631770035438466091326323960354531`15.698970004336017", \
 "\<\"S_0-3\"\>", "\<\"(: C-Decl)_0-3_3-3_3-3\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.96623009690324390373646339519075716481`15.522878745280337", "\<\"(: \
+     "0.99881756044886280590797546537071801866`15.522878745280343", "\<\"(: \
 C-Decl)_eps_eps_0-3\"\>", "\<\"(:: =T-Decl C-Decl)_eps_eps_eps\"\>", "\<\"(: \
 T-Decl)_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.03376990309675612591686913881364019674`15.522878745280321", "\<\"(: \
+     "0.00118243955113715134228199571535597057`15.522878745280343", "\<\"(: \
 C-Decl)_eps_eps_0-3\"\>", "\<\"(:: =T-Decl C-Decl)_eps_eps_eps\"\>", "\<\"(: \
 T-Decl)_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.01401597519753697752780170595449282838`15.522878745280337", "\<\"(: \
+     "0.01401597519753697777246048643693691557`15.522878745280337", "\<\"(: \
 C-Adj)_eps_eps_0-3\"\>", "\<\"(:: =T-Adj C-Adj)_eps_eps_eps\"\>", "\<\"(: \
 T-Adj)_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.98598402480246306101285190750915892458`15.522878745280334", "\<\"(: \
+     "0.98598402480246302938573721360256643093`15.522878745280334", "\<\"(: \
 C-Adj)_eps_eps_0-3\"\>", "\<\"(:: =T-Adj C-Adj)_eps_eps_eps\"\>", "\<\"(: \
 T-Adj)_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
@@ -628,83 +2301,109 @@ T-Adj)_eps_eps_0-3\"\>"},
 C-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =T-Decl C-Decl)_3-3_3-3_3-3\"\>", "\<\"(: \
 T-Decl)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.14295125164690382081686429512516469038`15.52287874528033", "\<\"(: \
+     "0.14295125164690380494608719738741967906`15.52287874528033", "\<\"(: \
 C-Decl)_3-3_3-3_3-3\"\>", "\<\"(: C-Adj)_3-3_3-3_3-3\"\>", "\<\"(: \
 C-Decl)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.03382013835511145272867025365103766333`15.522878745280337", "\<\"(: \
+     "0.03382013835511145648345988343634843982`15.522878745280337", "\<\"(: \
 v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
 "\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.96617986164488854138895453120598713497`15.522878745280334", "\<\"(: \
+     "0.96617986164488850567469479738338821836`15.522878745280334", "\<\"(: \
 v-Decl;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Decl)_3-3_3-3_3-3\"\>", \
 "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.9646425826287471176018447348193697156`15.522878745280334", "\<\"(: \
+=Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: V-Decl)_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.03535741737125287847269337949598763571`15.522878745280334", "\<\"(: \
+=Case v-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: =V-Decl =Case \
+v-Decl)_3-3_3-3_3-3\"\>", "\<\"(: V-Decl)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
      "0.98617511520737327188940092165898617511`15.52287874528033", "\<\"(: \
 v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", \
 "\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.01382488479262672802642928461554270385`15.52287874528033", "\<\"(: \
+     "0.01382488479262672598053015998167259053`15.52287874528033", "\<\"(: \
 v-Adj;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Adj)_3-3_3-3_3-3\"\>", \
 "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.00153727901614142966948501152959262106`15.522878745280334", "\<\"(: \
+     "0.04347826086956522221836097663111592906`15.522878745280337", "\<\"(: \
 +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Decl)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.9984627209838585642515926301006979223`15.522878745280334", "\<\"(: \
+     "0.95652173913043474142786878664547534108`15.522878745280334", "\<\"(: \
 +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Decl)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.01382488479262672811059907834101382489`15.52287874528033", "\<\"(: \
+     "0.01382488479262672964546961929745160878`15.52287874528033", "\<\"(: \
 +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Adj)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.98617511520737326588528896924204620832`15.52287874528033", "\<\"(: \
+     "0.98617511520737322943191666691852317319`15.52287874528033", "\<\"(: \
 +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Adj)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.75988896599583622947027655241217222884`15.522878745280334", "\<\"(: D \
+     "0.66166883963494143180320069822615729197`15.522878745280334", "\<\"(: D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(:: =N D -f)_3-3_3-3_3-3\"\>", "\<\"(:: \
 N)_3-3_3-3_3-3\"\>"},
     {"\<\"Unary\"\>", 
-     "0.24011103400416375733571302110386917257`15.698970004336017", "\<\"(: D \
+     "0.33833116036505862544493570845511745563`15.698970004336017", "\<\"(: D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\
 \>"},
+    {"\<\"Preterminal\"\>", 
+     "0.58087649402390438247011952191235059761`16.", "\<\"(:: \
+V-Decl)_tmp1_3-3\"\>", "\<\"yumyenghaycyessta\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.41912350597609561752988047808764940239`16.", "\<\"(:: \
+V-Decl)_tmp1_3-3\"\>", "\<\"palkhyecyessta\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.56227157892928690734648461460375648115`15.522878745280337", "\<\"(: \
+     "0.55483554112056709898978818406835218066`15.522878745280346", "\<\"(: \
 +epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =N-Dep +epp D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.43772842107071313505091290040167529984`15.522878745280343", "\<\"(: \
+     "0.44516445887943301530547431274630275205`15.522878745280334", "\<\"(: \
 +epp D -f;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =C-Rel +epp D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.50674373795761079842870761014293666032`15.52287874528033", "\<\"(: \
+     "0.50674373795761079803193252838035906784`15.52287874528033", "\<\"(: \
 +epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =N-Dep +epp D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(: N-Dep;: -epp)_3-3_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.49325626204238922788293481673449389099`15.522878745280334", "\<\"(: \
+     "0.49325626204238919918716201495071921731`15.522878745280334", "\<\"(: \
 +epp D -f;: -epp)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =C-Rel +epp D \
 -f)_3-3_3-3_3-3\"\>", "\<\"(: C-Rel;: -epp)_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.47578347578347578347578347578347578348`16.", "\<\"(:: =D +f Case \
+-nom)_tmp1_3-3\"\>", "\<\"i\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.52421652421652421652421652421652421652`16.", "\<\"(:: =D +f Case \
+-nom)_tmp1_3-3\"\>", "\<\"ka\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.92654441546097607236010983180394091474`15.522878745280334", "\<\"(: \
+     "0.89822550380420614019519813808045048509`15.522878745280337", "\<\"(: \
 +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"(:: =T-Rel +wh \
 C-Rel)_3-3_3-3_3-3\"\>", "\<\"(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.0734555845390239093540580080814033003`15.522878745280343", "\<\"(: \
+     "0.1017744961957939021550533870628351097`15.522878745280337", "\<\"(: \
 +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"(:: =T-Rel +wh \
 C-Rel)_3-3_3-3_3-3\"\>", "\<\"(: T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99794297941887472688931598212872561881`15.522878745280337", "\<\"(: \
+     "0.99706268599393270223940653686602038763`15.522878745280337", "\<\"(: \
 C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", \
 "\<\"(: T-Emb -epp)_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.0020570205811252338066072753003259769`15.522878745280337", "\<\"(: \
+     "0.00293731400606733812324920689217163204`15.522878745280337", "\<\"(: \
 C-Emb;: -epp)_3-3_3-3_3-3_0-3\"\>", "\<\"(:: =T-Emb C-Emb)_3-3_3-3_3-3\"\>", \
 "\<\"(: T-Emb -epp)_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.36256157635467980295566502463054187192`16.", "\<\"(:: \
+N)_tmp1_3-3\"\>", "\<\"kica\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.63743842364532019704433497536945812808`16.", "\<\"(:: \
+N)_tmp1_3-3\"\>", "\<\"uywon\"\>", "\<\"\"\>"},
     {"\<\"Unary\"\>", 
-     "0.2714843749999999999999991017335535557`15.698970004336012", "\<\"(: \
+     "0.27148437499999999999999999998629354177`15.698970004336012", "\<\"(: \
 T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -wh;: \
 -nom)_3-3_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
     {"\<\"Unary\"\>", 
@@ -712,35 +2411,35 @@ T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -wh;: \
 -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"(: +nom T-Rel -epp;: -nom \
 -wh)_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99049429657794680525653838720527027455`15.522878745280334", "\<\"(: \
+     "0.99049429657794683822125438598672810161`15.522878745280334", "\<\"(: \
 v-Emb;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", \
 "\<\"(:: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.00950570342205323223825460692602292806`15.522878745280334", "\<\"(: \
+     "0.00950570342205323114789693286367372603`15.522878745280334", "\<\"(: \
 v-Emb;: -nom)_3-3_3-3_3-3_3-3\"\>", "\<\"(: =Case v-Emb)_3-3_3-3_3-3\"\>", \
 "\<\"(: Case -nom)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.78725830856254840311635365398153034678`15.522878745280337", "\<\"(: \
+     "0.69594817766172705127575484575397355572`15.522878745280337", "\<\"(: \
 =Case v-Rel)_eps_eps_0-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_eps_eps_eps\"\>", \
 "\<\"(: V-Rel)_0-2_2-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.21274169143745159688364634601847124946`15.522878745280334", "\<\"(: \
+     "0.30405182233827294872424515424602644428`15.522878745280337", "\<\"(: \
 =Case v-Rel)_eps_eps_0-3\"\>", "\<\"(:: =V-Rel =Case v-Rel)_eps_eps_eps\"\>", \
 "\<\"(: V-Rel)_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.78725830856254841522553762156886903652`15.522878745280337", "\<\"(: \
+     "0.69594817766172705941401858033757923918`15.522878745280334", "\<\"(: \
 =Case v-Emb)_eps_eps_0-3\"\>", "\<\"(:: =V-Emb =Case v-Emb)_eps_eps_eps\"\>", \
 "\<\"(: V-Emb)_0-2_2-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.21274169143745158477446237843113176926`15.522878745280334", "\<\"(: \
+     "0.30405182233827294058598141966242076082`15.522878745280334", "\<\"(: \
 =Case v-Emb)_eps_eps_0-3\"\>", "\<\"(:: =V-Emb =Case v-Emb)_eps_eps_eps\"\>", \
 "\<\"(: V-Emb)_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.00950570342205323218709092272327126743`15.522878745280334", "\<\"(: \
+     "0.00950570342205323383524444442229574801`15.522878745280334", "\<\"(: \
 +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Emb)_3-3_3-3_3-3\"\>", "\<\"(:: Case -acc)_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99049429657794678786446580225118496497`15.522878745280334", "\<\"(: \
+     "0.99049429657794681302207712721127146265`15.522878745280334", "\<\"(: \
 +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3\"\>", "\<\"(:: =Case +acc \
 V-Emb)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"}
    },
@@ -755,121 +2454,140 @@ V-Emb)_3-3_3-3_3-3\"\>", "\<\"(: Case -acc)_3-3_3-3_3-3\"\>"}
         Offset[0.4]}, 
        Offset[0.2]}, "RowsIndexed" -> {}}],
   TableForm[{{
-    "Unary", 0.85871605845766739009469517489353196768`15.698970004336017, 
+    "Unary", 0.85464368229964559592940691818943102257`15.698970004336017, 
      "S_0-3", "(: C-Decl)_eps_eps_0-3"}, {
-    "Unary", 0.14128394154233260990530482510646803232`15.698970004336017, 
+    "Unary", 0.14535631770035438466091326323960354531`15.698970004336017, 
      "S_0-3", "(: C-Decl)_0-3_3-3_3-3"}, {
-    "Binary", 0.96623009690324390373646339519075716481`15.522878745280337, 
+    "Binary", 0.99881756044886280590797546537071801866`15.522878745280343, 
      "(: C-Decl)_eps_eps_0-3", "(:: =T-Decl C-Decl)_eps_eps_eps", 
      "(: T-Decl)_0-3_3-3_3-3"}, {
-    "Binary", 0.03376990309675612591686913881364019674`15.522878745280321, 
+    "Binary", 0.00118243955113715134228199571535597057`15.522878745280343, 
      "(: C-Decl)_eps_eps_0-3", "(:: =T-Decl C-Decl)_eps_eps_eps", 
      "(: T-Decl)_eps_eps_0-3"}, {
-    "Binary", 0.01401597519753697752780170595449282838`15.522878745280337, 
+    "Binary", 0.01401597519753697777246048643693691557`15.522878745280337, 
      "(: C-Adj)_eps_eps_0-3", "(:: =T-Adj C-Adj)_eps_eps_eps", 
      "(: T-Adj)_0-3_3-3_3-3"}, {
-    "Binary", 0.98598402480246306101285190750915892458`15.522878745280334, 
+    "Binary", 0.98598402480246302938573721360256643093`15.522878745280334, 
      "(: C-Adj)_eps_eps_0-3", "(:: =T-Adj C-Adj)_eps_eps_eps", 
      "(: T-Adj)_eps_eps_0-3"}, {
     "Binary", 0.85704874835309617918313570487483530962`15.522878745280334, 
      "(: C-Decl)_3-3_3-3_3-3", "(:: =T-Decl C-Decl)_3-3_3-3_3-3", 
      "(: T-Decl)_3-3_3-3_3-3"}, {
-    "Binary", 0.14295125164690382081686429512516469038`15.52287874528033, 
+    "Binary", 0.14295125164690380494608719738741967906`15.52287874528033, 
      "(: C-Decl)_3-3_3-3_3-3", "(: C-Adj)_3-3_3-3_3-3", 
      "(: C-Decl)_3-3_3-3_3-3"}, {
-    "Binary", 0.03382013835511145272867025365103766333`15.522878745280337, 
+    "Binary", 0.03382013835511145648345988343634843982`15.522878745280337, 
      "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Decl)_3-3_3-3_3-3", 
      "(:: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.96617986164488854138895453120598713497`15.522878745280334, 
+    "Binary", 0.96617986164488850567469479738338821836`15.522878745280334, 
      "(: v-Decl;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Decl)_3-3_3-3_3-3", 
      "(: Case -nom)_3-3_3-3_3-3"}, {
+    "Binary", 0.9646425826287471176018447348193697156`15.522878745280334, 
+     "(: =Case v-Decl)_3-3_3-3_3-3", "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", 
+     "(:: V-Decl)_3-3_3-3_3-3"}, {
+    "Binary", 0.03535741737125287847269337949598763571`15.522878745280334, 
+     "(: =Case v-Decl)_3-3_3-3_3-3", "(:: =V-Decl =Case v-Decl)_3-3_3-3_3-3", 
+     "(: V-Decl)_3-3_3-3_3-3"}, {
     "Binary", 0.98617511520737327188940092165898617511`15.52287874528033, 
      "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Adj)_3-3_3-3_3-3", 
      "(:: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.01382488479262672802642928461554270385`15.52287874528033, 
+    "Binary", 0.01382488479262672598053015998167259053`15.52287874528033, 
      "(: v-Adj;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Adj)_3-3_3-3_3-3", 
      "(: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.00153727901614142966948501152959262106`15.522878745280334, 
+    "Binary", 0.04347826086956522221836097663111592906`15.522878745280337, 
      "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.9984627209838585642515926301006979223`15.522878745280334, 
+    "Binary", 0.95652173913043474142786878664547534108`15.522878745280334, 
      "(: +acc V-Decl;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Decl)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.01382488479262672811059907834101382489`15.52287874528033, 
+    "Binary", 0.01382488479262672964546961929745160878`15.52287874528033, 
      "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.98617511520737326588528896924204620832`15.52287874528033, 
+    "Binary", 0.98617511520737322943191666691852317319`15.52287874528033, 
      "(: +acc V-Adj;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Adj)_3-3_3-3_3-3", "(: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.75988896599583622947027655241217222884`15.522878745280334, 
+    "Binary", 0.66166883963494143180320069822615729197`15.522878745280334, 
      "(: D -f)_3-3_3-3_3-3", "(:: =N D -f)_3-3_3-3_3-3", 
      "(:: N)_3-3_3-3_3-3"}, {
-    "Unary", 0.24011103400416375733571302110386917257`15.698970004336017, 
+    "Unary", 0.33833116036505862544493570845511745563`15.698970004336017, 
      "(: D -f)_3-3_3-3_3-3", "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.56227157892928690734648461460375648115`15.522878745280337, 
+    "Preterminal", 0.58087649402390438247011952191235059761`16., 
+     "(:: V-Decl)_tmp1_3-3", "yumyenghaycyessta"}, {
+    "Preterminal", 0.41912350597609561752988047808764940239`16., 
+     "(:: V-Decl)_tmp1_3-3", "palkhyecyessta"}, {
+    "Binary", 0.55483554112056709898978818406835218066`15.522878745280346, 
      "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3", 
      "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
      "(: N-Dep;: -epp)_3-3_3-3_3-3_0-3"}, {
-    "Binary", 0.43772842107071313505091290040167529984`15.522878745280343, 
+    "Binary", 0.44516445887943301530547431274630275205`15.522878745280334, 
      "(: +epp D -f;: -epp)_3-3_3-3_3-3_0-3", 
      "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
      "(: C-Rel;: -epp)_3-3_3-3_3-3_0-3"}, {
-    "Binary", 0.50674373795761079842870761014293666032`15.52287874528033, 
+    "Binary", 0.50674373795761079803193252838035906784`15.52287874528033, 
      "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3", 
      "(:: =N-Dep +epp D -f)_3-3_3-3_3-3", 
      "(: N-Dep;: -epp)_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.49325626204238922788293481673449389099`15.522878745280334, 
+    "Binary", 0.49325626204238919918716201495071921731`15.522878745280334, 
      "(: +epp D -f;: -epp)_3-3_3-3_3-3_3-3", 
      "(:: =C-Rel +epp D -f)_3-3_3-3_3-3", 
      "(: C-Rel;: -epp)_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.92654441546097607236010983180394091474`15.522878745280334, 
+    "Preterminal", 0.47578347578347578347578347578347578348`16., 
+     "(:: =D +f Case -nom)_tmp1_3-3", "i"}, {
+    "Preterminal", 0.52421652421652421652421652421652421652`16., 
+     "(:: =D +f Case -nom)_tmp1_3-3", "ka"}, {
+    "Binary", 0.89822550380420614019519813808045048509`15.522878745280337, 
      "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3", 
      "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
      "(: T-Rel -epp;: -wh)_eps_eps_0-3_3-3"}, {
-    "Binary", 0.0734555845390239093540580080814033003`15.522878745280343, 
+    "Binary", 0.1017744961957939021550533870628351097`15.522878745280337, 
      "(: +wh C-Rel;: -epp;: -wh)_3-3_3-3_3-3_0-3_3-3", 
      "(:: =T-Rel +wh C-Rel)_3-3_3-3_3-3", 
      "(: T-Rel -epp;: -wh)_0-3_3-3_3-3_3-3"}, {
-    "Binary", 0.99794297941887472688931598212872561881`15.522878745280337, 
+    "Binary", 0.99706268599393270223940653686602038763`15.522878745280337, 
      "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3", "(:: =T-Emb C-Emb)_3-3_3-3_3-3", 
      "(: T-Emb -epp)_eps_eps_0-3"}, {
-    "Binary", 0.0020570205811252338066072753003259769`15.522878745280337, 
+    "Binary", 0.00293731400606733812324920689217163204`15.522878745280337, 
      "(: C-Emb;: -epp)_3-3_3-3_3-3_0-3", "(:: =T-Emb C-Emb)_3-3_3-3_3-3", 
      "(: T-Emb -epp)_0-3_3-3_3-3"}, {
-    "Unary", 0.2714843749999999999999991017335535557`15.698970004336012, 
+    "Preterminal", 0.36256157635467980295566502463054187192`16., 
+     "(:: N)_tmp1_3-3", "kica"}, {
+    "Preterminal", 0.63743842364532019704433497536945812808`16., 
+     "(:: N)_tmp1_3-3", "uywon"}, {
+    "Unary", 0.27148437499999999999999999998629354177`15.698970004336012, 
      "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
      "(: +nom T-Rel -epp;: -wh;: -nom)_3-3_3-3_3-3_3-3_3-3"}, {
     "Unary", 0.728515625`15.698970004336017, 
      "(: T-Rel -epp;: -wh)_3-3_3-3_3-3_3-3", 
      "(: +nom T-Rel -epp;: -nom -wh)_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.99049429657794680525653838720527027455`15.522878745280334, 
+    "Binary", 0.99049429657794683822125438598672810161`15.522878745280334, 
      "(: v-Emb;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Emb)_3-3_3-3_3-3", 
      "(:: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.00950570342205323223825460692602292806`15.522878745280334, 
+    "Binary", 0.00950570342205323114789693286367372603`15.522878745280334, 
      "(: v-Emb;: -nom)_3-3_3-3_3-3_3-3", "(: =Case v-Emb)_3-3_3-3_3-3", 
      "(: Case -nom)_3-3_3-3_3-3"}, {
-    "Binary", 0.78725830856254840311635365398153034678`15.522878745280337, 
+    "Binary", 0.69594817766172705127575484575397355572`15.522878745280337, 
      "(: =Case v-Rel)_eps_eps_0-3", "(:: =V-Rel =Case v-Rel)_eps_eps_eps", 
      "(: V-Rel)_0-2_2-3_3-3"}, {
-    "Binary", 0.21274169143745159688364634601847124946`15.522878745280334, 
+    "Binary", 0.30405182233827294872424515424602644428`15.522878745280337, 
      "(: =Case v-Rel)_eps_eps_0-3", "(:: =V-Rel =Case v-Rel)_eps_eps_eps", 
      "(: V-Rel)_0-3_3-3_3-3"}, {
-    "Binary", 0.78725830856254841522553762156886903652`15.522878745280337, 
+    "Binary", 0.69594817766172705941401858033757923918`15.522878745280334, 
      "(: =Case v-Emb)_eps_eps_0-3", "(:: =V-Emb =Case v-Emb)_eps_eps_eps", 
      "(: V-Emb)_0-2_2-3_3-3"}, {
-    "Binary", 0.21274169143745158477446237843113176926`15.522878745280334, 
+    "Binary", 0.30405182233827294058598141966242076082`15.522878745280334, 
      "(: =Case v-Emb)_eps_eps_0-3", "(:: =V-Emb =Case v-Emb)_eps_eps_eps", 
      "(: V-Emb)_0-3_3-3_3-3"}, {
-    "Binary", 0.00950570342205323218709092272327126743`15.522878745280334, 
+    "Binary", 0.00950570342205323383524444442229574801`15.522878745280334, 
      "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Emb)_3-3_3-3_3-3", "(:: Case -acc)_3-3_3-3_3-3"}, {
-    "Binary", 0.99049429657794678786446580225118496497`15.522878745280334, 
+    "Binary", 0.99049429657794681302207712721127146265`15.522878745280334, 
      "(: +acc V-Emb;: -acc)_3-3_3-3_3-3_3-3", 
      "(:: =Case +acc V-Emb)_3-3_3-3_3-3", 
      "(: Case -acc)_3-3_3-3_3-3"}}]]], "Output",
  CellChangeTimes->{{3.52396617079955*^9, 3.523966184629884*^9}, 
    3.523966676959462*^9, {3.523966711640061*^9, 3.52396672521173*^9}, 
-   3.523966757317609*^9, 3.5239668039883842`*^9, 3.523967119316841*^9}]
+   3.523966757317609*^9, 3.5239668039883842`*^9, 3.523967119316841*^9, 
+   3.524588466005803*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -891,144 +2609,170 @@ Cell[BoxData[
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {"\<\"Unary\"\>", 
-     "0.85871605845766739009469517489353196768`15.698970004336017", \
-"\<\"S_0-3\"\>", "\<\"t148_eps_eps_0-3\"\>", "\<\"\"\>"},
+     "0.85464368229964559592940691818943102257`15.698970004336017", \
+"\<\"S_0-3\"\>", "\<\"t106_eps_eps_0-3\"\>", "\<\"\"\>"},
     {"\<\"Unary\"\>", 
-     "0.14128394154233260990530482510646803232`15.698970004336017", \
-"\<\"S_0-3\"\>", "\<\"t148_0-3_3-3_3-3\"\>", "\<\"\"\>"},
+     "0.14535631770035438466091326323960354531`15.698970004336017", \
+"\<\"S_0-3\"\>", "\<\"t106_0-3_3-3_3-3\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.96623009690324390373646339519075716481`15.522878745280337", \
-"\<\"t148_eps_eps_0-3\"\>", "\<\"t18_eps_eps_eps\"\>", \
-"\<\"t131_0-3_3-3_3-3\"\>"},
+     "0.99881756044886280590797546537071801866`15.522878745280343", \
+"\<\"t106_eps_eps_0-3\"\>", "\<\"t19_eps_eps_eps\"\>", "\<\"t87_0-3_3-3_3-3\"\
+\>"},
     {"\<\"Binary\"\>", 
-     "0.03376990309675612591686913881364019674`15.522878745280321", \
-"\<\"t148_eps_eps_0-3\"\>", "\<\"t18_eps_eps_eps\"\>", \
-"\<\"t131_eps_eps_0-3\"\>"},
+     "0.00118243955113715134228199571535597057`15.522878745280343", \
+"\<\"t106_eps_eps_0-3\"\>", "\<\"t19_eps_eps_eps\"\>", "\<\"t87_eps_eps_0-3\"\
+\>"},
     {"\<\"Binary\"\>", 
-     "0.01401597519753697752780170595449282838`15.522878745280337", \
-"\<\"t160_eps_eps_0-3\"\>", "\<\"t28_eps_eps_eps\"\>", \
-"\<\"t125_0-3_3-3_3-3\"\>"},
+     "0.01401597519753697777246048643693691557`15.522878745280337", \
+"\<\"t161_eps_eps_0-3\"\>", "\<\"t29_eps_eps_eps\"\>", \
+"\<\"t130_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.98598402480246306101285190750915892458`15.522878745280334", \
-"\<\"t160_eps_eps_0-3\"\>", "\<\"t28_eps_eps_eps\"\>", \
-"\<\"t125_eps_eps_0-3\"\>"},
+     "0.98598402480246302938573721360256643093`15.522878745280334", \
+"\<\"t161_eps_eps_0-3\"\>", "\<\"t29_eps_eps_eps\"\>", \
+"\<\"t130_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
      "0.85704874835309617918313570487483530962`15.522878745280334", \
-"\<\"t148_3-3_3-3_3-3\"\>", "\<\"t18_3-3_3-3_3-3\"\>", \
-"\<\"t131_3-3_3-3_3-3\"\>"},
+"\<\"t106_3-3_3-3_3-3\"\>", "\<\"t19_3-3_3-3_3-3\"\>", "\<\"t87_3-3_3-3_3-3\"\
+\>"},
     {"\<\"Binary\"\>", 
-     "0.14295125164690382081686429512516469038`15.52287874528033", \
-"\<\"t148_3-3_3-3_3-3\"\>", "\<\"t160_3-3_3-3_3-3\"\>", "\<\"t148_3-3_3-3_3-3\
+     "0.14295125164690380494608719738741967906`15.52287874528033", \
+"\<\"t106_3-3_3-3_3-3\"\>", "\<\"t161_3-3_3-3_3-3\"\>", "\<\"t106_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.03382013835511145272867025365103766333`15.522878745280337", \
-"\<\"t77_3-3_3-3_3-3_3-3\"\>", "\<\"t58_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
+     "0.03382013835511145648345988343634843982`15.522878745280337", \
+"\<\"t45_3-3_3-3_3-3_3-3\"\>", "\<\"t43_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.96617986164488854138895453120598713497`15.522878745280334", \
-"\<\"t77_3-3_3-3_3-3_3-3\"\>", "\<\"t58_3-3_3-3_3-3\"\>", \
-"\<\"t42_3-3_3-3_3-3\"\>"},
+     "0.96617986164488850567469479738338821836`15.522878745280334", \
+"\<\"t45_3-3_3-3_3-3_3-3\"\>", "\<\"t43_3-3_3-3_3-3\"\>", \
+"\<\"t46_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.9646425826287471176018447348193697156`15.522878745280334", \
+"\<\"t43_3-3_3-3_3-3\"\>", "\<\"t12_3-3_3-3_3-3\"\>", \
+"\<\"t7_3-3_3-3_3-3\"\>"},
+    {"\<\"Binary\"\>", 
+     "0.03535741737125287847269337949598763571`15.522878745280334", \
+"\<\"t43_3-3_3-3_3-3\"\>", "\<\"t12_3-3_3-3_3-3\"\>", \
+"\<\"t50_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
      "0.98617511520737327188940092165898617511`15.52287874528033", \
-"\<\"t65_3-3_3-3_3-3_3-3\"\>", "\<\"t61_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
+"\<\"t74_3-3_3-3_3-3_3-3\"\>", "\<\"t66_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.01382488479262672802642928461554270385`15.52287874528033", \
-"\<\"t65_3-3_3-3_3-3_3-3\"\>", "\<\"t61_3-3_3-3_3-3\"\>", \
-"\<\"t42_3-3_3-3_3-3\"\>"},
+     "0.01382488479262672598053015998167259053`15.52287874528033", \
+"\<\"t74_3-3_3-3_3-3_3-3\"\>", "\<\"t66_3-3_3-3_3-3\"\>", \
+"\<\"t46_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.00153727901614142966948501152959262106`15.522878745280334", \
-"\<\"t40_3-3_3-3_3-3_3-3\"\>", "\<\"t7_3-3_3-3_3-3\"\>", \
+     "0.04347826086956522221836097663111592906`15.522878745280337", \
+"\<\"t41_3-3_3-3_3-3_3-3\"\>", "\<\"t8_3-3_3-3_3-3\"\>", \
 "\<\"t6_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.9984627209838585642515926301006979223`15.522878745280334", \
-"\<\"t40_3-3_3-3_3-3_3-3\"\>", "\<\"t7_3-3_3-3_3-3\"\>", "\<\"t43_3-3_3-3_3-3\
+     "0.95652173913043474142786878664547534108`15.522878745280334", \
+"\<\"t41_3-3_3-3_3-3_3-3\"\>", "\<\"t8_3-3_3-3_3-3\"\>", "\<\"t47_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.01382488479262672811059907834101382489`15.52287874528033", \
-"\<\"t34_3-3_3-3_3-3_3-3\"\>", "\<\"t10_3-3_3-3_3-3\"\>", "\<\"t6_3-3_3-3_3-3\
+     "0.01382488479262672964546961929745160878`15.52287874528033", \
+"\<\"t35_3-3_3-3_3-3_3-3\"\>", "\<\"t11_3-3_3-3_3-3\"\>", "\<\"t6_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.98617511520737326588528896924204620832`15.52287874528033", \
-"\<\"t34_3-3_3-3_3-3_3-3\"\>", "\<\"t10_3-3_3-3_3-3\"\>", \
-"\<\"t43_3-3_3-3_3-3\"\>"},
+     "0.98617511520737322943191666691852317319`15.52287874528033", \
+"\<\"t35_3-3_3-3_3-3_3-3\"\>", "\<\"t11_3-3_3-3_3-3\"\>", \
+"\<\"t47_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.75988896599583622947027655241217222884`15.522878745280334", \
-"\<\"t29_3-3_3-3_3-3\"\>", "\<\"t2_3-3_3-3_3-3\"\>", "\<\"t0_3-3_3-3_3-3\"\>"},
+     "0.66166883963494143180320069822615729197`15.522878745280334", \
+"\<\"t34_3-3_3-3_3-3\"\>", "\<\"t2_3-3_3-3_3-3\"\>", "\<\"t1_3-3_3-3_3-3\"\>"},
     {"\<\"Unary\"\>", 
-     "0.24011103400416375733571302110386917257`15.698970004336017", \
-"\<\"t29_3-3_3-3_3-3\"\>", "\<\"t174_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+     "0.33833116036505862544493570845511745563`15.698970004336017", \
+"\<\"t34_3-3_3-3_3-3\"\>", "\<\"t175_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.58087649402390438247011952191235059761`16.", "\<\"t7_tmp1_3-3\"\>", "\
+\<\"yumyenghaycyessta\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.41912350597609561752988047808764940239`16.", "\<\"t7_tmp1_3-3\"\>", "\
+\<\"palkhyecyessta\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.56227157892928690734648461460375648115`15.522878745280337", \
-"\<\"t174_3-3_3-3_3-3_0-3\"\>", "\<\"t25_3-3_3-3_3-3\"\>", \
-"\<\"t163_3-3_3-3_3-3_0-3\"\>"},
+     "0.55483554112056709898978818406835218066`15.522878745280346", \
+"\<\"t175_3-3_3-3_3-3_0-3\"\>", "\<\"t26_3-3_3-3_3-3\"\>", \
+"\<\"t164_3-3_3-3_3-3_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.43772842107071313505091290040167529984`15.522878745280343", \
-"\<\"t174_3-3_3-3_3-3_0-3\"\>", "\<\"t23_3-3_3-3_3-3\"\>", \
-"\<\"t171_3-3_3-3_3-3_0-3\"\>"},
+     "0.44516445887943301530547431274630275205`15.522878745280334", \
+"\<\"t175_3-3_3-3_3-3_0-3\"\>", "\<\"t24_3-3_3-3_3-3\"\>", \
+"\<\"t172_3-3_3-3_3-3_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.50674373795761079842870761014293666032`15.52287874528033", \
-"\<\"t174_3-3_3-3_3-3_3-3\"\>", "\<\"t25_3-3_3-3_3-3\"\>", \
-"\<\"t163_3-3_3-3_3-3_3-3\"\>"},
+     "0.50674373795761079803193252838035906784`15.52287874528033", \
+"\<\"t175_3-3_3-3_3-3_3-3\"\>", "\<\"t26_3-3_3-3_3-3\"\>", \
+"\<\"t164_3-3_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.49325626204238922788293481673449389099`15.522878745280334", \
-"\<\"t174_3-3_3-3_3-3_3-3\"\>", "\<\"t23_3-3_3-3_3-3\"\>", \
-"\<\"t171_3-3_3-3_3-3_3-3\"\>"},
+     "0.49325626204238919918716201495071921731`15.522878745280334", \
+"\<\"t175_3-3_3-3_3-3_3-3\"\>", "\<\"t24_3-3_3-3_3-3\"\>", \
+"\<\"t172_3-3_3-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.47578347578347578347578347578347578348`16.", "\<\"t3_tmp1_3-3\"\>", "\
+\<\"i\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.52421652421652421652421652421652421652`16.", "\<\"t3_tmp1_3-3\"\>", "\
+\<\"ka\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.92654441546097607236010983180394091474`15.522878745280334", \
-"\<\"t155_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"t22_3-3_3-3_3-3\"\>", \
-"\<\"t122_eps_eps_0-3_3-3\"\>"},
+     "0.89822550380420614019519813808045048509`15.522878745280337", \
+"\<\"t156_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"t23_3-3_3-3_3-3\"\>", \
+"\<\"t127_eps_eps_0-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.0734555845390239093540580080814033003`15.522878745280343", \
-"\<\"t155_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"t22_3-3_3-3_3-3\"\>", \
-"\<\"t122_0-3_3-3_3-3_3-3\"\>"},
+     "0.1017744961957939021550533870628351097`15.522878745280337", \
+"\<\"t156_3-3_3-3_3-3_0-3_3-3\"\>", "\<\"t23_3-3_3-3_3-3\"\>", \
+"\<\"t127_0-3_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99794297941887472688931598212872561881`15.522878745280337", \
-"\<\"t158_3-3_3-3_3-3_0-3\"\>", "\<\"t27_3-3_3-3_3-3\"\>", \
-"\<\"t129_eps_eps_0-3\"\>"},
+     "0.99706268599393270223940653686602038763`15.522878745280337", \
+"\<\"t159_3-3_3-3_3-3_0-3\"\>", "\<\"t28_3-3_3-3_3-3\"\>", \
+"\<\"t134_eps_eps_0-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.0020570205811252338066072753003259769`15.522878745280337", \
-"\<\"t158_3-3_3-3_3-3_0-3\"\>", "\<\"t27_3-3_3-3_3-3\"\>", \
-"\<\"t129_0-3_3-3_3-3\"\>"},
+     "0.00293731400606733812324920689217163204`15.522878745280337", \
+"\<\"t159_3-3_3-3_3-3_0-3\"\>", "\<\"t28_3-3_3-3_3-3\"\>", \
+"\<\"t134_0-3_3-3_3-3\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.36256157635467980295566502463054187192`16.", "\<\"t1_tmp1_3-3\"\>", "\
+\<\"kica\"\>", "\<\"\"\>"},
+    {"\<\"Preterminal\"\>", 
+     "0.63743842364532019704433497536945812808`16.", "\<\"t1_tmp1_3-3\"\>", "\
+\<\"uywon\"\>", "\<\"\"\>"},
     {"\<\"Unary\"\>", 
-     "0.2714843749999999999999991017335535557`15.698970004336012", \
-"\<\"t122_3-3_3-3_3-3_3-3\"\>", "\<\"t150_3-3_3-3_3-3_3-3_3-3\"\>", \
+     "0.27148437499999999999999999998629354177`15.698970004336012", \
+"\<\"t127_3-3_3-3_3-3_3-3\"\>", "\<\"t151_3-3_3-3_3-3_3-3_3-3\"\>", \
 "\<\"\"\>"},
     {"\<\"Unary\"\>", 
-     "0.728515625`15.698970004336017", "\<\"t122_3-3_3-3_3-3_3-3\"\>", \
-"\<\"t104_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
+     "0.728515625`15.698970004336017", "\<\"t127_3-3_3-3_3-3_3-3\"\>", \
+"\<\"t109_3-3_3-3_3-3_3-3\"\>", "\<\"\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99049429657794680525653838720527027455`15.522878745280334", \
-"\<\"t69_3-3_3-3_3-3_3-3\"\>", "\<\"t60_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
+     "0.99049429657794683822125438598672810161`15.522878745280334", \
+"\<\"t78_3-3_3-3_3-3_3-3\"\>", "\<\"t65_3-3_3-3_3-3\"\>", "\<\"t5_3-3_3-3_3-3\
 \"\>"},
     {"\<\"Binary\"\>", 
-     "0.00950570342205323223825460692602292806`15.522878745280334", \
-"\<\"t69_3-3_3-3_3-3_3-3\"\>", "\<\"t60_3-3_3-3_3-3\"\>", \
-"\<\"t42_3-3_3-3_3-3\"\>"},
+     "0.00950570342205323114789693286367372603`15.522878745280334", \
+"\<\"t78_3-3_3-3_3-3_3-3\"\>", "\<\"t65_3-3_3-3_3-3\"\>", \
+"\<\"t46_3-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.78725830856254840311635365398153034678`15.522878745280337", \
-"\<\"t59_eps_eps_0-3\"\>", "\<\"t12_eps_eps_eps\"\>", \
-"\<\"t47_0-2_2-3_3-3\"\>"},
+     "0.69594817766172705127575484575397355572`15.522878745280337", \
+"\<\"t64_eps_eps_0-3\"\>", "\<\"t13_eps_eps_eps\"\>", \
+"\<\"t51_0-2_2-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.21274169143745159688364634601847124946`15.522878745280334", \
-"\<\"t59_eps_eps_0-3\"\>", "\<\"t12_eps_eps_eps\"\>", \
-"\<\"t47_0-3_3-3_3-3\"\>"},
+     "0.30405182233827294872424515424602644428`15.522878745280337", \
+"\<\"t64_eps_eps_0-3\"\>", "\<\"t13_eps_eps_eps\"\>", \
+"\<\"t51_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.78725830856254841522553762156886903652`15.522878745280337", \
-"\<\"t60_eps_eps_0-3\"\>", "\<\"t13_eps_eps_eps\"\>", \
-"\<\"t48_0-2_2-3_3-3\"\>"},
+     "0.69594817766172705941401858033757923918`15.522878745280334", \
+"\<\"t65_eps_eps_0-3\"\>", "\<\"t14_eps_eps_eps\"\>", \
+"\<\"t52_0-2_2-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.21274169143745158477446237843113176926`15.522878745280334", \
-"\<\"t60_eps_eps_0-3\"\>", "\<\"t13_eps_eps_eps\"\>", \
-"\<\"t48_0-3_3-3_3-3\"\>"},
+     "0.30405182233827294058598141966242076082`15.522878745280334", \
+"\<\"t65_eps_eps_0-3\"\>", "\<\"t14_eps_eps_eps\"\>", \
+"\<\"t52_0-3_3-3_3-3\"\>"},
     {"\<\"Binary\"\>", 
-     "0.00950570342205323218709092272327126743`15.522878745280334", \
-"\<\"t36_3-3_3-3_3-3_3-3\"\>", "\<\"t9_3-3_3-3_3-3\"\>", \
-"\<\"t6_3-3_3-3_3-3\"\>"},
+     "0.00950570342205323383524444442229574801`15.522878745280334", \
+"\<\"t37_3-3_3-3_3-3_3-3\"\>", "\<\"t10_3-3_3-3_3-3\"\>", "\<\"t6_3-3_3-3_3-3\
+\"\>"},
     {"\<\"Binary\"\>", 
-     "0.99049429657794678786446580225118496497`15.522878745280334", \
-"\<\"t36_3-3_3-3_3-3_3-3\"\>", "\<\"t9_3-3_3-3_3-3\"\>", "\<\"t43_3-3_3-3_3-3\
-\"\>"}
+     "0.99049429657794681302207712721127146265`15.522878745280334", \
+"\<\"t37_3-3_3-3_3-3_3-3\"\>", "\<\"t10_3-3_3-3_3-3\"\>", \
+"\<\"t47_3-3_3-3_3-3\"\>"}
    },
    GridBoxAlignment->{
     "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
@@ -1041,81 +2785,97 @@ Cell[BoxData[
         Offset[0.4]}, 
        Offset[0.2]}, "RowsIndexed" -> {}}],
   TableForm[{{
-    "Unary", 0.85871605845766739009469517489353196768`15.698970004336017, 
-     "S_0-3", "t148_eps_eps_0-3"}, {
-    "Unary", 0.14128394154233260990530482510646803232`15.698970004336017, 
-     "S_0-3", "t148_0-3_3-3_3-3"}, {
-    "Binary", 0.96623009690324390373646339519075716481`15.522878745280337, 
-     "t148_eps_eps_0-3", "t18_eps_eps_eps", "t131_0-3_3-3_3-3"}, {
-    "Binary", 0.03376990309675612591686913881364019674`15.522878745280321, 
-     "t148_eps_eps_0-3", "t18_eps_eps_eps", "t131_eps_eps_0-3"}, {
-    "Binary", 0.01401597519753697752780170595449282838`15.522878745280337, 
-     "t160_eps_eps_0-3", "t28_eps_eps_eps", "t125_0-3_3-3_3-3"}, {
-    "Binary", 0.98598402480246306101285190750915892458`15.522878745280334, 
-     "t160_eps_eps_0-3", "t28_eps_eps_eps", "t125_eps_eps_0-3"}, {
+    "Unary", 0.85464368229964559592940691818943102257`15.698970004336017, 
+     "S_0-3", "t106_eps_eps_0-3"}, {
+    "Unary", 0.14535631770035438466091326323960354531`15.698970004336017, 
+     "S_0-3", "t106_0-3_3-3_3-3"}, {
+    "Binary", 0.99881756044886280590797546537071801866`15.522878745280343, 
+     "t106_eps_eps_0-3", "t19_eps_eps_eps", "t87_0-3_3-3_3-3"}, {
+    "Binary", 0.00118243955113715134228199571535597057`15.522878745280343, 
+     "t106_eps_eps_0-3", "t19_eps_eps_eps", "t87_eps_eps_0-3"}, {
+    "Binary", 0.01401597519753697777246048643693691557`15.522878745280337, 
+     "t161_eps_eps_0-3", "t29_eps_eps_eps", "t130_0-3_3-3_3-3"}, {
+    "Binary", 0.98598402480246302938573721360256643093`15.522878745280334, 
+     "t161_eps_eps_0-3", "t29_eps_eps_eps", "t130_eps_eps_0-3"}, {
     "Binary", 0.85704874835309617918313570487483530962`15.522878745280334, 
-     "t148_3-3_3-3_3-3", "t18_3-3_3-3_3-3", "t131_3-3_3-3_3-3"}, {
-    "Binary", 0.14295125164690382081686429512516469038`15.52287874528033, 
-     "t148_3-3_3-3_3-3", "t160_3-3_3-3_3-3", "t148_3-3_3-3_3-3"}, {
-    "Binary", 0.03382013835511145272867025365103766333`15.522878745280337, 
-     "t77_3-3_3-3_3-3_3-3", "t58_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
-    "Binary", 0.96617986164488854138895453120598713497`15.522878745280334, 
-     "t77_3-3_3-3_3-3_3-3", "t58_3-3_3-3_3-3", "t42_3-3_3-3_3-3"}, {
+     "t106_3-3_3-3_3-3", "t19_3-3_3-3_3-3", "t87_3-3_3-3_3-3"}, {
+    "Binary", 0.14295125164690380494608719738741967906`15.52287874528033, 
+     "t106_3-3_3-3_3-3", "t161_3-3_3-3_3-3", "t106_3-3_3-3_3-3"}, {
+    "Binary", 0.03382013835511145648345988343634843982`15.522878745280337, 
+     "t45_3-3_3-3_3-3_3-3", "t43_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
+    "Binary", 0.96617986164488850567469479738338821836`15.522878745280334, 
+     "t45_3-3_3-3_3-3_3-3", "t43_3-3_3-3_3-3", "t46_3-3_3-3_3-3"}, {
+    "Binary", 0.9646425826287471176018447348193697156`15.522878745280334, 
+     "t43_3-3_3-3_3-3", "t12_3-3_3-3_3-3", "t7_3-3_3-3_3-3"}, {
+    "Binary", 0.03535741737125287847269337949598763571`15.522878745280334, 
+     "t43_3-3_3-3_3-3", "t12_3-3_3-3_3-3", "t50_3-3_3-3_3-3"}, {
     "Binary", 0.98617511520737327188940092165898617511`15.52287874528033, 
-     "t65_3-3_3-3_3-3_3-3", "t61_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
-    "Binary", 0.01382488479262672802642928461554270385`15.52287874528033, 
-     "t65_3-3_3-3_3-3_3-3", "t61_3-3_3-3_3-3", "t42_3-3_3-3_3-3"}, {
-    "Binary", 0.00153727901614142966948501152959262106`15.522878745280334, 
-     "t40_3-3_3-3_3-3_3-3", "t7_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
-    "Binary", 0.9984627209838585642515926301006979223`15.522878745280334, 
-     "t40_3-3_3-3_3-3_3-3", "t7_3-3_3-3_3-3", "t43_3-3_3-3_3-3"}, {
-    "Binary", 0.01382488479262672811059907834101382489`15.52287874528033, 
-     "t34_3-3_3-3_3-3_3-3", "t10_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
-    "Binary", 0.98617511520737326588528896924204620832`15.52287874528033, 
-     "t34_3-3_3-3_3-3_3-3", "t10_3-3_3-3_3-3", "t43_3-3_3-3_3-3"}, {
-    "Binary", 0.75988896599583622947027655241217222884`15.522878745280334, 
-     "t29_3-3_3-3_3-3", "t2_3-3_3-3_3-3", "t0_3-3_3-3_3-3"}, {
-    "Unary", 0.24011103400416375733571302110386917257`15.698970004336017, 
-     "t29_3-3_3-3_3-3", "t174_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.56227157892928690734648461460375648115`15.522878745280337, 
-     "t174_3-3_3-3_3-3_0-3", "t25_3-3_3-3_3-3", "t163_3-3_3-3_3-3_0-3"}, {
-    "Binary", 0.43772842107071313505091290040167529984`15.522878745280343, 
-     "t174_3-3_3-3_3-3_0-3", "t23_3-3_3-3_3-3", "t171_3-3_3-3_3-3_0-3"}, {
-    "Binary", 0.50674373795761079842870761014293666032`15.52287874528033, 
-     "t174_3-3_3-3_3-3_3-3", "t25_3-3_3-3_3-3", "t163_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.49325626204238922788293481673449389099`15.522878745280334, 
-     "t174_3-3_3-3_3-3_3-3", "t23_3-3_3-3_3-3", "t171_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.92654441546097607236010983180394091474`15.522878745280334, 
-     "t155_3-3_3-3_3-3_0-3_3-3", "t22_3-3_3-3_3-3", "t122_eps_eps_0-3_3-3"}, {
-    "Binary", 0.0734555845390239093540580080814033003`15.522878745280343, 
-     "t155_3-3_3-3_3-3_0-3_3-3", "t22_3-3_3-3_3-3", "t122_0-3_3-3_3-3_3-3"}, {
-    "Binary", 0.99794297941887472688931598212872561881`15.522878745280337, 
-     "t158_3-3_3-3_3-3_0-3", "t27_3-3_3-3_3-3", "t129_eps_eps_0-3"}, {
-    "Binary", 0.0020570205811252338066072753003259769`15.522878745280337, 
-     "t158_3-3_3-3_3-3_0-3", "t27_3-3_3-3_3-3", "t129_0-3_3-3_3-3"}, {
-    "Unary", 0.2714843749999999999999991017335535557`15.698970004336012, 
-     "t122_3-3_3-3_3-3_3-3", "t150_3-3_3-3_3-3_3-3_3-3"}, {
-    "Unary", 0.728515625`15.698970004336017, "t122_3-3_3-3_3-3_3-3", 
-     "t104_3-3_3-3_3-3_3-3"}, {
-    "Binary", 0.99049429657794680525653838720527027455`15.522878745280334, 
-     "t69_3-3_3-3_3-3_3-3", "t60_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
-    "Binary", 0.00950570342205323223825460692602292806`15.522878745280334, 
-     "t69_3-3_3-3_3-3_3-3", "t60_3-3_3-3_3-3", "t42_3-3_3-3_3-3"}, {
-    "Binary", 0.78725830856254840311635365398153034678`15.522878745280337, 
-     "t59_eps_eps_0-3", "t12_eps_eps_eps", "t47_0-2_2-3_3-3"}, {
-    "Binary", 0.21274169143745159688364634601847124946`15.522878745280334, 
-     "t59_eps_eps_0-3", "t12_eps_eps_eps", "t47_0-3_3-3_3-3"}, {
-    "Binary", 0.78725830856254841522553762156886903652`15.522878745280337, 
-     "t60_eps_eps_0-3", "t13_eps_eps_eps", "t48_0-2_2-3_3-3"}, {
-    "Binary", 0.21274169143745158477446237843113176926`15.522878745280334, 
-     "t60_eps_eps_0-3", "t13_eps_eps_eps", "t48_0-3_3-3_3-3"}, {
-    "Binary", 0.00950570342205323218709092272327126743`15.522878745280334, 
-     "t36_3-3_3-3_3-3_3-3", "t9_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
-    "Binary", 0.99049429657794678786446580225118496497`15.522878745280334, 
-     "t36_3-3_3-3_3-3_3-3", "t9_3-3_3-3_3-3", "t43_3-3_3-3_3-3"}}]]], "Output",\
-
- CellChangeTimes->{3.523967350423161*^9}]
-}, Open  ]],
+     "t74_3-3_3-3_3-3_3-3", "t66_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
+    "Binary", 0.01382488479262672598053015998167259053`15.52287874528033, 
+     "t74_3-3_3-3_3-3_3-3", "t66_3-3_3-3_3-3", "t46_3-3_3-3_3-3"}, {
+    "Binary", 0.04347826086956522221836097663111592906`15.522878745280337, 
+     "t41_3-3_3-3_3-3_3-3", "t8_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
+    "Binary", 0.95652173913043474142786878664547534108`15.522878745280334, 
+     "t41_3-3_3-3_3-3_3-3", "t8_3-3_3-3_3-3", "t47_3-3_3-3_3-3"}, {
+    "Binary", 0.01382488479262672964546961929745160878`15.52287874528033, 
+     "t35_3-3_3-3_3-3_3-3", "t11_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
+    "Binary", 0.98617511520737322943191666691852317319`15.52287874528033, 
+     "t35_3-3_3-3_3-3_3-3", "t11_3-3_3-3_3-3", "t47_3-3_3-3_3-3"}, {
+    "Binary", 0.66166883963494143180320069822615729197`15.522878745280334, 
+     "t34_3-3_3-3_3-3", "t2_3-3_3-3_3-3", "t1_3-3_3-3_3-3"}, {
+    "Unary", 0.33833116036505862544493570845511745563`15.698970004336017, 
+     "t34_3-3_3-3_3-3", "t175_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 0.58087649402390438247011952191235059761`16., 
+     "t7_tmp1_3-3", "yumyenghaycyessta"}, {
+    "Preterminal", 0.41912350597609561752988047808764940239`16., 
+     "t7_tmp1_3-3", "palkhyecyessta"}, {
+    "Binary", 0.55483554112056709898978818406835218066`15.522878745280346, 
+     "t175_3-3_3-3_3-3_0-3", "t26_3-3_3-3_3-3", "t164_3-3_3-3_3-3_0-3"}, {
+    "Binary", 0.44516445887943301530547431274630275205`15.522878745280334, 
+     "t175_3-3_3-3_3-3_0-3", "t24_3-3_3-3_3-3", "t172_3-3_3-3_3-3_0-3"}, {
+    "Binary", 0.50674373795761079803193252838035906784`15.52287874528033, 
+     "t175_3-3_3-3_3-3_3-3", "t26_3-3_3-3_3-3", "t164_3-3_3-3_3-3_3-3"}, {
+    "Binary", 0.49325626204238919918716201495071921731`15.522878745280334, 
+     "t175_3-3_3-3_3-3_3-3", "t24_3-3_3-3_3-3", "t172_3-3_3-3_3-3_3-3"}, {
+    "Preterminal", 0.47578347578347578347578347578347578348`16., 
+     "t3_tmp1_3-3", "i"}, {
+    "Preterminal", 0.52421652421652421652421652421652421652`16., 
+     "t3_tmp1_3-3", "ka"}, {
+    "Binary", 0.89822550380420614019519813808045048509`15.522878745280337, 
+     "t156_3-3_3-3_3-3_0-3_3-3", "t23_3-3_3-3_3-3", "t127_eps_eps_0-3_3-3"}, {
+    "Binary", 0.1017744961957939021550533870628351097`15.522878745280337, 
+     "t156_3-3_3-3_3-3_0-3_3-3", "t23_3-3_3-3_3-3", "t127_0-3_3-3_3-3_3-3"}, {
+    "Binary", 0.99706268599393270223940653686602038763`15.522878745280337, 
+     "t159_3-3_3-3_3-3_0-3", "t28_3-3_3-3_3-3", "t134_eps_eps_0-3"}, {
+    "Binary", 0.00293731400606733812324920689217163204`15.522878745280337, 
+     "t159_3-3_3-3_3-3_0-3", "t28_3-3_3-3_3-3", "t134_0-3_3-3_3-3"}, {
+    "Preterminal", 0.36256157635467980295566502463054187192`16., 
+     "t1_tmp1_3-3", "kica"}, {
+    "Preterminal", 0.63743842364532019704433497536945812808`16., 
+     "t1_tmp1_3-3", "uywon"}, {
+    "Unary", 0.27148437499999999999999999998629354177`15.698970004336012, 
+     "t127_3-3_3-3_3-3_3-3", "t151_3-3_3-3_3-3_3-3_3-3"}, {
+    "Unary", 0.728515625`15.698970004336017, "t127_3-3_3-3_3-3_3-3", 
+     "t109_3-3_3-3_3-3_3-3"}, {
+    "Binary", 0.99049429657794683822125438598672810161`15.522878745280334, 
+     "t78_3-3_3-3_3-3_3-3", "t65_3-3_3-3_3-3", "t5_3-3_3-3_3-3"}, {
+    "Binary", 0.00950570342205323114789693286367372603`15.522878745280334, 
+     "t78_3-3_3-3_3-3_3-3", "t65_3-3_3-3_3-3", "t46_3-3_3-3_3-3"}, {
+    "Binary", 0.69594817766172705127575484575397355572`15.522878745280337, 
+     "t64_eps_eps_0-3", "t13_eps_eps_eps", "t51_0-2_2-3_3-3"}, {
+    "Binary", 0.30405182233827294872424515424602644428`15.522878745280337, 
+     "t64_eps_eps_0-3", "t13_eps_eps_eps", "t51_0-3_3-3_3-3"}, {
+    "Binary", 0.69594817766172705941401858033757923918`15.522878745280334, 
+     "t65_eps_eps_0-3", "t14_eps_eps_eps", "t52_0-2_2-3_3-3"}, {
+    "Binary", 0.30405182233827294058598141966242076082`15.522878745280334, 
+     "t65_eps_eps_0-3", "t14_eps_eps_eps", "t52_0-3_3-3_3-3"}, {
+    "Binary", 0.00950570342205323383524444442229574801`15.522878745280334, 
+     "t37_3-3_3-3_3-3_3-3", "t10_3-3_3-3_3-3", "t6_3-3_3-3_3-3"}, {
+    "Binary", 0.99049429657794681302207712721127146265`15.522878745280334, 
+     "t37_3-3_3-3_3-3_3-3", "t10_3-3_3-3_3-3", 
+     "t47_3-3_3-3_3-3"}}]]], "Output",
+ CellChangeTimes->{3.523967350423161*^9, 3.524588551907147*^9}]
+}, Closed]],
 
 Cell[BoxData[
  RowBox[{
@@ -1273,9 +3033,14 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-Evaluator->"on garvin",
-WindowSize->{1549, 1552},
-WindowMargins->{{86, Automatic}, {Automatic, 0}},
+WindowSize->{965, 679},
+WindowMargins->{{Automatic, 69}, {Automatic, 0}},
+PrintingOptions->{"PaperOrientation"->"Landscape",
+"PaperSize"->{1032, 792},
+"PrintCellBrackets"->False,
+"PrintMultipleHorizontalPages"->False,
+"PrintRegistrationMarks"->False,
+"PrintingMargins"->54},
 ShowSelection->True,
 FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (February 23, \
 2011)",
@@ -1292,67 +3057,114 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
+Cell[557, 20, 265, 5, 27, "Input"],
 Cell[CellGroupData[{
-Cell[579, 22, 166, 3, 27, "Input"],
-Cell[748, 27, 157, 2, 27, "Output"]
-}, Open  ]],
+Cell[847, 29, 929, 16, 163, "Subsubtitle"],
+Cell[1779, 47, 627, 12, 27, "Input"],
+Cell[2409, 61, 343, 8, 27, "Input"],
 Cell[CellGroupData[{
-Cell[942, 34, 929, 16, 163, "Subsubtitle"],
-Cell[1874, 52, 581, 11, 27, "Input"],
-Cell[2458, 65, 343, 8, 27, "Input"],
-Cell[CellGroupData[{
-Cell[2826, 77, 409, 7, 27, "Input"],
-Cell[3238, 86, 7850, 129, 223, "Output"]
+Cell[2777, 73, 409, 7, 27, "Input"],
+Cell[3189, 82, 7952, 133, 388, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11137, 221, 120, 1, 26, "Subsubtitle"],
-Cell[11260, 224, 290, 7, 27, "Input"]
+Cell[11190, 221, 120, 1, 26, "Subsubtitle"],
+Cell[CellGroupData[{
+Cell[11335, 226, 240, 6, 27, "Input"],
+Cell[CellGroupData[{
+Cell[11600, 236, 118, 2, 20, "Print"],
+Cell[11721, 240, 118, 2, 20, "Print"],
+Cell[11842, 244, 118, 2, 20, "Print"],
+Cell[11963, 248, 118, 2, 20, "Print"],
+Cell[12084, 252, 118, 2, 20, "Print"],
+Cell[12205, 256, 118, 2, 20, "Print"],
+Cell[12326, 260, 118, 2, 20, "Print"],
+Cell[12447, 264, 118, 2, 20, "Print"],
+Cell[12568, 268, 120, 2, 20, "Print"],
+Cell[12691, 272, 120, 2, 20, "Print"],
+Cell[12814, 276, 118, 2, 20, "Print"],
+Cell[12935, 280, 120, 2, 20, "Print"],
+Cell[13058, 284, 118, 2, 20, "Print"],
+Cell[13179, 288, 120, 2, 20, "Print"],
+Cell[13302, 292, 120, 2, 20, "Print"],
+Cell[13425, 296, 118, 2, 20, "Print"],
+Cell[13546, 300, 118, 2, 20, "Print"],
+Cell[13667, 304, 118, 2, 20, "Print"],
+Cell[13788, 308, 118, 2, 20, "Print"],
+Cell[13909, 312, 118, 2, 20, "Print"],
+Cell[14030, 316, 118, 2, 20, "Print"],
+Cell[14151, 320, 118, 2, 20, "Print"],
+Cell[14272, 324, 118, 2, 20, "Print"],
+Cell[14393, 328, 118, 2, 20, "Print"],
+Cell[14514, 332, 117, 2, 20, "Print"],
+Cell[14634, 336, 118, 2, 20, "Print"],
+Cell[14755, 340, 118, 2, 20, "Print"],
+Cell[14876, 344, 117, 2, 20, "Print"],
+Cell[14996, 348, 118, 2, 20, "Print"],
+Cell[15117, 352, 118, 2, 20, "Print"],
+Cell[15238, 356, 118, 2, 20, "Print"],
+Cell[15359, 360, 118, 2, 20, "Print"],
+Cell[15480, 364, 120, 2, 20, "Print"],
+Cell[15603, 368, 120, 2, 20, "Print"],
+Cell[15726, 372, 118, 2, 20, "Print"],
+Cell[15847, 376, 120, 2, 20, "Print"],
+Cell[15970, 380, 118, 2, 20, "Print"],
+Cell[16091, 384, 120, 2, 20, "Print"],
+Cell[16214, 388, 120, 2, 20, "Print"],
+Cell[16337, 392, 118, 2, 20, "Print"],
+Cell[16458, 396, 118, 2, 20, "Print"],
+Cell[16579, 400, 118, 2, 20, "Print"]
+}, Closed]]
+}, Closed]],
+Cell[16724, 406, 290, 7, 21, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11587, 236, 217, 4, 26, "Subsubtitle"],
-Cell[11807, 242, 200, 4, 27, "Input"]
+Cell[17051, 418, 217, 4, 26, "Subsubtitle"],
+Cell[17271, 424, 200, 4, 27, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12044, 251, 419, 8, 26, "Subsubtitle"],
-Cell[12466, 261, 891, 19, 27, "Input"],
-Cell[13360, 282, 938, 21, 27, "Input"],
-Cell[14301, 305, 800, 18, 27, "Input"]
+Cell[17508, 433, 419, 8, 43, "Subsubtitle"],
+Cell[17930, 443, 891, 19, 43, "Input"],
+Cell[18824, 464, 938, 21, 58, "Input"],
+Cell[19765, 487, 800, 18, 43, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[15138, 328, 118, 1, 26, "Subsubtitle"],
-Cell[15259, 331, 305, 8, 27, "Input"],
-Cell[15567, 341, 207, 4, 27, "Input"],
+Cell[20602, 510, 118, 1, 26, "Subsubtitle"],
 Cell[CellGroupData[{
-Cell[15799, 349, 618, 16, 27, "Input"],
-Cell[16420, 367, 11487, 211, 601, "Output"]
+Cell[20745, 515, 305, 8, 27, "Input"],
+Cell[21053, 525, 79112, 1448, 4153, "Output"]
+}, Closed]],
+Cell[100180, 1976, 207, 4, 21, "Input"],
+Cell[CellGroupData[{
+Cell[100412, 1984, 618, 16, 27, "Input"],
+Cell[101033, 2002, 13391, 249, 729, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[27944, 583, 636, 16, 27, "Input"],
-Cell[28583, 601, 15061, 270, 601, "Output"]
+Cell[114461, 2256, 636, 16, 27, "Input"],
+Cell[115100, 2274, 17471, 315, 729, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[43681, 876, 381, 12, 27, "Input"],
-Cell[44065, 890, 12017, 226, 601, "Output"]
-}, Open  ]],
-Cell[56097, 1119, 2065, 53, 133, "Input"],
-Cell[58165, 1174, 203, 4, 27, "Input"],
-Cell[58371, 1180, 199, 4, 27, "Input"],
+Cell[132608, 2594, 381, 12, 27, "Input"],
+Cell[132992, 2608, 14117, 268, 729, "Output"]
+}, Closed]],
+Cell[147124, 2879, 2065, 53, 142, "Input"],
+Cell[149192, 2934, 203, 4, 27, "Input"],
+Cell[149398, 2940, 199, 4, 27, "Input"],
 Cell[CellGroupData[{
-Cell[58595, 1188, 310, 9, 27, "Input"],
-Cell[58908, 1199, 278, 7, 27, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[59223, 1211, 244, 8, 27, "Input"],
-Cell[59470, 1221, 227, 6, 27, "Output"]
+Cell[149622, 2948, 310, 9, 27, "Input"],
+Cell[149935, 2959, 278, 7, 27, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[59734, 1232, 366, 10, 27, "Input"],
-Cell[60103, 1244, 233, 6, 27, "Output"]
+Cell[150250, 2971, 244, 8, 27, "Input"],
+Cell[150497, 2981, 227, 6, 27, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[60373, 1255, 315, 9, 27, "Input"],
-Cell[60691, 1266, 182, 5, 27, "Output"]
+Cell[150761, 2992, 366, 10, 27, "Input"],
+Cell[151130, 3004, 233, 6, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[151400, 3015, 315, 9, 27, "Input"],
+Cell[151718, 3026, 182, 5, 27, "Output"]
 }, Open  ]]
 }, Open  ]]
 }

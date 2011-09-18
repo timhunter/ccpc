@@ -17,6 +17,7 @@ let build_rule_map grammar daughter =
       | PublicTerminating str -> () 
       | PublicNonTerminating (rights, recipes) -> 
           let key = Nelist.nth rights daughter in
+
           add map key rule
     else () in
   let map = Map (Hashtbl.create 100) in 
