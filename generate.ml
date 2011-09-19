@@ -1,5 +1,5 @@
 (* Zhong Chen, Sep 18, 2011,
-a radom tree generator based on WMCFG format (currently ignoring string_yield and weights information) 
+a radom tree generator based on WMCFG format (currently ignoring string_yield info) 
 Tree type and drawing were borrowed from LIN4424 course material by John Hale
 added function get_rhs in rule.ml and updated rule.mli
 *)
@@ -10,8 +10,8 @@ ocaml -I +ocamlgraph -I kbest -I mcfgread
 
 An example:
 
-generate a random tree in Chinese:
-let random_Chinese_tree = generate "grammars/wmcfg/chinese.wmcfg" "S";;
+generate a random tree and its corresponding weight:
+let (random_Chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg" "S";;
 
 and draw it in a .dot file:
 write_tree random_Chinese_tree "random_chinese_tree";;
@@ -54,7 +54,8 @@ type 'a tree = Node of 'a * 'a tree list
        end
 
 
-let rec generate_all g items = 
+(* this function only generate a random tree
+  let rec generate_all g items = 
     let nonterm = List.map Rule.get_nonterm g in
 	if List.mem (List.hd items) nonterm then
 	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
@@ -62,13 +63,43 @@ let rec generate_all g items =
 	    if List.length rule_selected = 1 then Node ((List.hd items),[generate_all g rule_selected])
 	    else Node ((List.hd items),[(generate_all g [List.hd rule_selected]);(generate_all g (List.tl rule_selected))])
 	else Node ((List.hd items),[])
+*)
+
+(* generate a random tree and its weight*)
+let rec generate_all g items w = 
+    let nonterm = List.map Rule.get_nonterm g in
+	if List.mem (List.hd items) nonterm then
+	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
+	  let rule_selected = List.nth productions (Random.int (List.length productions)) in
+	  let rule_selected_rhs = Rule.get_rhs rule_selected in
+	  let current_w = 
+	    match (get_weight rule_selected) with
+	      | Some (num,denom) -> (float_of_int num) /. (float_of_int denom) *. w
+	      | None -> w in
+	    if List.length rule_selected_rhs = 1 then 
+	      let child = generate_all g rule_selected_rhs current_w in
+	      (Node ((List.hd items),[fst child]),snd child)
+	    else 
+	      let left_child = generate_all g [List.hd rule_selected_rhs] current_w in
+	      let right_child = generate_all g (List.tl rule_selected_rhs) (snd left_child) in
+	      (Node ((List.hd items),[fst left_child;
+				      fst right_child]),snd right_child)
+	else (Node ((List.hd items),[]),w)
 
 let generate grammar_file start =
   let g = Grammar.get_input_grammar grammar_file in
   let items = [start] in
-    generate_all g items
+    generate_all g items 1.0
+
+(*
+let pair_multiply p1 p2 = (((fst p1) * (fst p2)), ((snd p1) * (snd p2)))
+let pair_deduct p1 p2 = (((fst p1) - (fst p2)), ((snd p1) - (snd p2)))
+*)
 
 
 
-(* need to calculate the weights*)
+
+
+
 (* random should based on probs?*)
+
