@@ -1,4 +1,4 @@
-(* Zhong Chen, Sep 18, 2011,
+(* Zhong Chen, Sep 19, 2011,
 a radom tree generator based on WMCFG format (currently ignoring string_yield info) 
 Tree type and drawing were borrowed from LIN4424 course material by John Hale
 added function get_rhs in rule.ml and updated rule.mli
@@ -65,6 +65,9 @@ type 'a tree = Node of 'a * 'a tree list
 	else Node ((List.hd items),[])
 *)
 
+   (*let probablity_random (rules : Rule.r list) =*)
+     
+
 (* generate a random tree and its weight*)
 let rec generate_all g items w = 
     let nonterm = List.map Rule.get_nonterm g in
@@ -73,7 +76,7 @@ let rec generate_all g items w =
 	  let rule_selected = List.nth productions (Random.int (List.length productions)) in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
-	    match (get_weight rule_selected) with
+	    match (Rule.get_weight rule_selected) with
 	      | Some (num,denom) -> (float_of_int num) /. (float_of_int denom) *. w
 	      | None -> w in
 	    if List.length rule_selected_rhs = 1 then 
@@ -91,15 +94,8 @@ let generate grammar_file start =
   let items = [start] in
     generate_all g items 1.0
 
-(*
-let pair_multiply p1 p2 = (((fst p1) * (fst p2)), ((snd p1) * (snd p2)))
-let pair_deduct p1 p2 = (((fst p1) - (fst p2)), ((snd p1) - (snd p2)))
-*)
 
 
 
-
-
-
-(* random should based on probs?*)
+(*To do: random select a rule based on probs*)
 
