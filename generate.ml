@@ -19,7 +19,20 @@ write_tree random_Chinese_tree "random_chinese_tree";;
 
 *)
 
-#use "loading.ml";;
+(*#use "loading.ml";;*)
+#load "profiling.cmo";;
+#load "util.cmo";;
+#load "kbest/rational.cmo";;
+#load "nelist.cmo";;
+#load "rule.cmo";;
+#load "mcfgread/read.cmo";;
+#load "mcfgread/lexer.cmo";;
+#load "chart.cmo";;
+#load "tables.cmo";;
+#load "parser.cmo";;
+#load "grammar.cmo";;
+#load "derivation.cmo";;
+
 
    (* trees are a typical kind of value for parsers to return *)
 type 'a tree = Node of 'a * 'a tree list
