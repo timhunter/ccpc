@@ -11,10 +11,10 @@ ocaml -I +ocamlgraph -I kbest -I mcfgread
 An example:
 
 generate a random Korean tree and its corresponding weight:
-let (random_korean_tree, weight) = generate "grammars/wmcfg/korean.wmcfg" "S";;
+let (random_korean_tree, weight) = generate "grammars/wmcfg/korean.wmcfg";;
 
 or a Chinese tree
-let (random_chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg" "S";;
+let (random_chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg";;
 
 and draw it in a .dot file:
 write_tree random_korean_tree "random_korean_tree";;
@@ -137,9 +137,9 @@ let rec generate_all g items w =
 				      fst right_child]),snd right_child)
 	else (Node ((List.hd items),[]),w)
 
-let generate grammar_file start =
-  let (g,_) = Grammar.get_input_grammar grammar_file in
-  let items = [start] in
+let generate grammar_file =
+  let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
+  let items = [start_symbol] in
     generate_all g items 1.0
 
 
