@@ -14,8 +14,6 @@ For each rule, keeps count of (i) number of time the rule is used
 Outputs a weighted version of the input grammar, given prefixing `num / denom' to each rule.
 ************************************************************************************************)
 
-let _START_SYMBOL_ = "S"
-
 type rule_counter = (Rule.r, int) Hashtbl.t
 type nonterm_counter = (string, int) Hashtbl.t
 
@@ -46,11 +44,11 @@ let rec process_tree weight sentence chart rule_uses nonterm_uses tree =
 	increment nonterm_uses nt weight;
 	List.iter (process_tree weight sentence chart rule_uses nonterm_uses) children
 
-let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : string) =
+let process_sentence (rules : Rule.r list) start_symbol rule_uses nonterm_uses (sentence : string) =
         let w = int_of_string (List.hd (Util.split ' ' sentence)) in
 	let split_sentence = List.tl (Util.split ' ' sentence) in
 	let chart = Parser.deduce (-1) rules (Parser.Sentence split_sentence) in
-	let goal_items = Chart.goal_items chart _START_SYMBOL_ (List.length split_sentence) in
+	let goal_items = Chart.goal_items chart start_symbol (List.length split_sentence) in
 	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
@@ -59,12 +57,12 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 
 let run_training grammar_file sentence_file =
 
-	let (grammar,_) = Grammar.get_input_grammar grammar_file in
+	let (grammar,start_symbol) = Grammar.get_input_grammar grammar_file in
 	let (sentences : string list) = read_sentences sentence_file in
 
 	let rule_uses = ref (Hashtbl.create (List.length grammar)) in
 	let nonterm_uses = ref (Hashtbl.create ((List.length grammar)/10)) in
-	List.iter (process_sentence grammar rule_uses nonterm_uses) sentences ;
+	List.iter (process_sentence grammar start_symbol rule_uses nonterm_uses) sentences ;
 
 	let print_weighted_rule r =
 		let num = try Hashtbl.find !rule_uses r with Not_found -> 0 in
