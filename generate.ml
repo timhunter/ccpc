@@ -138,7 +138,7 @@ let rec generate_all g items w =
 	else (Node ((List.hd items),[]),w)
 
 let generate grammar_file start =
-  let g = Grammar.get_input_grammar grammar_file in
+  let (g,_) = Grammar.get_input_grammar grammar_file in
   let items = [start] in
     generate_all g items 1.0
 

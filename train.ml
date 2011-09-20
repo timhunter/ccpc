@@ -59,7 +59,7 @@ let process_sentence (rules : Rule.r list) rule_uses nonterm_uses (sentence : st
 
 let run_training grammar_file sentence_file =
 
-	let grammar = Grammar.get_input_grammar grammar_file in
+	let (grammar,_) = Grammar.get_input_grammar grammar_file in
 	let (sentences : string list) = read_sentences sentence_file in
 
 	let rule_uses = ref (Hashtbl.create (List.length grammar)) in

@@ -32,14 +32,14 @@ let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = Chart.goal_items chart start_symbol (List.length sentence) in
   let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-  (* <:DEBUG< "%d goal items, %d goal derivations\n" (List.length goal_items) (List.length goal_derivations) >> ; *)
+  <:DEBUG< "%d goal items, %d goal derivations\n" (List.length goal_items) (List.length goal_derivations) >> ;
   let rec make_trees goals acc =
     match goals with
       [] -> acc
     | h::t ->  make_trees t ((print_tree h sentence)::acc) in
   let result = make_trees goal_derivations [] in
-   (*<:DEBUG< "%s\n" (String.concat "\n" (Chart.map_items chart (fun i -> Chart.to_string i sentence))) >> ;*)
-  (*<:DEBUG< "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) >> ;*)
+  <:DEBUG< "%s\n" (String.concat "\n" (Chart.map_items chart (fun i -> Chart.to_string i sentence))) >> ;
+  <:DEBUG< "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) >> ;
   (if (List.length goal_items)>0 then 
     (Printf.printf "SUCCESS!\n";)
   else 
@@ -72,7 +72,7 @@ let main () =
 		let options = process_args xs default_options in
 		if (options.sentence = None) && (options.prefix = None) then failwith "No prefix or sentence given; nothing to do!" ;
 		Util.set_debug_mode options.debug ;
-		let input_grammar = (Grammar.get_input_grammar grammar_file, "S") in
+		let input_grammar = Grammar.get_input_grammar grammar_file in
 		let grammar_for_parsing =
 			match options.prefix with
 			| None -> input_grammar ;

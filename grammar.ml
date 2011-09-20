@@ -1,13 +1,34 @@
 open Util
 open Rule
 
+(* Convert a string to a list of characters *)
+let rec string_to_list str =
+  match str with
+  | "" -> []
+  | s  -> (String.get s 0) :: string_to_list (String.sub s 1 ((String.length s) - 1))
+
+let is_candidate nonterm =
+	let isalpha c = (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')) in
+	match (string_to_list nonterm) with
+	| ('S' :: cs) -> (List.filter isalpha cs = [])
+	| _ -> false
+
+let choose_start_symbol nonterms =
+	let candidates = List.filter is_candidate nonterms in
+	match candidates with
+	| (x::[]) -> x
+	| _ -> failwith "Couldn't identify unique start symbol in this grammar"
+
 let get_input_grammar grammar_file =
+  let rules = 
   try 
     let channel = open_in grammar_file in 
     let lexbuf = Lexing.from_channel channel in 
-    Read.mcfgrule Lexer.token lexbuf  
-  with _ -> print_string ("Can't parse input mcfg file "^grammar_file^"\n"); []
-
+    Read.mcfgrule Lexer.token lexbuf
+  with _ -> failwith ("Can't parse input mcfg file "^grammar_file^"\n")
+  in
+  let start_symbol = choose_start_symbol (List.map Rule.get_nonterm rules) in
+  (rules, start_symbol)
 
 (******************************************************************************************)
 (* Extract the intersection grammar *)
