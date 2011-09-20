@@ -10,11 +10,14 @@ ocaml -I +ocamlgraph -I kbest -I mcfgread
 
 An example:
 
-generate a random tree and its corresponding weight:
-let (random_Chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg" "S";;
+generate a random Korean tree and its corresponding weight:
+let (random_korean_tree, weight) = generate "grammars/wmcfg/korean.wmcfg" "S";;
+
+or a Chinese tree
+let (random_chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg" "S";;
 
 and draw it in a .dot file:
-write_tree random_Chinese_tree "random_chinese_tree";;
+write_tree random_korean_tree "random_korean_tree";;
 
 
 *)
@@ -78,15 +81,47 @@ type 'a tree = Node of 'a * 'a tree list
 	else Node ((List.hd items),[])
 *)
 
-   (*let probablity_random (rules : Rule.r list) =*)
-     
+
+   (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
+   let sort_rules rules = 
+     let compare r1 r2 =
+       match ((Rule.get_weight r1),(Rule.get_weight r2)) with
+	 | (Some (num1,denom1),Some (num2,denom2)) -> 
+	     if num1 > num2 then -1 
+	     else if num1 = num2 then 0 
+	     else 1
+	 | (None,_) -> 0 
+	 | (_,None) -> 0 
+     in
+       List.sort compare rules
+
+   (* getting the weight in int. for a rule*)
+   let some_to_int weight = 
+     match weight with
+	 | Some (num,denom) -> (num,denom)
+	 | None -> (0,0)
+ 
+  (* weighted random sampling*)
+  let weighted_random rules =
+    if (List.length rules) = 1 then (List.hd rules) else
+      let sorted_rules = sort_rules rules in
+      let random = Random.int (snd (some_to_int (Rule.get_weight (List.hd sorted_rules)))+1) in
+        let rec select rnd r =
+	  if List.length r = 1 then (List.hd r) else 
+	    let diff = rnd - fst (some_to_int (Rule.get_weight (List.hd r))) in
+	      if diff < 0 then (List.hd r)	  
+	      else select diff (List.tl r) 
+	in
+	  select random sorted_rules
+
+
 
 (* generate a random tree and its weight*)
 let rec generate_all g items w = 
     let nonterm = List.map Rule.get_nonterm g in
 	if List.mem (List.hd items) nonterm then
 	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
-	  let rule_selected = List.nth productions (Random.int (List.length productions)) in
+	  let rule_selected = weighted_random productions in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    match (Rule.get_weight rule_selected) with
@@ -107,8 +142,4 @@ let generate grammar_file start =
   let items = [start] in
     generate_all g items 1.0
 
-
-
-
-(*To do: random select a rule based on probs*)
 
