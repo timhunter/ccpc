@@ -15,7 +15,7 @@ let is_candidate nonterm =
 
 let choose_start_symbol nonterms =
 	let candidates = List.filter is_candidate nonterms in
-	match candidates with
+	match (uniques candidates) with
 	| (x::[]) -> x
 	| _ -> failwith "Couldn't identify unique start symbol in this grammar"
 
