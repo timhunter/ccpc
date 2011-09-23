@@ -1,4 +1,4 @@
-(* Zhong Chen, Sep 19, 2011,
+(* Zhong Chen, Sep 20, 2011,
 a radom tree generator based on WMCFG format (currently ignoring string_yield info) 
 Tree type and drawing were borrowed from LIN4424 course material by John Hale
 added function get_rhs in rule.ml and updated rule.mli
@@ -70,7 +70,7 @@ type 'a tree = Node of 'a * 'a tree list
        end
 
 
-(* this function only generate a random tree
+(* this function only generates a random tree
   let rec generate_all g items = 
     let nonterm = List.map Rule.get_nonterm g in
 	if List.mem (List.hd items) nonterm then
