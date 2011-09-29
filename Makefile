@@ -32,13 +32,13 @@ train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) train.cmx
 
 visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) visualize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ str.cmxa $(OCAMLOBJ_nt) visualize.cmx
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
 	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx
-	rm -f $(EXE)_bc $(EXE)_nt train
+	rm -f $(EXE)_bc $(EXE)_nt train visualize
 
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 
