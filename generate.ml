@@ -5,11 +5,6 @@ added function get_rhs in rule.ml and updated rule.mli
 *)
 
 (*
-Make sure to run it on Caml toplevel
-ocaml -I +ocamlgraph -I kbest -I mcfgread
-
-An example:
-
 generate a random Korean tree and its corresponding weight:
 let (random_korean_tree, weight) = generate "grammars/wmcfg/korean.wmcfg";;
 
@@ -18,23 +13,7 @@ let (random_chinese_tree, weight) = generate "grammars/wmcfg/chinese.wmcfg";;
 
 and draw it in a .dot file:
 write_tree random_korean_tree "random_korean_tree";;
-
-
 *)
-
-(*#use "loading.ml";;*)
-#load "profiling.cmo";;
-#load "util.cmo";;
-#load "kbest/rational.cmo";;
-#load "nelist.cmo";;
-#load "rule.cmo";;
-#load "mcfgread/read.cmo";;
-#load "mcfgread/lexer.cmo";;
-#load "chart.cmo";;
-#load "tables.cmo";;
-#load "parser.cmo";;
-#load "grammar.cmo";;
-#load "derivation.cmo";;
 
 
    (* trees are a typical kind of value for parsers to return *)

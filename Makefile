@@ -15,10 +15,10 @@ YACC=ocamlyacc
 GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I kbest
-OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo
+OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo
 
-OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi
-OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx
+OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi
+OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx
 
 all: $(EXE)_nt train
 
@@ -30,6 +30,9 @@ $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
 
 train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) train.cmx
+
+visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) visualize.cmx
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
