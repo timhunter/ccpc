@@ -81,6 +81,7 @@ let clean_preterminal preterminal leaf =
 		Some (preterminal, new_leaf)
 
 (* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, each component being a string *)
+(* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
 let rec get_yield tree =
 	let (Node (root, children)) = tree in
 	match children with
@@ -88,30 +89,31 @@ let rec get_yield tree =
 	| [Node (child,[])] -> (match (clean_preterminal root child) with None -> [] | Some x -> [x])
 	| _ -> List.concat (List.map get_yield children)
 
+let lookup_index index preterm term =
+	if (Str.string_match (Str.regexp "^:: \(.*\)$") preterm 0) then
+		let features = Str.matched_group 1 preterm in
+		try
+			Hashtbl.find (index : (string * string, int) Hashtbl.t) ((term,features) : string * string)
+		with Not_found -> failwith (Printf.sprintf "Couldn't find pair (%s,%s)" term features)
+	else
+		failwith (Printf.sprintf "Preterminal category doesn't look like it's of the right form: %s\n" preterm)
+
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
-let get_derivation_string tree grammar_files prolog_file =
+let get_derivation_string tree dict index prolog_file =
 	let yield = get_yield tree in
 	List.iter (fun (preterm,term) -> Printf.printf "[%s]:[%s] " preterm term) yield ; Printf.printf "\n" ;
-	let dict = get_guillaumin_dict grammar_files.dict_file in
 	List.iter (fun (preterm,term) -> Printf.printf "[%s]:[%s] " (Hashtbl.find dict preterm) term) yield ; Printf.printf "\n" ;
-	let index = get_stabler_index grammar_files prolog_file in
-	let lookup_index preterm term : int =
-		if (Str.string_match (Str.regexp "^:: \(.*\)$") preterm 0) then
-			let features = Str.matched_group 1 preterm in
-			try
-				Hashtbl.find (index : (string * string, int) Hashtbl.t) ((term,features) : string * string)
-			with Not_found -> failwith (Printf.sprintf "Couldn't find pair (%s,%s)" term features)
-		else
-			failwith (Printf.sprintf "Preterminal category doesn't look like it's of the right form: %s\n" preterm)
-	in
-	List.iter (fun (preterm,term) -> Printf.printf "%d " ((lookup_index (Hashtbl.find dict preterm) term) : int)) yield ; Printf.printf "\n" ;
+	List.iter (fun (preterm,term) -> Printf.printf "%d " ((lookup_index index (Hashtbl.find dict preterm) term) : int)) yield ; Printf.printf "\n" ;
 	()
 
 let run_visualization grammar_files prolog_file =
+	let dict = get_guillaumin_dict grammar_files.dict_file in
+	let index = get_stabler_index grammar_files prolog_file in
+	Random.self_init () ;  (* initialise with a random seed *)
 	let (random_tree, weight) = generate grammar_files.wmcfg_file in
 	Printf.printf "weight is %f\n" weight ;
 	write_tree random_tree "random_tree" ;
-	get_derivation_string random_tree grammar_files prolog_file
+	get_derivation_string random_tree dict index prolog_file
 
 (************************************************************************************************)
 
