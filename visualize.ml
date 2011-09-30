@@ -14,20 +14,27 @@ produced from that prefix.
 (* Reads from the dict file a returns a mapping from guillaumin-generated 
    preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
 let get_guillaumin_dict filename =
+
 	let channel =
 		try open_in filename
 		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
 	in
+
+	(* This regex matches lines describing both lexical ("::") and non-lexical (":") categories. 
+	   We only actually take notice of the lexical categories, but we try to match the others too, 
+	   so that we can give a warning if it fails. *)
+	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (\(::?\) \(.*\))$" in
+
 	let result = Hashtbl.create 100 in
-	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (\(::? .*\))$" in
 	begin
 		try
 			while true; do
 				let line = input_line channel in
 				if (Str.string_match regex line 0) then
-					let category = Str.matched_group 1 line in
-					let features = Str.matched_group 2 line in
-					Hashtbl.add result category features
+					let category   = Str.matched_group 1 line in
+					let lex_or_not = Str.matched_group 2 line in
+					let features   = Str.matched_group 3 line in
+					if lex_or_not = "::" then (Hashtbl.add result category features) else ()
 				else if (line <> "") then
 					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
 			done
@@ -89,22 +96,26 @@ let rec get_yield tree =
 	| [Node (child,[])] -> (match (clean_preterminal root child) with None -> [] | Some x -> [x])
 	| _ -> List.concat (List.map get_yield children)
 
-let lookup_index index preterm term =
-	if (Str.string_match (Str.regexp "^:: \(.*\)$") preterm 0) then
-		let features = Str.matched_group 1 preterm in
-		try
-			Hashtbl.find (index : (string * string, int) Hashtbl.t) ((term,features) : string * string)
-		with Not_found -> failwith (Printf.sprintf "Couldn't find pair (%s,%s)" term features)
-	else
-		failwith (Printf.sprintf "Preterminal category doesn't look like it's of the right form: %s\n" preterm)
-
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
-let get_derivation_string tree dict index prolog_file =
-	let yield = get_yield tree in
-	List.iter (fun (preterm,term) -> Printf.printf "[%s]:[%s] " preterm term) yield ; Printf.printf "\n" ;
-	List.iter (fun (preterm,term) -> Printf.printf "[%s]:[%s] " (Hashtbl.find dict preterm) term) yield ; Printf.printf "\n" ;
-	List.iter (fun (preterm,term) -> Printf.printf "%d " ((lookup_index index (Hashtbl.find dict preterm) term) : int)) yield ; Printf.printf "\n" ;
-	()
+let get_derivation_string tree dict index =
+
+	let yield = get_yield tree in    (* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
+	List.iter (fun (preterm,term) -> Printf.printf "%s:\"%s\"  " preterm term) yield ; print_newline () ;
+
+	let preterm_to_features preterm =
+		try Hashtbl.find dict preterm
+		with Not_found -> failwith (Printf.sprintf "Couldn't find feature-sequence corresponding to preterm %s in the dictionary" preterm)
+	in
+	let yield_with_features = List.map (fun (preterm,term) -> (preterm_to_features preterm, term)) yield in
+
+	let lookup_id features term =
+		try Hashtbl.find index (term,features)
+		with Not_found -> failwith (Printf.sprintf "Couldn't find an ID for lexical item (%s,%s)" term features)
+	in
+	let yield_as_ids = List.map (fun (features,term) -> lookup_id features term) yield_with_features in
+
+	List.iter (Printf.printf "%d ") yield_as_ids ; print_newline () ;
+	yield_as_ids
 
 let run_visualization grammar_files prolog_file =
 	let dict = get_guillaumin_dict grammar_files.dict_file in
@@ -113,7 +124,7 @@ let run_visualization grammar_files prolog_file =
 	let (random_tree, weight) = generate grammar_files.wmcfg_file in
 	Printf.printf "weight is %f\n" weight ;
 	write_tree random_tree "random_tree" ;
-	get_derivation_string random_tree dict index prolog_file
+	ignore (get_derivation_string random_tree dict index)
 
 (************************************************************************************************)
 
