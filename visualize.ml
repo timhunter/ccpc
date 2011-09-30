@@ -72,7 +72,12 @@ let get_stabler_index grammar_files prolog_file =
 					Printf.eprintf "WARNING: Ignoring unexpected line in prolog output: %s\n" line
 			done
 		with End_of_file ->
-			close_in channel
+			let exit_status = Unix.close_process_in channel in
+			match exit_status with
+			| Unix.WEXITED 0 -> ()
+			| Unix.WEXITED n -> Printf.eprintf "WARNING: Prolog shell command exited with code %d\n" n
+			| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Prolog shell command was killed by signal number %d\n" n
+			| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Prolog shell command was stopped by signal number %d\n" n
 	end ;
 	result
 
