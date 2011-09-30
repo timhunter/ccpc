@@ -123,7 +123,6 @@ let run_visualization grammar_files prolog_file =
 	Random.self_init () ;  (* initialise with a random seed *)
 	let (random_tree, weight) = generate grammar_files.wmcfg_file in
 	Printf.printf "weight is %f\n" weight ;
-	write_tree random_tree "random_tree" ;
 	ignore (get_derivation_string random_tree dict index)
 
 (************************************************************************************************)
