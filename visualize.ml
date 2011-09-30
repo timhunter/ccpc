@@ -48,13 +48,15 @@ let get_guillaumin_dict filename =
 (* Calls Stabler's prolog to get the IDs of each MG lexical item.
    Returns a mapping from (lexical-string, feature-sequence) to ID. *)
 let get_stabler_index grammar_files prolog_file =
-	let command = Printf.sprintf "prolog -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
 	let channel =
-		if (Sys.file_exists prolog_file) then
+		if not (Sys.file_exists prolog_file) then
+			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
+		else if not (Sys.file_exists grammar_files.mg_file) then
+			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
+		else
+			let command = Printf.sprintf "prolog -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
-		else
-			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
 	in
 	let result = Hashtbl.create 100 in
 	let regex = Str.regexp "^\([0-9]+\)\. \[\(.*\)\]::\[\(.*\)\]$" in
