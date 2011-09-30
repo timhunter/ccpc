@@ -54,7 +54,7 @@ let get_stabler_index grammar_files prolog_file =
 		else if not (Sys.file_exists grammar_files.mg_file) then
 			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
 		else
-			let command = Printf.sprintf "prolog -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
+			let command = Printf.sprintf "swipl -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
