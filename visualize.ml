@@ -114,16 +114,22 @@ let get_derivation_string tree dict index =
 	in
 	let yield_as_ids = List.map (fun (features,term) -> lookup_id features term) yield_with_features in
 
-	List.iter (Printf.printf "%d ") yield_as_ids ; print_newline () ;
 	yield_as_ids
 
 let run_visualization grammar_files prolog_file =
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 	Random.self_init () ;  (* initialise with a random seed *)
-	let (random_tree, weight) = generate grammar_files.wmcfg_file in
-	Printf.printf "weight is %f\n" weight ;
-	ignore (get_derivation_string random_tree dict index)
+	let process_tree (tree,weight) =
+		print_endline "===============================================" ;
+		Printf.printf "weight is %f\n" weight ;
+		let ids = get_derivation_string tree dict index in
+		List.iter (Printf.printf "%d ") ids ; print_newline () ;
+		print_endline "===============================================" ;
+	in
+	for i = 0 to 5 do
+		process_tree (generate grammar_files.wmcfg_file)
+	done
 
 (************************************************************************************************)
 
