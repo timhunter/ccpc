@@ -106,6 +106,8 @@ let rec get_yield tree =
 	| [Node (child,[])] -> (match (clean_preterminal root child) with None -> [] | Some x -> [x])
 	| _ -> List.concat (List.map get_yield children)
 
+let remove_space s = Str.global_replace (Str.regexp " ") "" s
+
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
 let get_derivation_string tree dict index =
 
@@ -120,9 +122,11 @@ let get_derivation_string tree dict index =
 
 	let lookup_id features term =
 		try Hashtbl.find index (term,features)
-		with Not_found -> failwith (Printf.sprintf "Couldn't find an ID for lexical item (%s,%s)" term features)
+		with Not_found -> 
+		  (*Hashtbl.iter (fun key data -> let t = fst key in let f = snd key in (Printf.printf "(%s,%s): %d\n " t f data)) index;*)
+		  failwith (Printf.sprintf "Couldn't find an ID for lexical item (%s,%s)" term features)
 	in
-	let yield_as_ids = List.map (fun (features,term) -> lookup_id features term) yield_with_features in
+	let yield_as_ids = List.map (fun (features,term) -> lookup_id (remove_space features) term) yield_with_features in
 
 	yield_as_ids
 
