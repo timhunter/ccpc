@@ -32,7 +32,7 @@ train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(OCAMLOBJ_nt) train.cmx
 
 visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx

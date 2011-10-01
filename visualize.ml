@@ -1,3 +1,4 @@
+open Num
 open Util
 open Generate
 
@@ -136,7 +137,7 @@ let run_visualization grammar_files prolog_file =
 	Random.self_init () ;  (* initialise with a random seed *)
 	let process_tree (tree,weight) =
 		print_endline "===============================================" ;
-		Printf.printf "weight is %f\n" weight ;
+		Printf.printf "weight is %s\n" (string_of_num weight) ;
 		let ids = get_derivation_string tree dict index in
 		List.iter (Printf.printf "%d ") ids ; print_newline () ;
 		print_endline "===============================================" ;

@@ -12,5 +12,6 @@
 #load "parser.cmo";;
 #load "grammar.cmo";;
 #load "derivation.cmo";;
+#load "nums.cma";;
 #use "main.ml";;
    

@@ -15,6 +15,7 @@ and draw it in a .dot file:
 write_tree random_korean_tree "random_korean_tree";;
 *)
 
+open Num
 
    (* trees are a typical kind of value for parsers to return *)
 type 'a tree = Node of 'a * 'a tree list
@@ -74,6 +75,8 @@ type 'a tree = Node of 'a * 'a tree list
      in
        List.sort compare rules
 
+let n_of num denom = div_num (num_of_int num) (num_of_int denom)
+
    (* getting the weight in int. for a rule*)
    let some_to_int weight = 
      match weight with
@@ -104,7 +107,7 @@ let rec generate_all g items w =
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    match (Rule.get_weight rule_selected) with
-	      | Some (num,denom) -> (float_of_int num) /. (float_of_int denom) *. w
+	      | Some (num,denom) -> mult_num (div_num (num_of_int num) (num_of_int denom)) w
 	      | None -> w in
 	    if List.length rule_selected_rhs = 1 then 
 	      let child = generate_all g rule_selected_rhs current_w in
@@ -119,6 +122,6 @@ let rec generate_all g items w =
 let generate grammar_file =
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
   let items = [start_symbol] in
-    generate_all g items 1.0
+    generate_all g items (n_of 1 1)
 
 
