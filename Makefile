@@ -23,7 +23,7 @@ OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cm
 all: $(EXE)_nt train
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc) main.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(OCAMLOBJ_bc) main.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma $(OCAMLOBJ_bc) main.cmo
 
 $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa $(OCAMLOBJ_nt) main.cmx
