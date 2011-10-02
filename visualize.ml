@@ -139,7 +139,7 @@ let run_visualization grammar_files prolog_file =
 		print_endline "===============================================" ;
 		Printf.printf "weight is %s\n" (string_of_num weight) ;
 		let ids = get_derivation_string tree dict index in
-		List.iter (Printf.printf "%d ") ids ; print_newline () ;
+		List.iter (Printf.printf "%d, ") ids ; print_newline () ;
 		print_endline "===============================================" ;
 	in
 	for i = 0 to 5 do
