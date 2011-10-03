@@ -31,8 +31,15 @@ $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
 train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa $(OCAMLOBJ_nt) train.cmx
 
-visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
+visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx mgcky-swi/patched
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
+
+mgcky-swi/patched: mgcky-swi.patch
+	if [ -e mgcky-swi ]; then mv mgcky-swi `tmpfile mgcky-swi.moved-away.XXXX`; fi
+	wget http://www.linguistics.ucla.edu/people/stabler/mgcky-swi.tgz
+	tar xzf mgcky-swi.tgz
+	patch -d mgcky-swi -p1 < mgcky-swi.patch
+	touch mgcky-swi/patched
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx

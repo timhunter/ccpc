@@ -127,19 +127,44 @@ let get_derivation_string tree dict index =
 
 	yield_as_ids
 
+(* ids is a list of ints representing the "derivation string"; 
+   i is an integer identifying this particular derivation among those sampled *)
+let save_to_file grammar_files prolog_file ids i =
+	let ids_as_string = "[" ^ (String.concat "," (List.map string_of_int ids)) ^ "]" in
+	let channel =
+		if not (Sys.file_exists prolog_file) then
+			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
+		else if not (Sys.file_exists grammar_files.mg_file) then
+			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
+		else
+			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], lparse(%s,D,B,X,_,_), user:latex_tree(X,'tree%03d').\" 2>/dev/null" in
+			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file ids_as_string i in
+			try Unix.open_process_in command
+			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
+	in
+	(* We don't expect any output on stdout *)
+	let exit_status = Unix.close_process_in channel in
+	match exit_status with
+	| Unix.WEXITED 0 -> ()
+	| Unix.WEXITED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) exited with code %d\n" i n
+	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) was killed by signal number %d\n" i n
+	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) was stopped by signal number %d\n" i n
+
 let run_visualization grammar_files prolog_file =
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 	Random.self_init () ;  (* initialise with a random seed *)
-	let process_tree (tree,weight) =
+	let process_tree (tree,weight) i =
 		print_endline "===============================================" ;
 		Printf.printf "weight is %s\n" (string_of_num weight) ;
 		let ids = get_derivation_string tree dict index in
 		List.iter (Printf.printf "%d, ") ids ; print_newline () ;
+		Printf.printf "Saving tree to file %d\n" i ;
+		save_to_file grammar_files prolog_file ids i ;
 		print_endline "===============================================" ;
 	in
 	for i = 0 to 5 do
-		process_tree (generate grammar_files.wmcfg_file)
+		process_tree (generate grammar_files.wmcfg_file) i
 	done
 
 (************************************************************************************************)

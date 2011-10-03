@@ -1,0 +1,233 @@
+diff -rc -C 5 mgcky-swi-orig/setup.pl mgcky-swi-desired/setup.pl
+*** mgcky-swi-orig/setup.pl	2011-10-03 12:52:11.335668000 -0400
+--- mgcky-swi-desired/setup.pl	2011-10-03 12:54:11.883197000 -0400
+***************
+*** 40,50 ****
+  %:- ['grammars/g6']. % "the hammer which broke the window" à la Kayne, cf g6a, with head movement
+  %:- ['grammars/logic1']. % "- p & q"
+  
+     % GRAMMARS REQUIRING HEAD MOVEMENT (mghapx+lhapx)
+  %:- ['grammars/gh6']. % left-adjoining head movement + affix hop
+! :- ['grammars/larsonian1']. % larson-ian inspired grammar by Hale (2003)
+  
+  g0(a) :- showParse([the,king,the,pie,eat]).
+  g0(b) :- showParse([which,pie,the,king,eat]).
+  
+  logic(1) :- showParse(['-',p,v,q]).
+--- 40,50 ----
+  %:- ['grammars/g6']. % "the hammer which broke the window" à la Kayne, cf g6a, with head movement
+  %:- ['grammars/logic1']. % "- p & q"
+  
+     % GRAMMARS REQUIRING HEAD MOVEMENT (mghapx+lhapx)
+  %:- ['grammars/gh6']. % left-adjoining head movement + affix hop
+! %:- ['grammars/larsonian1']. % larson-ian inspired grammar by Hale (2003)
+  
+  g0(a) :- showParse([the,king,the,pie,eat]).
+  g0(b) :- showParse([which,pie,the,king,eat]).
+  
+  logic(1) :- showParse(['-',p,v,q]).
+diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi-desired/tree_display/draw_treeSWI.pl
+*** mgcky-swi-orig/tree_display/draw_treeSWI.pl	2011-10-03 12:52:11.366229000 -0400
+--- mgcky-swi-desired/tree_display/draw_treeSWI.pl	2011-10-03 13:59:27.673590000 -0400
+***************
+*** 34,63 ****
+   * draw_tree threads a pair of variables Stream0-Stream through all of the
+   * the interface drawing calls.  This makes it easy to collect all of the
+   * drawing commands in a list or some other data structure.
+   */
+  
+! :- module(draw_tree, [draw_tree/2]).
+  
+  %:- use_module(library(lists)).
+  
+  % internal node data structures
+  
+  node_offsets(n(X,Y,_,_,_), X, Y).
+  node_xchildshift(n(_,_,XCS,_,_), XCS).		% X shift for child
+  node(n(_,_,_,Label,Children), Label, Children).
+  
+  draw_tree(Tree, Module) :-
+  	layout_tree(Tree, Node, LeftSide, RightSide, Module),
+  	node_offsets(Node, 0, 0),
+  	min_x_side(LeftSide, X0),
+  	max_x_side(RightSide, X1),
+  	last(RightSide, _-Ymax), %sicstus, new versions of swi
+  %	last(_-Ymax, RightSide), % old swi
+  	DX is -(X0),
+  	Xmax is X1-X0,
+! 	Module:openstream(Xmax, Ymax, Tree, Stream0),
+  	draw_node(Node, Stream0, Stream, none, none, DX, 0, Module),
+  	Module:closestream(Stream).
+  
+  layout_tree(Tree, Node, LeftSide, RightSide, Module) :-
+  	Module:tree(Tree, Label, Subtrees),
+--- 34,66 ----
+   * draw_tree threads a pair of variables Stream0-Stream through all of the
+   * the interface drawing calls.  This makes it easy to collect all of the
+   * drawing commands in a list or some other data structure.
+   */
+  
+! :- module(draw_tree, [draw_tree/2, draw_tree/3]).
+  
+  %:- use_module(library(lists)).
+  
+  % internal node data structures
+  
+  node_offsets(n(X,Y,_,_,_), X, Y).
+  node_xchildshift(n(_,_,XCS,_,_), XCS).		% X shift for child
+  node(n(_,_,_,Label,Children), Label, Children).
+  
+  draw_tree(Tree, Module) :-
++ 	draw_tree(Tree, Module, 'ltree').
++ 
++ draw_tree(Tree, Module, Filename) :-
+  	layout_tree(Tree, Node, LeftSide, RightSide, Module),
+  	node_offsets(Node, 0, 0),
+  	min_x_side(LeftSide, X0),
+  	max_x_side(RightSide, X1),
+  	last(RightSide, _-Ymax), %sicstus, new versions of swi
+  %	last(_-Ymax, RightSide), % old swi
+  	DX is -(X0),
+  	Xmax is X1-X0,
+! 	Module:openstream(Xmax, Ymax, Tree, Filename, Stream0),
+  	draw_node(Node, Stream0, Stream, none, none, DX, 0, Module),
+  	Module:closestream(Stream).
+  
+  layout_tree(Tree, Node, LeftSide, RightSide, Module) :-
+  	Module:tree(Tree, Label, Subtrees),
+diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi-desired/tree_display/latex_treeSWI.pl
+*** mgcky-swi-orig/tree_display/latex_treeSWI.pl	2011-10-03 12:52:11.375013000 -0400
+--- mgcky-swi-desired/tree_display/latex_treeSWI.pl	2011-10-03 14:03:02.772687000 -0400
+***************
+*** 14,33 ****
+   *
+   * Example with double lines:
+   * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
+   */
+  
+! :- module(latex_tree, [latex_tree/1]).
+  % latex_tree/1 is the top predicate
+  % but draw_tree.pl makes direct calls to:
+  %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
+  
+  %:- use_module(draw_tree,[draw_tree/2]).
+! :- use_module(draw_treeSWI,[draw_tree/2]).
+  :- use_module(fontcmtt10, [label_size/3]).
+  
+  latex_tree(Tree) :- draw_tree(Tree, latex_tree), !.
+  
+  /* LaTeX/eepic interface to drawTree
+   */
+  
+  % tree/3  parses a term of the form Label/Subtrees as representing a tree
+--- 14,34 ----
+   *
+   * Example with double lines:
+   * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
+   */
+  
+! :- module(latex_tree, [latex_tree/1, latex_tree/2]).
+  % latex_tree/1 is the top predicate
+  % but draw_tree.pl makes direct calls to:
+  %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
+  
+  %:- use_module(draw_tree,[draw_tree/2]).
+! :- use_module(draw_treeSWI,[draw_tree/2, draw_tree/3]).
+  :- use_module(fontcmtt10, [label_size/3]).
+  
+  latex_tree(Tree) :- draw_tree(Tree, latex_tree), !.
++ latex_tree(Tree, Filename) :- draw_tree(Tree, latex_tree, Filename), !.
+  
+  /* LaTeX/eepic interface to drawTree
+   */
+  
+  % tree/3  parses a term of the form Label/Subtrees as representing a tree
+***************
+*** 62,73 ****
+  treeterminal([], [], []).
+  
+  xgap(10).		% min space between nodes in the X direction
+  ygap(10).		% min space between nodes in the Y direction
+  
+! openstream(Xmax, Ymax, Tree, Stream) :-
+! 	open('ltree.tex', write, Stream),
+          format(Stream, "\\documentstyle[epic,eepic]{article}~n", []),
+          format(Stream, "\\begin{document}~n", []),
+          MYmax is -(Ymax),
+          format(Stream, "\\begin{picture}(~0f,~0f)(~0f,~0f)~n", [Xmax,Ymax,0,MYmax]),
+          format(Stream, "% drawTree(~w).~n%~n", [Tree]).
+--- 63,75 ----
+  treeterminal([], [], []).
+  
+  xgap(10).		% min space between nodes in the X direction
+  ygap(10).		% min space between nodes in the Y direction
+  
+! openstream(Xmax, Ymax, Tree, Filename, Stream) :-
+! 	sformat(FullFilename, "~w.tex", [Filename]), 
+! 	open(FullFilename, write, Stream),
+          format(Stream, "\\documentstyle[epic,eepic]{article}~n", []),
+          format(Stream, "\\begin{document}~n", []),
+          MYmax is -(Ymax),
+          format(Stream, "\\begin{picture}(~0f,~0f)(~0f,~0f)~n", [Xmax,Ymax,0,MYmax]),
+          format(Stream, "% drawTree(~w).~n%~n", [Tree]).
+diff -rc -C 5 mgcky-swi-orig/tree_display/wish_treeSWI.pl mgcky-swi-desired/tree_display/wish_treeSWI.pl
+*** mgcky-swi-orig/tree_display/wish_treeSWI.pl	2011-10-03 12:52:11.380488000 -0400
+--- mgcky-swi-desired/tree_display/wish_treeSWI.pl	2011-10-03 13:59:20.773967000 -0400
+***************
+*** 67,77 ****
+  treeterminal([], [], []).
+  
+  xgap(10).
+  ygap(10).
+  
+! openstream(Xmax, Ymax, _Tree, WIS) :-
+  	( wish_streams(WIS, WOS)    % WIS = WishInputStream, WOS = WishOutputStream
+  	  % \+ at_end_of_stream(WOS)
+  	->   format(WIS, ".c delete all~n", [])
+  	;    retractall(wish_streams(_,_)),
+  %             plsys(exec('/usr/bin/wish -geometry 385x420+240+50', [pipe(WIS),pipe(WOS),null], _PID)),
+--- 67,77 ----
+  treeterminal([], [], []).
+  
+  xgap(10).
+  ygap(10).
+  
+! openstream(Xmax, Ymax, _Tree, Filename, WIS) :-
+  	( wish_streams(WIS, WOS)    % WIS = WishInputStream, WOS = WishOutputStream
+  	  % \+ at_end_of_stream(WOS)
+  	->   format(WIS, ".c delete all~n", [])
+  	;    retractall(wish_streams(_,_)),
+  %             plsys(exec('/usr/bin/wish -geometry 385x420+240+50', [pipe(WIS),pipe(WOS),null], _PID)),
+***************
+*** 86,100 ****
+  pack .hscroll -side bottom -fill x -in .f
+  ",           []),
+  	     format(WIS,
+  "frame .szb
+  pack .szb -side bottom -fill x -in .f
+! button .szb.1 -text \"dump ps\" -font 6x10 -command {.c postscript -colormode gray -file \"ltree.ps\"}
+  pack .szb.1 -side right
+  label .szb.2 -text \" wish_treeSWI.pl\" -font -*-times-bold-r-normal--12-120-*'
+  pack .szb.2 -side left
+! ",           []),
+  	     format(WIS, 
+  "pack .c -side top -expand 1 -fill both -in .f
+  scrollbar .vscroll -orient vertical
+  pack .vscroll -side right -fill y
+  pack .f -side left -expand 1 -fill both
+--- 86,100 ----
+  pack .hscroll -side bottom -fill x -in .f
+  ",           []),
+  	     format(WIS,
+  "frame .szb
+  pack .szb -side bottom -fill x -in .f
+! button .szb.1 -text \"dump ps\" -font 6x10 -command {.c postscript -colormode gray -file \"~w.ps\"}
+  pack .szb.1 -side right
+  label .szb.2 -text \" wish_treeSWI.pl\" -font -*-times-bold-r-normal--12-120-*'
+  pack .szb.2 -side left
+! ",           [Filename]),
+  	     format(WIS, 
+  "pack .c -side top -expand 1 -fill both -in .f
+  scrollbar .vscroll -orient vertical
+  pack .vscroll -side right -fill y
+  pack .f -side left -expand 1 -fill both
