@@ -171,25 +171,63 @@ let run_visualization grammar_files prolog_file =
 
 let print_usage () =
 	Printf.eprintf "\n" ;
-	Printf.eprintf "Usage: %s <grammars-directory> <grammar-name> <stabler-prolog-directory>\n" Sys.argv.(0) ;
+	Printf.eprintf "Usage: %s <grammar-file>\n" Sys.argv.(0) ;
 	Printf.eprintf "\n" ;
-	Printf.eprintf "    Assumes the three relevant grammar-related files are in these locations:\n" ;
-	Printf.eprintf "        <grammars-directory>/mg/<grammar-name>.pl\n" ;
-	Printf.eprintf "        <grammars-directory>/mcfgs/<grammar-name>.dict\n" ;
-	Printf.eprintf "        <grammars-directory>/wmcfg/<grammar-name>.wmcfg\n" ;
+	Printf.eprintf "The grammar file should\n" ;
+	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
+	Printf.eprintf "       OR (ii) contain a comment line identifying a weighted MCFG file from which it is derived\n" ;
+	Printf.eprintf "               by intersection, as path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
 	Printf.eprintf "\n" ;
-	Printf.eprintf "    A version of Ed Stabler's setup.pl file with ALL the grammar-loading lines \n" ;
-	Printf.eprintf "    commented out should be here:\n" ;
-	Printf.eprintf "        <stabler-prolog-directory>/setup.pl\n" ;
+	Printf.eprintf "In either case, the associated MG and dictionary files should be in the following locations:\n" ;
+	Printf.eprintf "   $GRAMMARS/mg/$NAME.pl\n" ;
+	Printf.eprintf "   $GRAMMARS/mcfgs/$NAME.dict\n" ;
 	Printf.eprintf "\n"
 
+(* Returns a pair of strings (grammars_dir, grammar_name), such that the relevant files are 
+   grammars_dir/{mg,mcfgs/wmcfg}/grammar_name.{pl,wmcfg,dict} *)
+let identify_original_grammar grammar_file =
+
+	let channel =
+		if not (Sys.file_exists grammar_file) then
+			failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
+		else
+			(* Might as well be picky about this regex *)
+			let command = Printf.sprintf "cat %s | awk ' /^\(\* original grammar: [a-z\/\.]* \*\)/ {print $4} '" grammar_file in
+			try Unix.open_process_in command
+			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
+	in
+
+	let orig_grammar =
+		let line1 = try Some (input_line channel) with End_of_file -> None in
+		match line1 with
+		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
+		| Some s ->
+			let line2 = try Some (input_line channel) with End_of_file -> None in
+			match line2 with
+			| None -> s                 (* Exactly one matching comment; use that one *)
+			| Some _ -> failwith (Printf.sprintf "Two distinct original grammars identified in %s, don't know what to do." grammar_file)
+	in
+	let exit_status = Unix.close_process_in channel in
+	( match exit_status with
+	| Unix.WEXITED 0 -> ()
+	| Unix.WEXITED n -> Printf.eprintf "WARNING: Shell command reading grammar file exited with code %d\n" n
+	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Shell command reading grammar file was killed by signal number %d\n" n
+	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Shell command reading grammar file was stopped by signal number %d\n" n ) ;
+
+	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
+	let regex = Str.regexp "^\([a-zA-Z0-9\.-]+\)\/wmcfg\/\([a-zA-Z0-9\.-]+\)\.wmcfg$" in
+	if (Str.string_match regex orig_grammar 0) then
+		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
+	else
+		failwith (Printf.sprintf "Original grammar location is not of the right form: %s" orig_grammar)
+
 let main () =
-	if (Array.length Sys.argv = 4) then (
-		let grammars_dir = Sys.argv.(1) in
-		let grammar_name = Sys.argv.(2) in
-		let prolog_file  = Sys.argv.(3) ^ "/setup.pl" in
+	if (Array.length Sys.argv = 2) then (
+		let grammar_file = Sys.argv.(1) in
+		let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
+		let prolog_file  = "mgcky-swi/setup.pl" in
 		let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
-		                      wmcfg_file = grammars_dir ^ "/wmcfg/" ^ grammar_name ^ ".wmcfg" ;
+		                      wmcfg_file = grammar_file ;
 		                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
 		                    } in
 		run_visualization grammar_files prolog_file
