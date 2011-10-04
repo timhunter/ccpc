@@ -52,21 +52,20 @@ let print_grammar grammar_file prefix (rules, start_symbol) =
 	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
-let default_options = {debug = false ; prefix = None ; sentence = None ; output_file = None }
+type options = { debug : bool ; prefix : string option ; sentence : string option }
+let default_options = {debug = false ; prefix = None ; sentence = None }
 
 let rec process_args args acc =
 	match args with
 	| [] -> acc
 	| ("-d" :: rest)        -> process_args rest {acc with debug = true}
 	| ("-p" :: (p :: rest)) -> process_args rest {acc with prefix = Some p}
-	| ("-o" :: (o :: rest)) -> process_args rest {acc with output_file = Some o}
 	| (x::rest)             -> process_args rest {acc with sentence = Some x}
 
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: mcfg grammar-file (-o output-file) (-d) (-p \"prefix\") \"sentence\"\n";
+		Printf.eprintf "Usage: %s grammar-file (-d) (-p \"prefix\") \"sentence\"\n" Sys.argv.(0);
 		Printf.eprintf "Flags in parentheses are optional\n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
@@ -86,18 +85,7 @@ let main () =
 			| Some p -> print_grammar grammar_file p grammar_for_parsing
 		)
 		| Some s ->
-			let result = run_parser (Util.split ' ' s) grammar_for_parsing in
-			match options.output_file with
-			| None -> ignore result
-			| Some o ->
-				(*** I don't really understand what's going on here, it's just copied from the previous version of the main function ***)
-				(* let oc = open_out "maketree.pl" in *)
-				(* Printf.fprintf oc "tikz_qtree(%s, '%s')." (List.nth result 0) o; *)
-				(* close_out oc; *)
-				(* let exit_code = Sys.command "prolog -q -s tikz_qtreeSWI.pl < maketree.pl" in *)
-				(* if exit_code = 1 then Printf.eprintf "Error running tree drawer" ; *)
-				(* let exit_code = Sys.command "rm maketree.pl" in  *)
-				(* if exit_code = 1 then Printf.eprintf "Error deleting prolog tree file" ; *)
-				()
+			let _ = run_parser (Util.split ' ' s) grammar_for_parsing in
+			()
 
 let _ = if (!Sys.interactive) then () else main () ;;
