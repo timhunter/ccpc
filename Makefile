@@ -20,7 +20,7 @@ OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo m
 OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi
 OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx
 
-all: $(EXE)_nt train
+all: $(EXE)_nt train visualize
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc) main.cmo
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma $(OCAMLOBJ_bc) main.cmo
