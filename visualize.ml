@@ -12,6 +12,15 @@ produced from that prefix.
 
 (************************************************************************************************)
 
+let check_exit_code code name =
+	match code with
+	| Unix.WEXITED 0 -> ()
+	| Unix.WEXITED n -> Printf.eprintf "WARNING: %s exited with code %d\n" name n
+	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: %s was killed by signal number %d\n" name n
+	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: %s was stopped by signal number %d\n" name n
+
+(************************************************************************************************)
+
 (* Reads from the dict file a returns a mapping from guillaumin-generated 
    preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
 let get_guillaumin_dict filename =
@@ -75,12 +84,7 @@ let get_stabler_index grammar_files prolog_file =
 					Printf.eprintf "WARNING: Ignoring unexpected line in prolog output: %s\n" line
 			done
 		with End_of_file ->
-			let exit_status = Unix.close_process_in channel in
-			match exit_status with
-			| Unix.WEXITED 0 -> ()
-			| Unix.WEXITED n -> Printf.eprintf "WARNING: Prolog shell command exited with code %d\n" n
-			| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Prolog shell command was killed by signal number %d\n" n
-			| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Prolog shell command was stopped by signal number %d\n" n
+			check_exit_code (Unix.close_process_in channel) "Prolog shell command for getting dictionary"
 	end ;
 	result
 
@@ -143,12 +147,7 @@ let save_to_file grammar_files prolog_file ids i =
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
 	(* We don't expect any output on stdout *)
-	let exit_status = Unix.close_process_in channel in
-	match exit_status with
-	| Unix.WEXITED 0 -> ()
-	| Unix.WEXITED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) exited with code %d\n" i n
-	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) was killed by signal number %d\n" i n
-	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Prolog shell command (for tree %d) was stopped by signal number %d\n" i n
+	check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving tree to file"
 
 let run_visualization grammar_files prolog_file =
 	let dict = get_guillaumin_dict grammar_files.dict_file in
@@ -192,7 +191,7 @@ let identify_original_grammar grammar_file =
 			failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
 		else
 			(* Might as well be picky about this regex *)
-			let command = Printf.sprintf "cat %s | awk ' /^\(\* original grammar: [a-z\/\.]* \*\)/ {print $4} '" grammar_file in
+			let command = Printf.sprintf "awk ' /^\(\* original grammar: [a-z\/\.]* \*\)/ {print $4} ' %s" grammar_file in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
@@ -207,12 +206,7 @@ let identify_original_grammar grammar_file =
 			| None -> s                 (* Exactly one matching comment; use that one *)
 			| Some _ -> failwith (Printf.sprintf "Two distinct original grammars identified in %s, don't know what to do." grammar_file)
 	in
-	let exit_status = Unix.close_process_in channel in
-	( match exit_status with
-	| Unix.WEXITED 0 -> ()
-	| Unix.WEXITED n -> Printf.eprintf "WARNING: Shell command reading grammar file exited with code %d\n" n
-	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: Shell command reading grammar file was killed by signal number %d\n" n
-	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: Shell command reading grammar file was stopped by signal number %d\n" n ) ;
+	check_exit_code (Unix.close_process_in channel) "Shell command reading grammar file" ;
 
 	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
 	let regex = Str.regexp "^\([a-zA-Z0-9\.-]+\)\/wmcfg\/\([a-zA-Z0-9\.-]+\)\.wmcfg$" in
