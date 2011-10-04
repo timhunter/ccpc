@@ -31,6 +31,16 @@ let get_input_grammar grammar_file =
   (rules, start_symbol)
 
 (******************************************************************************************)
+
+(* This function is the ``inverse'' (sort of) of build_symbol below.
+   Must be kept in sync if that changes. *)
+let desituate nonterm =
+	let regex = Str.regexp "\(_[0-9]+-[0-9]+\|_eps\)*$" in
+	let idx = Str.search_forward regex nonterm 0 in
+	Str.string_before nonterm idx
+
+(******************************************************************************************)
+
 (* Extract the intersection grammar *)
 (* See Albro's dissertation, appendix C section C.4 *)
 

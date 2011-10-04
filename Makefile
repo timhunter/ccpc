@@ -23,13 +23,13 @@ OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cm
 all: $(EXE)_nt train
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc) main.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma $(OCAMLOBJ_bc) main.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma $(OCAMLOBJ_bc) main.cmo
 
 $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa $(OCAMLOBJ_nt) main.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa $(OCAMLOBJ_nt) main.cmx
 
 train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa $(OCAMLOBJ_nt) train.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa $(OCAMLOBJ_nt) train.cmx
 
 visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx mgcky-swi/patched
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx

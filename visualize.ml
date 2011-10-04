@@ -90,17 +90,19 @@ let get_stabler_index grammar_files prolog_file =
 
 (************************************************************************************************)
 
-(* Cleans up some of the irrelevant mess introduced by the Guillaumin MCFG-generation:
+(* De-situates any situated nonterminals in an intersection grammar, then 
+   cleans up some of the irrelevant mess introduced by the Guillaumin MCFG-generation:
      (1) removes (preterminal,leaf) pairs of the form (E,"")
      (2) converts preterminals like "t123_tmp1" to "t123"             *)
 let clean_preterminal preterminal leaf =
 	let new_leaf = (if leaf = " " then "" else leaf) in
-	if ((preterminal = "E") && (new_leaf = "")) then
+	let new_preterminal = Grammar.desituate preterminal in
+	if ((new_preterminal = "E") && (new_leaf = "")) then
 		None
-	else if (Str.string_match (Str.regexp "\([a-z]+[0-9]+\)_tmp[0-9]+") preterminal 0) then
-		Some (Str.matched_group 1 preterminal, new_leaf)
+	else if (Str.string_match (Str.regexp "\([a-z]+[0-9]+\)_tmp[0-9]+") new_preterminal 0) then
+		Some (Str.matched_group 1 new_preterminal, new_leaf)
 	else
-		Some (preterminal, new_leaf)
+		Some (new_preterminal, new_leaf)
 
 (* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, each component being a string *)
 (* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
