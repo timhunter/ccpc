@@ -215,7 +215,10 @@ let identify_original_grammar grammar_file =
 	if (Str.string_match regex orig_grammar 0) then
 		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
 	else
-		failwith (Printf.sprintf "Original grammar location is not of the right form: %s" orig_grammar)
+		if (orig_grammar = grammar_file) then
+			failwith (Printf.sprintf "No original grammar identified in %s (and this file itself is not in a location of the form $GRAMMARS/wmcfg/$NAME.wmcfg)" orig_grammar)
+		else
+			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg/$NAME.wmcfg" orig_grammar)
 
 let main () =
 	if (Array.length Sys.argv = 2) then (
