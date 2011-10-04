@@ -12,7 +12,10 @@ open Rational
 
 mcfgrule:
    rule     {[$1]}
-|  rule mcfgrule {$1::$2};
+|  rule mcfgrule {$1::$2}
+|  NEWLINE {[]}
+|  NEWLINE mcfgrule {$2}
+;
 
 
 rule:

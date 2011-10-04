@@ -47,7 +47,9 @@ let run_parser sentence (rules, start_symbol) =
   List.iter (Util.debug "%s\n") result ;
   result
 
-let print_grammar (rules, start_symbol) =
+let print_grammar grammar_file prefix (rules, start_symbol) =
+	Printf.printf "(* original grammar: %s *)\n" grammar_file ;
+	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
 type options = { debug : bool ; prefix : string option ; sentence : string option ; output_file : string option }
@@ -70,7 +72,6 @@ let main () =
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
 		let options = process_args xs default_options in
-		if (options.sentence = None) && (options.prefix = None) then failwith "No prefix or sentence given; nothing to do!" ;
 		Util.set_debug_mode options.debug ;
 		let input_grammar = Grammar.get_input_grammar grammar_file in
 		let grammar_for_parsing =
@@ -79,7 +80,11 @@ let main () =
 			| Some p -> intersection_grammar input_grammar (Util.split ' ' p)
 		in
 		match options.sentence with
-		| None -> print_grammar grammar_for_parsing
+		| None -> (
+			match options.prefix with
+			| None -> failwith "No prefix or sentence given; nothing to do!"
+			| Some p -> print_grammar grammar_file p grammar_for_parsing
+		)
 		| Some s ->
 			let result = run_parser (Util.split ' ' s) grammar_for_parsing in
 			match options.output_file with
