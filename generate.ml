@@ -64,16 +64,13 @@ type 'a tree = Node of 'a * 'a tree list
 
    (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
    let sort_rules rules = 
-     let compare r1 r2 =
+     let rulecompare r1 r2 =
        match ((Rule.get_weight r1),(Rule.get_weight r2)) with
-	 | (Some (num1,denom1),Some (num2,denom2)) -> 
-	     if num1 > num2 then -1 
-	     else if num1 = num2 then 0 
-	     else 1
+	 | (Some (num1,denom1),Some (num2,denom2)) -> -(compare num1 num2)
 	 | (None,_) -> 0 
 	 | (_,None) -> 0 
      in
-       List.sort compare rules
+       List.sort rulecompare rules
 
 let n_of num denom = div_num (num_of_int num) (num_of_int denom)
 
@@ -119,9 +116,31 @@ let rec generate_all g items w =
 				      fst right_child]),snd right_child)
 	else (Node ((List.hd items),[]),w)
 
-let generate grammar_file =
+   (*sorting a list of trees in a decending order on their weights*)
+   let sort_trees treelist = 
+     let treecompare t1 t2 = -(Num.compare_num (snd t1) (snd t2)) in
+       List.sort treecompare treelist
+
+(* remove the duplicate trees in a tree list*)
+let remove_duplicate list = 
+  let rec fstlist l = 
+     match l with
+       |[] -> []
+       |h::t -> (fst h)::fstlist t in
+  let add_elem elem l =
+    if List.mem (fst elem) (fstlist l) then l 
+    else elem :: l
+  in
+    List.fold_right add_elem list []
+
+
+
+let generate grammar_file = 
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
   let items = [start_symbol] in
-    generate_all g items (n_of 1 1)
-
-
+  let rec add_n g items w n =
+    if n < 1 then []
+    else (generate_all g items w)::(add_n g items w (n-1)) 
+  in
+  let ntrees = add_n g items (n_of 1 1) 100 in
+    sort_trees (remove_duplicate ntrees)

@@ -164,8 +164,9 @@ let run_visualization grammar_files prolog_file =
 		save_to_file grammar_files prolog_file ids i ;
 		print_endline "===============================================" ;
 	in
+	let treelist = generate grammar_files.wmcfg_file in
 	for i = 0 to 5 do
-		process_tree (generate grammar_files.wmcfg_file) i
+		process_tree (List.nth treelist i) i
 	done
 
 (************************************************************************************************)
