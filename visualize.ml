@@ -151,7 +151,7 @@ let save_to_file grammar_files prolog_file ids i =
 	(* We don't expect any output on stdout *)
 	check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving tree to file"
 
-let run_visualization grammar_files prolog_file =
+let run_visualization grammar_files prolog_file kbest =
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 	Random.self_init () ;  (* initialise with a random seed *)
@@ -165,7 +165,7 @@ let run_visualization grammar_files prolog_file =
 		print_endline "===============================================" ;
 	in
 	let treelist = generate grammar_files.wmcfg_file in
-	for i = 0 to 5 do
+	for i = 0 to kbest-1 do
 		process_tree (List.nth treelist i) i
 	done
 
@@ -173,7 +173,7 @@ let run_visualization grammar_files prolog_file =
 
 let print_usage () =
 	Printf.eprintf "\n" ;
-	Printf.eprintf "Usage: %s <grammar-file>\n" Sys.argv.(0) ;
+	Printf.eprintf "Usage: %s <grammar-file> <number of trees>\n" Sys.argv.(0) ;
 	Printf.eprintf "\n" ;
 	Printf.eprintf "The grammar file should\n" ;
 	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
@@ -222,15 +222,16 @@ let identify_original_grammar grammar_file =
 			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg/$NAME.wmcfg" orig_grammar)
 
 let main () =
-	if (Array.length Sys.argv = 2) then (
+	if (Array.length Sys.argv = 3) then (
 		let grammar_file = Sys.argv.(1) in
+		let kbest = int_of_string Sys.argv.(2) in
 		let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
 		let prolog_file  = "mgcky-swi/setup.pl" in
 		let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
 		                      wmcfg_file = grammar_file ;
 		                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
 		                    } in
-		run_visualization grammar_files prolog_file
+		run_visualization grammar_files prolog_file kbest
 	) else
 		print_usage ()
 

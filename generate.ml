@@ -142,5 +142,5 @@ let generate grammar_file =
     if n < 1 then []
     else (generate_all g items w)::(add_n g items w (n-1)) 
   in
-  let ntrees = add_n g items (n_of 1 1) 100 in
+  let ntrees = add_n g items (n_of 1 1) 300 in
     sort_trees (remove_duplicate ntrees)
