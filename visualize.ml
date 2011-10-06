@@ -113,6 +113,14 @@ let rec get_yield tree =
 	| [Node (child,[])] -> (match (clean_preterminal root child) with None -> [] | Some x -> [x])
 	| _ -> List.concat (List.map get_yield children)
 
+let get_sentence tree =
+        let yields = get_yield tree in 
+        let rec get_words yields sentence =
+               match yields with
+                 | [] -> sentence
+                 | (id, lex_item)::t -> get_words t (lex_item::sentence) in
+        get_words yields []
+
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
 let get_derivation_string tree dict index =
 
@@ -161,12 +169,14 @@ let run_visualization grammar_files prolog_file kbest =
 		let ids = get_derivation_string tree dict index in
 		List.iter (Printf.printf "%d, ") ids ; print_newline () ;
 		Printf.printf "Saving tree to file %d\n" i ;
+                let sentence = get_sentence tree in 
+                List.iter (Printf.printf "%s ") sentence; print_newline () ;
 		save_to_file grammar_files prolog_file ids i ;
 		print_endline "===============================================" ;
 	in
 	let treelist = generate grammar_files.wmcfg_file in
 	for i = 0 to kbest-1 do
-		process_tree (List.nth treelist i) i
+		process_tree (List.nth treelist i) i;
 	done
 
 (************************************************************************************************)
