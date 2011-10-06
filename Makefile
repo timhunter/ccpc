@@ -35,7 +35,11 @@ visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx mgcky-swi/patched
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
 
 mgcky-swi/patched: mgcky-swi.patch
-	if [ -e mgcky-swi ]; then mv mgcky-swi `tmpfile mgcky-swi.moved-away.XXXX`; fi
+	@if [ -e mgcky-swi ]; then \
+		echo "PROBLEM: Directory mgcky-swi already exists, and I don't want to overwrite it, just in case." ; \
+		echo "         If you haven't been editing anything in there, just delete it and run make again." ; \
+		exit 1 ; \
+	fi
 	wget http://www.linguistics.ucla.edu/people/stabler/mgcky-swi.tgz
 	tar xzf mgcky-swi.tgz
 	patch -d mgcky-swi -p1 < mgcky-swi.patch
