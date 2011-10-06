@@ -47,6 +47,14 @@ let concatmap_tr f lsts =
 
 exception EmptyListException
 
+let rec take n lst =
+  if (n = 0) then
+    []
+  else
+    match lst with
+    | [] -> []
+    | (x::xs) -> x :: (take (n-1) xs)
+
 let optlistmap f xs =
   let rec optlistmap' f lst acc =
     match lst with

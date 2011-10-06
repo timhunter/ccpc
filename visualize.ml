@@ -168,7 +168,7 @@ let run_visualization grammar_files prolog_file kbest =
 	let index = get_stabler_index grammar_files prolog_file in
 	Random.self_init () ;  (* initialise with a random seed *)
 	let treelist = generate grammar_files.wmcfg_file in
-	let kbest_trees = List.map (fun i -> List.nth treelist i) (range 0 kbest) in
+	let kbest_trees = take kbest treelist in (*List.map (fun i -> List.nth treelist i) (range 0 kbest) in*)
 
 	(*** Just leaving this part in here for Sam, not actually relevant to what follows for now ***)
 	let process_tree (tree,weight) =
