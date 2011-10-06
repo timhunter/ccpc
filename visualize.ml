@@ -142,6 +142,8 @@ let get_derivation_string tree dict index =
 
 (* derivations is a list of lists of ints; each list of ints is the yield of one derivation tree *)
 let save_to_file grammar_files prolog_file derivations filename =
+	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" *)
+	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
 	let derivation_as_string (ids,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(List.map string_of_int ids))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
