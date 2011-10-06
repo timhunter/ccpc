@@ -125,7 +125,6 @@ let get_sentence tree =
 let get_derivation_string tree dict index =
 
 	let yield = get_yield tree in    (* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
-	List.iter (fun (preterm,term) -> Printf.printf "%s:\"%s\"  " preterm term) yield ; print_newline () ;
 
 	let preterm_to_features preterm =
 		try Hashtbl.find dict preterm
@@ -141,43 +140,45 @@ let get_derivation_string tree dict index =
 
 	yield_as_ids
 
-(* ids is a list of ints representing the "derivation string"; 
-   i is an integer identifying this particular derivation among those sampled *)
-let save_to_file grammar_files prolog_file ids i =
-	let ids_as_string = "[" ^ (String.concat "," (List.map string_of_int ids)) ^ "]" in
+(* derivations is a list of lists of ints; each list of ints is the yield of one derivation tree *)
+let save_to_file grammar_files prolog_file derivations filename =
+	let derivation_as_string (ids,w) = "[" ^ (String.concat "," (List.map string_of_int ids)) ^ "]" in
+	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
 			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
 		else if not (Sys.file_exists grammar_files.mg_file) then
 			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
 		else
-			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], lparse(%s,D,B,X,_,_), user:latex_tree(X,'tree%03d').\" 2>/dev/null" in
-			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file ids_as_string i in
+			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s').\" 2>/dev/null" in
+			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file derivations_as_string filename in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
 	(* We don't expect any output on stdout *)
-	check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving tree to file"
+	check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file"
 
 let run_visualization grammar_files prolog_file kbest =
+
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 	Random.self_init () ;  (* initialise with a random seed *)
-	let process_tree (tree,weight) i =
+	let treelist = generate grammar_files.wmcfg_file in
+	let kbest_trees = List.map (fun i -> List.nth treelist i) (range 0 kbest) in
+
+	(*** Just leaving this part in here for Sam, not actually relevant to what follows for now ***)
+	let process_tree (tree,weight) =
 		print_endline "===============================================" ;
 		Printf.printf "weight is %s\n" (string_of_num weight) ;
-		let ids = get_derivation_string tree dict index in
-		List.iter (Printf.printf "%d, ") ids ; print_newline () ;
-		Printf.printf "Saving tree to file %d\n" i ;
                 let sentence = get_sentence tree in 
                 List.iter (Printf.printf "%s ") sentence; print_newline () ;
-		save_to_file grammar_files prolog_file ids i ;
 		print_endline "===============================================" ;
 	in
-	let treelist = generate grammar_files.wmcfg_file in
-	for i = 0 to kbest-1 do
-		process_tree (List.nth treelist i) i;
-	done
+	List.iter process_tree kbest_trees ;
+	(************************************************)
+
+	let kbest_derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) kbest_trees in
+	save_to_file grammar_files prolog_file kbest_derivations "trees.tex"
 
 (************************************************************************************************)
 
