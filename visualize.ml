@@ -155,8 +155,12 @@ let save_to_file grammar_files prolog_file derivations filename =
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
-	(* We don't expect any output on stdout *)
-	check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file"
+	try
+		while true; do
+			Printf.printf "*** Output from Prolog tree-drawing: %s\n" (input_line channel)
+		done
+	with End_of_file ->
+		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file"
 
 let run_visualization grammar_files prolog_file kbest =
 
