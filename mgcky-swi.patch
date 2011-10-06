@@ -1,9 +1,10 @@
+Only in mgcky-swi/: patched
 diff -rc -C 5 mgcky-swi-orig/setup.pl mgcky-swi/setup.pl
 *** mgcky-swi-orig/setup.pl	2010-07-16 12:33:37.000000000 -0400
---- mgcky-swi/setup.pl	2011-10-05 23:31:05.088174000 -0400
+--- mgcky-swi/setup.pl	2011-10-06 02:07:36.361579000 -0400
 ***************
 *** 26,35 ****
---- 26,53 ----
+--- 26,54 ----
   
   % uncomment ONE of the recognizers and display tools
   %:- ensure_loaded('parser/mgpx'),ensure_loaded('parser/lpx').  % basic MG parser and lexical sequence parser
@@ -20,8 +21,9 @@ diff -rc -C 5 mgcky-swi-orig/setup.pl mgcky-swi/setup.pl
 + 	latex_trees(Trees, Filename).
 + 
 + strings_to_trees([], []).
-+ strings_to_trees([FirstList|OtherLists], [X|OtherTrees]) :-
-+ 	lparse(FirstList,D,B,X,_,_),
++ strings_to_trees([FirstList|OtherLists], [[Note,X]|OtherTrees]) :-
++ 	[Note|DerivationList] = FirstList,
++ 	lparse(DerivationList,D,B,X,_,_),
 + 	strings_to_trees(OtherLists, OtherTrees).
 + 
 + %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -45,7 +47,7 @@ diff -rc -C 5 mgcky-swi-orig/setup.pl mgcky-swi/setup.pl
   g0(b) :- showParse([which,pie,the,king,eat]).
   
   logic(1) :- showParse(['-',p,v,q]).
---- 58,68 ----
+--- 59,69 ----
   %:- ['grammars/g6']. % "the hammer which broke the window" à la Kayne, cf g6a, with head movement
   %:- ['grammars/logic1']. % "- p & q"
   
@@ -59,7 +61,7 @@ diff -rc -C 5 mgcky-swi-orig/setup.pl mgcky-swi/setup.pl
   logic(1) :- showParse(['-',p,v,q]).
 diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi/tree_display/draw_treeSWI.pl
 *** mgcky-swi-orig/tree_display/draw_treeSWI.pl	2009-02-11 23:11:49.000000000 -0500
---- mgcky-swi/tree_display/draw_treeSWI.pl	2011-10-05 23:31:51.820745000 -0400
+--- mgcky-swi/tree_display/draw_treeSWI.pl	2011-10-06 02:07:50.419876000 -0400
 ***************
 *** 34,63 ****
    * draw_tree threads a pair of variables Stream0-Stream through all of the
@@ -92,7 +94,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi/tree_display
   
   layout_tree(Tree, Node, LeftSide, RightSide, Module) :-
   	Module:tree(Tree, Label, Subtrees),
---- 34,98 ----
+--- 34,99 ----
    * draw_tree threads a pair of variables Stream0-Stream through all of the
    * the interface drawing calls.  This makes it easy to collect all of the
    * drawing commands in a list or some other data structure.
@@ -122,7 +124,8 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi/tree_display
 + 	latex_tree:end_file(Stream).
 + 
 + draw_trees_inner([],_).
-+ draw_trees_inner([Tree|Rest],Stream0) :-
++ draw_trees_inner([First|Rest],Stream0) :-
++ 	[Note,Tree] = First,
 + 	layout_tree(Tree, Node, LeftSide, RightSide, latex_tree),
 + 	node_offsets(Node, 0, 0),
 + 	min_x_side(LeftSide, X0),
@@ -132,7 +135,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi/tree_display
 + 	DX is -(X0),
 + 	Xmax is X1-X0,
 + 	node_offsets(Node, 0, 0),
-+ 	latex_tree:start_tree(Xmax, Ymax, Stream0, Tree),
++ 	latex_tree:start_tree(Xmax, Ymax, Stream0, Tree, Note),
 + 	draw_node(Node, Stream0, Stream1, none, none, DX, 0, latex_tree),
 + 	latex_tree:end_tree(Stream1),
 + 	draw_trees_inner(Rest,Stream1).
@@ -160,7 +163,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/draw_treeSWI.pl mgcky-swi/tree_display
   	Module:tree(Tree, Label, Subtrees),
 diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi/tree_display/latex_treeSWI.pl
 *** mgcky-swi-orig/tree_display/latex_treeSWI.pl	2009-02-11 23:11:48.000000000 -0500
---- mgcky-swi/tree_display/latex_treeSWI.pl	2011-10-05 23:30:25.168896000 -0400
+--- mgcky-swi/tree_display/latex_treeSWI.pl	2011-10-06 02:11:10.644514000 -0400
 ***************
 *** 14,33 ****
    *
@@ -183,7 +186,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi/tree_displa
    */
   
   % tree/3  parses a term of the form Label/Subtrees as representing a tree
---- 14,61 ----
+--- 14,62 ----
    *
    * Example with double lines:
    * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
@@ -210,10 +213,11 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi/tree_displa
 + 	format(Stream, "\\documentstyle[epic,eepic]{article}~n", []),
 + 	format(Stream, "\\begin{document}~n", []).
 + 
-+ start_tree(Xmax, Ymax, Stream, Tree) :-
++ start_tree(Xmax, Ymax, Stream, Tree, Note) :-
 + 	MYmax is -(Ymax),
 + 	format(Stream, "\\begin{picture}(~0f,~0f)(~0f,~0f)~n", [Xmax,Ymax,0,MYmax]),
-+ 	format(Stream, "% drawTree(~w).~n%~n", [Tree]).
++ 	format(Stream, "% drawTree(~w).~n%~n", [Tree]),
++ 	format(Stream, "~w\\\\~n", [Note]).
 + 
 + end_tree(Stream) :-
 + 	format(Stream, "\\end{picture}~n\\vskip 3\\baselineskip~n", []).
@@ -246,7 +250,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi/tree_displa
           MYmax is -(Ymax),
           format(Stream, "\\begin{picture}(~0f,~0f)(~0f,~0f)~n", [Xmax,Ymax,0,MYmax]),
           format(Stream, "% drawTree(~w).~n%~n", [Tree]).
---- 90,102 ----
+--- 91,103 ----
   treeterminal([], [], []).
   
   xgap(10).		% min space between nodes in the X direction
@@ -262,7 +266,7 @@ diff -rc -C 5 mgcky-swi-orig/tree_display/latex_treeSWI.pl mgcky-swi/tree_displa
           format(Stream, "% drawTree(~w).~n%~n", [Tree]).
 diff -rc -C 5 mgcky-swi-orig/tree_display/wish_treeSWI.pl mgcky-swi/tree_display/wish_treeSWI.pl
 *** mgcky-swi-orig/tree_display/wish_treeSWI.pl	2009-02-11 23:11:49.000000000 -0500
---- mgcky-swi/tree_display/wish_treeSWI.pl	2011-10-05 22:29:46.833180000 -0400
+--- mgcky-swi/tree_display/wish_treeSWI.pl	2011-10-05 23:45:58.962619000 -0400
 ***************
 *** 67,77 ****
   treeterminal([], [], []).

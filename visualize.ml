@@ -142,7 +142,7 @@ let get_derivation_string tree dict index =
 
 (* derivations is a list of lists of ints; each list of ints is the yield of one derivation tree *)
 let save_to_file grammar_files prolog_file derivations filename =
-	let derivation_as_string (ids,w) = "[" ^ (String.concat "," (List.map string_of_int ids)) ^ "]" in
+	let derivation_as_string (ids,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(List.map string_of_int ids))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
