@@ -4,6 +4,10 @@
 		type tuplerecipe 
 		type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
 		type r 
+
+		type marked_mg_rule = LeftAdjunction | RightAdjunction
+		val get_marked_mg_rule : r -> marked_mg_rule option
+
 		val to_string : r -> string
 		val create_terminating : string * string * (Rational.rat option) -> r
 		val create_nonterminating : string * (string list) * (component list list) * (Rational.rat option) -> r

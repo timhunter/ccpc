@@ -9,6 +9,31 @@ open Rational
 
     (**********************************************************)
 
+    (* Certain MCFG rules correspond to special ``marked'' MG rules; MG rules that aren't the normal 
+       merge and move rules. These rules need to be indicated in the ``derivation string'' that we 
+       construct in visualise.ml to pass to Stabler's prolog code. *)
+    type marked_mg_rule = LeftAdjunction | RightAdjunction
+
+    (* Given an MCFG rule, gives back the corresponding marked MG rule if there is one *)
+    let get_marked_mg_rule rule =
+        match rule with
+        | Terminating _ -> None
+        | NonTerminating (left, rights, trecipe, _) ->
+            if ((Nelist.length rights = 2) && (Nelist.nth rights 1 = left)) then ( (* If it's of the form "A --> B A" *)
+                (* It might (must?) be an adjunction rule. Now ... HACK! ... check the tuple recipe to see which direction *)
+                let stringrecipes = List.map Nelist.to_list (Nelist.to_list trecipe) in
+                if stringrecipes = [ [Component(0,0);Component(0,1);Component(0,2);Component(1,0)]; [Component(1,1)]; [Component(1,2)] ] then
+                    Some LeftAdjunction
+                else if stringrecipes = [ [Component(1,0)]; [Component(1,1)]; [Component(1,2);Component(0,0);Component(0,1);Component(0,2)] ] then
+                    Some RightAdjunction
+                else
+                    None   (* Not sure if this should ever happen, actually *)
+            ) else (
+                None
+            )
+
+    (**********************************************************)
+
     let getstr yields pair =
       match pair with 
         | Component (i,j) ->

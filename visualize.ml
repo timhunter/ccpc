@@ -12,6 +12,38 @@ produced from that prefix.
 
 (************************************************************************************************)
 
+(* Types for representing ``derivation lists''. An element of a derivation list is either a marker 
+   of a particular rule, or an encoding of a leaf of the derivation tree.
+   In simple cases, where the result of Hale and Stabler 2005 is applicable, we don't need any rule 
+   markers, and derivation lists are just lists of leaves. In other cases though, eg. adjunction, 
+   Stabler's prolog code requires markers like '>>' and '<<' to be interspersed with these leaves 
+   to disambiguate.
+   Since Stabler's prolog code represents a leaf of a derivation tree with an int, the eventual 
+   derivation list that we compute is of type int dlist. But we allow other types for leaf elements 
+   for intermediate representations in the course of computing that final list.
+   Intuitively: a "widget dlist" is a list of widgets interspersed with some rule markers. *)
+type 'a dlist_element = RuleMarker of Rule.marked_mg_rule | DerivLeaf of 'a
+type 'a dlist = ('a dlist_element) list
+
+let rec dlist_map (f : 'a -> 'b) (lst : 'a dlist) : 'b dlist =
+	let lifted_f x =
+		match x with
+		| RuleMarker r -> RuleMarker r
+		| DerivLeaf x -> DerivLeaf (f x)
+	in
+	List.map lifted_f lst
+
+(* Given a way to turn a thing of type 'a into a string, turns everything in the list into a string *)
+let dlist_to_strings (f : 'a -> string) (lst : 'a dlist) : string list =
+	let one_to_string = function
+	| RuleMarker Rule.LeftAdjunction -> ">>"
+	| RuleMarker Rule.RightAdjunction -> "<<"
+	| DerivLeaf x -> f x
+	in
+	List.map one_to_string lst
+
+(************************************************************************************************)
+
 let check_exit_code code name =
 	match code with
 	| Unix.WEXITED 0 -> ()
@@ -104,47 +136,52 @@ let clean_preterminal preterminal leaf =
 	else
 		Some (new_preterminal, new_leaf)
 
-(* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, each component being a string *)
-(* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
+(* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, possibly interspersed with "rule markers" *)
+(* eg. [DerivLeaf ("t123","John"); RuleMarker LeftAdjoin; DerivLeaf ("t234","saw"), DerivLeaf ("t345","Mary")] *)
 let rec get_yield tree =
 	match tree with
 	| Leaf label -> failwith (Printf.sprintf "Malformed tree: Got to leaf %s without going via a unary preterminal" label)
-	| NonLeaf (preterm, [Leaf term], _) -> (match (clean_preterminal preterm term) with None -> [] | Some x -> [x])
 	| NonLeaf (label, [], _) -> failwith (Printf.sprintf "Malformed tree: NonLeaf node (label %s) with no children" label)
-	| NonLeaf (_, children, _) -> List.concat (List.map get_yield children)
+	| NonLeaf (preterm, [Leaf term], _) -> (match (clean_preterminal preterm term) with None -> [] | Some x -> [DerivLeaf x])
+	| NonLeaf (_, children, rule) ->
+		match (Rule.get_marked_mg_rule rule) with
+		| None -> List.concat (List.map get_yield children)
+		| Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map get_yield children))
 
 let get_sentence tree =
         let yields = get_yield tree in 
         let rec get_words yields sentence =
                match yields with
                  | [] -> sentence
-                 | (id, lex_item)::t -> get_words t (lex_item::sentence) in
+                 | (DerivLeaf (id, lex_item))::t -> get_words t (lex_item::sentence)
+                 | (RuleMarker _)::t -> get_words t sentence in
         get_words yields []
 
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
 let get_derivation_string tree dict index =
 
-	let yield = get_yield tree in    (* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
+	let yield = get_yield tree in
 
 	let preterm_to_features preterm =
 		try Hashtbl.find dict preterm
 		with Not_found -> failwith (Printf.sprintf "Couldn't find feature-sequence corresponding to preterm %s in the dictionary" preterm)
 	in
-	let yield_with_features = List.map (fun (preterm,term) -> (preterm_to_features preterm, term)) yield in
+	let yield_with_features = dlist_map (fun (preterm,term) -> (preterm_to_features preterm, term)) yield in
 
 	let lookup_id features term =
 		try Hashtbl.find index (term,features)
 		with Not_found -> failwith (Printf.sprintf "Couldn't find an ID for lexical item (%s,%s)" term features)
 	in
-	let yield_as_ids = List.map (fun (features,term) -> lookup_id features term) yield_with_features in
+	let yield_as_ids = dlist_map (fun (features,term) -> lookup_id features term) yield_with_features in
 
 	yield_as_ids
 
-(* derivations is a list of lists of ints; each list of ints is the yield of one derivation tree *)
-let save_to_file grammar_files prolog_file derivations filename =
-	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" *)
+(* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
+let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list) filename =
+	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
+	   (and deals properly with rule markers in amongst the ids). *)
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
-	let derivation_as_string (ids,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(List.map string_of_int ids))) ^ "]" in
+	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
