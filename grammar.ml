@@ -39,6 +39,9 @@ let desituate nonterm =
 	let idx = Str.search_forward regex nonterm 0 in
 	Str.string_before nonterm idx
 
+let desituate_rule r =
+	Rule.map_nonterms desituate r
+
 (******************************************************************************************)
 
 (* Extract the intersection grammar *)

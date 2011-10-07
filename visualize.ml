@@ -144,7 +144,9 @@ let rec get_yield tree =
 	| NonLeaf (label, [], _) -> failwith (Printf.sprintf "Malformed tree: NonLeaf node (label %s) with no children" label)
 	| NonLeaf (preterm, [Leaf term], _) -> (match (clean_preterminal preterm term) with None -> [] | Some x -> [DerivLeaf x])
 	| NonLeaf (_, children, rule) ->
-		match (Rule.get_marked_mg_rule rule) with
+		(* Rule.get_marked_mg_rule unfortunately only works on unsituated rules. Unfortunately it can't desituate 
+		   a rule it is passed itself, because that would create a circular dependency between Grammar and Rule modules. :-( *)
+		match (Rule.get_marked_mg_rule (Grammar.desituate_rule rule)) with
 		| None -> List.concat (List.map get_yield children)
 		| Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map get_yield children))
 

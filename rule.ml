@@ -14,7 +14,9 @@ open Rational
        construct in visualise.ml to pass to Stabler's prolog code. *)
     type marked_mg_rule = LeftAdjunction | RightAdjunction
 
-    (* Given an MCFG rule, gives back the corresponding marked MG rule if there is one *)
+    (* Given an MCFG rule, gives back the corresponding marked MG rule if there is one.
+       NB: May not give the right results if you pass it a situated grammar rule! If you need to check a 
+       situated rule, use Grammar.desituate_rule first. *)
     let get_marked_mg_rule rule =
         match rule with
         | Terminating _ -> None
@@ -112,6 +114,14 @@ open Rational
       match rule with
       | Terminating (_, str, weight) -> PublicTerminating str
       | NonTerminating (_, rights, recipes, weight) -> PublicNonTerminating (rights, recipes)
+
+    (**********************************************************)
+
+    (* transforms a rule by modifying every nonterminal mentioned in the rule (and nothing else) *)
+    let map_nonterms f rule =
+      match rule with
+      | Terminating (nonterm, str, weight) -> Terminating (f nonterm, str, weight)
+      | NonTerminating (left, rights, recipes, weight) -> NonTerminating (f left, Nelist.map f rights, recipes, weight)
 
     (**********************************************************)
 

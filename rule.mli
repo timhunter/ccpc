@@ -21,6 +21,7 @@
 		val get_rhs : r -> string list
 		val get_weight : r -> Rational.rat option
 		val get_expansion : r -> expansion
+		val map_nonterms : (string -> string) -> r -> r
 		val apply :  tuplerecipe ->
            Util.range list list ->
            (Util.range ->
