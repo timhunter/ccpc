@@ -185,14 +185,19 @@ let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
 	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
+	let surface_strings = ["This is a placeholder."; 
+	                       "Eventually this will be the list of surface strings."; 
+	                       "That list should be the same length as the list of derivations, obviously."] in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
 			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
 		else if not (Sys.file_exists grammar_files.mg_file) then
 			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
 		else
-			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s').\" 2>/dev/null" in
-			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file derivations_as_string filename in
+			let intro_lines = ["\\\\\\\\begin{enumerate}"] @ (List.map (Printf.sprintf "\\\\\\\\item %s") surface_strings) @ ["\\\\\\\\end{enumerate}"] in
+			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
+			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,%s,'%s').\" 2>/dev/null" in
+			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string derivations_as_string filename in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in

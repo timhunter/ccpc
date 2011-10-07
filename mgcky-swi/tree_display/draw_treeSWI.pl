@@ -36,7 +36,7 @@
  * drawing commands in a list or some other data structure.
  */
 
-:- module(draw_tree, [draw_tree/2, draw_tree/3, draw_trees/2]).
+:- module(draw_tree, [draw_tree/2, draw_tree/3, draw_trees/3]).
 
 %:- use_module(library(lists)).
 
@@ -54,8 +54,8 @@ node(n(_,_,_,Label,Children), Label, Children).
 % This is not parametrised by a module in the way that draw_tree is; that interface 
 % only accommodates drawing one tree at a time. 
 % This only interacts with the latex module, to draw many trees to a single file.
-draw_trees(Trees, Filename) :-
-	latex_tree:start_file(Filename,Stream),
+draw_trees(IntroLines, Trees, Filename) :-
+	latex_tree:start_file(IntroLines,Filename,Stream),
 	draw_trees_inner(Trees,Stream),
 	latex_tree:end_file(Stream).
 

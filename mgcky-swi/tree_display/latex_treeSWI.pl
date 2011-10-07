@@ -16,13 +16,13 @@
  * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
  */
 
-:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/2]).
+:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/3]).
 % latex_tree/1 is the top predicate
 % but draw_tree.pl makes direct calls to:
 %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
 
 %:- use_module(draw_tree,[draw_tree/2]).
-:- use_module(draw_treeSWI,[draw_tree/2, draw_tree/3, draw_trees/2]).
+:- use_module(draw_treeSWI,[draw_tree/2, draw_tree/3, draw_trees/3]).
 :- use_module(fontcmtt10, [label_size/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,15 +30,21 @@
 %%% New code for putting multiple trees into a single tex file.
 %%% Tim Hunter, October 2011
 
-latex_trees(Trees, Filename) :- draw_trees(Trees, Filename), !.
+latex_trees(IntroLines, Trees, Filename) :- draw_trees(IntroLines, Trees, Filename), !.
 
-start_file(Filename, Stream) :-
+start_file(IntroLines,Filename, Stream) :-
 	open(Filename, write, Stream),
 	format(Stream, "\\documentclass{article}~n", []),
 	format(Stream, "\\usepackage{epic,eepicemu}~n", []),
 	format(Stream, "\\usepackage[landscape]{geometry}~n", []),
 	format(Stream, "\\begin{document}~n", []),
+	write_lines(IntroLines, Stream),
 	format(Stream, "\\begin{enumerate}    % every tree will be an item in this enumeration~n", []).
+
+write_lines([],_).
+write_lines([First|Rest],Stream) :-
+	format(Stream, "~w~n", [First]),
+	write_lines(Rest,Stream).
 
 start_tree(Xmax, Ymax, Stream, Tree, Note) :-
 	MYmax is -(Ymax),

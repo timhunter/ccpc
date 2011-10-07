@@ -33,13 +33,20 @@
 %%% New code for putting multiple trees into a single tex file.
 %%% Tim Hunter, October 2011
 
-% top-level function to be called from outside
-parse_and_display(DerivLists, Filename) :-
+% Top-level function to be called from outside.
+% - IntroLines are some lines of latex code which will be placed in the body of the document, 
+%   before the trees.
+% - DerivLists is a list of lists, each of which has a 'note' with which to annotate 
+%   the tree as its head, and the derivation string to be passed to Stabler's code as its tail.
+% - Filename is the name of the latex file to save to.
+parse_and_display(IntroLines, DerivLists, Filename) :-
 	strings_to_trees(DerivLists, Trees),
 	length(DerivLists,NumDerivs), length(Trees,NumTrees), 
 	format(user_output, 'Given ~w derivations; found trees for ~w of those~n', [NumDerivs,NumTrees]),
-	latex_trees(Trees, Filename).
+	latex_trees(IntroLines, Trees, Filename).
 
+% Given a list like the DerivList argument of parse_and_display, turns it into a list of 
+% pairs, each containing a 'note' and an x-bar tree.
 strings_to_trees([], []).
 strings_to_trees([FirstList|OtherLists], [[Note,X]|OtherTrees]) :-
 	[Note|DerivationList] = FirstList,
