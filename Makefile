@@ -31,19 +31,8 @@ $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
 train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa $(OCAMLOBJ_nt) train.cmx
 
-visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx mgcky-swi/patched
+visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
-
-mgcky-swi/patched: mgcky-swi.patch
-	@if [ -e mgcky-swi ]; then \
-		echo "PROBLEM: Directory mgcky-swi already exists, and I don't want to overwrite it, just in case." ; \
-		echo "         If you haven't been editing anything in there, just delete it and run make again." ; \
-		exit 1 ; \
-	fi
-	wget http://www.linguistics.ucla.edu/people/stabler/mgcky-swi.tgz
-	tar xzf mgcky-swi.tgz
-	patch -d mgcky-swi -p1 < mgcky-swi.patch
-	touch mgcky-swi/patched
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
