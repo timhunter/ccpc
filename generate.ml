@@ -18,7 +18,7 @@ write_tree random_korean_tree "random_korean_tree";;
 open Num
 
    (* trees are a typical kind of value for parsers to return *)
-type 'a tree = Node of 'a * 'a tree list
+type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list should never be empty in the NonLeaf case *)
 
    (* AT&T dot I/O *)
 
@@ -26,8 +26,8 @@ type 'a tree = Node of 'a * 'a tree list
    (*   dot_of_tree  takes a starting node number i and a tree into a pair consisting of   *)
    (*   a dot-input string and the highest node number used in making that script          *)
    let rec dot_of_tree i = function
-       Node (label,[]) -> ("n"^(string_of_int i)^" [label = \""^label^"\"];\n" , i)
-     | Node (label,children) -> 
+       Leaf label -> ("n"^(string_of_int i)^" [label = \""^label^"\"];\n" , i)
+     | NonLeaf (label,children,_) -> 
 	 let parent = "n"^(string_of_int i)^"[label = \""^label^"\"];\n" in
 	 let (subtrees,maximum) = List.fold_left
 	     (fun (prevt,oldi) t ->
@@ -108,13 +108,12 @@ let rec generate_all g items w =
 	      | None -> w in
 	    if List.length rule_selected_rhs = 1 then 
 	      let child = generate_all g rule_selected_rhs current_w in
-	      (Node ((List.hd items),[fst child]),snd child)
+	      (NonLeaf (List.hd items, [fst child], rule_selected), snd child)
 	    else 
 	      let left_child = generate_all g [List.hd rule_selected_rhs] current_w in
 	      let right_child = generate_all g (List.tl rule_selected_rhs) (snd left_child) in
-	      (Node ((List.hd items),[fst left_child;
-				      fst right_child]),snd right_child)
-	else (Node ((List.hd items),[]),w)
+	      (NonLeaf (List.hd items, [fst left_child; fst right_child], rule_selected), snd right_child)
+	else (Leaf (List.hd items), w)
 
    (*sorting a list of trees in a decending order on their weights*)
    let sort_trees treelist = 

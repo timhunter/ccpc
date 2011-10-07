@@ -107,11 +107,11 @@ let clean_preterminal preterminal leaf =
 (* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, each component being a string *)
 (* eg. [("t123","John"), ("t234","saw"), ("t345","Mary")] *)
 let rec get_yield tree =
-	let (Node (root, children)) = tree in
-	match children with
-	| [] -> failwith (Printf.sprintf "Tree not of the right form: no preterminal above %s node" root)
-	| [Node (child,[])] -> (match (clean_preterminal root child) with None -> [] | Some x -> [x])
-	| _ -> List.concat (List.map get_yield children)
+	match tree with
+	| Leaf label -> failwith (Printf.sprintf "Malformed tree: Got to leaf %s without going via a unary preterminal" label)
+	| NonLeaf (preterm, [Leaf term], _) -> (match (clean_preterminal preterm term) with None -> [] | Some x -> [x])
+	| NonLeaf (label, [], _) -> failwith (Printf.sprintf "Malformed tree: NonLeaf node (label %s) with no children" label)
+	| NonLeaf (_, children, _) -> List.concat (List.map get_yield children)
 
 let get_sentence tree =
         let yields = get_yield tree in 
