@@ -22,7 +22,7 @@
 %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
 
 %:- use_module(draw_tree,[draw_tree/2]).
-:- use_module(draw_treeSWI,[draw_tree/2, draw_tree/3, draw_trees/3]).
+:- use_module(draw_treeSWI,[draw_tree/2, draw_tree/3, draw_trees_inner/2]).
 :- use_module(fontcmtt10, [label_size/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,7 +30,17 @@
 %%% New code for putting multiple trees into a single tex file.
 %%% Tim Hunter, October 2011
 
-latex_trees(IntroLines, Trees, Filename) :- draw_trees(IntroLines, Trees, Filename), !.
+latex_trees(IntroLines, Trees, Filename) :-
+	start_file(IntroLines, Filename, Stream),
+	format(Stream, "\\section*{Surface strings}~n", []),
+	format(Stream, "\\begin{enumerate}    % every yield will be an item in this enumeration~n", []),
+	write_yields(Trees, Stream),
+	format(Stream, "\\end{enumerate}~n", []),
+	format(Stream, "\\section*{X-bar structures}~n", []),
+	format(Stream, "\\begin{enumerate}    % every tree will be an item in this enumeration~n", []),
+	draw_trees_inner(Trees, Stream),
+	format(Stream, "\\end{enumerate}~n", []),
+	end_file(Stream).
 
 start_file(IntroLines,Filename, Stream) :-
 	open(Filename, write, Stream),
@@ -38,13 +48,19 @@ start_file(IntroLines,Filename, Stream) :-
 	format(Stream, "\\usepackage{epic,eepicemu}~n", []),
 	format(Stream, "\\usepackage[landscape]{geometry}~n", []),
 	format(Stream, "\\begin{document}~n", []),
-	write_lines(IntroLines, Stream),
-	format(Stream, "\\begin{enumerate}    % every tree will be an item in this enumeration~n", []).
+	write_lines(IntroLines, Stream).
 
 write_lines([],_).
 write_lines([First|Rest],Stream) :-
 	format(Stream, "~w~n", [First]),
 	write_lines(Rest,Stream).
+
+write_yields([],_).
+write_yields([First|Rest],Stream) :-
+	[Note,Tree] = First,
+	yield(Tree,Yield),
+	format(Stream, "\\item ~w ``~s''~n", [Note,Yield]),
+	write_yields(Rest,Stream).
 
 start_tree(Xmax, Ymax, Stream, Tree, Note) :-
 	MYmax is -(Ymax),
@@ -53,6 +69,21 @@ start_tree(Xmax, Ymax, Stream, Tree, Note) :-
 	format(Stream, "\\begin{picture}(~0f,~0f)(~0f,~0f)~n", [Xmax,Ymax,0,MYmax]),
 	format(Stream, "% drawTree(~w).~n%~n", [Tree]).
 
+yield([Word]/[], X) :- name(Word,X).
+yield(_Node/Children, X) :- combined_yield(Children,X).
+
+combined_yield([], []).
+combined_yield([X|Rest], Result) :-
+	yield(X, ResultStart),
+	combined_yield(Rest, ResultRest),
+	append_with_space(ResultStart, ResultRest, Result).
+
+append_with_space(X,[],X).
+append_with_space([],X,X).
+append_with_space(X,Y,Result) :-
+	append(X, " ", X1),
+	append(X1, Y, Result).
+
 end_tree(Stream) :-
 	format(Stream, "\\end{picture}~n", []),
 	format(Stream, "\\vskip \\baselineskip~n", []),
@@ -60,7 +91,6 @@ end_tree(Stream) :-
 	format(Stream, "\\vskip \\baselineskip~n", []).
 
 end_file(Stream) :-
-	format(Stream, "\\end{enumerate}~n", []),
 	format(Stream, "\\end{document}~n", []),
 	close(Stream).
 
