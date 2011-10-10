@@ -184,7 +184,7 @@ let get_timestamp () =
 	Printf.sprintf "%04d-%02d-%02d %02d:%02d:%02d" (tm.Unix.tm_year + 1900) (tm.Unix.tm_mon + 1) tm.Unix.tm_mday tm.Unix.tm_hour tm.Unix.tm_min tm.Unix.tm_sec;;
 
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
-let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list) filename =
+let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist * num) list) filename =
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
 	   (and deals properly with rule markers in amongst the ids). *)
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
@@ -199,6 +199,7 @@ let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list
 			let intro_lines = [ "Here are some lines of latex code that go at the top of the file."; 
 			                    "Other useful info can be added here.";
 			                    "\\\\\\\\begin{itemize}" ;
+			                    Printf.sprintf "\\\\\\\\item random seed: %d" random_seed ;
 			                    Printf.sprintf "\\\\\\\\item WMCFG grammar file used for sampling: %s" grammar_files.wmcfg_file ;
 			                    Printf.sprintf "\\\\\\\\item md5sum for this grammar file: %s" (Digest.to_hex (Digest.file grammar_files.wmcfg_file)) ;
 			                    Printf.sprintf "\\\\\\\\item timestamp for generating this sample: %s" (get_timestamp ()) ;
@@ -217,11 +218,19 @@ let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list
 	with End_of_file ->
 		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file"
 
-let run_visualization grammar_files prolog_file kbest =
+let run_visualization grammar_files prolog_file kbest optional_seed =
 
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
-	Random.self_init () ;  (* initialise with a random seed *)
+
+	let random_seed =
+		match optional_seed with
+		| None -> Random.self_init () ; Random.int 1000
+		| Some n -> n
+	in
+	Printf.printf "Using random seed %d\n" random_seed ;
+	Random.init random_seed ;
+
 	let treelist = generate grammar_files.wmcfg_file in
 	let kbest_trees = take kbest treelist in (*List.map (fun i -> List.nth treelist i) (range 0 kbest) in*)
 
@@ -237,13 +246,13 @@ let run_visualization grammar_files prolog_file kbest =
 	(************************************************)
 
 	let kbest_derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) kbest_trees in
-	save_to_file grammar_files prolog_file kbest_derivations "trees.tex"
+	save_to_file random_seed grammar_files prolog_file kbest_derivations "trees.tex"
 
 (************************************************************************************************)
 
 let print_usage () =
 	Printf.eprintf "\n" ;
-	Printf.eprintf "Usage: %s <grammar-file> <number of trees>\n" Sys.argv.(0) ;
+	Printf.eprintf "Usage: %s <grammar-file> <number of trees> (<random-seed>)\n" Sys.argv.(0) ;
 	Printf.eprintf "\n" ;
 	Printf.eprintf "The grammar file should\n" ;
 	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
@@ -292,16 +301,17 @@ let identify_original_grammar grammar_file =
 			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg/$NAME.wmcfg" orig_grammar)
 
 let main () =
-	if (Array.length Sys.argv = 3) then (
+	if (Array.length Sys.argv = 3) || (Array.length Sys.argv = 4) then (
 		let grammar_file = Sys.argv.(1) in
 		let kbest = int_of_string Sys.argv.(2) in
+		let random_seed = if (Array.length Sys.argv = 4) then (Some (int_of_string Sys.argv.(3))) else None in
 		let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
 		let prolog_file  = "mgcky-swi/setup.pl" in
 		let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
 		                      wmcfg_file = grammar_file ;
 		                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
 		                    } in
-		run_visualization grammar_files prolog_file kbest
+		run_visualization grammar_files prolog_file kbest random_seed
 	) else
 		print_usage ()
 
