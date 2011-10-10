@@ -178,6 +178,11 @@ let get_derivation_string tree dict index =
 
 	yield_as_ids
 
+(* Apparently there is no simpler way ... *)
+let get_timestamp () =
+	let tm = Unix.localtime(Unix.gettimeofday ()) in
+	Printf.sprintf "%04d-%02d-%02d %02d:%02d:%02d" (tm.Unix.tm_year + 1900) (tm.Unix.tm_mon + 1) tm.Unix.tm_mday tm.Unix.tm_hour tm.Unix.tm_min tm.Unix.tm_sec;;
+
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
 let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list) filename =
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
@@ -191,7 +196,14 @@ let save_to_file grammar_files prolog_file (derivations : (int dlist * num) list
 		else if not (Sys.file_exists grammar_files.mg_file) then
 			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
 		else
-			let intro_lines = [""; "Here are some lines of latex code that go at the top of the file."; "They could be more interesting than this."; ""] in
+			let intro_lines = [ "Here are some lines of latex code that go at the top of the file."; 
+			                    "Other useful info can be added here.";
+			                    "\\\\\\\\begin{itemize}" ;
+			                    Printf.sprintf "\\\\\\\\item WMCFG grammar file used for sampling: %s" grammar_files.wmcfg_file ;
+			                    Printf.sprintf "\\\\\\\\item md5sum for this grammar file: %s" (Digest.to_hex (Digest.file grammar_files.wmcfg_file)) ;
+			                    Printf.sprintf "\\\\\\\\item timestamp for generating this sample: %s" (get_timestamp ()) ;
+			                    "\\\\\\\\end{itemize}" ;
+			                  ] in
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
 			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,%s,'%s').\" 2>/dev/null" in
 			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string derivations_as_string filename in
