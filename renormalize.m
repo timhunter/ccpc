@@ -1,5 +1,5 @@
-#!/usr/local/bin/MathematicaScript -script
-# on garvin
+#!/Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
+# on garvin /usr/local/bin/MathematicaScript -script
 #  on john's laptop /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript
 
 Off[FindRoot::precw,General::compat];
@@ -228,11 +228,26 @@ showrule[{kind_,prob_,lhs_,child_,recipe_}] :=StringJoin[showprob[prob],"     ",
 showrule[{kind_,prob_,lhs_,child1_,child2_,recipe_}]:= StringJoin[showprob[prob],"     ",lhs," --> ",child1," ", child2," ",recipe]/; kind=="Binary"
 showrule[{kind_,prob_,lhs_,child_}] := StringJoin[showprob[prob],"     ",lhs," --> ",child] (* no recipe for preterminals *)/;kind=="Preterminal"
 
+ExtractComment[tbl_] := Module[{comments = {}, rules = {}},
+  
+  	DispatchLine[line_] := Module[{},
+    	If[MatchQ["(*", First[line]] && MatchQ["*)", Last[line]],
+     	AppendTo[comments, line],
+     	AppendTo[rules, line]]
+    ];
+  
+  	Scan[DispatchLine, tbl];
+  	   Return[{comments, rules}]
+  ];
+
 (* actually do it *)
-grammar = MCFGFromTable[Import[$ScriptCommandLine[[2]],"Table"]];
+{metadata,tbl} = ExtractComment[Import[$ScriptCommandLine[[2]],"Table"]];
+grammar = MCFGFromTable[tbl];
 graph = GraphProjection[grammar];
 SCCs = getSCCs[graph];
 z = CalculateZ[grammar,graph,SCCs];
 tilted = TiltGrammar[grammar,z]
 
+
+Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
 Scan[Print,showrule /@ tilted[[4]]]
