@@ -78,7 +78,7 @@ let n_of num denom = div_num (num_of_int num) (num_of_int denom)
    let some_to_int weight = 
      match weight with
 	 | Some (num,denom) -> (num,denom)
-	 | None -> (0,0)
+	 | None -> failwith "There's no weight here"
  
   (* weighted random sampling*)
   let weighted_random rules =
