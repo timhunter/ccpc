@@ -1172,3 +1172,73 @@ after the second word it becomes more likely we've just seen the kica ka in the 
 
 
 these ratios are both halfs under oldstyle
+
+
+
+Fri Sep  9 14:40:18 EDT 2011
+
+
+Notes on Yun's Korean grammar, 8/23/11 version
+
+prepared by John Hale
+and using the July 2010 mg-swi package from Stabler
+
+
+"pro" is implemented as a casemarked argument, introduced by v, which happens to be empty.
+
+
+the basic thing is declaratives.
+   what happens when we zero out those training examples?
+
+
+Thu Oct 13 15:13:27 EDT 2011
+
+methodology:
+./mcfg_nt grammars/wmcfg/korean.wmcfg -p "kica" > korean.kica.chart
+./renormalize.csh korean.kica.chart > korean.kica.renorm.global.chart
+./visualize korean.kica.renorm.global.chart 100
+pdflatex trees
+
+
+
+"kica ka" is the prefix that starts the ORC sentence.
+after this prefix, entropy is at 2.535 bits
+
+top strings are
+
+1. 0.516305934893 “kica ka yumyenghaycyessta”
+2. 0.37253350394 “kica ka palkhyecyessta”
+    -> these are both intransitve verbs that have a preceeding nominative-marked NP. They could make full sentences.
+
+3. 0.0131435045802 “kica ka uywon ul kongkyekhayssta”
+4. 0.00747574916294 “kica ka kica ul kongkyekhayssta”
+  -> predicting that we'll also see an accusative-marked NP and then a 2-place verb
+
+
+
+
+before this, at "kica" entropy is 7 bits  (thus deriving a big bump when we see the case-marker)
+top strings are
+
+1. 0.166314879166 “kica ka yumyenghaycyessta”
+2. 0.150948830678 “kica i yumyenghaycyessta”
+3. 0.120002232215 “kica ka palkhyecyessta”
+4. 0.108915069551 “kica i palkhyecyessta”
+  --> intrans V with both possible intransitve verbs
+5. 0.0279747010338 “kica ul kongkyekhan sasil ka yumyenghaycyessta”
+6. 0.0253900819385 “kica ul kongkyekhan sasil i yumyenghaycyessta”
+ --> whether or not we're in an embedded clause or not
+
+
+Question: why is the conditional entropy so much higher in case where a sentence begins with an ACC marked NP?
+
+
+ACC  uywon ul     10 bits
+NOM kica ka       2.5 bits
+
+Answer: the nominative-marked NP continuations are strongly dominated (88%) by two analyses that involve intransitve Verbs.
+ ie maybe this is just a super-short sentence!
+
+whereas the accusative-marked NP continuations, there is no "simple" way to complete the sentence with just a single verb,
+either you assume the NP-ACC is part of a more complex construction, or that the Subject has been pro-dropped (analysis #45)
+or some other complication. no matter what happens, a more complex deriation will have to be assumed.

@@ -2,7 +2,7 @@
 # on garvin /usr/local/bin/MathematicaScript -script
 #  on john's laptop /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript
 
-Off[FindRoot::precw,General::compat];
+Off[FindRoot::precw,FindRoot::bddir,General::compat];
 
 Needs["Combinatorica`"]
 

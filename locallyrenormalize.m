@@ -2,7 +2,7 @@
 # on garvin
 #   /usr/local/bin/MathematicaScript -script
 
-Off[FindRoot::precw,General::compat];
+Off[FindRoot::precw,FindRoot::bddir,General::compat];
 
 Needs["Combinatorica`"]
 
