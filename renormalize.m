@@ -217,6 +217,8 @@ TiltGrammar[g_,z_]:= Module[{start,nonterminals,terminals,rules,amount},
 ];
 
 (* for output *)
+enquote[s_] := FromCharacterCode[Prepend[Append[ToCharacterCode[s],34],34]]
+
 showprob[p_] := Module[{num,denom},
 	If[p==1, (num=1;denom=1),
 	If[Chop[p]==0,(num=0;denom=0),
@@ -226,7 +228,14 @@ showprob[p_] := Module[{num,denom},
 ]
 showrule[{kind_,prob_,lhs_,child_,recipe_}] :=StringJoin[showprob[prob],"     ",lhs," --> ",child," ", recipe]/;kind=="Unary"
 showrule[{kind_,prob_,lhs_,child1_,child2_,recipe_}]:= StringJoin[showprob[prob],"     ",lhs," --> ",child1," ", child2," ",recipe]/; kind=="Binary"
-showrule[{kind_,prob_,lhs_,child_}] := StringJoin[showprob[prob],"     ",lhs," --> ",child] (* no recipe for preterminals *)/;kind=="Preterminal"
+showrule[{kind_, prob_, lhs_, child_}] := 
+ StringJoin[showprob[prob], "     ", lhs, 
+   " --> EMPTY"] (*no recipe for preterminals*)/; child == " "
+showrule[{kind_, prob_, lhs_, child_}] := 
+ StringJoin[showprob[prob], "     ", lhs, " --> ", 
+   enquote[child]] (*no recipe for preterminals*)/; 
+  kind == "Preterminal" && child != " "
+
 
 ExtractComment[tbl_] := Module[{comments = {}, rules = {}},
   
@@ -246,8 +255,8 @@ grammar = MCFGFromTable[tbl];
 graph = GraphProjection[grammar];
 SCCs = getSCCs[graph];
 z = CalculateZ[grammar,graph,SCCs];
-tilted = TiltGrammar[grammar,z]
-
+tilted = TiltGrammar[grammar,z];
+lose = SetPrecision[tilted,9];
 
 Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
-Scan[Print,showrule /@ tilted[[4]]]
+Scan[Print,showrule /@ lose[[4]]]
