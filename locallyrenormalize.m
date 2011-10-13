@@ -1,7 +1,6 @@
-#!/usr/local/bin/MathematicaScript -script
-
+#!/Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
 # on garvin
-#  on john's laptop /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript
+#   /usr/local/bin/MathematicaScript -script
 
 Off[FindRoot::precw,General::compat];
 
@@ -54,6 +53,8 @@ Return[{start,nonterminals,terminals,(divide/@rules)}]
 ];
 
 (* for output *)
+enquote[s_] := FromCharacterCode[Prepend[Append[ToCharacterCode[s],34],34]]
+
 showprob[p_] := Module[{num,denom},
 	If[p==1, (num=1;denom=1),
 	If[Chop[p]==0,(num=0;denom=0),
@@ -63,11 +64,33 @@ showprob[p_] := Module[{num,denom},
 ]
 showrule[{kind_,prob_,lhs_,child_,recipe_}] :=StringJoin[showprob[prob],"     ",lhs," --> ",child," ", recipe]/;kind=="Unary"
 showrule[{kind_,prob_,lhs_,child1_,child2_,recipe_}]:= StringJoin[showprob[prob],"     ",lhs," --> ",child1," ", child2," ",recipe]/; kind=="Binary"
-showrule[{kind_,prob_,lhs_,child_}] := StringJoin[showprob[prob],"     ",lhs," --> ",child] (* no recipe for preterminals *)/;kind=="Preterminal"
+showrule[{kind_, prob_, lhs_, child_}] := 
+ StringJoin[showprob[prob], "     ", lhs, 
+   " --> EMPTY"] (*no recipe for preterminals*)/; child == " "
+showrule[{kind_, prob_, lhs_, child_}] := 
+ StringJoin[showprob[prob], "     ", lhs, " --> ", 
+   enquote[child]] (*no recipe for preterminals*)/; 
+  kind == "Preterminal" && child != " "
+
+
+ExtractComment[tbl_] := Module[{comments = {}, rules = {}},
+  
+  	DispatchLine[line_] := Module[{},
+    	If[MatchQ["(*", First[line]] && MatchQ["*)", Last[line]],
+     	AppendTo[comments, line],
+     	AppendTo[rules, line]]
+    ];
+  
+  	Scan[DispatchLine, tbl];
+  	   Return[{comments, rules}]
+  ];
+
 
 (* actually do it *)
-grammar = MCFGFromTable[Import[$ScriptCommandLine[[2]],"Table"]];
+{metadata,tbl} = ExtractComment[Import[$ScriptCommandLine[[2]],"Table"]];
+grammar = MCFGFromTable[tbl];
 result = LocallyNormalize[grammar];
+lose = SetPrecision[result,9]
 
-
-Scan[Print,showrule /@ result[[4]]]
+Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
+Scan[Print,showrule /@ lose[[4]]]
