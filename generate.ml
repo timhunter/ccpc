@@ -39,6 +39,18 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 	     children in
 	 parent^subtrees,maximum
 
+   let rec get_sentence t = 
+     let rec get' t = 
+       match t with 
+           Leaf label -> [[label]]
+         | NonLeaf (label,children,r) -> 
+           let yields = List.map (fun child -> (get' child)) children in
+           match (Rule.get_expansion r) with 
+               Rule.PublicTerminating _ -> List.flatten (yields)
+             | Rule.PublicNonTerminating _ ->
+               let recipe = Rule.get_recipe r in
+               (Rule.apply recipe (yields) List.append) in 
+     List.flatten (get' t)
 
    let write_tree t fname =
      let oc = open_out (fname^".dot") in

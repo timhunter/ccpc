@@ -238,9 +238,9 @@ let run_visualization grammar_files prolog_file kbest optional_seed =
 	let process_tree (tree,weight) =
 		print_endline "===============================================" ;
 		Printf.printf "weight is %s\n" (string_of_num weight) ;
-                let sentence = get_sentence tree in 
-                List.iter (Printf.printf "%s ") sentence; print_newline () ;
-		print_endline "===============================================" ;
+                let sentence = Generate.get_sentence tree in 
+                List.iter (fun item -> Printf.printf "%s " item) sentence;
+		print_endline "\n===============================================" ;
 	in
 	List.iter process_tree kbest_trees ;
 	(************************************************)

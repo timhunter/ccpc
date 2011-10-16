@@ -115,6 +115,16 @@ open Rational
       | Terminating (_, str, weight) -> PublicTerminating str
       | NonTerminating (_, rights, recipes, weight) -> PublicNonTerminating (rights, recipes)
 
+    let get_recipe rule =
+      match rule with 
+          Terminating _ -> failwith ("Terminating rule, no recipe")
+        | NonTerminating (_,_,rcp,_) -> rcp
+      
+    let get_indices comp = 
+      match comp with
+          Component (a,b) -> (a,b)
+        | Epsilon -> failwith "This case should never be encountered"
+
     (**********************************************************)
 
     (* transforms a rule by modifying every nonterminal mentioned in the rule (and nothing else) *)
@@ -152,5 +162,3 @@ open Rational
         | None -> ""
       in
       Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe
-
-

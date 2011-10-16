@@ -20,12 +20,15 @@
 		val get_nonterm : r -> string
 		val get_rhs : r -> string list
 		val get_weight : r -> Rational.rat option
+                val get_recipe : r -> tuplerecipe
+                val get_indices : component -> int * int 
 		val get_expansion : r -> expansion
 		val map_nonterms : (string -> string) -> r -> r
 		val apply :  tuplerecipe ->
-           Util.range list list ->
-           (Util.range ->
-            Util.range ->
-            Util.range) ->
-           Util.range list
+           'a list list ->
+           ('a ->
+            'a ->
+            'a) ->
+           'a list
+                
 
