@@ -5,8 +5,8 @@ set GRAMMAR=$argv[1]
 set PREFIX=`echo "$argv[2]" | sed 's/ /-/g'`
 set RENORM=./renormalize.csh
 set VISUAL=./visualize
-$PARSE grammars/wmcfg/$argv[1].wmcfg -p "$argv[2]" >! $argv[1].$PREFIX.chart
-$RENORM $argv[1].$PREFIX.chart >! korean.$PREFIX.renorm.global.chart
-$VISUAL $argv[1].$PREFIX.renorm.global.chart 100
+$PARSE grammars/wmcfg/$GRAMMAR.wmcfg -p "$argv[2]" >! $GRAMMAR.$PREFIX.chart
+$RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
+$VISUAL $GRAMMAR.$PREFIX.global.chart 100
 pdflatex trees
-mv trees.pdf korean.$PREFIX.global.pdf
+mv trees.pdf $GRAMMAR.$PREFIX.global.pdf
