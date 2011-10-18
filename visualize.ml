@@ -273,7 +273,7 @@ let identify_original_grammar grammar_file =
 			failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
 		else
 			(* Might as well be picky about this regex *)
-			let command = Printf.sprintf "awk ' /^\(\* original grammar: [a-z\/\.]* \*\)/ {print $4} ' %s" grammar_file in
+			let command = Printf.sprintf "awk ' /^\(\* original grammar: [a-zA-Z0-9\/\.]* \*\)/ {print $4} ' %s" grammar_file in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
