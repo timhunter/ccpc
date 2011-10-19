@@ -50,7 +50,7 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
              | Rule.PublicNonTerminating _ ->
                let recipe = Rule.get_recipe r in
                (Rule.apply recipe (yields) List.append) in 
-     List.flatten (get' t)
+     List.filter (fun item -> (String.contains item ' ') == false) (List.flatten (get' t))
 
    let write_tree t fname =
      let oc = open_out (fname^".dot") in
