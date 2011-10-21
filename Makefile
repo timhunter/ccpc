@@ -11,10 +11,10 @@ YACC=ocamlyacc
 
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
 # pathname appropriatefor John's laptop
-#GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
-GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
+GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+#GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
-FLAGS= -I mcfgread -I kbest
+FLAGS= -I mcfgread -I kbest -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo 
 
 OCAMLINT= util.cmi kbest/rational.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi
@@ -22,17 +22,17 @@ OCAMLOBJ_nt= util.cmx kbest/rational.cmx nelist.cmx rule.cmx chart.cmx tables.cm
 
 all: $(EXE)_nt train visualize
 
-$(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc) main.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma $(OCAMLOBJ_bc) main.cmo
+$(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc)  main.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma unix.cma graph.cma $(OCAMLOBJ_bc) main.cmo
 
 $(EXE)_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa $(OCAMLOBJ_nt) main.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa unix.cmxa graph.cmxa $(OCAMLOBJ_nt) main.cmx
 
 train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa $(OCAMLOBJ_nt) train.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa unix.cmxa graph.cmxa $(OCAMLOBJ_nt) train.cmx
 
 visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa $(OCAMLOBJ_nt) visualize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa unix.cmxa graph.cmxa $(OCAMLOBJ_nt) visualize.cmx
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx

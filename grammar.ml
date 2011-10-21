@@ -115,3 +115,126 @@ let intersection_grammar (rules, start_symbol) symbols =
   (new_rules, new_start_symbol)
 
 
+(* back and forth from characters to string to char lists *)
+let explode s =
+  let rec explode s i = if i< String.length s
+  then s.[i]::(explode s (i+1))
+  else []
+  in (explode s 0)
+
+
+let is_whitespace c = (c=' ')||(c='\t')||(c='\n')
+
+module SituatedNode =
+  struct
+    type t = { name : string ; spans : range list }
+
+    let create itm =
+      match (Chart.get_nonterm itm) with
+	" " -> { name = "EMPTY" ; spans = (Chart.get_ranges itm) }
+      | nonempty -> { name = nonempty ; spans = (Chart.get_ranges itm) }
+
+    let compare x y =
+      let rec cmp l1 l2 = match (l1,l2) with
+	  ([],[]) -> 0 (* identical lists *)
+	| ([],_) -> -1
+	| (_,[]) -> 1
+	| (x::xs,y::ys) -> match (compare x y) with
+	    0 -> cmp xs ys
+	    | otheranswer -> otheranswer in
+      match (cmp x.spans y.spans) with
+	  0 -> compare x.name y.name
+	| otherwise -> otherwise
+
+    let equal x y = (x=y)
+
+    let hash = Hashtbl.hash
+  end
+
+(* apply the relation m to "old" and "current". Used to calculate subgraph widths in get_subgraph below *)
+let extremum m old current = match current with
+    Pair (i,j) -> m (m i j) old
+  | VarRange i -> m i old
+
+module SituatedGraph =
+  struct
+  include Graph.Imperative.Digraph.Concrete(SituatedNode)
+
+  let default_edge_attributes _ = []
+  let edge_attributes _ = []
+
+  let vertex_name x = ("\""^(build_symbol x.SituatedNode.name x.SituatedNode.spans)^"\"")
+
+  let default_vertex_attributes _ = [ `Shape (`Plaintext) ]
+  let vertex_attributes v = [] (* if v.SituatedSymbol.highlight then [ `Fontcolor (0xdc143c) ] else [] *)
+
+  let graph_attributes _ = []
+
+  let get_subgraph v =
+    let leftmost = List.fold_left (extremum min) min_int v.SituatedNode.spans in
+    let rightmost = List.fold_left (extremum max) max_int v.SituatedNode.spans in
+
+    let width = abs (rightmost - leftmost) in
+      Some ({ Graph.Graphviz.DotAttributes.sg_name = (string_of_int width);
+	      Graph.Graphviz.DotAttributes.sg_attributes=[] })
+  end
+
+
+let update_graph graph chart item =
+  let routes = Chart.get_routes item chart in
+  let parentnode = SituatedNode.create item in
+  
+  let do_route ((items, rule, weight):Chart.route) =
+    match (Rule.get_expansion rule) with
+	PublicTerminating str -> let leaf = match str with
+	    " "  -> ({ SituatedNode.name="EMPTY" ; SituatedNode.spans=[] }  : SituatedNode.t) 
+	  | nonempty ->  ({ SituatedNode.name=nonempty ; SituatedNode.spans=[] }  : SituatedNode.t) in
+				 begin
+				   (* SituatedGraph.add_vertex graph parentnode; *)
+				   (* SituatedGraph.add_vertex graph leaf; *)
+				   SituatedGraph.add_edge graph parentnode leaf;
+				   []
+				 end
+      | PublicNonTerminating (nts,_) -> let children = List.map SituatedNode.create items in
+	begin
+	  (* List.iter (SituatedGraph.add_vertex graph) (parentnode::children); *)
+	  List.iter (SituatedGraph.add_edge graph parentnode) children;
+	  items (* should return a list of new agenda items somehow *)
+         end
+  in
+    concatmap_tr do_route routes;;
+      
+
+(* analogous to build_intersection_grammar only the output is a SituatedGraph *)
+let rec build_graph chart q graph =
+  if (is_empty_myqueue q) then
+    graph
+  else
+    let trigger = pop_myqueue q in
+    let new_agenda_items = update_graph graph chart trigger in
+    List.iter (fun item -> add_if_new q item) new_agenda_items ;
+    build_graph chart q graph
+  
+
+let get_graph prefix grammar =
+  let (r,s) = grammar in
+  let _ = print_string ("start symbol: "^s^"\n") in
+  let p = Util.split ' ' prefix in
+  let ch = Parser.deduce (-1) r (Parser.Prefix p) in
+  let goal_items = Chart.goal_items ch s (List.length p) in
+  let _ = print_string ("I found "^(string_of_int (List.length goal_items))^" goal items\n") in
+  let q = create_myqueue () in
+  List.iter (fun item -> add_if_new q item) goal_items ;
+  build_graph ch q (SituatedGraph.create ~size:(Chart.length ch) ())
+
+
+module DotWriteSituatedGraph = Graph.Graphviz.Dot(SituatedGraph)
+
+let drawgraph prefix grammar filename = (* ocamlgraph does not support clusterrank or ordering, so stick them in post hoc on the first line using sed(1) *)
+  let g = get_graph prefix grammar in
+  let _ = print_string ("graph has "^(string_of_int (SituatedGraph.nb_vertex g))^" vertices and "^(string_of_int (SituatedGraph.nb_edges g))^" edges.\n") in
+  let oc = Unix.open_process_out ("sed 's/digraph G {/digraph G { clusterrank=none;  ordering=out;/' >| "^filename) in
+    begin
+      DotWriteSituatedGraph.output_graph oc g;
+      close_out oc
+    end

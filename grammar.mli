@@ -2,3 +2,4 @@ val intersection_grammar : (Rule.r list * string) -> (string list) -> (Rule.r li
 val desituate : string -> string
 val desituate_rule : Rule.r -> Rule.r
 val get_input_grammar : string -> (Rule.r list * string)
+val drawgraph : string -> Rule.r list * string -> string -> unit
