@@ -19,7 +19,7 @@ Sat Jul 30 08:44:39 EDT 2011
 		    accepted as category C: John give -ed Mary the book
 		    accepted as category C: John give -ed the book to Mary
 
-        but Stabler's larsonian1 cleans up all these duplicated lexical entries, relocating the ambiguity inside the choice between covert and over Preposition.
+        but Stabler's larsonian1 cleans up all these duplicated lexical entries, relocating the ambiguity inside the choice between covert and overt Preposition.
 
 	I believe the original point behind those +dat marked was comparability between the Chomskyan "adjunction" analysis and the Kaynian "promotion" analyses.
 
@@ -1242,3 +1242,49 @@ Answer: the nominative-marked NP continuations are strongly dominated (88%) by t
 whereas the accusative-marked NP continuations, there is no "simple" way to complete the sentence with just a single verb,
 either you assume the NP-ACC is part of a more complex construction, or that the Subject has been pro-dropped (analysis #45)
 or some other complication. no matter what happens, a more complex deriation will have to be assumed.
+
+
+
+Sat Oct 22 09:26:39 EDT 2011
+
+tracking down a potential Guillaumin bug. it seems to translate left and right affix hopping appropriately
+
+${GUILLAUMIN} -pl grammars/mg/af-right.pl
+      t4 --> t2 t3 [0,0][0,2][1,0; 1,1;0,1; 1,2] (* r1hopright *)
+
+
+${GUILLAUMIN} -pl grammars/mg/af-left.pl
+      t4 --> t2 t3 [0,0][0,2][1,0; 0,1;1,1; 1,2] (* r1hopleft *)
+
+
+...and it parses correctly.
+[colmerauer-2:~/projects/mcfgcky2_repos] john% ./mcfg_bc grammars/mcfgs/af-right.mcfg "verb affix noun"
+SUCCESS!
+
+[colmerauer-2:~/projects/mcfgcky2_repos] john% ./mcfg_bc grammars/mcfgs/af-left.mcfg "affix verb noun"
+SUCCESS!
+
+
+
+
+dictionary files:
+
+ ${GUILLAUMIN} -pl grammars/mg/af-right.pl -dict af-right.dict
+
+[colmerauer-2:~/projects/mcfgcky2_repos] john% head af-right.dict 
+t0 : (:: arg)
+t1 : (:: =arg v)
+t2 : (:: ==>v start)   (* this is the correct direction but in the source grammar the operator comes after the category symbol ie   v==>   *)
+t3 : (: v)
+t4 : (: start)
+
+[colmerauer-2:~/projects/mcfgcky2_repos] john% head af-left.dict 
+t0 : (:: arg)
+t1 : (:: =arg v)
+t2 : (:: <==v start)   (* same thing here *)
+t3 : (: v)
+t4 : (: start)
+
+
+
+patch hmgtransform.ml ~/Desktop/hmgtransform-fixity.patch

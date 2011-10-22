@@ -457,3 +457,28 @@ Binary,0.000286707   t136_eps_1-3_3-3_0-1,t42_eps_2-3_3-3, t80_3-3_1-2_3-3_0-1
 0.999713292546174		(: +case T;: -case)_eps_1-3_3-3_0-1	(:: =>Have +case T)_eps_2-3_3-3	(: Have;: -case)_3-3_1-2_3-3_0-1
 0.0002867074538258057	(: +case T;: -case)_eps_1-3_3-3_0-1	(:: =>v +case T)_eps_2-3_3-3	(: v;: -case)_3-3_1-2_3-3_0-1
 
+
+Sat Sep 17 15:01:36 EDT 2011
+    posted "renormalize.csh" which takes an arbitrary wmcfg and gives you back one that is normalized, using inside probs following Goodman, Nederhof & Satta etc.
+
+
+Wed Sep 21 10:53:15 EDT 2011
+
+    re: visualizing the intersection grammar as a related graph,
+
+    
+    about the closest I have come using the Combinatorica visualization tools is
+    manually figuring out the vertexnumber of some categories I am interested in
+    	  In[81]:= Position[grammar[[2]],"t82_eps_3-5_5-8_0-1"]
+	  Out[81]= {{13}}
+	  In[82]:= Position[grammar[[2]],"t169_8-8_8-8_8-8_8-8"]
+	  Out[82]= {{303}}
+    then Zooming in on a sub-area, painting the terminals in a different color
+
+ShowGraph[g,Append[Range[Length[grammar[[2]]],Length[grammar[[2]]]+Length[grammar[[3]]]],VertexLabelColor->Red], (* make terminals Red *)
+	VertexStyle->Disk[0.000000001],EdgeStyle->Thin,EdgeColor->Gray,VertexLabelPosition->Center,VertexLabel->Join[grammar[[2]],grammar[[3]]] (* label with nonterminal names *)
+	PlotRange->Zoom[{13,303}]]  (* make sure nodes 13 and 303 are simultaneously visible *)
+
+
+an alternative would be to use mcfgread to read in the set of MCFG rules, set up an appropriate ocamlgraph and then spit out the dot info
+the ocamlgraph approach is to define modules that specialize the needed functionality, ie a comparison function that takes into account string positions
