@@ -11,8 +11,8 @@ YACC=ocamlyacc
 
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
 # pathname appropriatefor John's laptop
-GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
-#GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
+#GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I kbest -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo 
@@ -44,6 +44,9 @@ clean:
 
 %.mcfg: grammars/mg/%.pl
 	$(GUILLAUMIN) -pl $< -o grammars/mcfgs/$@
+
+%.dict:	grammars/mg/%.pl
+	$(GUILLAUMIN) -pl $< -dict grammars/mcfgs/$@ -o /dev/null
 
 # John: I could not get output redirection to send the result immediately to the right directory
 # hence the mv command
