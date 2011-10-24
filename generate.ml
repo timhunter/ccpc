@@ -96,11 +96,11 @@ let n_of num denom = div_num (num_of_int num) (num_of_int denom)
   let weighted_random rules =
     if (List.length rules) = 1 then (List.hd rules) else
       let sorted_rules = sort_rules rules in
-      let random = Random.int (snd (some_to_int (Rule.get_weight (List.hd sorted_rules)))+1) in
+      let random = Random.int64 (Int64.of_int (snd (some_to_int (Rule.get_weight (List.hd sorted_rules)))+1))  in
         let rec select rnd r =
 	  if List.length r = 1 then (List.hd r) else 
-	    let diff = rnd - fst (some_to_int (Rule.get_weight (List.hd r))) in
-	      if diff < 0 then (List.hd r)	  
+	    let diff = Int64.sub rnd (Int64.of_int (fst (some_to_int (Rule.get_weight (List.hd r))))) in
+	      if diff < Int64.zero then (List.hd r)	  
 	      else select diff (List.tl r) 
 	in
 	  select random sorted_rules
