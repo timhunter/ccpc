@@ -10,6 +10,8 @@ LEX=ocamllex
 YACC=ocamlyacc
 
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
+# NB: Guillaumin's code should be patched like this and then recompiled:
+#     patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
 # pathname appropriatefor John's laptop
 #GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
 GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
@@ -42,17 +44,14 @@ clean:
 
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 
-%.mcfg: grammars/mg/%.pl
-	$(GUILLAUMIN) -pl $< -o grammars/mcfgs/$@
+grammars/mcfgs/%.mcfg: grammars/mg/%.pl $(GUILLAUMIN_EXE)
+	$(GUILLAUMIN_EXE) -pl $< -o $@
 
-%.dict:	grammars/mg/%.pl
-	$(GUILLAUMIN) -pl $< -dict grammars/mcfgs/$@ -o /dev/null
+grammars/mcfgs/%.dict: grammars/mg/%.pl $(GUILLAUMIN_EXE)
+	$(GUILLAUMIN_EXE) -pl $< -dict $@ -o /dev/null
 
-# John: I could not get output redirection to send the result immediately to the right directory
-# hence the mv command
-%.wmcfg: %.mcfg %.train
+grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train
 	./train grammars/mcfgs/$*.mcfg $*.train > $@
-	mv $@ grammars/wmcfg/$@
 
 debug.cmo: debug.ml
 	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml
