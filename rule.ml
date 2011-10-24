@@ -17,13 +17,22 @@ open Rational
     (* Given an MCFG rule, gives back the corresponding marked MG rule if there is one.
        NB: May not give the right results if you pass it a situated grammar rule! If you need to check a 
        situated rule, use Grammar.desituate_rule first. *)
-    let get_marked_mg_rule rule =
+    let get_marked_mg_rule dict rule =
         match rule with
         | Terminating _ -> None
         | NonTerminating (left, rights, trecipe, _) ->
-            if ((Nelist.length rights = 2) && (Nelist.nth rights 1 = left)) then ( (* If it's of the form "A --> B A" *)
-                (* It might (must?) be an adjunction rule. Now ... HACK! ... check the tuple recipe to see which direction *)
-                let stringrecipes = List.map Nelist.to_list (Nelist.to_list trecipe) in
+            let is_adjunct =   (* See if this is an adjunction rule, i.e. of the form A -> B C where A and C map to the same feature sequence *)
+                try (
+                    let left_features = Hashtbl.find dict left in
+                    let right1_features = Hashtbl.find dict (Nelist.nth rights 1) in
+                    (Nelist.length rights = 2) && (left_features = right1_features)
+                ) with _ -> false
+            in
+            if is_adjunct then (
+                (* It might (must?) be an adjunction rule. Now ... HACK! ... check the tuple recipe to see which direction. *)
+                (* We only look at the first three string recipes because these look after the head, comp and spec of the phrase; 
+                   we ignore the rest, which look after any ``moving sub-parts'', since these are unaffected by adjunction. *)
+                let stringrecipes = take 3 (List.map Nelist.to_list (Nelist.to_list trecipe)) in
                 if stringrecipes = [ [Component(0,0);Component(0,1);Component(0,2);Component(1,0)]; [Component(1,1)]; [Component(1,2)] ] then
                     Some LeftAdjunction
                 else if stringrecipes = [ [Component(1,0)]; [Component(1,1)]; [Component(1,2);Component(0,0);Component(0,1);Component(0,2)] ] then

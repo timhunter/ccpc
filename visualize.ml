@@ -63,9 +63,10 @@ let get_guillaumin_dict filename =
 	in
 
 	(* This regex matches lines describing both lexical ("::") and non-lexical (":") categories. 
-	   We only actually take notice of the lexical categories, but we try to match the others too, 
-	   so that we can give a warning if it fails. *)
-	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (\(::?\) \(.*\))$" in
+	   We record both in the dictionary, without recording the distinction anywhere. Therefore 
+	   some feature-sequences appear twice in the range of this mapping, 
+	   eg. if t123 represents ":: D" and t234 represents ": D", both will simply be mapped to "D" here. *)
+	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (::? \(.*\))$" in
 
 	let result = Hashtbl.create 100 in
 	begin
@@ -74,9 +75,8 @@ let get_guillaumin_dict filename =
 				let line = input_line channel in
 				if (Str.string_match regex line 0) then
 					let category   = Str.matched_group 1 line in
-					let lex_or_not = Str.matched_group 2 line in
-					let features   = Str.matched_group 3 line in
-					if lex_or_not = "::" then (Hashtbl.add result category features) else ()
+					let features   = Str.matched_group 2 line in
+					Hashtbl.add result category features
 				else if (line <> "") then
 					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
 			done
@@ -138,7 +138,7 @@ let clean_preterminal preterminal leaf =
 
 (* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, possibly interspersed with "rule markers" *)
 (* eg. [DerivLeaf ("t123","John"); RuleMarker LeftAdjoin; DerivLeaf ("t234","saw"), DerivLeaf ("t345","Mary")] *)
-let rec get_yield tree =
+let rec get_yield dict tree =
 	match tree with
 	| Leaf label -> failwith (Printf.sprintf "Malformed tree: Got to leaf %s without going via a unary preterminal" label)
 	| NonLeaf (label, [], _) -> failwith (Printf.sprintf "Malformed tree: NonLeaf node (label %s) with no children" label)
@@ -146,23 +146,14 @@ let rec get_yield tree =
 	| NonLeaf (_, children, rule) ->
 		(* Rule.get_marked_mg_rule unfortunately only works on unsituated rules. Unfortunately it can't desituate 
 		   a rule it is passed itself, because that would create a circular dependency between Grammar and Rule modules. :-( *)
-		match (Rule.get_marked_mg_rule (Grammar.desituate_rule rule)) with
-		| None -> List.concat (List.map get_yield children)
-		| Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map get_yield children))
-
-let get_sentence tree =
-        let yields = get_yield tree in 
-        let rec get_words yields sentence =
-               match yields with
-                 | [] -> sentence
-                 | (DerivLeaf (id, lex_item))::t -> get_words t (lex_item::sentence)
-                 | (RuleMarker _)::t -> get_words t sentence in
-        get_words yields []
+		match (Rule.get_marked_mg_rule dict (Grammar.desituate_rule rule)) with
+		| None -> List.concat (List.map (get_yield dict) children)
+		| Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map (get_yield dict) children))
 
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
 let get_derivation_string tree dict index =
 
-	let yield = get_yield tree in
+	let yield = get_yield dict tree in
 
 	let preterm_to_features preterm =
 		try Hashtbl.find dict preterm

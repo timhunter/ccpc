@@ -6,7 +6,7 @@
 		type r 
 
 		type marked_mg_rule = LeftAdjunction | RightAdjunction
-		val get_marked_mg_rule : r -> marked_mg_rule option
+		val get_marked_mg_rule : (string, string) Hashtbl.t -> r -> marked_mg_rule option
 
 		val to_string : r -> string
 		val create_terminating : string * string * (Rational.rat option) -> r
