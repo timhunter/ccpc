@@ -1,4 +1,6 @@
-#!/Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
+#!/usr/local/bin/MathematicaScript -script
+
+#   /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
 # on garvin /usr/local/bin/MathematicaScript -script
 #  on john's laptop /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript
 

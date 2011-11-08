@@ -44,11 +44,11 @@ clean:
 
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 
-grammars/mcfgs/%.mcfg: grammars/mg/%.pl $(GUILLAUMIN_EXE)
-	$(GUILLAUMIN_EXE) -pl $< -o $@
+grammars/mcfgs/%.mcfg:	grammars/mg/%.pl $(GUILLAUMIN)
+	$(GUILLAUMIN) -pl $< -o $@
 
-grammars/mcfgs/%.dict: grammars/mg/%.pl $(GUILLAUMIN_EXE)
-	$(GUILLAUMIN_EXE) -pl $< -dict $@ -o /dev/null
+grammars/mcfgs/%.dict:	grammars/mg/%.pl $(GUILLAUMIN)
+	$(GUILLAUMIN) -pl $< -dict $@ -o /dev/null
 
 grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train
 	./train grammars/mcfgs/$*.mcfg $*.train > $@

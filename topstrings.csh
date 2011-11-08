@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -v
 
 set PARSE=./mcfg_nt
 set GRAMMAR=$argv[1]
