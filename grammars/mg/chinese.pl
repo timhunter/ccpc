@@ -87,6 +87,9 @@
 % needs to check out Cheng and Sybesma (2010)
  [de]::[='NDep',+epp,'D',-case].
 
+% genitive de
+ [de]::[='N',='D',+case,'D',-case].
+
 % TP is raised to Spec-DP due to EPP
  []::[='vEmb',+case,'TEmb',-epp].
 
