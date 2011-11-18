@@ -16,18 +16,18 @@
 []::['N',-case]. 
 
 % One-place predicates (intransitive verbs and adjective predicates)
-['Vi']::['V'].	% had bad intensions
+['Vi']::['V-Subjless'].	% had bad intensions
 
 % Two-place predicates (transitive verbs)
 % used in an RC, only have NP arguments
- ['Vt']::[='N',+case,'V'].	% like
-['Vt']::[='Poss',+case,'V'].
+ ['Vt']::[='N',+case,'V-Subjless'].	% like
+['Vt']::[='Poss',+case,'V-Subjless'].
 
-[]::[=>'V',='N','v']. %v
-[]::[=>'V',='N','vRel']. %v
+[]::[=>'V-Subjless',='N','v']. %v
+[]::[=>'V-Subjless',='N','vRel']. %v
 
-[]::[=>'V',='Poss','v']. %v
-[]::[=>'V',='Poss','vRel']. %v
+[]::[=>'V-Subjless',='Poss','v']. %v
+[]::[=>'V-Subjless',='Poss','vRel']. %v
 
 []::[='v',+case,'T']. %tense
 
@@ -36,10 +36,10 @@
 
 
 % Relative Clauses: an Adjunction Analysis
-% SSR showParse([yaoqing,guanyuan,de,fuhao,dale,jizhe]).
-% SOR showParse([guanyuan,yaoqing,de,fuhao,dale,jizhe]).
-% OSR showParse([jizhe,dale,yaoqing,guanyuan,de,fuhao]).
-% OOR showParse([jizhe,dale,guanyuan,yaoqing,de,fuhao]).
+% SSR showParse([Vt,Noun,de,Noun,Vt,Noun]).
+% SOR showParse([Noun,Vt,de,Noun,Vt,Noun]).
+% OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
+% OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
 % Nothing special for T; -f is used to ensure RC preceeds de
  []::[='vRel',+case,'TRel',-f].
