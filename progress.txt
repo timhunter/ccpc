@@ -1,4 +1,4 @@
-Sat Jul 30 08:44:39 EDT 2011
+>Sat Jul 30 08:44:39 EDT 2011
 
 
 	the original "larsonian" grammar marked July 21st 2002 does not have any lexical entries with the +dat dative movement licensor feature
@@ -1288,3 +1288,277 @@ t4 : (: start)
 
 
 patch hmgtransform.ml ~/Desktop/hmgtransform-fixity.patch
+
+
+
+Tue Nov  8 16:31:48 EST 2011
+  progress on Kahraman Japanese examples
+
+with this training arrangement
+"as per Kahraman's corpus study"
+   subject clefts: 31 
+     object clefts: 8
+
+"equal"
+  subject RC: 20
+  object RC: 20
+
+
+we derive 
+    - in both cases, more processing effort for an accusative-initial sentence
+    - no difference at the RC headnoun (inconsistent with Kahraman's results)
+    - more effort in the object cleft (opposite of Kahraman's results)
+
+
+so, we're deriving the opposite of what he found. So, is it really true that 
+
+ <<the Japanese parser's certainty about OCs is higher than SCs>>
+
+No, not on this grammar.  at the verb, kaihoushita, the entropy is 28 bits after hearing sobo-ga  vs 25 after hearing sobo-o
+
+one possible next-step would be 
+
+
+Sat Nov 12 14:09:31 EST 2011
+
+    JBW: subject PRO is preferred, compared to object PRO
+
+on this weighting
+      100 Taroo ga hon o yonda
+      120 hon o yonda
+      50 Taroo ga yonda
+
+
+600/1591     Taroo ga hon o yonda   0.37
+606/1591     Taroo ga yonda            0.38
+125/1591     hon o yonda                 0.07
+
+this shows that the grammar succeeds at encoding these string-weights
+
+pertinent categories are "simple"
+   t15 : (:: Case -nom)
+   t16 : (:: Case -acc)
+
+as contrasted with "complex"
+   t66 : (: Case -acc)
+
+
+
+objects are selected by big-V
+	t18 : (:: =Case +acc V-Decl)     ...becomes...       t55 : (: +acc V-Decl;: -acc)
+
+whereas subjects are selected by little v
+	t58 : (: =Case v-Decl)               ...becomes...        t61 : (: v-Decl;: -nom)
+
+
+
+as regards missing objects, the relevant rules have to do with whether a declarative big V likes a simple (ie PRO) or complex (ie derived & thus overt) CaseP as argument
+
+320 / 420     t55 --> t18 t66 [0,0][0,1][0,2][1,0;1,1;1,2]
+100 / 420     t55 --> t18 t16 [0,0][0,1][0,2][1,0;1,1;1,2]
+
+
+regarding missing subjects, the relevant rules have to do with little v-Decl
+
+250 / 490     t61 --> t58 t63 [0,0][0,1][0,2][1,0;1,1;1,2]
+240 / 490     t61 --> t58 t15 [0,0][0,1][0,2][1,0;1,1;1,2]
+
+
+
+
+
+
+for this to work in relativization structures like clefts, the same asymmetries must be present on  {v,V}-Rel
+
+t128 : (: v-Rel;: -nom -wh)
+t614 : (: v-Rel;: -nom -wh;: -topic)
+t615 : (: v-Rel;: -nom -wh;: -scramble)
+t3372 : (: v-Rel;: -nom -wh;: -scramble;: -topic)
+t3373 : (: v-Rel;: -nom -wh;: -topic;: -scramble)
+
+
+
+
+
+
+
+
+old training
+31 kyonen sobo o inaka de kaihoushita no wa shinseki da to hahaoya ga itta
+8 kyonen sobo ga inaka de kaihoushita no wa shinseki da to hahaoya ga itta
+20 kyonen sobo o inaka de kaihoushita tooi shinseki wa jiko de nakunatta
+20 kyonen sobo ga inaka de kaihoushita tooi shinseki wa jiko de nakunatta
+
+
+
+Fri Nov 18 14:35:05 EST 2011
+
+
+Q1: does the grammar correctly encode the training?
+A1: yes, sort of. it extremizes the contrasts.
+
+
+subj-reading1   = 0.00189                1.89
+weight is 106544375/112712937696
+sobo o kaihoushita no wa shinseki da 
+===============================================
+===============================================
+weight is 106544375/112712937696
+sobo o kaihoushita no wa shinseki da 
+============================================
+
+
+
+obj-reading1    = 0.0000119823   (1.1 * 10-5)
+
+weight is 300125/25047319488
+sobo ga kaihoushita no wa shinseki da 
+
+
+
+
+
+subj-reading2   = 0.004831
+weight is 37732311/15620908928
+neko o oikakeru no o Mari ga mita 
+===============================================
+===============================================
+weight is 37732311/15620908928
+neko o oikakeru no o Mari ga mita 
+===================================
+
+
+obj-reading2 = 0.000000382738  (3.8 * 10 -7)
+
+weight is 4782969/12496727142400
+komodo ga oikakeru no o Mari ga mita 
+
+
+
+the automatic way
+
+foreach file ( {subj,obj}-reading[12].chart )
+foreach? ./renormalize.csh ${file} >! ${file}.renorm
+foreach? grep -H probability ${file}.renorm
+foreach? end
+
+subj-reading1.chart.renorm:(* "probability = 0.001890543839561039" *)
+obj-reading1.chart.renorm:(* "probability = 0.00001198232010989391" *)
+
+subj-reading2.chart.renorm:(* "probability = 0.004831000702189101" *)
+obj-reading2.chart.renorm:(* "probability = 3.827377316875168e-7" *)
+
+
+
+
+Q2: in prefixes of the form:  N Prt V "no"
+      is the uncertainty about the rest of the sentence higher if Prt="ga"
+         ie, is Kahraman right that <<the Japanese parser's certainty about OCs is higher than SCs>> ?
+
+JBW-backstory: at "no" two readings are competing, the cleft reading (1) and the no-complement-of-psych-verb reading (2).
+	                 this competition is far more unbalanced with "ga" because "ga" entails Object PRO in the no-complement-of-psych-verb, which is very marked.
+
+A2: no.
+Prt=o, missing subject: entropy 7.1311002782895
+Prt=ga, missing object: entropy 6.1311002782895
+
+./topstrings.csh japanese "sobo {ga,o} kaihoushita no"
+
+reveals possible reason:
+ in the -ga marked prefix with lower Entropy,  only the top 3 analyses continue to the shortest completion
+ in the -o marked prefix with the higher Entropy, it's the top 6.
+
+same pattern in the abstracted grammar
+-o missing-subject-abstract.chart.renorm:(* "entropy = 6.0173189847709" *)
+  there being double ambiguity about e..g where that first N-o is, ie in specifier of V-RelP or adjoined to v-RelP
+  the problem is that any time there's an object it doubles the ambiguity
+
+-ga missing-object-abstract.chart.renorm:(* "entropy = 5.0173189847709" *)
+
+ok, now turning off scrambling to big V gets rid of the duplication problem and now suffix entropies are exactly the same
+missing-object-abstract.chart.renorm:(* prefix: N ga Vt *)
+missing-object-abstract.chart.renorm:(* "entropy = 4.2618475766534" *)
+missing-subject-abstract.chart.renorm:(* prefix: N o Vt *)
+missing-subject-abstract.chart.renorm:(* "entropy = 4.2618475766534" *)
+
+
+so, Q3: why isn't there some difference if you've used "ga" vs "o" in the prefix
+
+can this grammar represent the co-occurrence of 
+     a) a particular grammatical relation being gapped (ie PRO or relativized)
+and
+     b) whether that gapping happened as a result of merging a null argument, PRO, or clefting with "no"
+
+
+want it to be the case that if you've merged Object PRO
+      []::['Case',-acc].  t13 : (:: Case -acc)
+then you're very unlikely to be in a no-complement
+
+  am I going to have a relative CP wrapped in an empty determiner, raised to Specifier of the root C-Decl via topicalization (the no wa cleft)
+  or am I going to have the matrix TP  scramble "no" as a D to a specifier of TP (the scrambled no -o complement)
+
+
+Sun Nov 20 12:22:14 EST 2011
+  full-sentence version of both the cleft and the no-complements are ambiguous between PRO and trace.
+
+the penalty for Object Gap is getting encoded, but becau
+
+sg-r1.chart.renorm:(* "probability = 0.06049175347222222" *)
+og-r1.chart.renorm:(* "probability = 0.004519531249999999" *)
+
+
+sg-r2.chart.renorm:(* "probability = 0.06359389467592592" *)
+og-r2.chart.renorm:(* "probability = 0.004751302083333333" *)
+   the analysis with trace has prob 0.00427083333333
+   the analysis with PRO has prob  0.00048046875
+
+
+
+
+./mcfg_nt grammars/wmcfg/japanese.wmcfg -p "N o Vt no" > /tmp/subjectgap-prefix.chart
+./mcfg_nt grammars/wmcfg/japanese.wmcfg -p "N ga Vt no" > /tmp/objectgap-prefix.chart
+
+subjectgap-prefix.chart.renorm:(* "entropy = 6.4142260189557" *)
+objectgap-prefix.chart.renorm:(* "entropy = 5.9898639434921" *)
+
+this seems to be consistent with Kahraman saying that  <<the Japanese parser's certainty about OCs is higher than SCs>> ?
+however, when you look at entropy Reduction, it derives a slight subject advantage in both cases
+
+
+
+
+possible changes
+  disallow object PRO?....has the same effect on all conditions.
+
+
+i'd like it to be the case that -wa disambiguates it to the cleft
+whereas -o disambiguates it to the .  done by ensuring that -topic 's can only be clefted Ds.
+
+
+(we want to say that PRO is just really bad in object gaps that are nonclefts
+PRO is better in subject gaps )
+
+
+this seems to derive Kahraman's no-wa pattern...does it also describe the RC pattern?
+
+
+big bump on -ga: what if we include RCs
+
+
+Ishizuka's example
+showParse([uma,o,ketta,roba,ga,sinda]).    # subject-extracted RC
+  analysis 1: 
+  analysis 2: item 28 vs 29
+
+28. [o]::[=D,+f,Case,-acc,-scramble]
+29. [o]::[=D,+f,Case,-acc]
+
+
+derivation:[69, 66, 63, 41, 27, 78, 77, 76, 64, 57, 29, 26, 19, 73, 26, 20].
+
+derivation:[69, 67, 63, 41, 27, 78, 77, 76, 64, 57, 28, 26, 19, 73, 26, 20].
+
+
+showParse([uma,ga,ketta,roba,ga,sinda]).  # object-extracted RC
+
+showParse([N o Vt no wa N da ]) # cleft subjectx

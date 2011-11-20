@@ -9,4 +9,4 @@
 # (only relevant for the comments)
 
 set RENORM=./renormalize.m
-$RENORM $argv[1] | sed -f unquote.sed | sed -e 's/\\"/\"/g'|  sed -f twospaces.sed | perl -pe 's/\\n/\n/'
+$RENORM $argv[1] | sed -f unquote.sed | sed -e 's/\\"/\"/g'|  sed -f twospaces.sed | perl -pe 's/\\n/\n/g'

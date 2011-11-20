@@ -15,7 +15,10 @@ def abstractify(grammarFile, outputFile):
                     name = (string.strip(pieces[1]))
                     if name not in items:
                         items.add(name)
-                        name = string.translate(name, None, "',[]")
+                        #                        name = string.translate(name, None, "',[]")
+                        # print ("I'm thinking this string should be ",pieces[0])
+                        name = string.translate(pieces[0],None,"[]")
+                        name = string.strip(name)
                         rule = '['+name+']'+'::'+pieces[1]
                         rules.add(rule)
                 else:

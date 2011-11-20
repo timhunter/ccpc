@@ -1,4 +1,4 @@
-#!/usr/local/bin/MathematicaScript -script
+#!/Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
 
 #   /Volumes/mechanical/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
 # on garvin /usr/local/bin/MathematicaScript -script
@@ -218,6 +218,69 @@ TiltGrammar[g_,z_]:= Module[{start,nonterminals,terminals,rules,amount},
 	             TiltRule/@rules}]
 ];
 
+
+(* might as well compute the entropy of the start symbol while we're at it *)
+littleh[g_] := Module[{start, nonterminals, terminals, rules, Eta},
+   			{start, nonterminals, terminals, rules} = g;
+   
+   			Eta[p_] := -p*Log2[p];(* is there a better name? *)
+   
+   			Return[
+    				Function[nt,
+      					
+      Fold[Plus, 0, 
+       Eta[Part[#, 2]] & /@ Select[rules, Part[#, 3] == nt & ]]
+      		                    ] /@ nonterminals
+    				]
+   			
+   			];
+
+fertilitymatrix[g_] := 
+  Module[{start, nonterminals, terminals, rules, idx, a, updateA},
+   			                    {start, nonterminals, terminals, rules} = 
+    g;
+   					idx[nt_String] := 
+    FromDigits[FromDigits[Position[nonterminals, nt]]];
+   					a = 
+    ConstantArray[0, {Length[nonterminals], Length[nonterminals]}];
+   
+   					updateA[r_] := Module[{prob, lhs},
+     	                                              
+     prob = Part[r, 2];
+     						lhs = Part[r, 3];
+     						
+     If[MemberQ[nonterminals, Part[r, 4]], 
+      a[[idx[lhs]]][[idx[Part[r, 4]]]] += prob];
+     
+     						
+     If [Part[r, 1] == "Binary" && MemberQ[nonterminals, Part[r, 5]], 
+      a[[idx[lhs]]][[idx[Part[r, 5]]]] += prob] 
+     					];
+   					Scan[updateA, rules];
+   					Return[a]
+   ];
+
+entropyOfGrammar[g_] := 
+  Module[{start, nonterminals, terminals, rules, idx, fert, h,   spectralradius, everybody},
+     {start, nonterminals, terminals, rules} =   g;
+   					idx[nt_String] := 
+    FromDigits[FromDigits[Position[nonterminals, nt]]];
+   					h = littleh[g];
+   					fert = fertilitymatrix[g];
+   
+   					spectralradius = Max[Abs /@ Eigenvalues[fert]];
+   					If[spectralradius > 1, 
+    Print["entropyOfGrammar: grammar not consistent"]];
+   
+   					everybody = (Inverse[
+       IdentityMatrix[Length[nonterminals]] - fert]) . h;
+   					(* Return[{everybody[[idx[start]]],everybody}] *)
+   					
+   everybody[[idx[start]]]
+   ];
+
+
+
 (* for output *)
 enquote[s_] := FromCharacterCode[Prepend[Append[ToCharacterCode[s],34],34]]
 
@@ -256,9 +319,19 @@ ExtractComment[tbl_] := Module[{comments = {}, rules = {}},
 grammar = MCFGFromTable[tbl];
 graph = GraphProjection[grammar];
 SCCs = getSCCs[graph];
+
+startsymbolindex = First[First[Position[grammar[[2]], grammar[[1]]]]];
 z = CalculateZ[grammar,graph,SCCs];
+
+(* add some useful metadata *)
+AppendTo[metadata, {"(*", ("probability = " <> ToString[CForm[z[[startsymbolindex]]]]), "*)"}]
+
 tilted = TiltGrammar[grammar,z];
-lose = SetPrecision[tilted,9];
+
+(* add some useful metadata *)
+AppendTo[metadata, {"(*", ("entropy = " <> ToString[CForm[entropyOfGrammar[tilted]]]), "*)"}]
+
+lose = tilted;  (* SetPrecision[tilted,9]; *) (* try keeping it all *)
 
 Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
 Scan[Print,showrule /@ lose[[4]]]

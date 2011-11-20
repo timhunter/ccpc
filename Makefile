@@ -13,8 +13,8 @@ YACC=ocamlyacc
 # NB: Guillaumin's code should be patched like this and then recompiled:
 #     patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
 # pathname appropriatefor John's laptop
-#GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
-GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
+GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+#GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I kbest -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo kbest/rational.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo 
@@ -50,8 +50,11 @@ grammars/mcfgs/%.mcfg:	grammars/mg/%.pl $(GUILLAUMIN)
 grammars/mcfgs/%.dict:	grammars/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -dict $@ -o /dev/null
 
-grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train
+grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train train
 	./train grammars/mcfgs/$*.mcfg $*.train > $@
+
+%.train:	%.train.annot stripcomment.sed blanks.grep killtrailingblanks.sed
+	sed -E -f stripcomment.sed $< | sed -E -f killtrailingblanks.sed | egrep -v -f blanks.grep > $@
 
 debug.cmo: debug.ml
 	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml

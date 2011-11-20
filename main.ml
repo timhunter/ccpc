@@ -52,43 +52,53 @@ let print_grammar grammar_file prefix (rules, start_symbol) =
 	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { debug : bool ; graph : string option ; prefix : string option ; sentence : string option }
-let default_options = {debug = false ; graph = None; prefix = None ; sentence = None }
+type options = { debug : bool ; graph : string option ; intersect : bool ; prefix : string option ; sentence : string option }
+let default_options = {debug = false ; graph = None; intersect = false; prefix = None ; sentence = None }
 
 let rec process_args args acc =
 	match args with
 	| [] -> acc
 	| ("-d" :: rest)               -> process_args rest {acc with debug = true}
-	| ("-g" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename} (* if you want to draw a -g(raph) then give it a filename for the output *)
-	| ("-p" :: (p :: rest)) -> process_args rest {acc with prefix = Some p}
+	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
+	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
+	| ("-p" :: (p :: rest)) -> process_args rest {acc with prefix = Some p ;  intersect = true}
 	| (x::rest)             -> process_args rest {acc with sentence = Some x}
 
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: %s grammar-file (-d) (-g \"dot-output-file\") (-p \"prefix\") \"sentence\"\n" Sys.argv.(0);
-		Printf.eprintf "Flags in parentheses are optional\n"
+		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\")  (-intersect) (-p \"prefix\") \"sentence\"\n" Sys.argv.(0);
+		Printf.eprintf "Flags in parentheses are optional. -p implies -intersect \n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
 		let options = process_args xs default_options in
 		Util.set_debug_mode options.debug ;
-		let input_grammar = Grammar.get_input_grammar grammar_file in
-		let grammar_for_parsing =
-			match options.prefix with
-			| None -> input_grammar ;
-			| Some p -> intersection_grammar input_grammar (Util.split ' ' p)
-		in
-		match options.sentence with
-		| None -> (
-			match (options.prefix,options.graph) with
-			| (None,_) -> failwith "No prefix or sentence given; nothing to do!"
-			| (Some p,None) -> print_grammar grammar_file p grammar_for_parsing
-			| (Some p,Some filename) -> Grammar.drawgraph p input_grammar filename
-		)
-		| Some s ->
-			let _ = run_parser (Util.split ' ' s) grammar_for_parsing in
-			()
-
+		let (rules,start_symbol) as input_grammar = Grammar.get_input_grammar grammar_file in
+		let (input_list,input_string,parser_argument) = match options.prefix with
+		    None -> (match options.sentence with
+			None -> failwith "No prefix or sentence given; nothing to do!"
+		      | Some s -> (let x = Util.split ' ' s in
+				   (x,s,Parser.Sentence x)))
+		  | Some p -> (let x = Util.split ' ' p in
+			       (x,p,Parser.Prefix x))          in
+		match (options.intersect,options.graph) with
+		    (false,None) -> ignore (run_parser input_list input_grammar)
+		  | (_,_) -> 
+		      let chart = Parser.deduce (-1) rules parser_argument in
+		      let goal_items = Chart.goal_items chart start_symbol (List.length input_list) in
+		      begin
+			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
+			if options.intersect
+			then print_grammar grammar_file input_string
+			         (intersection_grammar chart goal_items start_symbol input_list)
+			else ();
+			(* ditto for graphs *)
+			match options.graph with
+			    (Some graphname) -> Grammar.drawgraph chart goal_items input_list graphname
+			  | None -> ()
+		      end
 
 let _ = if (!Sys.interactive) then () else main () ;;
+
+

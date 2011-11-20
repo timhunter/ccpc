@@ -5,7 +5,7 @@
 
 % very abstracted version of Jiwon Yun's korean.pl
 % generates sentences like
-%    noun acc noun nom verb
+%    noun nom noun acc verb
 %    noun nom verb
 %    noun accverb
 

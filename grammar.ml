@@ -105,25 +105,13 @@ let rec build_intersection_grammar prefix chart q grammar_so_far =
     List.iter (fun item -> add_if_new q item) new_agenda_items ;
     build_intersection_grammar prefix chart q (grammar_so_far @ new_rules)
 
-let intersection_grammar (rules, start_symbol) symbols =
-  let chart = Parser.deduce (-1) rules (Parser.Prefix symbols) in
-  let goal_items = Chart.goal_items chart start_symbol (List.length symbols) in
+
+let intersection_grammar chart goal_items start_symbol symbols = 
   let q = create_myqueue () in
   List.iter (fun item -> add_if_new q item) goal_items ;
   let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
   let new_rules = build_intersection_grammar symbols chart q [] in
   (new_rules, new_start_symbol)
-
-
-(* back and forth from characters to string to char lists *)
-let explode s =
-  let rec explode s i = if i< String.length s
-  then s.[i]::(explode s (i+1))
-  else []
-  in (explode s 0)
-
-
-let is_whitespace c = (c=' ')||(c='\t')||(c='\n')
 
 module SituatedNode =
   struct
@@ -179,7 +167,7 @@ module SituatedGraph =
 	      Graph.Graphviz.DotAttributes.sg_attributes=[] })
   end
 
-
+(* analogous to new_intersection_grammar_rules above *)
 let update_graph graph chart item =
   let routes = Chart.get_routes item chart in
   let parentnode = SituatedNode.create item in
@@ -190,14 +178,11 @@ let update_graph graph chart item =
 	    " "  -> ({ SituatedNode.name="EMPTY" ; SituatedNode.spans=[] }  : SituatedNode.t) 
 	  | nonempty ->  ({ SituatedNode.name=nonempty ; SituatedNode.spans=[] }  : SituatedNode.t) in
 				 begin
-				   (* SituatedGraph.add_vertex graph parentnode; *)
-				   (* SituatedGraph.add_vertex graph leaf; *)
 				   SituatedGraph.add_edge graph parentnode leaf;
 				   []
 				 end
       | PublicNonTerminating (nts,_) -> let children = List.map SituatedNode.create items in
 	begin
-	  (* List.iter (SituatedGraph.add_vertex graph) (parentnode::children); *)
 	  List.iter (SituatedGraph.add_edge graph parentnode) children;
 	  items (* should return a list of new agenda items somehow *)
          end
@@ -214,27 +199,19 @@ let rec build_graph chart q graph =
     let new_agenda_items = update_graph graph chart trigger in
     List.iter (fun item -> add_if_new q item) new_agenda_items ;
     build_graph chart q graph
-  
-
-let get_graph prefix grammar =
-  let (r,s) = grammar in
-  let _ = print_string ("start symbol: "^s^"\n") in
-  let p = Util.split ' ' prefix in
-  let ch = Parser.deduce (-1) r (Parser.Prefix p) in
-  let goal_items = Chart.goal_items ch s (List.length p) in
-  let _ = print_string ("I found "^(string_of_int (List.length goal_items))^" goal items\n") in
-  let q = create_myqueue () in
-  List.iter (fun item -> add_if_new q item) goal_items ;
-  build_graph ch q (SituatedGraph.create ~size:(Chart.length ch) ())
-
 
 module DotWriteSituatedGraph = Graph.Graphviz.Dot(SituatedGraph)
 
-let drawgraph prefix grammar filename = (* ocamlgraph does not support clusterrank or ordering, so stick them in post hoc on the first line using sed(1) *)
-  let g = get_graph prefix grammar in
-  let _ = print_string ("graph has "^(string_of_int (SituatedGraph.nb_vertex g))^" vertices and "^(string_of_int (SituatedGraph.nb_edges g))^" edges.\n") in
+let drawgraph chart goal_items symbols filename =
+  let q = create_myqueue () in
+  List.iter (fun item -> add_if_new q item) goal_items ;
+  let gr = build_graph chart q (SituatedGraph.create ~size:(Chart.length chart) ()) in
+  let _ = print_string ("graph has "^(string_of_int (SituatedGraph.nb_vertex gr))^" vertices and "^(string_of_int (SituatedGraph.nb_edges gr))^" edges.\n") in
   let oc = Unix.open_process_out ("sed 's/digraph G {/digraph G { clusterrank=none;  ordering=out;/' >| "^filename) in
     begin
-      DotWriteSituatedGraph.output_graph oc g;
+      DotWriteSituatedGraph.output_graph oc gr;
       close_out oc
     end
+
+
+  
