@@ -1,4 +1,4 @@
-type range = Pair of (int * int) | VarRange of int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
+type range = Pair of int * int | VarRange of int * int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
 exception RangesNotAdjacentException
 exception EmptyListException
 

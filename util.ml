@@ -119,14 +119,14 @@ let rec split sep str =
 
 exception RangesNotAdjacentException
 
-type range = Pair of (int * int) | VarRange of int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
+type range = Pair of int * int | VarRange of int * int   (* VarRange (m,n) means (i,i) for any i, m <= i < n *)
 
 let concat_ranges range1 range2 =
 	match (range1,range2) with
 	| (Pair (i,j), Pair (k,l)) -> if (j = k) then (Pair (i,l)) else (raise RangesNotAdjacentException)
-	| (Pair (i,j), VarRange k) -> if (j < k) then (Pair (i,j)) else (raise RangesNotAdjacentException)
-	| (VarRange k, Pair (i,j)) -> if (i < k) then (Pair (i,j)) else (raise RangesNotAdjacentException)
-	| (VarRange k, VarRange l) -> if (k < l) then (VarRange k) else (VarRange l)
+	| (Pair (i,j), VarRange (k,l)) -> if (k <= j && j < l) then (Pair (i,j)) else (raise RangesNotAdjacentException)
+	| (VarRange (k,l), Pair (i,j)) -> if (k <= i && i < l) then (Pair (i,j)) else (raise RangesNotAdjacentException)
+	| (VarRange (i,j), VarRange (k,l)) -> let ik = max i k in let jl = min j l in if ik < jl then (VarRange (ik,jl)) else (raise RangesNotAdjacentException)
 
 
 

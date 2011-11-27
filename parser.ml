@@ -5,54 +5,34 @@ open Chart
 open Rational
 
     type prim = Rule.r
-    type input = Prefix of (string list) | Sentence of (string list)
+    type input = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
     type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
 
     
     let is_goal start_symbol length item =
       (get_nonterm item = start_symbol) && (get_ranges item = [Pair (0,length)])
 
-    (* return type is (item, Rational.rat option) *)
-    let get_axioms_parse grammar symbols =
-      let indices = range 0 (List.length symbols) in
-      let make_axiom nt term r i = if (List.nth symbols i) = term then Some (create_item nt [Pair (i,i+1)], r, Rule.get_weight r) else None in
-      let get_axiom symbols rule =
-        match Rule.get_expansion rule with
-        | PublicTerminating str -> optlistmap (make_axiom (Rule.get_nonterm rule) str rule) indices
-        | PublicNonTerminating _ -> []
-      in
-      concatmap_tr (get_axiom symbols) grammar 
-      
-    (* return type is (item, Rational.rat option) *)
-    let get_axioms_intersect grammar prefix =
-      let len = List.length prefix in
-      let situated_axiom nt rule index = (create_item nt [Pair (index,index+1)], rule, Rule.get_weight rule) in
-      let unsituated_axiom nt rule = (create_item nt [Pair (len,len)], rule, Rule.get_weight rule) in
+    (* return type is Chart.item * Rule.r * Rational.rat option *)
+    let get_axioms grammar input =
+      let (symbols, epsilon, unsituated_ranges) = match input with
+        | Prefix   symbols -> let len = List.length symbols in (symbols, (if 0 < len then [VarRange (0,len  )] else []), [Pair (len,len)])
+        | Infix    symbols -> let len = List.length symbols in (symbols, (if 1 < len then [VarRange (1,len  )] else []), [Pair (len,len); Pair (0,0)])
+        | Sentence symbols -> let len = List.length symbols in (symbols,                  [VarRange (0,len+1)]         , []) in
       let get_axiom rule =
-        let nt = Rule.get_nonterm rule in
         match Rule.get_expansion rule with
-        | PublicTerminating str -> (unsituated_axiom nt rule) :: (map_tr (situated_axiom nt rule) (find_in_list str prefix))
+        | PublicTerminating str ->
+          map_tr (let nt = Rule.get_nonterm rule in
+                  let wt = Rule.get_weight rule in
+                  fun range -> (create_item nt [range], rule, wt))
+                 ((* an item that can go anywhere in the input (i.e. VarRange), if the terminating rule produces the empty string *)
+                  (if str = " " then epsilon else []) @
+                  (* items that cover non-empty chunks of the input *)
+                  map_tr (fun index -> Pair (index,index+1)) (find_in_list str symbols) @
+                  (* items that hypothesize non-empty chunks of unseen "input" *)
+                  unsituated_ranges)
         | PublicNonTerminating _ -> []
       in
       concatmap_tr get_axiom grammar
-
-    let get_axioms grammar input =
-      let epsilon_max = match input with | Prefix s -> (List.length s) - 1 | Sentence s -> List.length s in
-      let from_symbols =  match input with
-        | Prefix strings -> get_axioms_intersect grammar strings
-        | Sentence strings -> get_axioms_parse grammar strings in 
-      (* get_axioms_parse only gives us items that cover non-empty chunks of the input; get_empties creates 
-         items that can go anywhere in the input (i.e. EpsVar) from each terminating rule that produces the empty string *)
-      let rec get_empties gram acc =
-        match gram with 
-          | [] -> acc
-          | h::t -> (match Rule.get_expansion h with 
-                      | PublicTerminating str -> if str = " " then (get_empties t ((create_item (Rule.get_nonterm h) [VarRange (epsilon_max+1)], h, Rule.get_weight h)::acc))
-                                                       else get_empties t acc
-                      | PublicNonTerminating _ -> get_empties t acc) in
-      (get_empties grammar []) @ from_symbols 
-  
-  
 
 (*Add an item to the given item map*)
     let add_item item_map item =

@@ -52,8 +52,8 @@ let print_grammar grammar_file prefix (rules, start_symbol) =
 	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { debug : bool ; graph : string option ; intersect : bool ; prefix : string option ; sentence : string option }
-let default_options = {debug = false ; graph = None; intersect = false; prefix = None ; sentence = None }
+type options = { debug : bool ; graph : string option ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
+let default_options = {debug = false ; graph = None; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
 
 let rec process_args args acc =
 	match args with
@@ -61,27 +61,25 @@ let rec process_args args acc =
 	| ("-d" :: rest)               -> process_args rest {acc with debug = true}
 	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
-	| ("-p" :: (p :: rest)) -> process_args rest {acc with prefix = Some p ;  intersect = true}
-	| (x::rest)             -> process_args rest {acc with sentence = Some x}
+	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s); intersect = true}
+        | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s); intersect = true}
+	| (x::rest)          -> process_args rest {acc with sentence = Some x}
 
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\")  (-intersect) (-p \"prefix\") \"sentence\"\n" Sys.argv.(0);
-		Printf.eprintf "Flags in parentheses are optional. -p implies -intersect \n"
+		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\")  (-intersect) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
+		Printf.eprintf "Flags in parentheses are optional. -p and -infix each imply -intersect \n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
 		let options = process_args xs default_options in
 		Util.set_debug_mode options.debug ;
 		let (rules,start_symbol) as input_grammar = Grammar.get_input_grammar grammar_file in
-		let (input_list,input_string,parser_argument) = match options.prefix with
-		    None -> (match options.sentence with
-			None -> failwith "No prefix or sentence given; nothing to do!"
+		let (input_list,input_string,parser_argument) = match options.sentence with
+			None -> failwith "No sentence given; nothing to do!"
 		      | Some s -> (let x = Util.split ' ' s in
-				   (x,s,Parser.Sentence x)))
-		  | Some p -> (let x = Util.split ' ' p in
-			       (x,p,Parser.Prefix x))          in
+				   (x,s,options.input x)) in
 		match (options.intersect,options.graph) with
 		    (false,None) -> ignore (run_parser input_list input_grammar)
 		  | (_,_) -> 
