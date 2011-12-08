@@ -41,22 +41,22 @@ around delim f p q = do x <- p
                         y <- q
                         return (f x y)
 
-mcfgFromFile :: String -> MCFG
+mcfgFromFile :: String -> MCFG String String
 mcfgFromFile name = unsafePerformIO (do
     result <- parseFromFile (between whiteSpace eof mcfg) name
     either (fail . show) return result)
 
-mcfg :: Parser MCFG
+mcfg :: Parser (MCFG String String)
 mcfg = many (liftM2 (,) (optionMaybe weight) rule)
 
 weight :: Parser Rational
 weight = chainl1 (liftM (either toRational toRational) naturalOrFloat)
                  (symbol "/" >> return (/))
 
-rule :: Parser (Cat, RHS Cat)
+rule :: Parser (String, RHS String String)
 rule = around (symbol "-->") (,) identifier rhs
 
-rhs :: Parser (RHS Cat)
+rhs :: Parser (RHS String String)
 rhs = liftM2 Cats (many1 identifier)
         (many1 (fmap catMaybes (brackets (semiSep1 component))))
   <|> between quote quote

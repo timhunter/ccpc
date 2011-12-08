@@ -1,8 +1,6 @@
 module MCFG where
 
-type MCFG    = [(Maybe Rational, (Cat, RHS Cat))]
-type Cat     = String
-type Term    = String
-data RHS cat = Cats [cat] [[(Int, Int)]] | Term Term
+type MCFG cat term = [(Maybe Rational, (cat, RHS cat term))]
+data RHS  cat term = Cats [cat] [[(Int, Int)]] | Term term
     deriving (Eq, Ord, Show)
 

@@ -10,13 +10,13 @@ import qualified Data.IntMap as IM
 import qualified Numeric.GSL as G
 import qualified Numeric.Container as C
 
-type Map = M.Map Cat [(Maybe Rational, RHS Vertex)]
+type Map cat term = M.Map cat [(Maybe Rational, RHS Vertex term)]
 type Formula = [(Double, [Vertex])]
 
 -- Try: starts (partition 1e-20 1000 (mcfgMap (MCFGRead.mcfgFromFile "copy.abba.mcfg")))
 
 -- Turn a list of parsed MCFG rules into a map from LHS to RHSs
-mcfgMap :: MCFG -> Map
+mcfgMap :: (Ord cat) => MCFG cat term -> Map cat term
 mcfgMap g = m where
   m = M.unionsWith (++) (map f g)
   i cat = M.findIndex cat m
@@ -26,14 +26,15 @@ mcfgMap g = m where
   f (weight, (lhs, Term term))
     = M.singleton lhs [(weight, Term term)]
 
--- Take a slice of an MCFG map that consists of the start symbols(' rules)
-starts :: M.Map Cat a -> M.Map Cat a
+-- Take a slice of an MCFG map that consists of the start symbols(' rules),
+-- i.e., symbols that are strings that begin with S
+starts :: M.Map String a -> M.Map String a
 starts m = let (_, s, after)  = M.splitLookup "S" m
                (before, _, _) = M.splitLookup "T" after
            in maybe before (\a -> M.insert "S" a before) s
 
 -- Turn an MCFG map into a graph of nonterminal usage
-mcfgGraph :: Map -> Graph
+mcfgGraph :: Map cat term -> Graph
 mcfgGraph m = A.listArray (0, M.size m - 1)
   [ [ j | (_, Cats js _) <- rhss, j <- js ] | rhss <- M.elems m ]
 
@@ -43,11 +44,10 @@ mcfgGraph m = A.listArray (0, M.size m - 1)
 -- current estimates.  The return value is a table of the current estimates
 -- along with the difference vector between the new estimates and the current
 -- estimates.
-iteration :: Map -> A.Array Vertex Double -> SCCL ->
+iteration :: Map cat term -> A.Array Vertex Double -> SCCL ->
              [Double] -> (IM.IntMap Double, [Double])
 iteration m =
-  let m' :: M.Map Cat Formula
-      m' = M.map (\rhss -> [ (fromRational (fromJust weight),
+  let m' = M.map (\rhss -> [ (fromRational (fromJust weight),
                               case rhs of Cats children _ -> children
                                           _               -> [])
                            | (weight, rhs) <- rhss ])
@@ -83,7 +83,7 @@ iteration m =
 -- the accuracy desired, the maximum number of iterations for each strongly
 -- connected component, and the MCFG map.  The return value is a map from
 -- nonterminals to their Z values.
-partition :: Double -> Int -> Map -> M.Map Cat Double
+partition :: Double -> Int -> Map cat term -> M.Map cat Double
 partition residual duration m = result where
   ([], result) = M.mapAccum (\(x:xs) _ -> (xs,x)) (A.elems known) m
   iter = iteration m known
