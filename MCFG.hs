@@ -1,3 +1,5 @@
+{-# OPTIONS -w #-}
+
 module MCFG (
     MCFG, Rule, RHS(..), Appearance(..),
     Consistency, ruleConsistency, consistency

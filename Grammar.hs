@@ -1,5 +1,5 @@
 {-# OPTIONS -W #-}
-{-# LANGUAGE TypeSynonymInstances, MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
 
 module Grammar where
 
@@ -59,24 +59,34 @@ instance Show Cat where
   show (Init label lex pos) =
     show label ++ "(" ++ show lex ++ show pos ++ ")"
   show (Bar parent head lexHead posHead) =
-    show head ++ "^" ++ show parent ++ "(" ++ show lexHead ++ show posHead ++ ")"
+    show head ++ "^" ++ show parent ++
+    "(" ++ show lexHead ++ show posHead ++ ")"
   show (Mod side parent head word) =
-    show head ++ "^" ++ show parent ++ "(" ++ showHeadWord word ++ ")" ++ show side
+    show head ++ "^" ++ show parent ++
+    "(" ++ showHeadWord word ++ ")" ++ show side
   show (ModLex side mod pos parent head word) =
-    show mod ++ "(" ++ show pos ++ ")" ++ show head ++ "^" ++ show parent ++ "(" ++ showHeadWord word ++ ")" ++ show side
+    show mod ++ "(" ++ show pos ++ ")" ++ show head ++ "^" ++ show parent ++
+    "(" ++ showHeadWord word ++ ")" ++ show side
   show (NPB side key word) =
     show key ++ "^NPB(" ++ showHeadWord word ++ ")" ++ show side
   show (NPBLex side mod pos key word) =
-    show mod ++ "(" ++ show pos ++ ")" ++ show key ++ "^NPB(" ++ showHeadWord word ++ ")" ++ show side
+    show mod ++ "(" ++ show pos ++ ")" ++ show key ++
+    "^NPB(" ++ showHeadWord word ++ ")" ++ show side
 
 instance NFData Cat where
   rnf Start = ()
-  rnf (Init label lex pos) = rnf label `seq` rnf lex `seq` rnf pos
-  rnf (Bar parent head lex pos) = rnf parent `seq` rnf head `seq` rnf lex `seq` rnf pos
-  rnf (Mod side parent head word) = rnf side `seq` rnf parent `seq` rnf head `seq` rnf word
-  rnf (ModLex side mod pos parent head word) = rnf side `seq` rnf mod `seq` rnf pos `seq` rnf parent `seq` rnf head `seq` rnf word
+  rnf (Init label lex pos) =
+    rnf label `seq` rnf lex `seq` rnf pos
+  rnf (Bar parent head lex pos) =
+    rnf parent `seq` rnf head `seq` rnf lex `seq` rnf pos
+  rnf (Mod side parent head word) =
+    rnf side `seq` rnf parent `seq` rnf head `seq` rnf word
+  rnf (ModLex side mod pos parent head word) =
+    rnf side `seq` rnf mod `seq` rnf pos `seq`
+    rnf parent `seq` rnf head `seq` rnf word
   rnf (NPB side key word) = rnf side `seq` rnf key `seq` rnf word
-  rnf (NPBLex side mod pos key word) = rnf side `seq` rnf mod `seq` rnf pos `seq` rnf key `seq` rnf word
+  rnf (NPBLex side mod pos key word) =
+    rnf side `seq` rnf mod `seq` rnf pos `seq` rnf key `seq` rnf word
 
 showHeadWord :: Maybe (Maybe Lex, POS) -> String
 showHeadWord Nothing                = ""
@@ -391,7 +401,8 @@ instance FoldableWithKey (,) where
   foldMapWithKey f (k0,(k,v)) = f ((k0,k),v)
 
 head_phw :: S.Set (Nont, Label, POS, Lex)
-head_phw = (foldMapWithKey . foldMapWithKey . foldMapWithKey . foldMapWithKey . foldMapWithKey . foldMapWithKey)
+head_phw = (foldMapWithKey . foldMapWithKey . foldMapWithKey .
+            foldMapWithKey . foldMapWithKey . foldMapWithKey)
            (\((((((((),parent),_),pos),_),lex),head),_) ->
             S.singleton (parent,head,pos,lex))
            ((),head_dists)

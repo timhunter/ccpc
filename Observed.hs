@@ -1,12 +1,11 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving, OverloadedStrings #-}
+{-# OPTIONS -w #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Observed (
     main,
-    Lex(..), Label(..), Nont, POS, Count,
-    Word(..), Side(..), Event(..),
-    event, theEvents,
+    Lex(..), Label(..), Nont, POS, Count, Word(..), Side(..), Event(..),
     _TOP_, _START_, _STOP_, _NPB_, _CC_, _COMMA_, _COLON_, _UNKNOWN_,
-    theNonts, unArg, reArg, thePOSs, thePosMap
+    event, theEvents, theNonts, unArg, reArg, thePOSs, thePosMap
 ) where
 
 import Data.Atom.Simple
@@ -16,7 +15,7 @@ import Codec.Compression.GZip (decompress)
 import Control.Monad.State
 import Data.Maybe (catMaybes)
 import Data.List (union, sort)
-import GHC.Exts (IsString(fromString))
+import GHC.Exts (IsString(fromString)) -- for -XOverloadedStrings
 import System.IO.Unsafe (unsafePerformIO)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as C
@@ -53,16 +52,17 @@ _UNKNOWN_ = Lex (intern "+unknown+")
 data Word = Word !Lex !Label deriving (Eq, Ord)
 data Side = L | R            deriving (Eq, Ord, Show)
 
-instance Show Word where
-  show (Word lex pos) = show lex ++ show pos
+instance Show Word where show (Word lex pos) = show lex ++ show pos
 
 instance NFData Symbol
 instance NFData Word where rnf (Word lex pos) = rnf lex `seq` rnf pos
 instance NFData Side
 
-data Event = Nonterminal !Label {-# UNPACK #-} !Count
-           | Head {-# UNPACK #-} !Word !(Maybe (Nont, Label)) {-# UNPACK #-} !Count
-           | Modifier {-# UNPACK #-} !Word {-# UNPACK #-} !Word !Label !Label {-# UNPACK #-} !Word !Nont !Label !Bool !Side {-# UNPACK #-} !Count
+data Event
+  = Nonterminal !Label {-# UNPACK #-} !Count
+  | Head {-# UNPACK #-} !Word !(Maybe (Nont, Label)) {-# UNPACK #-} !Count
+  | Modifier {-# UNPACK #-} !Word {-# UNPACK #-} !Word !Label !Label
+      {-# UNPACK #-} !Word !Nont !Label !Bool !Side {-# UNPACK #-} !Count
   deriving (Eq, Ord, Show)
 
 instance NFData Event where
@@ -100,9 +100,11 @@ sym = do x <- token
            else return $! intern x
 
 count :: Parser Count
-count = state (\s -> case C.readInt s of
-                       Nothing    -> error "Integer expected"
-                       Just (i,s) -> (i, B.dropWhile isSpace (B.dropWhile (\c -> c == 46 || c == 48) s)))
+count = state (\s ->
+  case C.readInt s of
+    Nothing    -> error "Integer expected"
+    Just (i,s) -> (i, B.dropWhile isSpace
+                     (B.dropWhile (\c -> c == 46 || c == 48) s)))
 
 parens :: Parser a -> Parser a
 parens m = do "(" <- token
@@ -194,10 +196,14 @@ unArgList = [ (ntA, case reverse (extern sym) of
             | ntA@(Label sym) <- _TOP_ : _STOP_ : theNonts ++ thePOSs ]
 
 thePOSs :: [Label]
-thePOSs = S.toList (S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ])
+thePOSs = S.toList $
+          S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ]
 
 thePosMap :: M.Map Lex [Label]
-thePosMap = M.map S.toList (M.fromListWith S.union [ (lex, S.singleton pos) | Head (Word lex pos) Nothing _ <- theEvents ])
+thePosMap = M.map S.toList $
+            M.fromListWith S.union
+	      [ (lex, S.singleton pos)
+              | Head (Word lex pos) Nothing _ <- theEvents ]
 
 extern :: Symbol -> String
 extern = tail . dropWhile ('>' /=) . show
