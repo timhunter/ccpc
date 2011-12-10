@@ -1,138 +1,176 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving, OverloadedStrings #-}
+
 module Observed (
+    main,
     Lex(..), Label(..), Nont, POS, Count,
-    Unknown(..), Word(..), Subcat(..), Side(..), Event(..),
-    event, parseFromGZipFile, theEvents, _TOP_, theNonts, unArg, reArg, thePOSs, thePosMap
+    Word(..), Side(..), Event(..),
+    event, theEvents,
+    _TOP_, _START_, _STOP_, _NPB_, _CC_, _COMMA_, _COLON_, _UNKNOWN_,
+    theNonts, unArg, reArg, thePOSs, thePosMap
 ) where
 
-import Data.List (union, sort)
 import Data.Atom.Simple
-import Control.Applicative ((<*>))
-import Control.Monad (guard)
-import Data.Char (isPrint, isSpace)
-import Text.Parsec hiding (count)
-import Text.Parsec.ByteString.Lazy (Parser)
+import Control.DeepSeq (deepseq, NFData(rnf))
+import Data.Word (Word8)
 import Codec.Compression.GZip (decompress)
+import Control.Monad.State
+import Data.Maybe (catMaybes)
+import Data.List (union, sort)
+import GHC.Exts (IsString(fromString))
 import System.IO.Unsafe (unsafePerformIO)
+import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as C
-import qualified Text.Parsec.Token as P
 import qualified Data.Set as S
 import qualified Data.Map as M
 
-P.TokenParser {
-    P.identifier = identifier,
-    P.symbol     = symbol,
-    P.decimal    = decimal,
-    P.parens     = parens,
-    P.whiteSpace = whiteSpace
-} = P.makeTokenParser P.LanguageDef {
-    P.commentStart    = "",
-    P.commentEnd      = "",
-    P.commentLine     = "",
-    P.nestedComments  = False,
-    P.identStart      = ident,
-    P.identLetter     = ident,
-    P.opStart         = parserZero,
-    P.opLetter        = parserZero,
-    P.reservedNames   = [],
-    P.reservedOpNames = [],
-    P.caseSensitive   = True
-} where ident = satisfy (\c -> isPrint c && not (isSpace c || elem c "()"))
+main :: IO ()
+main = theEvents `deepseq` print thePosMap
 
-list :: Parser a -> Parser [a]
-list p = parens (many p)
-
-count :: Parser Count
-count = decimal >>= \n -> symbol ".0" >> return n
-
-sym :: Parser Symbol
-sym = identifier >>= \x -> return $! intern x
-
-newtype Lex   = Lex   Symbol deriving (Eq, Ord)
-newtype Label = Label Symbol deriving (Eq, Ord)
+newtype Lex   = Lex   Symbol deriving (Eq, Ord, NFData)
+newtype Label = Label Symbol deriving (Eq, Ord, NFData)
 type    Nont  = Label
 type    POS   = Label
-type    Count = Integer
+type    Count = Int
 
 instance Show Lex   where show (Lex   sym) = extern sym ++ "/"
 instance Show Label where show (Label sym) = extern sym
 
-data    Unknown = Unknown                        deriving (Eq, Ord, Show)
-data    Word    = Word Lex Label (Maybe Unknown) deriving (Eq, Ord, Show)
-newtype Subcat  = Subcat [Label]                 deriving (Eq, Ord, Show)
-data    Side    = L | R                          deriving (Eq, Ord, Show)
+instance IsString Lex   where fromString = Lex   . intern
+instance IsString Label where fromString = Label . intern
 
-data Event = Nonterminal Label Count
-           | Head Word (Maybe (Nont, Label, Subcat, Subcat)) Count
-           | Modifier Word Word Label [Label] [Word] Nont Label Subcat Bool Side Count
-           | Vocab Lex Count
-           | WordFeature Unknown Count
-           | Pos Lex [POS]
-           | PrunedPreterm [(Symbol, Symbol)]
-           | PrunedPunc [(Symbol, Symbol)]
+_TOP_, _START_, _STOP_, _NPB_, _CC_, _COMMA_, _COLON_ :: Label
+_TOP_   = Label (intern "+TOP+")
+_START_ = Label (intern "+START+")
+_STOP_  = Label (intern "+STOP+")
+_NPB_   = Label (intern "NPB")
+_CC_    = Label (intern "CC")
+_COMMA_ = Label (intern ",")
+_COLON_ = Label (intern ":")
+
+_UNKNOWN_ :: Lex
+_UNKNOWN_ = Lex (intern "+unknown+")
+
+data Word = Word !Lex !Label deriving (Eq, Ord)
+data Side = L | R            deriving (Eq, Ord, Show)
+
+instance Show Word where
+  show (Word lex pos) = show lex ++ show pos
+
+instance NFData Symbol
+instance NFData Word where rnf (Word lex pos) = rnf lex `seq` rnf pos
+instance NFData Side
+
+data Event = Nonterminal !Label {-# UNPACK #-} !Count
+           | Head {-# UNPACK #-} !Word !(Maybe (Nont, Label)) {-# UNPACK #-} !Count
+           | Modifier {-# UNPACK #-} !Word {-# UNPACK #-} !Word !Label !Label {-# UNPACK #-} !Word !Nont !Label !Bool !Side {-# UNPACK #-} !Count
   deriving (Eq, Ord, Show)
 
-unknown :: Parser Unknown
-unknown = symbol "+unknown+" >> return Unknown
+instance NFData Event where
+  rnf (Nonterminal nt count) = rnf nt `seq` rnf count
+  rnf (Head word info count) = rnf word `seq` rnf info `seq` rnf count
+  rnf (Modifier wordMod wordHead mod prev wordPrev parent head vi side count)
+    = rnf wordMod `seq` rnf wordHead `seq` rnf mod `seq` rnf prev `seq`
+      rnf wordPrev `seq` rnf parent `seq` rnf head `seq` rnf vi `seq`
+      rnf side `seq` rnf count
+
+type Parser = State B.ByteString
+
+isSpace :: Word8 -> Bool
+isSpace c = c == 32 || c == 10 || c == 13 || c == 9
+
+isBreak :: Word8 -> Bool
+isBreak c = isSpace c || c == 40 || c == 41
+
+whitespace :: Parser ()
+whitespace = modify (B.dropWhile isSpace)
+
+token :: Parser String
+token = state (\s ->
+  case B.uncons s of
+    Nothing      -> ([], s)
+    Just (40, s) -> ("(", B.dropWhile isSpace s)
+    Just (41, s) -> (")", B.dropWhile isSpace s)
+    Just (c , s) -> case B.break isBreak s of { (rest, s) ->
+                    (C.unpack (B.cons c rest), B.dropWhile isSpace s) })
+
+sym :: Parser Symbol
+sym = do x <- token
+         if x == "(" || x == ")"
+           then error ("Unexpected `" ++ x ++ "'")
+           else return $! intern x
+
+count :: Parser Count
+count = state (\s -> case C.readInt s of
+                       Nothing    -> error "Integer expected"
+                       Just (i,s) -> (i, B.dropWhile isSpace (B.dropWhile (\c -> c == 46 || c == 48) s)))
+
+parens :: Parser a -> Parser a
+parens m = do "(" <- token
+              a <- m
+              ")" <- token
+              return a
+
+many :: Parser a -> Parser [a]
+many m = loop where
+  loop = do done <- gets (\s -> B.null s || 41 == B.head s)
+            if done then return [] else liftM2 (:) m loop
 
 word :: Parser Word
-word = parens (return Word <*> fmap Lex sym <*> fmap Label sym <*> optionMaybe unknown)
+word = do "(" <- token
+          lex <- sym
+          pos <- sym
+          next <- token
+          case next of
+            ")"         -> do return (Word (Lex lex) (Label pos))
+            "+unknown+" -> do ")" <- token
+                              return (Word _UNKNOWN_ (Label pos))
 
-subcat :: Parser Subcat
-subcat = fmap (Subcat . sort) (list (fmap Label sym))
-
-bool :: Parser Bool
-bool = (symbol "true"  >> return True ) <|>
-       (symbol "false" >> return False)
-
-side :: Parser Side
-side = (symbol "left"  >> return L) <|>
-       (symbol "right" >> return R)
-
-pair :: Parser (Symbol, Symbol)
-pair = parens (return (,) <*> sym <*> sym)
-
-event :: Parser Event
-event = parens (identifier >>= dispatch) where
-  dispatch "nonterminal"    = return (Nonterminal . Label) <*> sym <*> count
-  dispatch "head"           = parens (do
-                                w@(Word (Lex lex) (Label pos) _) <- word
-                                parent <- sym
-                                head   <- sym
-                                if pos == parent
-                                  then do guard (lex == head)
-                                          parens (return ())
-                                          parens (return ())
-                                          return (Head w Nothing)
-                                  else do left  <- subcat
-                                          right <- subcat
-                                          return (Head w (Just (Label parent, Label head, left, right))))
-                              <*> count
-  dispatch "mod"            = parens (return Modifier
-                                      <*> word <*> word <*> fmap Label sym
-                                      <*> list (fmap Label sym) <*> list word
-                                      <*> fmap Label sym <*> fmap Label sym
-                                      <*> subcat <*> bool <*> side)
-                              <*> count
-  dispatch "vocab"          = return Vocab <*> fmap Lex sym <*> count
-  dispatch "word-feature"   = return WordFeature <*> unknown <*> count
-  dispatch "pos"            = return Pos <*> fmap Lex sym <*> list (fmap Label sym)
-  dispatch "pruned-preterm" = return PrunedPreterm <*> list pair
-  dispatch "pruned-punc"    = return PrunedPunc <*> list pair
-  dispatch _                = parserZero
-
-parseFromGZipFile :: Parser a -> SourceName -> IO (Either ParseError a)
-parseFromGZipFile p fname = fmap (runP p () fname . decompress)
-                                 (C.readFile fname)
+event :: Parser (Maybe Event)
+event = do "(" <- token
+           tag <- token
+           case tag of
+             "nonterminal" -> do
+               nt <- sym
+               n <- count
+               return (Just (Nonterminal (Label nt) n))
+             "head" -> do
+               "(" <- token
+               w@(Word _ (Label pos)) <- word
+               parent <- sym
+               head <- sym
+               parens (many token)
+               parens (many token)
+               ")" <- token
+               n <- count
+               let info | pos == parent = Nothing
+                        | otherwise     = Just (Label parent, Label head)
+               return (Just (Head w info n))
+             "mod" -> do
+               "(" <- token
+               wordMod <- word
+               wordHead <- word
+               mod <- sym
+               prev <- parens sym
+               wordPrev <- parens word
+               parent <- sym
+               head <- sym
+               parens (many token)
+               vi <- token
+               side <- token
+               ")" <- token
+               n <- count
+               return (Just (Modifier wordMod wordHead (Label mod)
+                              (Label prev) wordPrev (Label parent) (Label head)
+                              (case vi of "true" -> True; "false" -> False)
+                              (case side of "left" -> L; "right" -> R)
+                              n))
+             _ -> return Nothing
 
 theEvents :: [Event]
 theEvents = unsafePerformIO $ do
-  Right r <- parseFromGZipFile (many event)
-               "/home/ccshan/lib/parsers/bikel-parser/wsj-02-21.observed.gz"
-               -- "/home/ccshan/lib/parsers/bikel-parser/observed-sampled.gz"
-  return r
-
-_TOP_ :: Nont
-_TOP_ = Label (intern "+TOP+")
+  let fname = "wsj-02-21.observed.gz" -- "observed-sampled.gz"
+  gzip <- C.readFile fname
+  return (catMaybes (map (evalState event) (C.lines (decompress gzip))))
 
 theNonts :: [Label]
 theNonts = [ nt | Nonterminal nt _ <- theEvents ]
@@ -146,20 +184,20 @@ unArg = \nt -> case M.lookup nt table of
 reArg :: Label -> [Label]
 reArg = \nt -> case M.lookup nt table of
                  Just nt' -> nt'
-                 Nothing  -> error ("unArg " ++ show nt)
+                 Nothing  -> error ("reArg " ++ show nt)
   where table = M.fromListWith (++) [ (nt, [ntA]) | (ntA, nt) <- unArgList ]
 
 unArgList :: [(Label, Label)]
 unArgList = [ (ntA, case reverse (extern sym) of
                       'A':'-':tn -> Label (intern (reverse tn))
                       _          -> ntA)
-            | ntA@(Label sym) <- _TOP_ : theNonts ++ thePOSs ]
+            | ntA@(Label sym) <- _TOP_ : _STOP_ : theNonts ++ thePOSs ]
 
 thePOSs :: [Label]
-thePOSs = S.toList (S.unions [ S.fromList poss | Pos _ poss <- theEvents ])
+thePOSs = S.toList (S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ])
 
 thePosMap :: M.Map Lex [Label]
-thePosMap = M.fromListWith union [ (lex,poss) | Pos lex poss <- theEvents ]
+thePosMap = M.map S.toList (M.fromListWith S.union [ (lex, S.singleton pos) | Head (Word lex pos) Nothing _ <- theEvents ])
 
 extern :: Symbol -> String
 extern = tail . dropWhile ('>' /=) . show
