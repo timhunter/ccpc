@@ -5,7 +5,8 @@ module Observed (
     main,
     Lex(..), Label(..), Nont, POS, Count, Word(..), Side(..), Event(..),
     _TOP_, _START_, _STOP_, _NPB_, _CC_, _COMMA_, _COLON_, _UNKNOWN_,
-    event, theEvents, theNonts, unArg, reArg, thePOSs, thePosMap
+    event, theEvents, theNonts, unArg, reArg, thePOSs, thePosMap,
+    antepreterminals
 ) where
 
 import Data.Atom.Simple
@@ -193,17 +194,28 @@ unArgList :: [(Label, Label)]
 unArgList = [ (ntA, case reverse (extern sym) of
                       'A':'-':tn -> Label (intern (reverse tn))
                       _          -> ntA)
-            | ntA@(Label sym) <- _TOP_ : _STOP_ : theNonts ++ thePOSs ]
+            | ntA@(Label sym) <-
+	        _TOP_ : _STOP_ : theNonts ++ S.toList thePOSs ]
 
-thePOSs :: [Label]
-thePOSs = S.toList $
-          S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ]
+thePOSs :: S.Set POS
+thePOSs = S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ]
 
 thePosMap :: M.Map Lex [Label]
 thePosMap = M.map S.toList $
             M.fromListWith S.union
 	      [ (lex, S.singleton pos)
               | Head (Word lex pos) Nothing _ <- theEvents ]
+
+antepreterminals :: M.Map Nont (S.Set POS)
+-- If a nonterminal appears in this map, it means that it is compatible
+-- with only certain head-word POS-tags. In other words, it can reach only
+-- the listed POS-tags by the observed parent--head-child relation.
+antepreterminals =
+  M.mapMaybe (\heads -> if heads `S.isSubsetOf` thePOSs
+                        then Just heads else Nothing)
+             (M.fromListWith S.union
+                [ (unArg parent, S.singleton (unArg head))
+                | Head _ (Just (parent, head)) _ <- theEvents ])
 
 extern :: Symbol -> String
 extern = tail . dropWhile ('>' /=) . show

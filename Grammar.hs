@@ -6,6 +6,7 @@ module Grammar where
 import Prelude hiding (lex)
 import Observed hiding (main)
 import MCFG
+import Reduce (mapReduce)
 import Data.Ratio ((%))
 import Data.Map (Map, (!))
 import Data.Either (partitionEithers)
@@ -14,14 +15,13 @@ import Data.Monoid
 import Control.Category ((>>>))
 import Control.Arrow ((***))
 import Control.DeepSeq (NFData(rnf), deepseq)
-import Data.Foldable (foldMap)
 import Control.Parallel.Strategies (parMap, rdeepseq)
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 main :: IO ()
-main = deepseq theEvents $ print $
-  -- consistency $ mconcat $ parMap rdeepseq (foldMap ruleConsistency) $
+main = deepseq theEvents $ mapM_ print $
+  -- S.toList $ used $ mconcat $ parMap rdeepseq (mapReduce ruleConsistency) $
   parMap rdeepseq length $
   [top_rules, lex_rules, head_rules (), mod_rules (), npb_rules ()]
 
@@ -30,11 +30,14 @@ data Prev = START | CC | PUNC | OTHER
 
 instance NFData Prev
 
+isPunc :: Label -> Bool
+isPunc l = l == _COMMA_ || l == _COLON_
+
 prevOfLabel :: Label -> Prev
-prevOfLabel prev | prev == _START_                    = START
-                 | prev == _CC_                       = CC
-                 | prev == _COMMA_ || prev == _COLON_ = PUNC
-                 | otherwise                          = OTHER
+prevOfLabel prev | prev == _START_ = START
+                 | prev == _CC_    = CC
+                 | isPunc prev     = PUNC
+                 | otherwise       = OTHER
 
 type Lex_POS = Maybe (Maybe Lex, POS)
 data Cat
@@ -175,14 +178,24 @@ head_rules () = do
   (parent, m) <- M.toList head_dists
   (lex, poss) <- M.toList thePosMap
   pos <- poss
-  let (word, dist) = case M.lookup pos (snd m) of
-                       Nothing -> (Nothing, fst m)
-                       Just m  -> case M.lookup lex (snd m) of
-                                    Nothing -> (Just (Nothing , pos), fst m)
-                                    Just m  -> (Just (Just lex, pos), m)
-  (head, wt) <- M.toList dist
+  let dist = maybe (fst m)
+                   (\m -> maybe (fst m)
+                                (\m -> m)
+                                (M.lookup lex (snd m)))
+                   (M.lookup pos (snd m))
+      -- If the generated head label is a POS tag or a nonterminal label
+      -- that can only generate a POS tag in turn, then this generated label
+      -- must match the head word's already-chosen POS.
+      (impossible, dist') = M.mapEitherWithKey
+        (\head prob -> if if S.member head thePOSs then head == pos
+                          else maybe True (S.member pos)
+                                 (M.lookup head antepreterminals)
+                       then Right (prob / possibleProb) else Left prob)
+        dist
+      possibleProb = 1 - sum (M.elems impossible)
+  (head, wt) <- M.toList dist'
   let cat | parent == _NPB_ = \side -> npbCat side head pos lex
-          | otherwise       = \side -> Mod side parent head word
+          | otherwise       = \side -> modCat side parent head pos lex
   [(Just wt, Init parent lex pos     --> [cat L, Bar parent head lex pos]),
    (Just 1,  Bar parent head lex pos --> [Init head lex pos, cat R])]
 
@@ -236,7 +249,7 @@ npb_rules () = do
       catlex wordKey   = NPBLex side mod pos key wordKey
       catrule wordKey  = (Just wt1, cat --> [catlex wordKey])
       rulesOfDist dist = [ (Just wt2, catlex wordKey -->
-                                      cons side (npbCat side mod pos lex)
+                                      cons side (if isPunc mod then {- generating punctuation leaves the "previous" ("key") nonterminal/POS/word unchanged -} catlex wordKey {- slightly incorrect when the grammar generates (catlex wordKey) due to backoff from another Lex_POS -} else npbCat side mod pos lex)
                                                 [Init mod lex pos])
                          | (lex, wt2) <- M.toList dist ]
   if mod == _STOP_ then [(Just wt1, cat --> [])] else do
@@ -320,6 +333,15 @@ mod_nt_dists = M.map (uncurry (rough      >>> \d -> ((,) d) .
                M.map (uncurry (smoothed d >>> \d -> \() -> d))))))
              $ mod_nt_counts
 
+modCat :: Side -> Nont -> Label -> POS -> Lex -> Cat
+modCat side parent head posHead lexHead = Mod side parent head $
+  let m = seek "mod_nt_dists" mod_nt_dists (side, parent, head) in
+  case M.lookup posHead (snd m) of
+    Nothing -> Nothing
+    Just m  -> case M.lookup lexHead (snd m) of
+                 Nothing -> Just (Nothing     , posHead)
+                 Just _m -> Just (Just lexHead, posHead)
+
 mod_w_counts :: Map POS                             (Counts Lex,
                 Map (Label, Side, Nont, Label, POS) (Counts Lex,
                 Map Lex                             (Counts Lex, ())))
@@ -361,13 +383,13 @@ npb_nt_dists = M.map (uncurry (rough      >>> \d -> ((,) d) .
              $ npb_nt_counts
 
 npbCat :: Side -> Label -> POS -> Lex -> Cat
-npbCat side key posKey lexKey =
-  NPB side key (let m = seek "npb_nt_dists" npb_nt_dists (side, key) in
-                case M.lookup posKey (snd m) of
-                  Nothing -> Nothing
-                  Just m  -> case M.lookup lexKey (snd m) of
-                               Nothing -> Just (Nothing    , posKey)
-                               Just _m -> Just (Just lexKey, posKey))
+npbCat side key posKey lexKey = NPB side key $
+  let m = seek "npb_nt_dists" npb_nt_dists (side, key) in
+  case M.lookup posKey (snd m) of
+    Nothing -> Nothing
+    Just m  -> case M.lookup lexKey (snd m) of
+                 Nothing -> Just (Nothing    , posKey)
+                 Just _m -> Just (Just lexKey, posKey)
 
 npb_w_counts :: Map POS                       (Counts Lex,
                 Map (Label, Side, Label, POS) (Counts Lex,
