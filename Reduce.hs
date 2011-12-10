@@ -3,20 +3,19 @@
 module Reduce (reduce, mapReduce) where
 
 import Data.Monoid
-import Data.Maybe
+import Data.Maybe (catMaybes)
+import Data.List (foldl')
 
 -- MapReduce over a long list
 
 reduce :: Monoid a => [a] -> a
 reduce []     = mempty
 reduce [x]    = x
-reduce (x:xs) = reduce (scan xs [Just x]) where
-  scan []     accum = catMaybes (reverse accum)
-  scan (x:xs) accum = push x xs accum 0
-  push x _  _             n | x `seq` n `seq` False = undefined
-  push x xs []            n = x : scan xs (replicate (succ n) Nothing)
-  push x xs (Nothing: ys) n =     scan xs (replicate n Nothing ++ Just x : ys)
-  push x xs (Just y : ys) n = push (mappend y x) xs ys (succ n)
+reduce (x:xs) = reduce (reverse (catMaybes (foldl' (shift 0) [Just x] xs)))
+  where shift n _             x | n `seq` x `seq` False = undefined
+        shift n []            x = replicate n Nothing ++ Just x : []
+        shift n (Nothing: ys) x = replicate n Nothing ++ Just x : ys
+        shift n (Just y : ys) x = shift (succ n) ys (mappend y x)
 
 mapReduce :: Monoid a => (b -> a) -> [b] -> a
 mapReduce f = reduce . map f
