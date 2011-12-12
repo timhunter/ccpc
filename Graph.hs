@@ -13,7 +13,7 @@ import Control.Monad.ST
 -- \citep{nederhof-computing}.  The computed components are topologically
 -- sorted, as with Data.Graph.stronglyConnComp.
 
-data SCCL = SCCL { members, nonlinking :: [Vertex] } deriving Show
+data SCCL = SCCL { members, nonlinking :: [Vertex] } deriving (Show, Read)
 
 sccL :: Graph -> [SCCL]
 sccL g = map (`decode` SCCL [] []) (dfs' g (topSort (transposeG g)))

@@ -1,10 +1,10 @@
 {-# OPTIONS -W #-}
 
-module CFG (CFG, Vertex, cfgOfMCFG, isNonterminal, isTerminal) where
+module CFG (CFG, Vertex, graphOfCFG, isNonterminal, isTerminal, cfgOfMCFG) where
 
 import MCFG (MCFG, Rule(Rule), RHS(Cats, Term), MapMCFG(MapMCFG), mapmcfgOfRule)
 import Reduce (mapReduce)
-import Data.Graph (Vertex)
+import Data.Graph (Graph, Vertex)
 import Data.Bifunctor (first)
 import Control.Arrow ((&&&))
 import qualified Data.Array as A
@@ -14,6 +14,10 @@ import qualified Data.Map as M
 -- are terminals, non-negative numbers are non-terminals, and zero is the
 -- start symbol.
 type CFG = A.Array Vertex [(Double, [Vertex])]
+
+-- Turn a CFG into a graph of nonterminal usage
+graphOfCFG :: CFG -> Graph
+graphOfCFG = fmap (filter isNonterminal . concatMap snd)
 
 -- Convenient discrimination on symbols represented as numbers
 isNonterminal, isTerminal :: Vertex -> Bool
