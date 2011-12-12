@@ -1,4 +1,4 @@
-{-# OPTIONS -w #-}
+{-# OPTIONS -W #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Observed (
@@ -15,7 +15,6 @@ import Data.Word (Word8)
 import Codec.Compression.GZip (decompress)
 import Control.Monad.State
 import Data.Maybe (catMaybes)
-import Data.List (union, sort)
 import GHC.Exts (IsString(fromString)) -- for -XOverloadedStrings
 import System.IO.Unsafe (unsafePerformIO)
 import qualified Data.ByteString.Lazy as B
@@ -81,9 +80,6 @@ isSpace c = c == 32 || c == 10 || c == 13 || c == 9
 
 isBreak :: Word8 -> Bool
 isBreak c = isSpace c || c == 40 || c == 41
-
-whitespace :: Parser ()
-whitespace = modify (B.dropWhile isSpace)
 
 token :: Parser String
 token = state (\s ->

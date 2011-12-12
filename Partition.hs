@@ -20,10 +20,10 @@ mcfgMap :: (Ord cat) => MCFG cat term -> Map cat term
 mcfgMap g = m where
   m = M.unionsWith (++) (map f g)
   i cat = M.findIndex cat m
-  f (weight, (lhs, Cats children stringyield))
+  f (Rule weight lhs (Cats children stringyield))
     = M.insert lhs [(weight, Cats (map i children) stringyield)]
                (M.fromList [ (cat,[]) | cat <- children ])
-  f (weight, (lhs, Term term))
+  f (Rule weight lhs (Term term))
     = M.singleton lhs [(weight, Term term)]
 
 -- Take a slice of an MCFG map that consists of the start symbols(' rules),
