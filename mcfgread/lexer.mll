@@ -2,25 +2,26 @@
    open Read 
 }
 
+let skip = [' ''\t']|'(''*'[^'\n']*'*'')' (* eat whitespace and ignore comments *)
+let letter = ['_''#''$''%''&''\'''*''+'',''-''.''/'':'';''\\''^''<''>''A'-'Z''a'-'z''0'-'9']
+
 rule token = parse
    |  "Epsilon"                                          { EPSILON }
-   |  't' ['0'-'9']+ ['a'-'z']* ("_tmp" ['0'-'9'])? ("_eps" | ("_" ['0'-'9']+ "-" ['0'-'9']+))* as cat   {CAT cat}
-   |  'S' ("_" ['0'-'9']+ "-" ['0'-'9']+)* as cat                                           { CAT cat}
-   |  'E' ("_" ['0'-'9']+ "-" ['0'-'9']+)* ("_eps")?  as cat                                           { CAT cat}
-   |  ['_''-''A'-'Z''a'-'z'] (['_''-''A'-'Z''a'-'z''0'-'9'])*                      { TERM (Lexing.lexeme lexbuf)}
-   |  "\""                                               { QUOTE }
+   |  ['A'-'Z'] ['_''-''0'-'9']* ('_' letter*)?          { CAT (Lexing.lexeme lexbuf) }
+   |  ['a'-'z'] letter*                                  { CAT (Lexing.lexeme lexbuf) }
+   |  '"' skip* (letter+ as term) skip* '"'              { TERM term }
+   |  '"' skip* '"'                                      { TERM_EMPTY }
    |  "-->"                                              { ARROW }
    |  '['                                                { LBRAC }
    |  ']'                                                { RBRAC }
-   |  [' ' '\t']                                         { token lexbuf} (* eat whitespace *)
-   |  '(' '*'  [^'\n']* '*' ')'                          { token lexbuf} (* ignore comments *)
+   |  skip+                                              { token lexbuf }
    |  '\n'                                               { NEWLINE }
    |  [ '0'-'9' ]+ as tupleint                           { INT (int_of_string tupleint) }
    |  ';'                                                { CONCAT }
    |  ','                                                { COMMA }
    |  [^ '\n']* eof                                      { EOF }
    |  '#' [^ '\n']* eof                                  { EOF }
-	 |	"/"			                                           { SLASH }
+   |  "/"                                                { SLASH }
    |  eof                                                { EOF }
 
 {
