@@ -1,3 +1,5 @@
+{-# OPTIONS -W #-}
+
 module MCFGRead (mcfgFromFile) where
 
 import MCFG
@@ -47,7 +49,7 @@ mcfgFromFile name = unsafePerformIO (do
     either (fail . show) return result)
 
 mcfg :: Parser (MCFG String String)
-mcfg = many (liftM2 (,) (optionMaybe weight) rule)
+mcfg = many (liftM2 (uncurry . Rule) (optionMaybe weight) rule)
 
 weight :: Parser Rational
 weight = chainl1 (liftM (either toRational toRational) naturalOrFloat)

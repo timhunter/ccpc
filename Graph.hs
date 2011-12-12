@@ -1,8 +1,9 @@
+{-# OPTIONS -W #-}
+
 module Graph (module Data.Graph, SCCL(..), sccL) where
 
 import Data.Array
 import Data.Graph
-import Data.Tree (Tree(Node), Forest)
 import Data.Array.ST (STArray, newArray, readArray, writeArray)
 import Control.Monad
 import Control.Monad.ST
@@ -40,7 +41,7 @@ prune' bnds ts = runST (do
 
 chop' :: STArray s Vertex Epoch -> Epoch ->
          Forest Vertex -> ST s (Forest' Vertex)
-chop' m epoch [] = return []
+chop' _ _ [] = return []
 chop' m epoch (Node v ts : us) = do
   visited <- readArray m v
   case compare visited epoch of

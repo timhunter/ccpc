@@ -1,42 +1,22 @@
-module Partition where
+{-# OPTIONS -W #-}
 
-import MCFG
+module Partition (partition) where
+
+import CFG (CFG, isNonterminal)
 import Graph (Graph, Vertex, SCCL(..), sccL)
-import Data.List (foldl')
-import Data.Maybe (fromJust, fromMaybe)
+import Data.Maybe (fromMaybe)
 import qualified Data.Array as A
-import qualified Data.Map as M
 import qualified Data.IntMap as IM
 import qualified Numeric.GSL as G
 import qualified Numeric.Container as C
 
-type Map cat term = M.Map cat [(Maybe Rational, RHS Vertex term)]
 type Formula = [(Double, [Vertex])]
 
--- Try: starts (partition 1e-20 1000 (mcfgMap (MCFGRead.mcfgFromFile "copy.abba.mcfg")))
+-- Try: partition 1e-20 1000 (snd (CFG.cfgOfMCFG (MCFGRead.mcfgFromFile "copy.abba.mcfg"))) A.! 0
 
--- Turn a list of parsed MCFG rules into a map from LHS to RHSs
-mcfgMap :: (Ord cat) => MCFG cat term -> Map cat term
-mcfgMap g = m where
-  m = M.unionsWith (++) (map f g)
-  i cat = M.findIndex cat m
-  f (Rule weight lhs (Cats children stringyield))
-    = M.insert lhs [(weight, Cats (map i children) stringyield)]
-               (M.fromList [ (cat,[]) | cat <- children ])
-  f (Rule weight lhs (Term term))
-    = M.singleton lhs [(weight, Term term)]
-
--- Take a slice of an MCFG map that consists of the start symbols(' rules),
--- i.e., symbols that are strings that begin with S
-starts :: M.Map String a -> M.Map String a
-starts m = let (_, s, after)  = M.splitLookup "S" m
-               (before, _, _) = M.splitLookup "T" after
-           in maybe before (\a -> M.insert "S" a before) s
-
--- Turn an MCFG map into a graph of nonterminal usage
-mcfgGraph :: Map cat term -> Graph
-mcfgGraph m = A.listArray (0, M.size m - 1)
-  [ [ j | (_, Cats js _) <- rhss, j <- js ] | rhss <- M.elems m ]
+-- Turn a CFG into a graph of nonterminal usage
+graphOfCFG :: CFG -> Graph
+graphOfCFG = fmap (filter isNonterminal . concatMap snd)
 
 -- The vector-to-vector function whose least root we want.  The arguments
 -- (curried so as to cache temporary tables) are: the MCFG map, the known
@@ -44,19 +24,15 @@ mcfgGraph m = A.listArray (0, M.size m - 1)
 -- current estimates.  The return value is a table of the current estimates
 -- along with the difference vector between the new estimates and the current
 -- estimates.
-iteration :: Map cat term -> A.Array Vertex Double -> SCCL ->
+iteration :: CFG -> A.Array Vertex Double -> SCCL ->
              [Double] -> (IM.IntMap Double, [Double])
-iteration m =
-  let m' = M.map (\rhss -> [ (fromRational (fromJust weight),
-                              case rhs of Cats children _ -> children
-                                          _               -> [])
-                           | (weight, rhs) <- rhss ])
-                 m
+iteration cfg =
+  let cfg' = fmap (map (fmap (filter isNonterminal))) cfg
   in
   \known SCCL{members=members,nonlinking=nonlinking} ->
   let linking :: IM.IntMap (Bool, Formula)
       linking = IM.fromList
-        [ (i, (linking, snd (M.elemAt i m')))
+        [ (i, (linking, cfg' A.! i))
         | (is, linking) <- [(members, True), (nonlinking, False)]
         , i <- is ]
   in
@@ -81,19 +57,22 @@ iteration m =
 
 -- Main function for computing the partition function.  The arguments are:
 -- the accuracy desired, the maximum number of iterations for each strongly
--- connected component, and the MCFG map.  The return value is a map from
--- nonterminals to their Z values.
-partition :: Double -> Int -> Map cat term -> M.Map cat Double
-partition residual duration m = result where
-  ([], result) = M.mapAccum (\(x:xs) _ -> (xs,x)) (A.elems known) m
-  iter = iteration m known
-  known = A.array (0, M.size m - 1) (do
-    c@SCCL{members=members,nonlinking=nonlinking} <- sccL (mcfgGraph m)
+-- connected component, and the MCFG map.  The return values are: the list
+-- of strongly connected components, the list of nonterminals and their Z
+-- values, and this last list tabulated as an array.
+partition :: Double -> Int -> CFG ->
+             ([SCCL], [(Vertex, Double)], A.Array Vertex Double)
+partition residual duration cfg = (cs, list, known) where
+  iter = iteration cfg known
+  known = A.array (A.bounds cfg) list
+  cs = sccL (graphOfCFG cfg)
+  list = do
+    c@SCCL{members=members,nonlinking=nonlinking} <- cs
     let iter_c = iter c
         (solution, path) = G.root G.Broyden residual duration
                              (snd . iter_c) [0 | _ <- nonlinking]
         final | null nonlinking        = (fst (iter_c []      ) IM.!)
               | C.rows path < duration = (fst (iter_c solution) IM.!)
               | otherwise              = \i -> error "did not converge"
-    [ (i, final i) | i <- members ])
+    [ (i, final i) | i <- members ]
 

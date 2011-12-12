@@ -80,7 +80,7 @@ theNumberedGrammar =
   map (fmap (map (first (Renum . (`M.findIndex` theCats))) .)) theGrammar
 
 theCFG :: CFG
-theCFG = A.accumArray (flip (:)) [] (0, M.size theCats - 1)
+theCFG = A.accumArray (flip (:)) [] (0, M.size theNonlexCats - 1)
            [ (M.findIndex lhs theNonlexCats, (fromRational wt, map f rhs))
            | (_, thunk) <- theNonlexGrammar
            , rule <- thunk ()

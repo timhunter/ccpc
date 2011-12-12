@@ -19,10 +19,8 @@ import qualified Data.Map as M
 -- Multiple context-free grammars in mcfgcky2 format
 
 type MCFG cat term = [Rule cat term]
-data Rule cat term = Rule (Maybe Rational) cat (RHS cat term)
-  deriving (Eq, Ord)
-data RHS  cat term = Cats [cat] [[(Int, Int)]] | Term term
-  deriving (Eq, Ord)
+data Rule cat term = Rule (Maybe Rational) cat (RHS cat term) deriving (Eq, Ord)
+data RHS  cat term = Cats [cat] [[(Int, Int)]] | Term term    deriving (Eq, Ord)
 
 instance (NFData cat, NFData term) => NFData (Rule cat term) where
   rnf (Rule wt lhs rhs) = rnf wt `seq` rnf lhs `seq` rnf rhs

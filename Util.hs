@@ -1,3 +1,5 @@
+{-# OPTIONS -W #-}
+
 module Util (printListToFile, concurrently) where
 
 import Control.Exception (finally)
