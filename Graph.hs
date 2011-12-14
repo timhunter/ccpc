@@ -4,6 +4,7 @@ module Graph (module Data.Graph, SCCL(..), sccL) where
 
 import Data.Array
 import Data.Graph
+import Data.Binary (Binary(put, get))
 import Data.Array.ST (STArray, newArray, readArray, writeArray)
 import Control.Monad
 import Control.Monad.ST
@@ -15,6 +16,13 @@ import Control.Monad.ST
 
 data SCCL = SCCL { members, nonlinking :: [Vertex] } deriving (Show, Read)
 
+instance Binary SCCL where
+  put (SCCL m n) = do put m
+                      put n
+  get = do m <- get
+           n <- get
+           return (SCCL m n)
+
 sccL :: Graph -> [SCCL]
 sccL g = map (`decode` SCCL [] []) (dfs' g (topSort (transposeG g)))
 
@@ -23,10 +31,13 @@ type Forest' a = [Tree' a]
 
 type Epoch = Int
 
+-- For Partition.iterationGen to work, this traversal must be postfix!
+-- This is unlike the decode function in Data.Graph.stronglyConnCompR
 decode :: Tree' Vertex -> SCCL -> SCCL
-decode (Node' v ts) c = SCCL (v : members c') (nonlinking c')
-  where c' = foldr decode c ts
-decode (Nonlink v)  c = SCCL (members c) (v : nonlinking c)
+decode (Node' v ts) c =
+  foldr decode SCCL{members = v : members c, nonlinking = nonlinking c} ts
+decode (Nonlink v) c =
+  SCCL{members = members c, nonlinking = v : nonlinking c}
 
 dfs' :: Graph -> [Vertex] -> Forest' Vertex
 dfs' g vs = prune' (bounds g) (map (generate g) vs)

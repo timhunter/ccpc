@@ -1,11 +1,14 @@
 {-# OPTIONS -W #-}
-module Broyden (broyden, broyden', zero) where
+module Broyden (broyden, broyden', zero, Doubles) where
 
 import Data.List
-import Data.Array.IArray
+import qualified Data.Vector.Generic as G
+import qualified Data.Vector.Storable as S
+import qualified Data.Vector.Fusion.Stream as Stream
 
-broyden, broyden' :: (IArray a e, Ix i, RealFloat e) =>
-                     (a i e -> a i e) -> Int -> a i e -> (Int, a i e)
+type Doubles = S.Vector Double
+
+broyden, broyden' :: (Doubles -> Doubles) -> Int -> Doubles -> (Int, Doubles)
 
 broyden f = loop 0
   -- outer loop with restarts every 20 iterations
@@ -18,19 +21,23 @@ broyden f = loop 0
 broyden' f steps init = fst (head (dropWhile continue path))
   where continue ((k,_x),(x1,s,ss)) =
           k < steps && ss > 0 && not (isDenormalized ss) &&
-          or (zipWith (\x1 s -> x1/=0 && abs (s/x1) >= 1e-10) (elems x1) (elems s))
+          Stream.or (Stream.zipWith (\x1 s -> x1/=0 && abs (s/x1) >= 1e-10) (G.stream x1) (G.stream s))
         path = zip (zip [0..] x) (zip3 (tail x) s ss)
+        x, z, s :: [Doubles]
         x = init : zipWith plus x s
         z = [ foldl' (\z (sj:sj1:_, sjsj) ->
-                      z `plus` amap ((sj `dot` z / sjsj) *) sj1)
+                      G.zipWith ((+) . ((sj `dot` z / sjsj) *)) sj1 z)
                      zinit
                      (zip (take k (tails s)) ss)
             | (k, zinit) <- zip [0..] (map f (tail x)) ]
-        s = f init : zipWith3 (\z sk sksk -> amap (/ (1 - sk `dot` z / sksk)) z)
+        s = f init : zipWith3 (\z sk sksk -> G.map (/ (1 - sk `dot` z / sksk)) z)
                               z s ss
+        ss :: [Double]
         ss = [ sj `dot` sj | sj <- s ]
-        plus u v = listArray (bounds init) (zipWith (+) (elems u) (elems v))
-        dot  u v = sum (zipWith (*) (elems u) (elems v))
+        plus :: Doubles -> Doubles -> Doubles
+        plus = G.zipWith (+)
+        dot :: Doubles -> Doubles -> Double
+        dot u v = Stream.foldl' (+) 0 (Stream.zipWith (*) (G.stream u) (G.stream v))
 
-zero :: (IArray a e, Ix i, Num e) => (i, i) -> a i e
-zero bounds = accumArray undefined 0 bounds []
+zero :: Int -> Doubles
+zero ln = S.replicate ln 0
