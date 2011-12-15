@@ -2,6 +2,7 @@ module Stage where
 
 import Foreign
 import Foreign.C
+import Numeric (showHex)
 import System.IO.Unsafe (unsafePerformIO)
 import System.Directory (getTemporaryDirectory, removeFile)
 import System.IO (openTempFile, hClose, hPutStr)
@@ -18,18 +19,16 @@ import qualified Data.Vector.Storable as S
 
 -- Render floating-point constants in hexadecimal
 
-foreign import ccall "stdio.h" snprintf :: CString -> CSize -> CString -> CDouble -> IO CInt
-
 showADouble :: Double -> String
-showADouble =
-  \x -> unsafeLocalState $
-        allocaArray (fromIntegral size) (\buffer ->
-        snprintf buffer size format (realToFrac x) >>= \written ->
-        if 0 < written && written < fromIntegral size
-        then peekCAString buffer
-        else error ("showADouble: snprintf returned " ++ show written))
-  where size = 42
-        format = unsafePerformIO (newCAString "%a")
+showADouble d | isNaN d = "NAN"
+showADouble d = case decodeFloat d of
+                (m,n) -> case compare m 0 of
+                         LT | isInfinite d     -> "(-INFINITY)"
+                         LT -> "-0x" ++ showHex (-m) ("p" ++ show n)
+                         EQ | isNegativeZero d -> "-0."
+                         EQ                    -> "0."
+                         GT | isInfinite d     -> "INFINITY"
+                         GT -> "0x" ++ showHex m ("p" ++ show n)
 
 -- Offshore to C the computation of the function whose root we want
 
@@ -58,13 +57,14 @@ paginateCode params args = go 1 [] [] . map Compute where
     (f, un) -> let name = "f" ++ show n
                in go (succ n) (name : uses) (define name f : defns) un
   declare name = "void " ++ name ++ "(" ++ params ++ ");"
-  define name stmts = unlines
-    (   [ declare name' | Invoke name' <- stmts ]
+  define name stmts = unlines $
+        ["#define _ISOC99_SOURCE", "#include <math.h>"] -- for NAN and INFINITY
+     ++ [ declare name' | Invoke name' <- stmts ]
      ++ ["void " ++ name ++ "(" ++ params ++ ") {"]
      ++ [ case stmt of Compute s -> s
                        Invoke name' -> name' ++ "(" ++ args ++ ");"
         | stmt <- stmts ]
-     ++ ["}"]  )
+     ++ ["}"]
   rev []     a = a
   rev (x:xs) a = rev xs (x:a)
 
