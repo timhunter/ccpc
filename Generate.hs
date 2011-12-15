@@ -9,6 +9,7 @@ import CFG (CFG, Vertex, isTerminal)
 import Data.Binary (decodeFile)
 import Data.Array.IArray
 import Data.Array.Unboxed (UArray)
+import Util (decodeListFromFile)
 import qualified System.Random as R
 import qualified Data.ByteString.Lazy.Char8 as B
 
@@ -16,13 +17,10 @@ data Item = LB | RB | Fail | Lex Vertex
 
 main :: IO ()
 main = do
-  theCFG <- decodeFile "wsj.cfg"
-  thePartitionFile <- B.readFile "wsj.partition"
-  theWordsFile <- B.readFile "wsj.words"
-  let thePartition :: UArray Vertex Double
-      thePartition = listArray (bounds theCFG)
-                       (map (read . B.unpack) (B.lines thePartitionFile))
-      theWords :: Array Vertex B.ByteString
+  theCFG <- decodeFile "wsj.cfg" :: IO CFG
+  thePartition <- decodeListFromFile "wsj.car-dealer.partition" :: IO [UArray Vertex Double]
+  theWordsFile <- B.readFile "wsj.words" :: IO B.ByteString
+  let theWords :: Array Vertex B.ByteString
       theWords = let bs = B.lines theWordsFile
                  in listArray (1, length bs) bs
       show' :: Item -> String
@@ -30,7 +28,7 @@ main = do
       show' RB      = "]"
       show' Fail    = "?"
       show' (Lex n) = B.unpack (theWords ! (-n))
-  forever $ R.getStdRandom (runState (generate theCFG thePartition 0))
+  forever $ R.getStdRandom (runState (generate theCFG (head thePartition) 0))
             >>= putStrLn . intercalate " " . map show'
 
 random :: (R.RandomGen g, MonadState g m, R.Random a) => m a
@@ -41,7 +39,7 @@ randomR b = get >>= \g -> let (a,g') = R.randomR b g in put g' >> return a
 
 generate :: (R.RandomGen g, MonadState g m) =>
             CFG -> UArray Vertex Double -> Vertex -> m [Item]
-generate g p = f 20 where
+generate g p = f 100 where
   f fuel lhs
     | fuel < 0       = return [Fail]
     | isTerminal lhs = return [Lex lhs]
