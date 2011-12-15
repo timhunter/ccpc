@@ -1,4 +1,4 @@
-module Merge (merge, mergeBy) where
+module Merge (merge, mergeBy, crossWith, crossBy, crossByWith) where
 
 import PriorityQueue.PriorityQueue
 
@@ -15,3 +15,11 @@ mergeBy cmp xss = go (fromListBy cmp' [ (x,xs) | x:xs <- xss ])
                                      [] -> q'
                                      x:xs -> insertBy cmp' (x,xs) q'))})
 
+crossWith :: (Ord c) => (a -> b -> c) -> [a] -> [b] -> [c]
+crossWith = crossByWith compare
+
+crossBy :: ((a,b) -> (a,b) -> Ordering) -> [a] -> [b] -> [(a,b)]
+crossBy cmp = crossByWith cmp (,)
+
+crossByWith :: (c -> c -> Ordering) -> (a -> b -> c) -> [a] -> [b] -> [c]
+crossByWith cmp f xs ys = mergeBy cmp [ map (f x) ys | x <- xs ]
