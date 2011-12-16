@@ -1,6 +1,11 @@
 {-# OPTIONS -W #-}
 
-module CFG (CFG, Vertex, graphOfCFG, isNonterminal, isTerminal, cfgOfMCFG) where
+module CFG (
+    CFG, Vertex, aCFG,
+    graphOfCFG,
+    isNonterminal, isTerminal,
+    cfgOfMCFG
+) where
 
 import MCFG (MCFG, Rule(Rule), RHS(Cats, Term), MapMCFG(MapMCFG), mapmcfgOfRule)
 import Reduce (mapReduce)
@@ -14,6 +19,9 @@ import qualified Data.Map as M
 -- are terminals, non-negative numbers are non-terminals, and zero is the
 -- start symbol.
 type CFG = A.Array Vertex [(Double, [Vertex])]
+
+aCFG :: CFG -- a deficient example
+aCFG = A.listArray (0,0) [[(1/3, [-1]), (1/3, [0])]]
 
 -- Turn a CFG into a graph of nonterminal usage
 graphOfCFG :: CFG -> Graph
