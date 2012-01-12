@@ -2,7 +2,6 @@
 
 module Generate (main, top, generate) where
 
-import Data.List (intercalate)
 import Control.Monad (liftM, liftM2, forever, foldM)
 import CFG (CFG, Vertex, isTerminal)
 import Chart (Chart(..), Cell(Universe), infixChart)
@@ -20,12 +19,15 @@ type Phrase = [Item]
 type Stream = [(Double, Maybe Phrase)]
 
 showPhraseBy :: (a -> String) -> Array Vertex a -> Phrase -> String
-showPhraseBy unpack words = intercalate " " . map show' where
-  show' :: Item -> String
-  show' LB      = "["
-  show' RB      = "]"
-  show' Fail    = "?"
-  show' (Lex n) = unpack (words ! (-n))
+showPhraseBy unpack words = go where
+  go  []          = ""
+  go  (LB   : xs) = "["                   ++ go  xs
+  go  (RB   : xs) = "]"                   ++ go' xs
+  go  (Fail : xs) = "?"                   ++ go' xs
+  go  (Lex n: xs) = unpack (words ! (-n)) ++ go' xs
+  go' []          = ""
+  go' (RB   : xs) = "]" ++ go' xs
+  go' xs          = " " ++ go  xs
 
 showStreamBy :: (a -> String) -> Array Vertex a -> Stream -> IO ()
 showStreamBy unpack words stream = foldM go 0 stream >> return () where
@@ -47,17 +49,17 @@ main = do
       thePinnacle = last (last (levels theChart))
   known <- fmap (listArray (0, indexOfCell theChart thePinnacle)
                  . withStrategy (parList rseq))
-                (decodeListFromFile "wsj.car-dealer.partition"
-                 :: IO [UArray Vertex Double])
-  forever $ runStdRandom (generate theCFG theChart known thePinnacle 0)
-            >>= putStrLn . showPhraseBy B.unpack theWords
+                (decodeListFromFile "wsj.car-dealer.partition")
+           :: IO (Array Int (UArray Vertex Double))
+  -- forever $ runStdRandom (generate theCFG theChart known thePinnacle 0)
+  --           >>= putStrLn . showPhraseBy B.unpack theWords
   showStreamBy B.unpack theWords
     (top theCFG (known ! indexOfCell theChart Universe) ! 0)
 
 -- Try: let prt = head (Partition.partitions CFG.aCFG (Chart.infixChart [-1]) 1000 (Graph.sccL (CFG.graphOfCFG CFG.aCFG))) in mapM_ print (take 10 (top CFG.aCFG prt ! 0))
 -- Try: let (words, cfg) = CFG.cfgOfMCFG (MCFGRead.mcfgFromFile "grammars/wmcfg/strauss.wmcfg"); prt = Partition.partitions cfg (infixChart []) 1000 (Graph.sccL (CFG.graphOfCFG cfg)) in showStreamBy id words (top cfg (head prt) ! 0)
 
-descend :: Stream -> Stream
+descend :: [(Double, Maybe a)] -> [(Double, Maybe a)]
 descend [] = []
 descend ((wt, x) : xs) = (wt, x) : go wt xs where
   go _   [] = []
@@ -67,13 +69,14 @@ descend ((wt, x) : xs) = (wt, x) : go wt xs where
 top :: CFG -> UArray Vertex Double -> Array Vertex Stream
 top cfg prt = a where
   a = listArray (bounds cfg) (map f (indices cfg))
-  f lhs = descend
+  f lhs = map (fmap (fmap concat'))
+        $ descend
         $ (prt ! lhs, Nothing) -- prt bounds the tropical partition function from above
         : toListBy cmp ((cfg ! lhs) >>= \(wt, rhs) ->
           foldr prepend (singleton (wt, Just [])) rhs)
-  prepend v | isTerminal v = map (fmap (fmap (fmap (Lex v :))))
+  prepend v | isTerminal v = map (fmap (fmap (fmap ([Lex v] :))))
             | otherwise    = crossWithAscList multiply (a ! v)
-  multiply (p,xs) (q,ys) = (p*q, liftM2 (++) xs ys)
+  multiply (p,xs) (q,ys) = (p*q, liftM2 (:) xs ys)
   cmp (p,_) (q,_)        = compare q p
 
 generate :: CFG -> Chart -> Array Int (UArray Vertex Double) ->
@@ -104,5 +107,7 @@ generate cfg Chart{epsilon=epsilon,
                         , not (null interp'r)
                         , (wt'l, yield'l) <- interp'l
                         , (wt'r, yield'r) <- interp'r ]
-  concat' xs | length xs > 2 = [LB] ++ concat xs ++ [RB]
-             | otherwise     =         concat xs
+
+concat' :: [[Item]] -> [Item]
+concat' xs | length xs > 1 = [LB] ++ concat xs ++ [RB]
+           | otherwise     =         concat xs
