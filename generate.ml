@@ -62,50 +62,49 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
        end
 
 
-(* this function only generates a random tree
-  let rec generate_all g items = 
-    let nonterm = List.map Rule.get_nonterm g in
-	if List.mem (List.hd items) nonterm then
-	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
-	  let rule_selected = Rule.get_rhs (List.nth productions (Random.int (List.length productions))) in
-	    if List.length rule_selected = 1 then Node ((List.hd items),[generate_all g rule_selected])
-	    else Node ((List.hd items),[(generate_all g [List.hd rule_selected]);(generate_all g (List.tl rule_selected))])
-	else Node ((List.hd items),[])
-*)
-
-
    (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
    let sort_rules rules = 
      let rulecompare r1 r2 =
        match ((Rule.get_weight r1),(Rule.get_weight r2)) with
-	 | (Some (num1,denom1),Some (num2,denom2)) -> -(compare num1 num2)
+	 | (Some (num1,_),Some (num2,_)) -> compare_num num1 num2 (* we're assuming here that all the denominators are equal *)
 	 | (None,_) -> 0 
 	 | (_,None) -> 0 
      in
        List.sort rulecompare rules
 
-let n_of num denom = div_num (num_of_int num) (num_of_int denom)
+   let n_of num denom = div_num (num_of_int num) (num_of_int denom)
 
-   (* getting the weight in int. for a rule*)
-   let some_to_int weight = 
-     match weight with
-	 | Some (num,denom) -> (num,denom)
-	 | None -> failwith "There's no weight here"
- 
-  (* weighted random sampling*)
-  let weighted_random rules =
-    if (List.length rules) = 1 then (List.hd rules) else
-      let sorted_rules = sort_rules rules in
-      let random = Random.int64 (Int64.of_int (snd (some_to_int (Rule.get_weight (List.hd sorted_rules)))+1))  in
-        let rec select rnd r =
-	  if List.length r = 1 then (List.hd r) else 
-	    let diff = Int64.sub rnd (Int64.of_int (fst (some_to_int (Rule.get_weight (List.hd r))))) in
-	      if diff < Int64.zero then (List.hd r)	  
-	      else select diff (List.tl r) 
-	in
-	  select random sorted_rules
+   exception Unweighted of string
 
+   let numerator_of_rule r =
+     match (Rule.get_weight r) with
+	 Some (n,_) -> n
+       | None -> raise (Unweighted (Rule.to_string r))
 
+   let denominator_of_rule r =
+     match (Rule.get_weight r) with
+	 Some (_,d) -> d
+       | None -> raise (Unweighted (Rule.to_string r))
+
+   let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n)
+
+  (* weighted random sampling
+     assumes the first denominator is the denominator shared by all the rule
+     we're using the 64-bit random number generator because these denominators are so freakin large
+   *)
+  let weighted_random rules = match rules with
+      [] -> failwith "weighted_random: no rules"
+    | r::[] -> r
+    | _ -> let sorted_rules = sort_rules rules in
+	   let one = Num.num_of_int 1 in
+	   let die_roll = Random.int64 (i64_of_num ((denominator_of_rule (List.hd sorted_rules)) +/ one)) in
+	   let rec select stillleft = function
+	        [] -> failwith "select: no rules"
+	     | r::[] -> r
+	     | r::rs -> let diff = Int64.sub stillleft (i64_of_num (numerator_of_rule r)) in
+	       if diff < Int64.zero then r else select diff rs
+	   in
+	   select die_roll sorted_rules
 
 (* generate a random tree and its weight*)
 let rec generate_all g items w = 
@@ -116,7 +115,7 @@ let rec generate_all g items w =
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    match (Rule.get_weight rule_selected) with
-	      | Some (num,denom) -> mult_num (div_num (num_of_int num) (num_of_int denom)) w
+	      | Some (num,denom) -> mult_num (div_num num denom) w
 	      | None -> w in
 	    if List.length rule_selected_rhs = 1 then 
 	      let child = generate_all g rule_selected_rhs current_w in
@@ -151,7 +150,7 @@ let generate grammar_file =
   let items = [start_symbol] in
   let rec add_n g items w n =
     if n < 1 then []
-    else (generate_all g items w)::(add_n g items w (n-1)) 
+    else (generate_all g items w)::(add_n g items w (n-1))
   in
-  let ntrees = add_n g items (n_of 1 1) 300 in
+  let ntrees = add_n g items (n_of 1 1) 300 in (* magic number: 300 samples *)
     sort_trees (remove_duplicate ntrees)

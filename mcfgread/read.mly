@@ -1,11 +1,10 @@
 %{
 open Rule
 open Util
-open Rational
+open Num
 %}
-%token ARROW NEWLINE EOF LBRAC RBRAC COMMA INT CONCAT EPSILON SLASH TERM_EMPTY
-%token <string> CAT TERM
-%token <int> INT
+%token ARROW NEWLINE EOF LBRAC RBRAC COMMA DIGITS CONCAT EPSILON SLASH TERM_EMPTY
+%token <string> CAT TERM DIGITS
 %start mcfgrule
 %type <Rule.r list> mcfgrule
 %%
@@ -25,7 +24,11 @@ rule:
 
 weight:
    {None}
-|  INT SLASH INT {Some ($1,$3)}
+|  DIGITS SLASH DIGITS { try
+			   Some ((num_of_string $1),(num_of_string $3))
+                          with
+			  _ -> failwith ("could not read the weight: "^$1^" / "^$3^"\n")
+                  }
 ;
 
 children:
@@ -43,4 +46,4 @@ component:
 |  EPSILON CONCAT component { Rule.Epsilon :: $3};
 
 tuple:
-   INT COMMA INT { Rule.Component($1,$3) };
+   DIGITS COMMA DIGITS { Rule.Component((int_of_string $1),(int_of_string $3)) };

@@ -1,11 +1,11 @@
 open Util
-open Rational
+open Num
 
     type component = Component of int * int | Epsilon
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
     type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)    
-    type r = Terminating of (string * string * (Rational.rat option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * (Rational.rat option))
+    type r = Terminating of (string * string * ((num * num) option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * ((num * num) option))
 
     (**********************************************************)
 
@@ -167,7 +167,7 @@ open Rational
       let recipe = String.concat "" recipe in 
       let weight_str =
         match (get_weight rule) with
-        | Some (w1,w2) -> Printf.sprintf "%d / %d     " w1 w2
+        | Some (w1,w2) -> ((Num.string_of_num (Num.div_num w1 w2))^"     ")  (*  Printf.sprintf "%d / %d     " w1 w2 *)
         | None -> ""
       in
       Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe

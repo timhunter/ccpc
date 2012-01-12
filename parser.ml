@@ -2,7 +2,6 @@ open Util
 open Rule
 open Tables
 open Chart
-open Rational
 
     type prim = Rule.r
     type input = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
@@ -134,7 +133,7 @@ open Rational
       let left_map = build_rule_map (Array.get arity_map 2) 0 in 
       let right_map = build_rule_map (Array.get arity_map 2) 1 in
       let single_map = build_rule_map (Array.get arity_map 1) 0 in
-      let axioms_list : ((item * Rule.r * Rational.rat option) list) = get_axioms prims input in   
+      let axioms_list : ((item * Rule.r * (Num.num * Num.num) option) list) = get_axioms prims input in   
       let axioms =
         let tbl = Chart.create 100 in 
         let rec add lst  =

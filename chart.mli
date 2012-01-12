@@ -1,6 +1,6 @@
 type item
 type chart 
-type route = (item list) * Rule.r * Rational.rat option
+type route = (item list) * Rule.r * (Num.num * Num.num) option
 type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 
 val get_nonterm: item -> string

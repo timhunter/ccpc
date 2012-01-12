@@ -16,7 +16,7 @@ rule token = parse
    |  ']'                                                { RBRAC }
    |  skip+                                              { token lexbuf }
    |  '\n'                                               { NEWLINE }
-   |  [ '0'-'9' ]+ as tupleint                           { INT (int_of_string tupleint) }
+   |  [ '0'-'9' ]+ as tupleint                           { DIGITS tupleint }
    |  ';'                                                { CONCAT }
    |  ','                                                { COMMA }
    |  [^ '\n']* eof                                      { EOF }

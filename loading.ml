@@ -2,7 +2,7 @@
 
 #load "profiling.cmo";;
 #load "util.cmo";;
-#load "kbest/rational.cmo";;
+(* #load "kbest/rational.cmo";; *)
 #load "nelist.cmo";;
 #load "rule.cmo";;
 #load "mcfgread/read.cmo";;
@@ -13,5 +13,4 @@
 #load "grammar.cmo";;
 #load "derivation.cmo";;
 #load "nums.cma";;
-#use "main.ml";;
-   
+(* #use "main.ml";; *)
