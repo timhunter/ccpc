@@ -46,7 +46,10 @@ main = do
   encodeListToFile "wsj.card-dealer.partition" thePartition
 
 partitions :: CFG -> Chart -> Int -> [SCCL] -> [UArray Vertex Double]
-partitions cfg chart stepsMax cs = loop (array (0,-1) []) (levels chart) where
+partitions cfg chart@Chart{minCell=minCell,
+                           indexOfCell=indexOfCell,
+                           levels=levels} stepsMax cs =
+  loop (array (indexOfCell minCell, indexOfCell minCell - 1) []) levels where
   loop :: Array Int (UArray Vertex Double) -> [[Cell]] -> [UArray Vertex Double]
   loop _known [] = []
   loop known (cells:levels) = new ++ loop known' levels

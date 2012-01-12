@@ -1,6 +1,9 @@
 {-# OPTIONS -W #-}
 
-module Chart where
+module Chart (
+    Chart(..), Cell(..),
+    infixChart, prefixChart, suffixChart, exactChart
+) where
 
 import Graph (Vertex)
 import Data.Word (Word8)
@@ -8,6 +11,8 @@ import Data.Array.IArray
 import Data.Array.Unboxed (UArray)
 
 data Chart = Chart {
+  minCell     :: Cell,
+  maxCell     :: Cell,
   levels      :: [[Cell]],
   indexOfCell :: Cell -> Int,
   cellOfIndex :: Int -> Cell,
@@ -23,19 +28,49 @@ data Cell = Universe
   deriving (Eq, Ord, Show)
 
 infixChart :: [Vertex] -> Chart
-infixChart terminals = Chart {
-  levels = levels,
+infixChart []        = universeChart
+infixChart terminals = mixfixChart True True terminals
+
+prefixChart :: [Vertex] -> Chart
+prefixChart []        = universeChart
+prefixChart terminals = mixfixChart False True terminals
+
+suffixChart :: [Vertex] -> Chart
+suffixChart []        = universeChart
+suffixChart terminals = mixfixChart True False terminals
+
+exactChart :: [Vertex] -> Chart
+exactChart = mixfixChart False False
+
+universeChart :: Chart
+universeChart = Chart {
+  minCell = Universe,
+  maxCell = Universe,
+  levels  = [[Universe]],
+  indexOfCell = \Universe -> 0,
+  cellOfIndex = \0 -> Universe,
+  splits = \Universe -> [(Universe, Universe)],
+  epsilon = \Universe -> 1,
+  terminal = \Universe _t -> 1
+}
+
+mixfixChart :: Bool -> Bool -> [Vertex] -> Chart
+mixfixChart before after terminals = Chart {
+  minCell     = cells ! fst (bounds cells),
+  maxCell     = cells ! snd (bounds cells),
+  levels      = levels,
   indexOfCell = \c -> case c of
                       Universe -> 0
                       Epsilon -> 1
                       Range i j -> 2 + (2 + 2 * fi n + fi i - fi j)
                                        * (fi j - fi i - 1) `div` 2
                                      + fi i,
-  cellOfIndex = \i -> cells ! fromIntegral i,
+  cellOfIndex = \i -> cells ! i,
   splits      = \c -> case c of
                       Universe -> [(Universe, Universe)]
                       Epsilon -> [(Epsilon, Epsilon)]
-                      Range i j -> let stay k | k == 0 || k == n = Universe
+                      Range i j -> let stay k | before && k == 0
+                                              || after && k == n = Universe
                                               | otherwise        = Epsilon
                                    in [(stay i, c)]
                                    ++ [(Range i k, Range k j) | k <- [i+1..j-1]]
@@ -54,12 +89,12 @@ infixChart terminals = Chart {
         n = fromIntegral (length terminals)
         a :: UArray Word8 Vertex
         a = listArray (1,n) terminals
-        size :: Int
-        size = fi n * (fi n + 1) `div` 2 + 2
         fi :: Word8 -> Int
         fi = fromIntegral
         cells :: Array Int Cell
-        cells = listArray (0,size-1) (concat levels)
+        cells = listArray (if before || after then 0 else 1,
+                           fi n * (fi n + 1) `div` 2 + 1)
+                          (concat levels)
         levels :: [[Cell]]
-        levels = [Universe, Epsilon]
+        levels = ([Universe | before || after] ++ [Epsilon])
                : [ [Range i (i+l) | i <- [0..n-l]] | l <- [1..n] ]
