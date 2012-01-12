@@ -1,6 +1,7 @@
 {-# OPTIONS -W #-}
 
 module Util (
+    putStrsLnToFile, getLinesFromFile,
     printListToFile, readListFromFileLines,
     encodeListToFile, decodeListFromFile,
     concurrently,
@@ -13,21 +14,27 @@ import Data.Binary.Put
 import Control.Exception (bracket, finally)
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
-import System.IO (withFile, IOMode(ReadMode, WriteMode), hPrint, hGetLine, hFlush, hIsEOF, hClose, openBinaryFile)
+import System.IO (withFile, IOMode(ReadMode, WriteMode), hPutStrLn, hGetLine, hFlush, hIsEOF, hClose, openBinaryFile)
 import qualified Control.Monad.State.Lazy as State
 import qualified Data.ByteString.Lazy as B
 import qualified System.Random as R
 
-printListToFile :: (Show a) => FilePath -> [a] -> IO ()
-printListToFile file xs = withFile file WriteMode
-                            (\h -> mapM_ (\x -> hPrint h x >> hFlush h) xs)
+putStrsLnToFile :: FilePath -> [String] -> IO ()
+putStrsLnToFile file xs = withFile file WriteMode
+                            (\h -> mapM_ (\x -> hPutStrLn h x >> hFlush h) xs)
 
-readListFromFileLines :: (Read a) => FilePath -> IO [a]
-readListFromFileLines file = withFile file ReadMode loop
+printListToFile :: (Show a) => FilePath -> [a] -> IO ()
+printListToFile file xs = putStrsLnToFile file (map show xs)
+
+getLinesFromFile :: FilePath -> IO [String]
+getLinesFromFile file = withFile file ReadMode loop
   where loop h = do b <- hIsEOF h
                     if b then return [] else do l <- hGetLine h
                                                 xs <- loop h
-                                                return (read l : xs)
+                                                return (l : xs)
+
+readListFromFileLines :: (Read a) => FilePath -> IO [a]
+readListFromFileLines = fmap (map read) . getLinesFromFile
 
 encodeListToFile :: (Binary a) => FilePath -> [a] -> IO ()
 encodeListToFile file xs = bracket (openBinaryFile file WriteMode) hClose

@@ -133,6 +133,7 @@ withFortran lm ln codes k | lm >= ln =
 
 dl_lock :: MVar () -- This doesn't seem to help fix multithreading problems
 dl_lock = unsafePerformIO (newMVar ())
+{-# NOINLINE dl_lock #-}
 
 fillNaN :: Ptr Double -> Int -> IO ()
 fillNaN _ n | n <= 0 = return ()

@@ -31,17 +31,19 @@ main :: IO ()
 main = do
   theCFG <- decodeFile "wsj.cfg"
   theSCCs <- theCFG `par`
-             if False
+             if True
                then decodeListFromFile "wsj.sccs" >>= evaluate
-               else do let theSCCs = sccL (graphOfCFG theCFG)
+               else do let theSCCs = sccL (graphOfCFG theCFG) -- +RTS -K1g
                        encodeListToFile "wsj.sccs" theSCCs
                        return theSCCs
   evaluate theCFG
   let theChart :: Chart
-      theChart = infixChart [-4070 {-car/NN-}, -9756 {-dealer/NN-}]
+      theChart = infixChart -- [-4070 {-car/NN-}, -9756 {-dealer/NN-}]
+                            -- [-5175 {-drug/NN-}, -9756 {-dealer/NN-}]
+                            [-4807 {-card/NN-}, -9756 {-dealer/NN-}]
       thePartition :: [UArray Vertex Double]
       thePartition = partitions theCFG theChart 1000 theSCCs
-  encodeListToFile "wsj.car-dealer.partition" thePartition
+  encodeListToFile "wsj.card-dealer.partition" thePartition
 
 partitions :: CFG -> Chart -> Int -> [SCCL] -> [UArray Vertex Double]
 partitions cfg chart stepsMax cs = loop (array (0,-1) []) (levels chart) where

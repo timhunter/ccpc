@@ -6,7 +6,12 @@ module Grammar (
     main, Grammar, mapReduce,
     theGrammar, theLexGrammar, theNonlexGrammar,
     theCats, theLexCats, theNonlexCats, theWords,
-    theNumberedGrammar, Renum(..), theCFG, Cat(..)
+    theNumberedGrammar, Renum(..), theCFG, Cat(..),
+    Tally(..), Obs(..), Counts, Prob, Dist, seek,
+    top_nt_counts, top_nt_dist, top_w_counts, top_w_dists,
+    head_counts, head_dists,
+    mod_nt_counts, mod_nt_dists, modCat, mod_w_counts, mod_w_dists,
+    npb_nt_counts, npb_nt_dists, npbCat, npb_w_counts, npb_w_dists
 ) where
 
 import Prelude hiding (lex)
@@ -162,7 +167,7 @@ showSide :: Side -> String
 showSide L = "l"
 showSide R = "r"
 
-infixl 6 -->
+infix 6 -->
 (-->) :: (RHS Cat Word -> Rule Cat Word) -> [Cat] -> Rule Cat Word
 lhs --> rhs = lhs (Cats rhs [zipWith (\_ i -> (i,0)) rhs [0..]])
 
