@@ -1,0 +1,16 @@
+(* Ben Strauss, "K-Best Parsing Using Hypergraphs" *)
+1 / 1 S  --> NP VP [0,0;1,0]
+1 / 1 VP --> V1    [0,0]
+1 / 4 V1 --> V1 PP [0,0;1,0]
+3 / 4 V1 --> V  NP [0,0;1,0]
+1 / 1 PP --> P  NP [0,0;1,0]
+1 / 4 NP --> PN    [0,0]
+3 / 4 NP --> DT N1 [0,0;1,0]
+3 / 4 N1 --> N     [0,0]
+1 / 4 N1 --> N1 PP [0,0;1,0]
+1 / 1 V  --> "hit"
+1 / 1 PN --> "Jon"
+1 / 2 N  --> "dog"
+1 / 2 N  --> "stick"
+1 / 1 P  --> "with"
+1 / 1 DT --> "the"

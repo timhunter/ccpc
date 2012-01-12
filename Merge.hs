@@ -1,25 +1,63 @@
-module Merge (merge, mergeBy, crossWith, crossBy, crossByWith) where
+{-# OPTIONS -W #-}
 
-import PriorityQueue.PriorityQueue
+module Merge (
+    Forest,
+    toList,
+    toListBy,
+    empty,
+    singleton,
+    fromAscList,
+    crossWithAscList
+) where
 
-merge :: (Ord a) => [[a]] -> [a]
-merge = mergeBy compare
+import Data.Tree (Tree(Node, rootLabel), Forest)
+import Data.Function (on)
+import qualified PriorityQueue.PriorityQueue as Q
+import Test.QuickCheck
+import Data.List (sort)
+import Control.Monad (liftM2)
 
-mergeBy :: (a -> a -> Ordering) -> [[a]] -> [a]
-mergeBy cmp xss = go (fromListBy cmp' [ (x,xs) | x:xs <- xss ])
-  where cmp' (x,_) (y,_) = cmp x y
-        go q | isEmpty q = []
-             | otherwise = let q' = deleteMinBy cmp' q in seq q'
-                           (case findMin q of {(x,xs) ->
-                            (x : go (case xs of
-                                     [] -> q'
-                                     x:xs -> insertBy cmp' (x,xs) q'))})
+toList :: (Ord a) => Forest a -> [a]
+toList = toListBy compare
 
-crossWith :: (Ord c) => (a -> b -> c) -> [a] -> [b] -> [c]
-crossWith = crossByWith compare
+toListBy :: (a -> a -> Ordering) -> Forest a -> [a]
+toListBy cmp ts = go (Q.fromListBy cmp' ts) where
+  go q | Q.isEmpty q = []
+       | otherwise   = seq q' (x : go (foldr (Q.insertBy cmp') q' ts))
+                       where q' = Q.deleteMinBy cmp' q
+                             Node x ts = Q.findMin q
+  cmp' = cmp `on` rootLabel
 
-crossBy :: ((a,b) -> (a,b) -> Ordering) -> [a] -> [b] -> [(a,b)]
-crossBy cmp = crossByWith cmp (,)
+empty :: Forest a
+empty = []
 
-crossByWith :: (c -> c -> Ordering) -> (a -> b -> c) -> [a] -> [b] -> [c]
-crossByWith cmp f xs ys = mergeBy cmp [ map (f x) ys | x <- xs ]
+singleton :: a -> Forest a
+singleton x = [Node x []]
+
+fromAscList :: [a] -> Forest a
+fromAscList []     = []
+fromAscList (x:xs) = [Node x (fromAscList xs)]
+
+crossWithAscList :: (a -> b -> c) -> [a] -> Forest b -> Forest c
+crossWithAscList _ []     = const []
+crossWithAscList f (x:xs) = g where
+  g = map (\(Node y ts) -> Node (x `f` y) (fromAscList (map (`f` y) xs) ++ g ts))
+
+main :: IO ()
+main = do
+  quickCheck (null (toList empty :: [Double]))
+  quickCheck (\x -> [x]
+                 == (toList (singleton x) :: [Double]))
+  quickCheck (\xs -> sort xs
+                  == (toList (xs >>= singleton) :: [Double]))
+  quickCheck (\xs -> sort xs
+                  == (toList (fromAscList (sort xs)) :: [Double]))
+  quickCheck (conjoin
+    [ \xs ys -> sort (liftM2 f xs ys)
+             == (toList (crossWithAscList f (sort xs) (fromAscList (sort ys))) :: [Double])
+    | f <- [(+), (*) `on` (1.01**), const, const id] ])
+  quickCheck (conjoin
+    [ \xs ys zs -> sort (liftM2 f xs (liftM2 f ys zs))
+             == (toList (crossWithAscList f (sort xs) (
+                         crossWithAscList f (sort ys) (fromAscList (sort zs)))) :: [Double])
+    | f <- [(+), (*) `on` (1.01**), const, const id] ])
