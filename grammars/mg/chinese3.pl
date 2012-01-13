@@ -14,6 +14,7 @@
 [nimen]::['N',-case].	% you (pl.)
 [ta]::['N',-case].		% he/she
 [tamen]::['N',-case].	% them
+%['Pronoun']::['N',-case].
 
 % Common Nouns
 [fuhao]::['N',-case].		% tycoon
@@ -21,7 +22,9 @@
 [jizhe]::['N',-case].	% reporter
 [dangao]::['N',-case].	% cake
 [pengyou]::['N',-case].	% friend
+[shishi]::['N',-case].			%fact
 
+%['Noun']::['N',-case].
 
 [fuhao]::['N'].		% tycoon
 [guanyuan]::['N'].	% official
@@ -29,8 +32,12 @@
 [dangao]::['N'].	% cake
 [pengyou]::['N'].	% friend
 
+
+%['Noun']::['N'].
+
+
 % Null argument (pro/the relativized NP)
-[]::['N',-case]. 
+[]::['N-null',-case]. 
 
 % One-place predicates (intransitive verbs and adjective predicates)
 [xinhuaibugui]::['V'].	% had bad intensions
@@ -38,19 +45,35 @@
 [shuiluoshichu]::['V'].  % revealed: used with 'zhenxiang' truth
 [chenggongle]::['V']. %succeed
 
+%['Vi']::['V'].
+
 % Two-place predicates (transitive verbs)
 % used in an RC, only have NP arguments
  [xihuan]::[='N',+case,'V'].	% like
  [yaoqing]::[='N',+case,'V'].	% invite
  [dale]::[='N',+case,'V'].	% hit
 
+%['Vt']::[='N',+case,'V'].
+
+
+ [xihuan]::[='N-null',+case,'V'].	% like
+ [yaoqing]::[='N-null',+case,'V'].	% invite
+ [dale]::[='N-null',+case,'V'].	% hit
+
+%['Vt']::[='N-null',+case,'V'].
+
  [xihuan]::[='Poss',+case,'V'].	% like
  [yaoqing]::[='Poss',+case,'V'].	% invite
  [dale]::[='Poss',+case,'V'].	% hit
 
+%['Vt']::[='Poss',+case,'V'].
+
 
 []::[=>'V',='N','v']. %v
 []::[=>'V',='N','vRel']. %v
+
+[]::[=>'V',='N-null','v']. %v
+[]::[=>'V',='N-null','vRel']. %v
 
 []::[=>'V',='Poss','v']. %v
 []::[=>'V',='Poss','vRel']. %v
@@ -68,6 +91,10 @@
 % SOR showParse([guanyuan,yaoqing,de,fuhao,dale,jizhe]).
 % OSR showParse([jizhe,dale,yaoqing,guanyuan,de,fuhao]).
 % OOR showParse([jizhe,dale,guanyuan,yaoqing,de,fuhao]).
+% SSR showParse([Vt,Noun,de,Noun,Vt,Noun]).
+% SOR showParse([Noun,Vt,de,Noun,Vt,Noun]).
+% OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
+% OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
 % Nothing special for T; -f is used to ensure RC preceeds de
  []::[='vRel',+case,'TRel',-f].
@@ -76,7 +103,7 @@
 
 % Relative CP can left-adjoin onto the NP head
  ['CRel']>>['N'].
-
+['CRel']>>['N-null'].
 % % genitive de
  [de]::[='N',='N','Poss',-case].
 

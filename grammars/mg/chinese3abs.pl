@@ -3,33 +3,45 @@
 %   Updated: Nov 14th 2011
 % This grammar assumes there is no DP in Chinese.
 
-% Proper Nouns
+
+% pronouns
+
 ['Pronoun']::['N',-case].
 
 % Common Nouns
 ['Noun']::['N',-case].
 
-['Noun']::['N'].	
+% Common Nouns in PossP
+['Noun']::['N'].
 
 
 % Null argument (pro/the relativized NP)
-[]::['N',-case]. 
+[]::['N-null',-case]. 
 
 % One-place predicates (intransitive verbs and adjective predicates)
-['Vi']::['V-Subjless'].	% had bad intensions
+['Vi']::['V'].
 
 % Two-place predicates (transitive verbs)
 % used in an RC, only have NP arguments
- ['Vt']::[='N',+case,'V-Subjless'].	% like
-['Vt']::[='Poss',+case,'V-Subjless'].
+['Vt']::[='N',+case,'V'].
 
-[]::[=>'V-Subjless',='N','v']. %v
-[]::[=>'V-Subjless',='N','vRel']. %v
+['Vt']::[='N-null',+case,'V'].
 
-[]::[=>'V-Subjless',='Poss','v']. %v
-[]::[=>'V-Subjless',='Poss','vRel']. %v
+['Vt']::[='Poss',+case,'V'].
+
+
+[]::[=>'V',='N','v']. %v
+[]::[=>'V',='N','vRel']. %v
+
+[]::[=>'V',='N-null','v']. %v
+[]::[=>'V',='N-null','vRel']. %v
+
+[]::[=>'V',='Poss','v']. %v
+[]::[=>'V',='Poss','vRel']. %v
+
 
 []::[='v',+case,'T']. %tense
+
 
 []::[='T','C'].
 
@@ -48,9 +60,10 @@
 
 % Relative CP can left-adjoin onto the NP head
  ['CRel']>>['N'].
-
+['CRel']>>['N-null'].
 % % genitive de
  [de]::[='N',='N','Poss',-case].
+
 
 % The root.
 startCategory('C').

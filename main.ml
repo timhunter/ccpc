@@ -8,7 +8,7 @@ open Grammar
 open Parser
 open Read 
 open Chart
-open Rational
+(* open Rational *)
 
 let get_yield (sentence : string list) (r : Util.range) : string =
 	match r with

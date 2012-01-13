@@ -3,7 +3,7 @@ open Rule
 open Parser
 open Read 
 open Chart
-open Rational
+(* open Rational *)
 
 (************************************************************************************************
 Accepts as command-line args (i) a grammar file
