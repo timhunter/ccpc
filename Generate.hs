@@ -1,4 +1,4 @@
-{-# OPTIONS -W #-}
+{-# OPTIONS -W -fspec-constr-count=10 #-}
 
 module Generate (main, top, generate) where
 
@@ -60,9 +60,12 @@ optionsSetWords words
 optionsDefault :: Options
 optionsDefault
   = optionsSetCFG aCFG
-  $ Options{theWords = Words (fst . fromJust . B.readInt) (B.pack . show),
-            theChart = infixChart [],
-            method   = Random}
+  $ Options{theCFG       = undefined,
+            theWords     = Words (fst . fromJust . B.readInt) (B.pack . show),
+            theSCCs      = undefined,
+            theChart     = infixChart [],
+            thePartition = undefined,
+            method       = Random}
 
 getOptChart :: ([Vertex] -> Chart) -> [String] -> Options -> IO Options
 getOptChart f (sentence:xs) o@Options{theWords=Words{indexOfWord=indexOfWord}}
