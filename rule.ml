@@ -167,7 +167,7 @@ open Num
       let recipe = String.concat "" recipe in 
       let weight_str =
         match (get_weight rule) with
-        | Some (w1,w2) -> ((Num.string_of_num (Num.div_num w1 w2))^"     ")  (*  Printf.sprintf "%d / %d     " w1 w2 *)
+        | Some (w1,w2) -> (((Num.string_of_num w1)^" / "^(Num.string_of_num w2))^"     ")  (*  Printf.sprintf "%d / %d     " w1 w2 *)
         | None -> ""
       in
       Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe
