@@ -19,6 +19,7 @@ import Data.List (isSuffixOf)
 import Data.Maybe (fromJust)
 import Data.Tuple (swap)
 import System.Environment (getArgs)
+import System.IO (hFlush, stdout)
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.Map as M
 
@@ -54,7 +55,7 @@ optionsSetWords words
   swapped = M.fromList (map swap (assocs words))
   indexOfWord w = case M.lookup w swapped of
                   Nothing -> error ("Unknown word " ++ B.unpack w)
-		  Just i  -> i
+                  Just i  -> i
 
 optionsDefault :: Options
 optionsDefault
@@ -113,9 +114,10 @@ main = do
                         (thePartition o)
       w = wordOfIndex (theWords o)
   case method o of
-    Random -> forever
-              $ runStdRandom (generate (theCFG o) (theChart o) known maxCell 0)
-                >>= putStrLn . showPhraseBy w
+    Random -> forever $ do
+      ph <- runStdRandom (generate (theCFG o) (theChart o) known maxCell 0)
+      putStrLn (showPhraseBy w ph)
+      hFlush stdout
     Top -> showStreamBy w (top (theCFG o) (theChart o) known maxCell 0)
 
 {- Usage examples:
@@ -141,9 +143,16 @@ showPhraseBy w = go where
 
 showStreamBy :: (Int -> B.ByteString) -> Stream -> IO ()
 showStreamBy w stream = foldM go 0 stream >> return () where
-  go n (wt, Nothing) = if n > 0 then return (n - 1) else
-                       putStr (show wt ++ "\ESC[K\r") >> return 10000
-  go _ (wt, Just ph) = putStrLn (show wt ++ " " ++ showPhrase ph) >> return 0
+  go n (wt, Nothing)
+    | n > 0 = return (n - 1)
+    | otherwise = do
+      putStr (show wt ++ "\ESC[K\r")
+      hFlush stdout
+      return 10000
+  go _ (wt, Just ph) = do
+      putStrLn (show wt ++ " " ++ showPhrase ph)
+      hFlush stdout
+      return 0
   showPhrase = showPhraseBy w
 
 -- Shorten a stream of descending-probability maybe-results by removing
