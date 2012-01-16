@@ -11,14 +11,16 @@ import Util (decodeListFromFile, StdRandom, runStdRandom, randomR, choose)
 import Merge (Forest, toListBy, empty, singleton, fromAscList, crossWithAscList)
 import Control.Monad (liftM, liftM2, forever, foldM)
 import Control.Parallel (par, pseq)
-import Control.Parallel.Strategies (using, parList, rseq)
+import Control.Parallel.Strategies (using, parList, evalList, rseq)
 import Data.Array.IArray
 import Data.Array.Unboxed (UArray)
 import Data.Binary (decodeFile)
 import Data.List (isSuffixOf)
 import Data.Maybe (fromJust)
+import Data.Tuple (swap)
 import System.Environment (getArgs)
 import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.Map as M
 
 data Words = Words {
   indexOfWord :: B.ByteString -> Int {-positive-},
@@ -49,13 +51,10 @@ optionsSetWords :: Array Vertex B.ByteString -> Options -> Options
 optionsSetWords words
   = \o -> o{theWords = Words{indexOfWord = indexOfWord,
                              wordOfIndex = (words !)}} where
-  indexOfWord = uncurry go (bounds words)
-  go lo hi target | lo <= hi = let m = lo + (hi - lo) `div` 2 in
-                               case compare target (words ! m) of
-                               LT -> go lo (m-1) target
-                               EQ -> m
-                               GT -> go (m+1) hi target
-                  | otherwise = error ("Unknown word " ++ B.unpack target)
+  swapped = M.fromList (map swap (assocs words))
+  indexOfWord w = case M.lookup w swapped of
+                  Nothing -> error ("Unknown word " ++ B.unpack w)
+		  Just i  -> i
 
 optionsDefault :: Options
 optionsDefault
@@ -69,8 +68,11 @@ optionsDefault
 
 getOptChart :: ([Vertex] -> Chart) -> [String] -> Options -> IO Options
 getOptChart f (sentence:xs) o@Options{theWords=Words{indexOfWord=indexOfWord}}
-  = let chart = f (map (negate.indexOfWord) (B.words (B.pack sentence)))
-    in getOpt xs (optionsRepartition o{theChart = chart})
+  = let terminals = map (negate.indexOfWord) (B.words (B.pack sentence))
+                    `using` evalList rseq
+        chart = f terminals
+    in terminals `seq` chart `seq` -- detect problems with the sentence early
+       getOpt xs (optionsRepartition o{theChart = chart})
 getOptChart _ [] _
   = error "Sentence missing at the end of the command line"
 
