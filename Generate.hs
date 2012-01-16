@@ -122,7 +122,7 @@ main = do
 
 {- Usage examples:
     ./Generate -top
-    ./Generate -top wsj.cfg wsj.words wsj.car-dealer.partition -infix "car/NN dealer/NN"
+    ./Generate -top wsj.cfg wsj.words -infix "car/NN dealer/NN" wsj.car-dealer.partition
     ./Generate -top grammars/wmcfg/strauss.wmcfg -exact "the dog hit the dog with the stick with Jon with Jon with Jon with Jon with Jon"
 -}
 
