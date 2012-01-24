@@ -1,0 +1,17 @@
+# matrix level argument that is *nominative*
+2 Noun Nom VTDecl
+214 Noun Acc Vadj Noun Nom VTDecl
+521 Noun Acc Vadn fact Nom VTDecl
+373 Noun Acc Vadn Noun Nom VTDecl
+3 Noun Nom Vadj Noun Nom VTDecl
+5 Noun Nom Vadn fact Nom VTDecl
+139 Noun Nom Vadn Noun Nom VTDecl
+# ....matrix level argument that is *accusative*
+# assume that Subject PRO is 22 times more frequent than Object PRO
+44 Noun Acc VTDecl
+4708 Noun Acc Vadj Noun Acc VTDecl
+11462 Noun Acc Vadn fact Acc VTDecl
+8206 Noun Acc Vadn Noun Acc VTDecl
+66 Noun Nom Vadj Noun Acc VTDecl
+110 Noun Nom Vadn fact Acc VTDecl
+3058 Noun Nom Vadn Noun Acc VTDecl
