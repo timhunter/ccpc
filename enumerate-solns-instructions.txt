@@ -1,0 +1,24 @@
+
+I made a command-line tool today that reads a .wmcfg file directly.
+Here are two examples:
+
+   $ /home/cs872/mcfgcky2_repos/Generate -top /home/cs872/mcfgcky2_repos/grammars/wmcfg/strauss.wmcfg -infix "hit Jon"|head
+   5.2734375e-2 [[the dog] [hit Jon]]
+   5.2734375e-2 [[the stick] [hit Jon]]
+   ...
+
+   $ /home/cs872/mcfgcky2_repos/Generate -top /home/cs872/mcfgcky2_repos/grammars/wmcfg/strauss.wmcfg -exact "the dog hit the dog with the stick with Jon with Jon with Jon with Jon with Jon"
+   3.978129825554788e-9 [[the dog] [hit [the [[[[[dog [with [the [stick [with Jon]]]]] [with Jon]] [with Jon]] [with Jon]] [with Jon]]]]]
+   3.978129825554788e-9 [[the dog] [hit [the [[[[[[dog [with [the stick]]] [with Jon]] [with Jon]] [with Jon]] [with Jon]] [with Jon]]]]]
+   ...
+
+You can also say -prefix and -suffix.  The default is -infix "".
+
+(If you pipe this output to less, you'd see that the program also prints
+and overwrites 'countdown' probabilities, which you can filter out using
+sed 's/.*\r//'
+)
+
+You can easily compile my Haskell code on garvin using my installation
+of ghc 7.  Just add /home/cs872/local/bin to your $PATH and do
+   ghc -main-is Generate -O2 -rtsopts -threaded --make Generate.hs
