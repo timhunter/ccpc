@@ -123,6 +123,7 @@ word = do "(" <- token
             ")"         -> do return (Word (Lex lex) (Label pos))
             "+unknown+" -> do ")" <- token
                               return (Word _UNKNOWN_ (Label pos))
+            _           -> error ("Unknown word property: " ++ next)
 
 event :: Parser (Maybe Event)
 event = do "(" <- token
@@ -160,8 +161,12 @@ event = do "(" <- token
                n <- count
                return (Just (Modifier wordMod wordHead (Label mod)
                               (Label prev) wordPrev (Label parent) (Label head)
-                              (case vi of "true" -> True; "false" -> False)
-                              (case side of "left" -> L; "right" -> R)
+                              (case vi of "true" -> True
+                                          "false" -> False
+                                          _ -> error ("Unknown vi: " ++ vi))
+                              (case side of "left" -> L
+                                            "right" -> R
+                                            _ -> error ("Unknown side: " ++ side))
                               n))
              _ -> return Nothing
 
@@ -191,7 +196,7 @@ unArgList = [ (ntA, case reverse (extern sym) of
                       'A':'-':tn -> Label (intern (reverse tn))
                       _          -> ntA)
             | ntA@(Label sym) <-
-	        _TOP_ : _STOP_ : theNonts ++ S.toList thePOSs ]
+                _TOP_ : _STOP_ : theNonts ++ S.toList thePOSs ]
 
 thePOSs :: S.Set POS
 thePOSs = S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ]
@@ -199,7 +204,7 @@ thePOSs = S.fromList [ pos | Head (Word _ pos) Nothing _ <- theEvents ]
 thePosMap :: M.Map Lex [Label]
 thePosMap = M.map S.toList $
             M.fromListWith S.union
-	      [ (lex, S.singleton pos)
+              [ (lex, S.singleton pos)
               | Head (Word lex pos) Nothing _ <- theEvents ]
 
 antepreterminals :: M.Map Nont (S.Set POS)
