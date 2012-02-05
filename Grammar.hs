@@ -18,7 +18,7 @@ import Prelude hiding (lex)
 import Observed hiding (main)
 import MCFG
 import Util (printListToFile, concurrently)
-import CFG (CFG)
+import CFG (CFG, Rule(Rule), RHS(RHS, prob, children, yield))
 import qualified Reduce (mapReduce)
 import Data.Monoid
 import Data.Ratio ((%))
@@ -49,7 +49,7 @@ main = do
 type Grammar cat term = [(String, () -> MCFG cat term)]
 
 mapReduce :: (Monoid a, NFData a) =>
-             (Rule cat term -> a) -> Grammar cat term -> a
+             (MRule cat term -> a) -> Grammar cat term -> a
 mapReduce f grammar =
   mconcat (parMap rdeepseq (Reduce.mapReduce f . \x -> snd x ()) grammar)
 
@@ -65,9 +65,10 @@ theLexCats :: M.Map Cat Word
 theCats, theNonlexCats :: M.Map Cat ()
 theCats = M.union (M.map (const ()) theLexCats) theNonlexCats
 theLexCats = mapReduce f theLexGrammar
-  where f (Rule _ lhs (Term rhs)) = M.singleton lhs rhs
+  where f (Rule lhs (RHS _ [] [[Term rhs]])) = M.singleton lhs rhs
+        f _ = error "theLexCats encountered non-lexical rule"
 theNonlexCats = mapReduce f theNonlexGrammar
-  where f (Rule _ lhs _) = M.singleton lhs ()
+  where f (Rule lhs _) = M.singleton lhs ()
 
 theWords :: M.Map Word ()
 theWords = M.fromList [ (Word lex pos, ())
@@ -84,16 +85,20 @@ theNumberedGrammar :: Grammar Renum Word
 theNumberedGrammar =
   map (fmap (map (first (Renum . (`M.findIndex` theCats))) .)) theGrammar
 
-theCFG :: CFG
+theCFG :: CFG Double ()
 theCFG = A.accumArray (flip (:)) [] (0, M.size theNonlexCats - 1)
-           [ (M.findIndex lhs theNonlexCats, (fromRational wt, map f rhs))
+           [ (M.findIndex lhs theNonlexCats,
+              RHS { prob = fromRational wt, children = map f rhs, yield = () })
            | (_, thunk) <- theNonlexGrammar
            , rule <- thunk ()
-           , let Rule (Just wt) lhs (Cats rhs _) = rule ]
+           , let Rule lhs (RHS (Just wt) rhs _) = rule ]
   where f cat = case (M.lookupIndex cat theNonlexCats,
                       M.lookup cat theLexCats) of
                 (Just nonlex, Nothing) -> nonlex
                 (Nothing, Just word)   -> -1 - M.findIndex word theWords
+                (Nothing, Nothing)     -> error ("theCFG: undefined " ++ s)
+                (Just _, Just _)       -> error ("theCFG: redefined " ++ s)
+          where s = show cat
 
 data Prev = START | CC | PUNC | OTHER deriving (Eq, Ord, Show)
 
@@ -168,8 +173,11 @@ showSide L = "l"
 showSide R = "r"
 
 infix 6 -->
-(-->) :: (RHS Cat Word -> Rule Cat Word) -> [Cat] -> Rule Cat Word
-lhs --> rhs = lhs (Cats rhs [zipWith (\_ i -> (i,0)) rhs [0..]])
+(-->) :: (Rational, Cat) -> [Cat] -> MRule Cat Word
+(wt, lhs) --> rhs = Rule lhs RHS{
+  prob     = Just wt,
+  children = rhs,
+  yield    = [zipWith (\_ i -> Child i 0) rhs [0..]] }
 
 cons :: Side -> a -> [a] -> [a]
 cons L x xs = x : xs
@@ -246,12 +254,15 @@ possibleHeadPos head pos =
 top_rules :: () -> MCFG Cat Word
 top_rules () = do ((nt, pos), wt1) <- M.toList top_nt_dist
                   (lex      , wt2) <- M.toList (top_w_dists ! pos ! nt)
-                  [Rule (Just (wt1 * wt2)) Start --> [Init nt lex pos]]
+                  [(wt1 * wt2, Start) --> [Init nt lex pos]]
 
 lex_rules :: () -> MCFG Cat Word
 lex_rules () = do (lex, poss) <- M.toList thePosMap
                   pos <- poss
-                  [Rule (Just 1) (Init pos lex pos) (Term (Word lex pos))]
+                  [Rule (Init pos lex pos) RHS{
+                    prob     = Just 1,
+                    children = [],
+                    yield    = [[Term (Word lex pos)]] }]
 
 head_rules :: () -> MCFG Cat Word
 head_rules () = do
@@ -269,8 +280,8 @@ head_rules () = do
   (head, wt) <- M.toList dist'
   let cat | parent == _NPB_ = \side -> npbCat side head pos lex
           | otherwise       = \side -> modCat side parent head pos lex
-  [Rule (Just wt) (Init parent lex pos) --> [cat L, {- Bar parent head lex pos],
-   Rule (Just 1 ) (Bar parent head lex pos) --> [-} Init head lex pos, cat R]]
+  [(wt, Init parent lex pos) --> [cat L, {- Bar parent head lex pos],
+   (1 , Bar parent head lex pos) --> [-} Init head lex pos, cat R]]
 
 mod_rules :: () -> MCFG Cat Word
 mod_rules () = do
@@ -283,11 +294,10 @@ mod_rules () = do
   ((mod, pos), wt1) <- M.toList dist
   let cat              = Mod    side         parent head wordHead
       catlex wordHead  = ModLex side mod pos parent head wordHead
-      catrule wordHead = Rule (Just wt1) cat --> cons side cat [catlex wordHead]
-      rulesOfDist dist = [ Rule (Just wt2) (catlex wordHead)
-                           --> [Init mod lex pos]
+      catrule wordHead = (wt1, cat) --> cons side cat [catlex wordHead]
+      rulesOfDist dist = [ (wt2, catlex wordHead) --> [Init mod lex pos]
                          | (lex, wt2) <- M.toList dist ]
-  if mod == _STOP_ then [Rule (Just wt1) cat --> []] else do
+  if mod == _STOP_ then [(wt1, cat) --> []] else do
     let m = seek "mod_w_dists" mod_w_dists pos
     case wordHead of
       Nothing ->
@@ -299,7 +309,7 @@ mod_rules () = do
             case lexHead of
               Nothing ->
                 catrule wordHead :
-                Rule (Just (fst (fst m))) (catlex wordHead) --> [catlex Nothing] :
+                (fst (fst m), catlex wordHead) --> [catlex Nothing] :
                 rulesOfDist (snd (fst m))
               Just lexHead ->
                 let wordHead' = Just (Nothing, posHead) in
@@ -307,7 +317,7 @@ mod_rules () = do
                   Nothing -> [catrule wordHead']
                   Just m ->
                     catrule wordHead :
-                    Rule (Just (fst m)) (catlex wordHead) --> [catlex wordHead'] :
+                    (fst m, catlex wordHead) --> [catlex wordHead'] :
                     rulesOfDist (snd m)
 
 npb_rules :: () -> MCFG Cat Word
@@ -321,12 +331,12 @@ npb_rules () = do
   ((mod, pos), wt1) <- M.toList dist
   let cat              = NPB    side         key wordKey
       catlex wordKey   = NPBLex side mod pos key wordKey
-      catrule wordKey  = Rule (Just wt1) cat --> [catlex wordKey]
-      rulesOfDist dist = [ Rule (Just wt2) (catlex wordKey)
+      catrule wordKey  = (wt1, cat) --> [catlex wordKey]
+      rulesOfDist dist = [ (wt2, catlex wordKey)
                            --> cons side (if isPunc mod then {- generating punctuation leaves the "previous" ("key") nonterminal/POS/word unchanged -} catlex wordKey {- slightly incorrect when the grammar generates (catlex wordKey) due to backoff from another Lex_POS -} else npbCat side mod pos lex)
                                          [Init mod lex pos]
                          | (lex, wt2) <- M.toList dist ]
-  if mod == _STOP_ then [Rule (Just wt1) cat --> []] else do
+  if mod == _STOP_ then [(wt1, cat) --> []] else do
     let m = seek "npb_w_dists" npb_w_dists pos
     case wordKey of
       Nothing ->
@@ -338,7 +348,7 @@ npb_rules () = do
             case lexKey of
               Nothing ->
                 catrule wordKey :
-                Rule (Just (fst (fst m))) (catlex wordKey) --> [catlex Nothing] :
+                (fst (fst m), catlex wordKey) --> [catlex Nothing] :
                 rulesOfDist (snd (fst m))
               Just lexKey ->
                 let wordKey' = Just (Nothing, posKey) in
@@ -346,7 +356,7 @@ npb_rules () = do
                   Nothing -> [catrule wordKey']
                   Just m ->
                     catrule wordKey :
-                    Rule (Just (fst m)) (catlex wordKey) --> [catlex wordKey'] :
+                    (fst m, catlex wordKey) --> [catlex wordKey'] :
                     rulesOfDist (snd m)
 
 top_nt_counts :: Counts (Label, POS)

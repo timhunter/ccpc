@@ -1,16 +1,22 @@
 {-# OPTIONS -W #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Util (
     putStrsLnToFile, getLinesFromFile,
     printListToFile, readListFromFileLines,
     encodeListToFile, decodeListFromFile,
     concurrently,
-    StdRandom, random, randomR, runStdRandom, choose
+    StdRandom, random, randomR, runStdRandom, choose,
+    MonoidMap(MonoidMap),
+    isLeft, isRight, fromLeft, fromRight
 ) where
 
 import Data.Binary (Binary(get, put))
 import Data.Binary.Get (runGet, isEmpty)
 import Data.Binary.Put
+import Data.Traversable (Traversable)
+import Data.Foldable (Foldable)
+import Data.Monoid (Monoid(..))
 import Control.Exception (bracket, finally)
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
@@ -18,6 +24,7 @@ import System.IO (withFile, IOMode(ReadMode, WriteMode), hPutStrLn, hGetLine, hF
 import qualified Control.Monad.State.Lazy as State
 import qualified Data.ByteString.Lazy as B
 import qualified System.Random as R
+import qualified Data.Map as M
 
 putStrsLnToFile :: FilePath -> [String] -> IO ()
 putStrsLnToFile file xs = withFile file WriteMode
@@ -76,3 +83,23 @@ choose :: [(Double, a)] -> Double -> a
 choose []              r = error ("choose [] " ++ show r)
 choose ((wt,rhs):rhss) r = let r' = r - wt in
                            if r' < 0 || null rhss then rhs else choose rhss r'
+
+newtype MonoidMap k v = MonoidMap (M.Map k v)
+  deriving (Functor, Foldable, Traversable, Eq, Ord, Read, Show)
+instance (Ord k, Monoid v) => Monoid (MonoidMap k v) where
+  mempty = MonoidMap M.empty
+  mappend (MonoidMap m1) (MonoidMap m2) = MonoidMap (M.unionWith mappend m1 m2)
+  mconcat ms = MonoidMap (M.unionsWith mappend [ m | MonoidMap m <- ms ])
+
+isLeft, isRight :: Either a b -> Bool
+isLeft  (Left  _) = True
+isLeft  _         = False
+isRight (Right _) = True
+isRight _         = False
+
+fromLeft  :: Either a b -> a
+fromLeft  (Left  x) = x
+fromLeft  _         = error "Util.fromLeft: Right"
+fromRight :: Either a b -> b
+fromRight (Right x) = x
+fromRight _         = error "Util.fromRight: Left"

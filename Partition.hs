@@ -2,7 +2,7 @@
 
 module Partition (partition, partitions, iteration, main) where
 
-import CFG (CFG, graphOfCFG, isTerminal)
+import CFG (CFG, RHS(RHS, prob, children), graphOfCFG, isTerminal)
 import Chart (Chart(..), Cell, infixChart)
 import Graph (Vertex, SCCL(..), sccL)
 import Broyden (broyden, zero, Doubles)
@@ -25,11 +25,11 @@ import Control.Monad.Writer.Lazy
 
 type Formula = Nomial Vertex Double
 
--- Try: let (words,cfg) = CFG.cfgOfMCFG (MCFGRead.mcfgFromFile "grammars/wmcfg/larsonian1.wmcfg") in (words, partitions cfg (Chart.infixChart []) 1000 (Graph.sccL (CFG.graphOfCFG cfg)))
+-- Try: let (words,cfg) = MCFG.cfgOfMCFG (MCFGRead.mcfgFromFile "grammars/wmcfg/larsonian1.wmcfg") in (words, partitions cfg (Chart.infixChart []) 1000 (Graph.sccL (CFG.graphOfCFG cfg)))
 
 main :: IO ()
 main = do
-  theCFG <- decodeFile "wsj.cfg"
+  theCFG <- decodeFile "wsj.cfg" :: IO (CFG Double ())
   theSCCs <- theCFG `par`
              if True
                then decodeListFromFile "wsj.sccs" >>= evaluate
@@ -45,7 +45,7 @@ main = do
       thePartition = partitions theCFG theChart 1000 theSCCs
   encodeListToFile "wsj.card-dealer.partition" thePartition
 
-partitions :: CFG -> Chart -> Int -> [SCCL] -> [UArray Vertex Double]
+partitions :: CFG Double y -> Chart -> Int -> [SCCL] -> [UArray Vertex Double]
 partitions cfg chart@Chart{minCell=minCell,
                            indexOfCell=indexOfCell,
                            levels=levels} stepsMax cs =
@@ -65,13 +65,14 @@ partitions cfg chart@Chart{minCell=minCell,
 -- Convert a CFG RHS into a Formula by partially evaluating the RHS with
 -- respect to the given chart, the given cell in the chart, and the given
 -- partition values already computed for other cells in the chart.
-interp :: CFG -> Chart -> Array Int (UArray Vertex Double) ->
+interp :: CFG Double y -> Chart -> Array Int (UArray Vertex Double) ->
           Cell -> (Vertex -> Formula) -> Vertex -> Formula
 interp cfg Chart{epsilon=epsilon,
                  terminal=terminal,
                  splits=splits,
                  indexOfCell=indexOfCell} known here var' i =
-  sum [ con wt * interp' here rhs | (wt, rhs) <- cfg!i ] where
+  sum [ con wt * interp' here rhs
+      | RHS{prob=wt,children=rhs} <- cfg!i ] where
   interp' :: Cell -> [Vertex] -> Formula
   interp' cell [] = con (epsilon cell)
   interp' cell [v] | isTerminal v = con (terminal cell v)
@@ -86,7 +87,7 @@ interp cfg Chart{epsilon=epsilon,
 -- the strongly connected component to work on, and the current estimates.  The
 -- return value is a table of the current estimates along with the difference
 -- vector between the new estimates and the current estimates.
-iteration :: CFG -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
+iteration :: CFG Double y -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
              Array Vertex Double -> SCCL -> Doubles -> (Doubles, Doubles)
 iteration cfg chart known here
           known_here SCCL{members=members,nonlinking=nonlinking} =
@@ -116,7 +117,7 @@ iteration cfg chart known here
   (S.fromList (map (current IM.!) members), S.fromList diff)
 
 -- Code-generator version of "iteration" above.
-iterationGen :: CFG -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
+iterationGen :: CFG Double y -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
                 Array Vertex Double -> SCCL -> [String]
 iterationGen cfg chart known here
              known_here SCCL{members=members,nonlinking=nonlinking} =
@@ -161,7 +162,7 @@ instance Show Shown where show (Shown x) = x
 -- and the list of strongly connected components as computed by
 -- Graph.sccL.CFG.graphOfCFG.  The return values are the nonterminals and their
 -- Z values, in the form of a list (sorted in computation order).
-partition :: CFG -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
+partition :: CFG Double y -> Chart -> Array Int (UArray Vertex Double) -> Cell ->
              Int -> [SCCL] -> [(Vertex, Double)]
 partition cfg chart known here stepsMax cs = list where
   known_here = array (bounds cfg) list

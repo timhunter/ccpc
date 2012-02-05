@@ -2,8 +2,8 @@
 
 module MCFGRead (mcfgFromFile) where
 
+import CFG
 import MCFG
-import Data.Function (on)
 import Data.Maybe (catMaybes)
 import Control.Monad (liftM, liftM2)
 import System.IO.Unsafe (unsafePerformIO)
@@ -49,22 +49,27 @@ mcfgFromFile name = unsafePerformIO (do
     either (fail . show) return result)
 
 mcfg :: Parser (MCFG String String)
-mcfg = many (liftM2 (uncurry . Rule) (optionMaybe weight) rule)
+mcfg = many (liftM2 f (optionMaybe weight) rule)
+  where f wt (Rule lhs rhs) = Rule lhs rhs{prob=wt}
 
 weight :: Parser Rational
 weight = chainl1 (liftM (either toRational toRational) naturalOrFloat)
                  (symbol "/" >> return (/))
 
-rule :: Parser (String, RHS String String)
-rule = around (symbol "-->") (,) identifier rhs
+rule :: Parser (Rule () String [[Part String]])
+rule = around (symbol "-->") Rule identifier rhs
 
-rhs :: Parser (RHS String String)
-rhs = liftM2 Cats (many1 identifier)
-        (many1 (fmap catMaybes (brackets (semiSep1 component))))
-  <|> between quote quote
-        (option (Cats [] [[]]) (liftM Term identifier))
+rhs :: Parser (RHS () String [[Part String]])
+rhs = liftM2 (RHS ())
+             (many identifier)
+             (    many1 (liftM catMaybes (brackets (semiSep1 part)))
+              <|> between quote quote
+                    (liftM (:[]) (many (liftM Term identifier))) )
 
-component :: Parser (Maybe (Int, Int))
-component = (symbol "Epsilon" >> return Nothing)
-        <|> (liftM Just (around comma ((,) `on` fromIntegral) decimal decimal))
-
+part :: Parser (Maybe (Part String))
+part = (symbol "Epsilon" >> return Nothing)
+   <|> (around comma
+          (\i j -> Just (Child (fromIntegral i) (fromIntegral j)))
+          decimal
+          decimal)
+   <|> (between quote quote (liftM (Just . Term) identifier))

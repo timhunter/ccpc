@@ -1,15 +1,17 @@
 {-# OPTIONS -W -fspec-constr-count=10 #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Generate (main, top, generate) where
 
+import CFG
 import MCFGRead (mcfgFromFile)
-import CFG (CFG, Vertex, isTerminal, aCFG, cfgOfMCFG, graphOfCFG)
+import MCFG (cfgOfMCFG, portrayMCFG)
 import Graph (SCCL, sccL)
 import Chart (Chart(..), Cell, infixChart, prefixChart, suffixChart, exactChart)
 import Partition (partitions)
 import Util (decodeListFromFile, StdRandom, runStdRandom, randomR, choose)
-import Merge (Forest, toListBy, empty, singleton, fromAscList, crossWithAscList)
-import Control.Monad (liftM, liftM2, forever, foldM)
+import Merge (toListBy, empty, singleton, fromAscList, crossWithAscList)
+import Control.Monad (liftM2, forever, foldM)
 import Control.Parallel (par, pseq)
 import Control.Parallel.Strategies (using, parList, evalList, rseq)
 import Data.Array.IArray
@@ -31,7 +33,7 @@ data Words = Words {
 data Method = Random | Top
 
 data Options = Options {
-  theCFG       :: CFG,
+  theCFG       :: CFGYield,
   theWords     :: Words,
   theSCCs      :: [SCCL],
   theChart     :: Chart,
@@ -40,13 +42,16 @@ data Options = Options {
 }
 
 optionsRepartition :: Options -> Options
-optionsRepartition o@Options{theCFG=theCFG,theSCCs=theSCCs,theChart=theChart}
+optionsRepartition o@Options{theCFG   = CFGYield theCFG _,
+                             theSCCs  = theSCCs,
+                             theChart = theChart}
   = o{thePartition = partitions theCFG theChart 1000 theSCCs}
 
-optionsSetCFG :: CFG -> Options -> Options
-optionsSetCFG cfg o
+optionsSetCFG :: CFG Double yield -> Portray yield -> Options -> Options
+optionsSetCFG cfg portray o
   = optionsRepartition
-  $ o{theCFG = cfg, theSCCs = sccL (graphOfCFG cfg) {- +RTS -K1g -}}
+  $ o{theCFG  = CFGYield cfg portray,
+      theSCCs = sccL (graphOfCFG cfg) {- +RTS -K1g -}}
 
 optionsSetWords :: Array Vertex B.ByteString -> Options -> Options
 optionsSetWords words
@@ -59,7 +64,7 @@ optionsSetWords words
 
 optionsDefault :: Options
 optionsDefault
-  = optionsSetCFG aCFG
+  = optionsSetCFG aCFG portrayCFG
   $ Options{theCFG       = undefined,
             theWords     = Words (fst . fromJust . B.readInt) (B.pack . show),
             theSCCs      = undefined,
@@ -81,10 +86,11 @@ getOpt :: [String] -> Options -> IO Options
 getOpt [] o = return o
 getOpt (x:xs) o
   | ".wmcfg" `isSuffixOf` x
-  = case cfgOfMCFG ((map.fmap) B.pack (mcfgFromFile x)) of
-    (words, cfg) -> getOpt xs (optionsSetCFG cfg (optionsSetWords words o))
+  = case cfgOfMCFG (mcfgFromFile x) of
+    (words, cfg) -> getOpt xs (optionsSetCFG cfg portrayMCFG
+                                (optionsSetWords (fmap B.pack words) o))
   | ".cfg" `isSuffixOf` x -- created by Grammar.main
-  = decodeFile x >>= \cfg -> getOpt xs (optionsSetCFG cfg o)
+  = decodeFile x >>= \cfg -> getOpt xs (optionsSetCFG cfg portrayCFG o)
   | ".words" `isSuffixOf` x -- created by Grammar.main
   = fmap B.lines (B.readFile x) >>= \bs ->
     getOpt xs (optionsSetWords (listArray (1, length bs) bs) o)
@@ -106,19 +112,20 @@ getOpt (x:_)          _ = error ("Unknown option " ++ x)
 main :: IO ()
 main = do
   o <- getArgs >>= \args -> getOpt args optionsDefault
+  case theCFG o of { CFGYield cfg portrayBy ->
   let Chart{minCell    =minCell,
             maxCell    =maxCell,
             indexOfCell=indexOfCell} = theChart o
-      known = theWords o `par` theCFG o `pseq`
+      known = theWords o `par` cfg `pseq`
               listArray (indexOfCell minCell, indexOfCell maxCell)
                         (thePartition o)
-      w = wordOfIndex (theWords o)
+      portray = portrayBy (B.unpack . wordOfIndex (theWords o)) in
   case method o of
     Random -> forever $ do
-      ph <- runStdRandom (generate (theCFG o) (theChart o) known maxCell 0)
-      putStrLn (showPhraseBy w ph)
+      ph <- runStdRandom (generate cfg (theChart o) known maxCell 0)
+      putStrLn (portray ph)
       hFlush stdout
-    Top -> showStreamBy w (top (theCFG o) (theChart o) known maxCell 0)
+    Top -> showStreamBy portray (top cfg (theChart o) known maxCell 0) }
 
 {- Usage examples:
     ./Generate -top
@@ -126,23 +133,11 @@ main = do
     ./Generate -top grammars/wmcfg/strauss.wmcfg -exact "the dog hit the dog with the stick with Jon with Jon with Jon with Jon with Jon"
 -}
 
-data Item = LB | RB | Fail | Lex Vertex deriving (Show)
-type Phrase = [Item]
-type Stream = [(Double, Maybe Phrase)]
+type Stream prob yield = [(prob, Maybe (Derivation yield))]
 
-showPhraseBy :: (Int -> B.ByteString) -> Phrase -> String
-showPhraseBy w = go where
-  go  []          = ""
-  go  (LB   : xs) = "["               ++ go  xs
-  go  (RB   : xs) = "]"               ++ go' xs
-  go  (Fail : xs) = "?"               ++ go' xs
-  go  (Lex n: xs) = B.unpack (w (-n)) ++ go' xs
-  go' []          = ""
-  go' (RB   : xs) = "]" ++ go' xs
-  go' xs          = " " ++ go  xs
-
-showStreamBy :: (Int -> B.ByteString) -> Stream -> IO ()
-showStreamBy w stream = foldM go 0 stream >> return () where
+showStreamBy :: (Show prob) => (Derivation yield -> String) ->
+                Stream prob yield -> IO ()
+showStreamBy portray stream = foldM go 0 stream >> return () where
   go n (wt, Nothing)
     | n > 0 = return (n - 1)
     | otherwise = do
@@ -150,14 +145,13 @@ showStreamBy w stream = foldM go 0 stream >> return () where
       hFlush stdout
       return 10000
   go _ (wt, Just ph) = do
-      putStrLn (show wt ++ " " ++ showPhrase ph)
+      putStrLn (show wt ++ " " ++ portray ph)
       hFlush stdout
       return 0
-  showPhrase = showPhraseBy w
 
 -- Shorten a stream of descending-probability maybe-results by removing
 -- duplicate probabilities and stopping at zero probability.
-descend :: [(Double, Maybe a)] -> [(Double, Maybe a)]
+descend :: (Ord prob, Num prob) => [(prob, Maybe a)] -> [(prob, Maybe a)]
 descend []             = []
 descend ((0 , _) : _ ) = []
 descend ((wt, x) : xs) = (wt, x) : go wt xs where
@@ -171,8 +165,9 @@ funArray :: (IArray a e, Ix i) => (i, i) -> (i -> e) -> a i e
 funArray bounds f = listArray bounds (map f (range bounds))
 
 -- Generate parses in descending probability order.
-top :: CFG -> Chart -> Array Int (UArray Vertex Double) ->
-       Cell -> Vertex -> Stream
+top :: forall yield.
+       CFG Double yield -> Chart -> Array Int (UArray Vertex Double) ->
+       Cell -> Vertex -> Stream Double yield
 top cfg Chart{minCell=minCell,
               maxCell=maxCell,
               indexOfCell=indexOfCell,
@@ -180,54 +175,64 @@ top cfg Chart{minCell=minCell,
               epsilon=epsilon,
               terminal=terminal,
               splits=splits} known = f where
-  f :: Cell -> Vertex -> Stream
+  f :: Cell -> Vertex -> Stream Double yield
   f here lhs = a ! indexOfCell here ! lhs
-  a :: Array Int (Array Vertex Stream)
+  a :: Array Int (Array Vertex (Stream Double yield))
   a = funArray (indexOfCell minCell, indexOfCell maxCell) $ \hereIndex ->
       let here = cellOfIndex hereIndex in
       funArray (bounds cfg) $ \lhs ->
-      map (fmap (fmap concat')) $
       descend $
       (known {- the partition function bounds the tropical partition function from above -} ! hereIndex ! lhs, Nothing) :
-      toListBy cmp ((cfg ! lhs) >>= interp' here)
-  interp' :: Cell -> (Double, [Vertex]) -> Forest (Double, Maybe [Phrase])
-  interp' cell (wt, []) = con wt (epsilon cell) []
-  interp' cell (wt, [v])
-    | isTerminal v = con wt (terminal cell v) [[Lex v]]
+      toListBy cmp
+      [ (fmap . fmap . fmap) (Node (Step lhs y)) tree
+      | RHS{prob=p, children=cs, yield=y} <- cfg ! lhs
+      , tree <- interp' here p cs ]
+  interp' :: Cell -> Double -> [Vertex] ->
+             Forest (Double, Maybe [Derivation yield])
+  interp' cell wt [] = con wt (epsilon cell) []
+  interp' cell wt [v]
+    | isTerminal v = con wt (terminal cell v) [lex v]
     | otherwise = fromAscList [ (wt * wt', fmap (:[]) yield')
                               | (wt', yield') <- a ! indexOfCell cell ! v ]
-  interp' cell (wt, v:vs) = do
+  interp' cell wt (v:vs) = do
     (l, r) <- splits cell
-    let rForest = interp' r (wt, vs)
+    let rForest = interp' r wt vs
     if isTerminal v
       then let wt' = terminal l v in
-           if wt' > 0 then map (fmap (multiply (wt', Just [Lex v]))) rForest
+           if wt' > 0 then map (fmap (multiply (wt', Just (lex v)))) rForest
                       else empty
       else crossWithAscList multiply (a ! indexOfCell l ! v) rForest
-  con :: Double -> Double -> [Phrase] -> Forest (Double, Maybe [Phrase])
+  con :: Double -> Double -> [Derivation yield] ->
+         Forest (Double, Maybe [Derivation yield])
   con wt wt' ph = if wt' > 0 then singleton (wt * wt', Just ph) else empty
-  multiply :: (Double, Maybe Phrase) -> (Double, Maybe [Phrase])
-                                     -> (Double, Maybe [Phrase])
+  multiply :: (Double, Maybe (Derivation yield)) ->
+              (Double, Maybe [Derivation yield]) ->
+              (Double, Maybe [Derivation yield])
   multiply (p,xs) (q,ys) = (p*q, liftM2 (:) xs ys)
   cmp :: (Double, a) -> (Double, a) -> Ordering
   cmp (p,_) (q,_)        = compare q p
+  lex :: Vertex -> Derivation yield
+  lex v = Node (Step v (error "lex")) []
 
 -- Generate parses randomly.
-generate :: CFG -> Chart -> Array Int (UArray Vertex Double) ->
-            Cell -> Vertex -> StdRandom Phrase
+generate :: forall yield.
+            CFG Double yield -> Chart -> Array Int (UArray Vertex Double) ->
+            Cell -> Vertex -> StdRandom (Derivation yield)
 generate cfg Chart{epsilon=epsilon,
                    terminal=terminal,
                    splits=splits,
                    indexOfCell=indexOfCell} known = f 100 where
   f fuel here lhs
-    | fuel < 0       = return [Fail]
-    | isTerminal lhs = return [Lex lhs]
-    | otherwise      = randomR (0, known ! indexOfCell here ! lhs)
-                       >>= liftM concat'
-                         . mapM (uncurry (f (pred fuel)))
-                         . choose [ (wt * wt', yield')
-                                  | (wt, rhs) <- cfg ! lhs
-                                  , (wt', yield') <- interp' here rhs ]
+    | fuel < 0       = return (Node (Step lhs (error "out of fuel")) [])
+    | isTerminal lhs = return (Node (Step lhs (error "is terminal")) [])
+    | otherwise      = do
+      r <- randomR (0, known ! indexOfCell here ! lhs)
+      let (y, below) = choose [ (wt * wt', (y, below))
+                              | RHS{prob=wt, children=rhs, yield=y} <- cfg ! lhs
+                              , (wt', below) <- interp' here rhs ]
+                              r
+      below <- mapM (uncurry (f (pred fuel))) below
+      return (Node (Step lhs y) below)
   interp' :: Cell -> [Vertex] -> [(Double, [(Cell, Vertex)])]
   interp' cell [] = [(epsilon cell, [])]
   interp' cell [v] = [(if isTerminal v
@@ -241,8 +246,3 @@ generate cfg Chart{epsilon=epsilon,
                         , not (null interp'r)
                         , (wt'l, yield'l) <- interp'l
                         , (wt'r, yield'r) <- interp'r ]
-
--- Insert brackets to indicate binary (and ternary...) branching.
-concat' :: [[Item]] -> [Item]
-concat' xs | length xs > 1 = [LB] ++ concat xs ++ [RB]
-           | otherwise     =         concat xs
