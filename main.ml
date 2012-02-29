@@ -28,6 +28,21 @@ let print_tree tree sentence =
 	in
 	List.fold_right (Printf.sprintf("%s\n%s")) (print_tree' tree) ""
 
+let print_sexp tree = 
+  let interdigitate s t =
+    if (s = "") || (t = "") then
+      s ^ t
+    else
+      s ^ " , " ^ t   in
+  let rec show_tree t =
+    let item = Derivation.get_root_item t in
+    let parent_label = Chart.get_nonterm item in
+    let children = Derivation.get_children  t in
+    match (List.length children) with
+	0 -> parent_label
+      | _ ->  ("<"^parent_label^"> "^ (List.fold_left interdigitate "" (List.map show_tree children)) ^ " </"^parent_label^"> ") in
+  (show_tree tree)
+
 let run_parser sentence (rules, start_symbol) =
   let chart = Parser.deduce (-1) rules (Parser.Sentence sentence) in
   let goal_items = Chart.goal_items chart start_symbol (List.length sentence) in
@@ -52,14 +67,15 @@ let print_grammar grammar_file prefix (rules, start_symbol) =
 	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { debug : bool ; graph : string option ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
-let default_options = {debug = false ; graph = None; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
+type options = { debug : bool ; graph : string option ; sexp : bool ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
+let default_options = {debug = false ; graph = None; sexp = false; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
 
 let rec process_args args acc =
 	match args with
 	| [] -> acc
 	| ("-d" :: rest)               -> process_args rest {acc with debug = true}
 	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
+	| ("-s" :: rest)               -> process_args rest {acc with sexp = true}
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
 	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s); intersect = true}
         | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s); intersect = true}
@@ -68,7 +84,7 @@ let rec process_args args acc =
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\")  (-intersect) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
+		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\") (-s) (-intersect) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
 		Printf.eprintf "Flags in parentheses are optional. -p and -infix each imply -intersect \n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
@@ -80,9 +96,9 @@ let main () =
 			None -> failwith "No sentence given; nothing to do!"
 		      | Some s -> (let x = Util.split ' ' s in
 				   (x,s,options.input x)) in
-		match (options.intersect,options.graph) with
-		    (false,None) -> ignore (run_parser input_list input_grammar)
-		  | (_,_) -> 
+		match (options.intersect,options.graph,options.sexp) with
+		    (false,None,false) -> ignore (run_parser input_list input_grammar)
+		  | (_,_,_) -> 
 		      let chart = Parser.deduce (-1) rules parser_argument in
 		      let goal_items = Chart.goal_items chart start_symbol (List.length input_list) in
 		      begin
@@ -90,7 +106,20 @@ let main () =
 			if options.intersect
 			then print_grammar grammar_file input_string
 			         (intersection_grammar chart goal_items start_symbol input_list)
-			else ();
+			else 
+			  (if options.sexp then 
+			    let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
+			    let rec make_trees goals acc =
+			      match goals with
+				  [] -> acc
+				| h::t ->  make_trees t ((print_sexp h)::acc) in
+			    begin
+			       (* print out each derivation *)
+   			       List.iter print_string (make_trees goal_derivations []);
+			      print_newline ()
+			    end
+			   else ()
+			  );
 			(* ditto for graphs *)
 			match options.graph with
 			    (Some graphname) -> Grammar.drawgraph chart goal_items input_list graphname
