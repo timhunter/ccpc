@@ -103,7 +103,7 @@
 
 % Relative CP can left-adjoin onto the NP head
  ['CRel']>>['N'].
-['CRel']>>['N-null'].
+ ['CRel']>>['N-null'].
 % % genitive de
  [de]::[='N',='N','Poss',-case].
 
