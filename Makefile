@@ -13,8 +13,8 @@ YACC=ocamlyacc
 # NB: Guillaumin's code should be patched like this and then recompiled:
 #     patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
 # pathname appropriatefor John's laptop
-GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
-#GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
+#GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
+GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo 
