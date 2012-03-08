@@ -1,24 +1,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   File   : korean.pl
 %   Author : Jiwon Yun
-%   Last Updated: August 23, 2011
+%   Last Updated: March 8, 2012
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % With this grammar, you can parse the followings:
 % - simple SV sentences
 % - simple SOV sentences
-% - pro-drop sentences (simple/adjunct/complement)
-% - relative clauses (under both promotion and adjunction analyses)
+% - relative/complement/adjunct clauses
+% - pro-drop
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Grammar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Korean (or every language) has DPs. 
+% Let us assume that Korean (or every language) has DPs. 
 
 % Proper Nouns
 ['Jiwon']::['D',-f].
 ['Seongyeon']::['D',-f].
+
+% Determiner (null)
+[]::[='N','D',-f].
+
+['Det']::['N'].		% (abstracted)
 
 % Common Nouns
 [kica]::['N'].			% reporter
@@ -26,8 +31,7 @@
 [phyencipcang]::['N'].	% editor
 [hyengsa]::['N'].		% detective
 
-% Determiner (null)
-[]::[='N','D',-f].
+['Noun']::['N'].		% (abstracted)
 
 % Case particles are heads of CaseP (cf. Hoshi 2004)
 % "morphological case is realized at the Case head position"
@@ -39,6 +43,9 @@
 [ul]::[='D',+f,'Case',-acc].
 [lul]::[='D',+f,'Case',-acc].
 
+['Nom']::[='D',+f,'Case',-nom].		% (abstracted)
+['Acc']::[='D',+f,'Case',-acc].		% (abstracted)
+
 % Null argument (pro)
 []::['Case',-nom].
 []::['Case',-acc].
@@ -46,9 +53,11 @@
 % One-place predicates (intransitive verbs and adjectives)
 % In Korean, adjectives syntactically behave like intransitive verbs.
 [hwanassta]::['V-Decl'].			% got angry
-[yumyenghata]::['V-Decl'].			% famous
+[yumyenghata]::['V-Decl'].			% be famous
 [yumyenghaycyessta]::['V-Decl'].	% became famous
 [palkhyecyessta]::['V-Decl'].		% was revealed
+
+['VIDecl']::['V-Decl'].	% (abstracted)
 
 % Two-place predicates (transitive verbs)
 % , which assign accusative case
@@ -59,13 +68,20 @@
 [koylophyessta]::[='Case',+acc,'V-Decl'].	% troubled
 [ttaylyessta]::[='Case',+acc,'V-Decl'].	% beat
 
+['VTDecl']::[='Case',+acc,'V-Decl'].	% (abstracted)
+
 % adnominal forms of predicates
 % The same adnominal form is used for both relative and complement clauses.
 [kongkyekhan]::[='Case',+acc,'V-Rel'].	% (the person that ...) attacked
 [kongkyekhan]::[='Case',+acc,'V-Emb'].	% (the fact that ...) attacked 
 
+['VTAdn']::[='Case',+acc,'V-Rel'].	% (abstracted)
+['VTAdn']::[='Case',+acc,'V-Emb'].	% (abstracted)
+
 % adjunctive forms of predicates
 [kongkyekhayse]::[='Case',+acc,'V-Adj'].	% (because ...) attacked
+
+['VTAdj']::[='Case',+acc,'V-Adj'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
