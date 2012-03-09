@@ -43,7 +43,7 @@
  ['Vt']::[='Case',+acc,'V-Decl'].
 
 % declarative form predicates (transitive verbs)
-%['Vdecl']::[='Case',+acc,'V-Decl'].
+ ['VTDecl']::[='Case',+acc,'V-Decl'].
 
 % adnominal form of predicates
 % The same adnominal form is used for both relative and complement clauses.
