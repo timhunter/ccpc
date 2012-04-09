@@ -20,14 +20,17 @@
 %  d. the particle "to" is a complementizer (p172 of Tsujimura)
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
+% updated by Jiwon Yun, April 9 2012
+% proofread with minor corrections
+
 % Proper Nouns
-['Taroo']::['D',-f].           % m
-['Ziroo']::['D',-f].           % m
-['Satiko']::['D',-f].          % f
-['Masako']::['D',-f].          % f
-['Hanako']::['D',-f].          % f
-['Ken']::['D',-f].
-['Mari']::['D',-f].
+['Taroo']::['D',-f].			% m
+['Ziroo']::['D',-f].			% m
+['Satiko']::['D',-f].			% f
+['Masako']::['D',-f].			% f
+['Hanako']::['D',-f].			% f
+['Ken']::['D',-f].				% m
+['Mari']::['D',-f].				% f
 
 % like a pronoun
 [no]::['D',-f].
@@ -41,7 +44,7 @@
 [shinseki]::['N'].			% relative
 [susi]::['N'].				% sushi
 [hon]::['N'].				% book
-[yubiwa]::['N'].			% wedding-ring
+[yubiwa]::['N'].			% ring
 [hanbaagaa]::['N'].			% hamburger
 [ronbun]::['N'].			% article (as in "academic paper")
 [uma]::['N'].			% horse
@@ -50,7 +53,7 @@
 [inu]::['N'].			% dog
 [inaka]::['N']. 		% village
 [jiko]::['N'].			% accident
-['N']::['N']. % abstracted
+['N']::['N'].			% (abstracted)
 
 % Determiner (null)
 []::[='N','D',-f].
@@ -85,14 +88,14 @@
 []::['Case',-nom].
 []::['Case',-acc].
 
-% these are all in the past tense, I think
+% verbs are all in the past tense
 % one-place predicate
 [kita]::['V-Decl'].                     % come
 [asonda]::['V-Decl'].                   % play
 [kusatta]::['V-Decl'].                  % spoil (as in food)
 [sinda]::['V-Decl'].                    % die
-[nakunatta]::['V-Decl'].                % another way to die
-['Vi']::['V-Decl'].
+[nakunatta]::['V-Decl'].                % pass away
+['Vi']::['V-Decl'].						% (abstracted)
 
 % two-place, which assign accusative case
 [katta]::[='Case',+acc,'V-Decl'].	% buy
@@ -101,14 +104,14 @@
 [kaita]::[='Case',+acc,'V-Decl'].	% write
 [tukutta]::[='Case',+acc,'V-Decl'].	% make (as in prepare food)
 [ketta]::[='Case',+acc,'V-Decl'].	% kick
-[oikakeru]::[='Case',+acc,'V-Decl'].	% chase
+[oikaketa]::[='Case',+acc,'V-Decl'].	% chase
 [kaihoushita]::[='Case',+acc,'V-Decl'].	% nurse (needed for Kahraman examples)
-[itta]::[='Case',+acc,'V-Decl'].	          % say (needed for Kahraman examples)
-[mita]::[='Case',+acc,'V-Decl'].	% see
-['Vt']::[='Case',+acc,'V-Decl'].
+[itta]::[='Case',+acc,'V-Decl'].		% say (needed for Kahraman examples)
+[mita]::[='Case',+acc,'V-Decl'].		% see
+['Vt']::[='Case',+acc,'V-Decl'].		% (abstracted)
 
 % three-place. dative arg is naturally preverbal since nonfirst args go in specifiers stacked to the left
-[ageta]::[='Case',+acc,='Case',+dat,'V-Decl']. % eat
+[ageta]::[='Case',+acc,='Case',+dat,'V-Decl']. % give
 
 
 % "modern Japanese lacks the affixal complementizers characteristic of adnominal clauses in Korean" (Kaplan & Whitman 95)
@@ -117,10 +120,10 @@
 [ketta]::[='Case',+acc,'V-Rel'].	% kick
 [katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
 [kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
-[oikakeru]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
-['Vt']::[='Case',+acc,'V-Rel'].
+[oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
+['Vt']::[='Case',+acc,'V-Rel'].		% (abstracted)
 
-['Vt']::[='Case',+acc,'V-Emb'].
+['Vt']::[='Case',+acc,'V-Emb'].		% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
@@ -175,7 +178,7 @@
 % adjectives
 [omosiroi]::[adj].   % interesting
 [oisii]::[adj].      % delicious
-[tooi]::[adj].       % distant (kinship)
+[tooi]::[adj].       % distant
 
 
 % adjectives can left adjoin
