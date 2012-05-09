@@ -1,6 +1,6 @@
 module Stage where
 
-import Foreign
+import Foreign hiding (unsafePerformIO)
 import Foreign.C
 import Numeric (showHex)
 import System.IO.Unsafe (unsafePerformIO)
@@ -9,7 +9,7 @@ import System.IO (openTempFile, hClose, hPutStr)
 import System.Process (createProcess, proc, waitForProcess, ProcessHandle)
 import System.Exit (ExitCode(ExitSuccess))
 import System.IO.Error (isDoesNotExistError)
-import Debug.Trace (putTraceMsg)
+import Debug.Trace (traceIO)
 import Control.Monad (liftM)
 import Control.Concurrent.MVar (MVar, newMVar, withMVar)
 import Control.Exception (bracket, bracket_, evaluate, tryJust, IOException)
@@ -86,7 +86,7 @@ gcc :: [String] -> FilePath -> (ProcessHandle' -> IO a) -> IO a
 gcc argv' output k = do
   let argc = "gcc44"
       argv = argv' ++ ["-o", output]
-  putTraceMsg (unwords (argc:argv))
+  traceIO (unwords (argc:argv))
   bracket (createProcess (proc argc argv))
           (\_ -> cleanup (removeFile output))
           (\(_,_,_,p) -> k (output, p))
@@ -94,7 +94,7 @@ gcc argv' output k = do
 waitForProcessToSucceed :: ProcessHandle' -> IO ()
 waitForProcessToSucceed (path, processHandle) = do
   ExitSuccess <- waitForProcess processHandle
-  putTraceMsg ("done " ++ path)
+  traceIO ("done " ++ path)
   return ()
 
 withFortran :: Int -> Int -> [String] ->

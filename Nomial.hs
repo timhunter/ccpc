@@ -32,7 +32,7 @@ eval (Non a u m) = eval a + u * eval m
 subst :: (Num a) => (v -> a) -> Nomial v a -> a
 subst f = eval . first f
 
-instance (Ord v, Show v, Num a) => Num (Nomial v a) where
+instance (Ord v, Eq a, Num a) => Num (Nomial v a) where
 
   Con x + Con y = Con (x + y)
   x@(Non a u m) + y@(Non b v n) =

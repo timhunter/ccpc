@@ -1,5 +1,4 @@
 {-# OPTIONS -W #-}
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Grammar (
@@ -7,7 +6,7 @@ module Grammar (
     theGrammar, theLexGrammar, theNonlexGrammar,
     theCats, theLexCats, theNonlexCats, theWords,
     theNumberedGrammar, Renum(..), theCFG, Cat(..),
-    Tally(..), Obs(..), Counts, Prob, Dist, seek,
+    seek,
     top_nt_counts, top_nt_dist, top_w_counts, top_w_dists,
     head_counts, head_dists,
     mod_nt_counts, mod_nt_dists, modCat, mod_w_counts, mod_w_dists,
@@ -16,14 +15,13 @@ module Grammar (
 
 import Prelude hiding (lex)
 import Observed hiding (main)
+import Prob (Counts, Prob, Dist, rough, smoothed, smooth, Obs(Obs), tally)
 import MCFG
 import Util (printListToFile, concurrently)
 import CFG (CFG, Rule(Rule), RHS(RHS, prob, children, yield))
 import qualified Reduce (mapReduce)
 import Data.Monoid
-import Data.Ratio ((%))
 import Data.Map (Map, (!))
-import Data.Either (partitionEithers)
 import Data.Maybe (fromMaybe)
 import Data.Bifunctor (first)
 import Data.Binary (encodeFile)
@@ -183,64 +181,9 @@ cons :: Side -> a -> [a] -> [a]
 cons L x xs = x : xs
 cons R x xs = xs ++ [x]
 
-type Counts v = Map v Count
-type Prob     = Rational
-type Dist   v = Map v Prob
-
 seek :: (Ord k, Show k) => String -> Map k a -> k -> a
 seek tag m k = fromMaybe (error ("seek (" ++ tag ++ ") " ++ show k))
                          (M.lookup k m)
-
-data Obs k v = Obs { past :: k, future :: v, count :: Count }
-
-class Tally k v where
-  type Tallied k v
-  tally :: (Ord v) => [Obs k v] -> (Counts v, Tallied k v)
-
-instance Tally () v where
-  type Tallied () v = ()
-  tally os = (M.fromListWith (+) [ (v, c) | Obs () v c <- os ], ())
-
-instance (Ord k1, Tally k2 v) => Tally (k1, k2) v where
-  type Tallied (k1, k2) v = Map k1 (Counts v, Tallied k2 v)
-  tally os = (M.unionsWith (+) (map fst (M.elems m)), m)
-    where m = M.map tally (M.fromListWith (++)
-                [ (k1, [Obs k2 v c]) | Obs (k1, k2) v c <- os ])
-
-instance (Tally k v) => Tally (Maybe k) v where
-  type Tallied (Maybe k) v = Tallied k v
-  tally os = (M.unionWith (+) cNothing cJust, rJust)
-    where (cNothing, ()) = tally osNothing
-          (cJust, rJust) = tally osJust
-          (osNothing, osJust) = partitionEithers (map f os)
-          f (Obs Nothing  v c) = Left  (Obs () v c)
-          f (Obs (Just k) v c) = Right (Obs k  v c)
-
-rough :: Counts a -> Dist a
-rough counts = M.map ((% total) . fromIntegral) counts
-  where total = fromIntegral (sum (M.elems counts))
-
-smoothedBy :: (Ord a) => (Count -> Count) -> Dist a -> Counts a -> Dist a
-smoothedBy backoffOfDiversity coarser finer
-  = M.unionWith (+) (M.map (deficiency *) coarser) rescaled
-  where (deficiency, rescaled) = smoothBy backoffOfDiversity finer
-
-smoothBy :: (Ord a) => (Count -> Count) -> Counts a -> (Prob, Dist a)
-smoothBy backoffOfDiversity finer
-  -- Bikel equation (19):
-  -- Setting backoffOfDiversity to (5 *)     gives Bikel's f_t = 0 and f_f = 5.0
-  -- Setting backoffOfDiversity to (const 5) gives Bikel's f_t = 5.0 and f_f = 0
-  = (fromIntegral backoff % denominator,
-     M.map ((% denominator) . fromIntegral) finer)
-  where total       = sum (M.elems finer)
-        diversity   = M.size finer
-        backoff     = backoffOfDiversity diversity
-        denominator = fromIntegral (total + backoff)
-
-smoothed :: (Ord a) => Dist a -> Counts a -> Dist a
-smooth   :: (Ord a) => Counts a -> (Prob, Dist a)
-smoothed = smoothedBy (5 *)
-smooth   = smoothBy   (5 *)
 
 possibleHeadPos :: Label -> POS -> Bool
 -- If a head label is a POS tag or a nonterminal label that can only generate

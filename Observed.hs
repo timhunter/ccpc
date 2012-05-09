@@ -3,12 +3,14 @@
 
 module Observed (
     main,
-    Lex(..), Label(..), Nont, POS, Count, Word(..), Side(..), Event(..),
+    Sexp(..), sexp, theTrees, theTrees',
+    Lex(..), Label(..), Nont, POS, Word(..), Side(..), Event(..),
     _TOP_, _START_, _STOP_, _NPB_, _CC_, _COMMA_, _COLON_, _UNKNOWN_,
-    event, theEvents, theNonts, unArg, reArg, thePOSs, thePosMap,
+    event, theEvents, theNonts, unArg, reArg, thePOSs, thePosMap, known,
     antepreterminals
 ) where
 
+import Prob (Count)
 import Data.Atom.Simple
 import Control.DeepSeq (deepseq, NFData(rnf))
 import Data.Word (Word8)
@@ -21,6 +23,7 @@ import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as C
 import qualified Data.Set as S
 import qualified Data.Map as M
+import qualified Data.Char
 
 main :: IO ()
 main = theEvents `deepseq` print thePosMap
@@ -29,7 +32,6 @@ newtype Lex   = Lex   Symbol deriving (Eq, Ord, NFData)
 newtype Label = Label Symbol deriving (Eq, Ord, NFData)
 type    Nont  = Label
 type    POS   = Label
-type    Count = Int
 
 instance Show Lex   where show (Lex   sym) = extern sym ++ "/"
 instance Show Label where show (Label sym) = extern sym
@@ -53,6 +55,14 @@ data Word = Word !Lex !Label deriving (Eq, Ord)
 data Side = L | R            deriving (Eq, Ord, Show)
 
 instance Show Word where show (Word lex pos) = show lex ++ show pos
+instance Read Word where
+  readsPrec _ = readParen False (\r ->
+    let (word, rest) = break Data.Char.isSpace (dropWhile Data.Char.isSpace r)
+        (rev_pos, rev_lex) = span ('/'/=) (reverse word)
+    in case rev_lex of
+       '/':rev_lex -> [(Word (Lex   (intern (reverse rev_lex)))
+                             (Label (intern (reverse rev_pos))), rest)]
+       _ -> [])
 
 instance NFData Symbol
 instance NFData Word where rnf (Word lex pos) = rnf lex `seq` rnf pos
@@ -114,6 +124,22 @@ many m = loop where
   loop = do done <- gets (\s -> B.null s || 41 == B.head s)
             if done then return [] else liftM2 (:) m loop
 
+data Sexp = Atom !Symbol | List [Sexp] deriving (Eq, Ord)
+instance Show Sexp where
+  showsPrec _ (Atom sym)    = showString (extern sym)
+  showsPrec _ (List [])     = showString "()"
+  showsPrec _ (List (e:es)) = showChar '(' . showsPrec 0 e . s es . showChar ')'
+    where s []     = id
+          s (e:es) = showChar ' ' . showsPrec 0 e . s es
+sexp :: Parser Sexp
+sexp = do x <- token
+          case x of
+            "(" -> do es <- many sexp
+                      ")" <- token
+                      return (List es)
+            ")" -> error "Unmatched `)'"
+            _   -> return $! Atom (intern x)
+
 word :: Parser Word
 word = do "(" <- token
           lex <- sym
@@ -170,11 +196,20 @@ event = do "(" <- token
                               n))
              _ -> return Nothing
 
+readGzipFile :: FilePath -> B.ByteString
+readGzipFile fname = decompress (unsafePerformIO (C.readFile fname))
+
+theTrees :: [Sexp]
+theTrees = evalState (many (parens sexp))
+                     (B.dropWhile isSpace (readGzipFile "wsj-02-21.mrg.gz"))
+
+theTrees' :: [Sexp]
+theTrees' = evalState (many (parens sexp))
+                      (B.dropWhile isSpace (readGzipFile "wsj-22.mrg.gz"))
+
 theEvents :: [Event]
-theEvents = unsafePerformIO $ do
-  let fname = "wsj-02-21.observed.gz" -- "observed-sampled.gz"
-  gzip <- C.readFile fname
-  return (catMaybes (map (evalState event) (C.lines (decompress gzip))))
+theEvents = catMaybes (map (evalState event) (C.lines (readGzipFile fname)))
+  where fname = "wsj-02-21.observed.gz" -- "observed-sampled.gz"
 
 theNonts :: [Label]
 theNonts = [ nt | Nonterminal nt _ <- theEvents ]
@@ -206,6 +241,9 @@ thePosMap = M.map S.toList $
             M.fromListWith S.union
               [ (lex, S.singleton pos)
               | Head (Word lex pos) Nothing _ <- theEvents ]
+
+known :: Word -> Bool
+known (Word lex pos) = maybe False (pos `elem`) (M.lookup lex thePosMap)
 
 antepreterminals :: M.Map Nont (S.Set POS)
 -- If a nonterminal appears in this map, it means that it is compatible

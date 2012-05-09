@@ -1,5 +1,5 @@
 {-# OPTIONS -W #-}
-{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 
 module MCFG (
     MCFG, MRule, MRHS,

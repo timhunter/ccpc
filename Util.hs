@@ -8,7 +8,8 @@ module Util (
     concurrently,
     StdRandom, random, randomR, runStdRandom, choose,
     MonoidMap(MonoidMap),
-    isLeft, isRight, fromLeft, fromRight
+    isLeft, isRight, fromLeft, fromRight,
+    buffered
 ) where
 
 import Data.Binary (Binary(get, put))
@@ -20,6 +21,8 @@ import Data.Monoid (Monoid(..))
 import Control.Exception (bracket, finally)
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
+import Control.DeepSeq (NFData)
+import Control.Parallel.Strategies (withStrategy, parBuffer, rdeepseq)
 import System.IO (withFile, IOMode(ReadMode, WriteMode), hPutStrLn, hGetLine, hFlush, hIsEOF, hClose, openBinaryFile)
 import qualified Control.Monad.State.Lazy as State
 import qualified Data.ByteString.Lazy as B
@@ -103,3 +106,6 @@ fromLeft  _         = error "Util.fromLeft: Right"
 fromRight :: Either a b -> b
 fromRight (Right x) = x
 fromRight _         = error "Util.fromRight: Left"
+
+buffered :: (NFData a) => [a] -> [a]
+buffered = withStrategy (parBuffer 3 rdeepseq)
