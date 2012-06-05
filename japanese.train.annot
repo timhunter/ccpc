@@ -1,13 +1,13 @@
 # basic sentences
-100 N ga N o Vt
-120 N o Vt   # subject PRO
-50 N ga Vt   # object PRO
+759 N ga N o Vt
+538 N o Vt   # subject PRO
+75 N ga Vt   # object PRO
 # relative clauses
-30 N o Vt N ga Vi
-30 N ga Vt N ga Vi
+613 N o Vt N ga Vi
+295 N ga Vt N ga Vi
 # clefts
-31 N o Vt no wa N da   # clefted subject is more frequent than       SUBJECTGAP-reading1
-8 N ga Vt no wa N da   # clefted object                              OBJECTGAP-reading1
+36 N o Vt no wa N da   # SUBJECTGAP-reading1
+18 N ga Vt no wa N da   # OBJECTGAP-reading1
 # and no-complements
-40 N o Vt no o N ga mita   # N saw someone chase the cat             SUBJECTGAP-reading2
-1 N ga Vt no o N ga mita   # N saw the child chase something  	     OBJECTGAP-reading2
+51 N o Vt no ga Vi   # SUBJECTGAP-reading2
+10 N ga Vt no ga Vi   # OBJECTGAP-reading2
