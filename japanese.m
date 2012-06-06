@@ -3,6 +3,6 @@ japanese = {
 {"N","ga","Vt","N","ga","Vi"},
 {"N","o","Vt","no","wa","N","da"},
 {"N","ga","Vt","no","wa","N","da"},
-{"N","o","Vt","no","o","N","ga","mita"},
-{"N","ga","Vt","no","o","N","ga","mita"}
+{"N","o","Vt","no","ga","Vi"},
+{"N","ga","Vt","no","ga","Vi"}
 }
