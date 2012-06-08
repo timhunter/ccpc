@@ -20,8 +20,9 @@
 %  d. the particle "to" is a complementizer (p172 of Tsujimura)
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
-% updated by Jiwon Yun, April 9 2012
-% proofread with minor corrections
+% modified by Jiwon Yun
+% April 9, 2012: proofreading with minor corrections
+% June 8, 2012: turned off short scrambling to avoid spurious ambiguity
 
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
@@ -64,7 +65,7 @@
 % DP moves to Spec-CaseP due to the word-order. 
 [ga]::[='D',+f,'Case',-nom].
 
-[o]::[='D',+f,'Case',-acc,-scramble].  % "short" scrambling
+%[o]::[='D',+f,'Case',-acc,-scramble].  % "short" scrambling
 [o]::[='D',+f,'Case',-acc].
 
 [ni]::[='D',+f,'Case',-dat].
@@ -137,7 +138,7 @@
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
-[]::[='v-Decl',+nom,+scramble,'T-Decl'].
+%[]::[='v-Decl',+nom,+scramble,'T-Decl'].
 []::[='v-Emb',+nom,'T-Emb',-f].
 % []::[='v-Adj',+nom,'T-Adj'].
 
