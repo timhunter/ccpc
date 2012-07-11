@@ -2,7 +2,7 @@ open Util
 
 type item = ParseItem of string * (range list)  (*range defined in Util*) 
 
-type route = (item list) * Rule.r * (Num.num * Num.num) option
+type route = (item list) * Rule.r * weight
 
 type chart = TableWithHistory of (item, route) Hashtbl.t
 
