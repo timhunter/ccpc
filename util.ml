@@ -128,5 +128,18 @@ let concat_ranges range1 range2 =
 	| (VarRange (k,l), Pair (i,j)) -> if (k <= i && i < l) then (Pair (i,j)) else (raise RangesNotAdjacentException)
 	| (VarRange (i,j), VarRange (k,l)) -> let ik = max i k in let jl = min j l in if ik < jl then (VarRange (ik,jl)) else (raise RangesNotAdjacentException)
 
+(****************************************************************************)
 
+type weight = (Num.num * Num.num) option
+
+let show_weight w =
+  match w with
+  | Some (x,y) -> Printf.sprintf "%s / %s" (Num.string_of_num x) (Num.string_of_num y)
+  | None -> ""
+
+let mult_weights w1 w2 =
+  match (w1,w2) with
+  | (None, None) -> None
+  | (Some (n1,d1), Some (n2,d2)) -> Some (Num.mult_num n1 n2, Num.mult_num d1 d2)
+  | _ -> Printf.eprintf "WARNING: Multiplying a None weight with a non-None weight!" ; None
 

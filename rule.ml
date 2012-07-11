@@ -5,7 +5,7 @@ open Num
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
     type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)    
-    type r = Terminating of (string * string * ((num * num) option)) | NonTerminating of (string * string Nelist.t * tuplerecipe * ((num * num) option))
+    type r = Terminating of (string * string * weight) | NonTerminating of (string * string Nelist.t * tuplerecipe * weight)
 
     (**********************************************************)
 
@@ -165,9 +165,4 @@ open Num
           | PublicTerminating s -> []
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
-      let weight_str =
-        match (get_weight rule) with
-        | Some (w1,w2) -> (((Num.string_of_num w1)^" / "^(Num.string_of_num w2))^"     ")  (*  Printf.sprintf "%d / %d     " w1 w2 *)
-        | None -> ""
-      in
-      Printf.sprintf "%s %s --> %s %s" weight_str left rhs_output recipe
+      Printf.sprintf "%s      %s --> %s %s" (show_weight (get_weight rule)) left rhs_output recipe
