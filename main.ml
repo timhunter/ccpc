@@ -67,8 +67,8 @@ let print_grammar grammar_file prefix (rules, start_symbol) =
 	Printf.printf "(* prefix: %s *)\n" prefix ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { debug : bool ; graph : string option ; sexp : bool ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
-let default_options = {debug = false ; graph = None; sexp = false; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
+type options = { debug : bool ; graph : string option ; kbest : int option ; sexp : bool ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
+let default_options = {debug = false ; graph = None; kbest = None ; sexp = false; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
 
 let rec process_args args acc =
 	match args with
@@ -79,7 +79,40 @@ let rec process_args args acc =
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
 	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s); intersect = true}
         | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s); intersect = true}
+        | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
 	| (x::rest)          -> process_args rest {acc with sentence = Some x}
+
+(****************************************************************************************)
+
+(*
+let rec get_best item chart =
+        let build_derivation (antecedents, rule, weight) =
+                let sub_derivations : Derivation.derivation_tree list = List.map (fun i -> get_best i chart) antecedents in
+                let new_weight = List.fold_left mult_weights weight (map_tr Derivation.get_weight sub_derivations) in
+                Derivation.make_derivation_tree_weighted item sub_derivations new_weight
+        in
+        let candidates = List.map build_derivation (get_routes item chart) in
+        print_string ("Item: " ^ (debug_str item)) ;
+        print_string "Weights: " ;
+        List.iter (fun w -> print_string (show_weight w) ; print_string " ") (List.map Derivation.get_weight candidates) ;
+        print_newline () ;
+        (List.hd candidates)   (* assume for now that the first one is the ``best'' *)
+*)
+
+let print_kbest k chart start_symbol input_list =
+        Printf.printf "Here are the %d best parses!\n" k ;
+        let goal_items = goal_items chart start_symbol (List.length input_list) in
+        let goal_derivations = List.concat ((map_tr (Derivation.get_derivations chart)) goal_items) in
+        let compare_derivations d1 d2 = compare_weights (Derivation.get_weight d1) (Derivation.get_weight d2) in
+        let rec make_trees goals acc =
+                match goals with
+                | [] -> acc
+                | h::t ->  make_trees t ((print_tree h input_list)::acc)
+        in
+        let trees = make_trees (take k (List.sort compare_derivations goal_derivations)) [] in
+        List.iter (Printf.printf "%s\n") trees
+
+(****************************************************************************************)
 
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
@@ -96,9 +129,9 @@ let main () =
 			None -> failwith "No sentence given; nothing to do!"
 		      | Some s -> (let x = Util.split ' ' s in
 				   (x,s,options.input x)) in
-		match (options.intersect,options.graph,options.sexp) with
-		    (false,None,false) -> ignore (run_parser input_list input_grammar)
-		  | (_,_,_) -> 
+		match (options.intersect,options.graph,options.sexp,options.kbest) with
+		    (false,None,false,None) -> ignore (run_parser input_list input_grammar)
+		  | (_,_,_,_) -> 
 		      let chart = Parser.deduce (-1) rules parser_argument in
 		      let goal_items = Chart.goal_items chart start_symbol (List.length input_list) in
 		      begin
@@ -118,7 +151,11 @@ let main () =
    			       List.iter print_string (make_trees goal_derivations []);
 			      print_newline ()
 			    end
-			   else ()
+			   else 
+			     (match options.kbest with
+			      | None -> ()
+			      | Some k -> print_kbest k chart start_symbol input_list
+			     )
 			  );
 			(* ditto for graphs *)
 			match options.graph with

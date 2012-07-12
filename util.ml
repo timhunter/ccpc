@@ -143,3 +143,9 @@ let mult_weights w1 w2 =
   | (Some (n1,d1), Some (n2,d2)) -> Some (Num.mult_num n1 n2, Num.mult_num d1 d2)
   | _ -> Printf.eprintf "WARNING: Multiplying a None weight with a non-None weight!" ; None
 
+let compare_weights w1 w2 =
+  match (w1,w2) with
+  | (None, None) -> 0
+  | (Some (n1,d1), Some (n2,d2)) -> Num.compare_num (Num.div_num n1 d1) (Num.div_num n2 d2)
+  | (None, Some (n,d)) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.num_of_int 0) (Num.div_num n d)
+  | (Some (n,d), None) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.div_num n d) (Num.num_of_int 0)

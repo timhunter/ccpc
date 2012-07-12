@@ -22,3 +22,4 @@ val all_lists : 'a list -> int -> 'a list list
 type weight = (Num.num * Num.num) option
 val show_weight : weight -> string
 val mult_weights : weight -> weight -> weight
+val compare_weights : weight -> weight -> int
