@@ -146,6 +146,7 @@ let main () =
 		    (false,None,false,None) -> ignore (run_parser input_list input_grammar)
 		  | (_,_,_,_) -> 
 		      let chart = Parser.deduce (-1) rules parser_argument in
+		      <:DEBUG< "%s\n" (String.concat "\n" (Chart.map_items chart (fun i -> Chart.debug_str_long i chart))) >> ;
 		      let goal_items = Chart.goal_items chart start_symbol (List.length input_list) in
 		      begin
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)

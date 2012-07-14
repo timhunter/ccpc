@@ -17,7 +17,7 @@ let debug fmt =
    <:DEBUG< ... >> quotation. *)
 let debug_fast s =
 	if (!_debug_mode) then
-		print_string (Lazy.force s)
+		prerr_string (Lazy.force s)
 	else
 		()
 

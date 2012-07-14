@@ -9,6 +9,7 @@ val get_ranges: item -> Util.range list
 val get_routes : item -> chart -> route list
 val to_string: item -> string list -> string 
 val debug_str : item -> string
+val debug_str_long : item -> chart -> string
 
 val create : int -> chart 
 val add : chart -> item -> route -> unit

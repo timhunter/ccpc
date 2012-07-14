@@ -50,6 +50,17 @@ let debug_str item =
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
 
+let debug_str_long item chart =
+	let ParseItem (nt, ranges) = item in
+	let show_range r =
+		match r with
+		| Pair (x,y) -> Printf.sprintf "%d:%d" x y
+		| VarRange _ -> Printf.sprintf "eps"
+	in
+	let show_backpointer (items,r,wt) = "(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")" in
+	let backpointers_str = List.fold_left (^^) "" (map_tr show_backpointer (get_routes item chart)) in
+	("[" ^^ (string_of_int (Hashtbl.hash item)) ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ backpointers_str ^^ "]")
+
 let create i = TableWithHistory (Hashtbl.create i)
 
 let add c item route =
