@@ -77,8 +77,8 @@ let rec process_args args acc =
 	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
 	| ("-s" :: rest)               -> process_args rest {acc with sexp = true}
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
-	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s); intersect = true}
-        | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s); intersect = true}
+	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s)}
+        | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s)}
         | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
 	| (x::rest)          -> process_args rest {acc with sentence = Some x}
 
@@ -100,7 +100,6 @@ let rec get_best item chart =
 *)
 
 let print_kbest k chart start_symbol input_list =
-        Printf.printf "Here are the %d best parses!\n" k ;
         let goal_items = goal_items chart start_symbol (List.length input_list) in
         let goal_derivations = List.concat ((map_tr (Derivation.get_derivations chart)) goal_items) in
         let compare_derivations d1 d2 = compare_weights (Derivation.get_weight d1) (Derivation.get_weight d2) in
@@ -110,6 +109,7 @@ let print_kbest k chart start_symbol input_list =
                 | h::t ->  make_trees t ((print_tree h input_list)::acc)
         in
         let trees = make_trees (take k (List.sort compare_derivations goal_derivations)) [] in
+        Printf.printf "Found %d parses altogether, here are the best %d:\n" (List.length goal_derivations) k ;
         List.iter (Printf.printf "%s\n") trees
 
 (****************************************************************************************)
@@ -118,7 +118,20 @@ let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
 		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\") (-s) (-intersect) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
-		Printf.eprintf "Flags in parentheses are optional. -p and -infix each imply -intersect \n"
+		Printf.eprintf "\n" ;
+		Printf.eprintf "  Flags in parentheses are optional.\n" ;
+		Printf.eprintf "\n" ;
+		Printf.eprintf "  Only one of the following three flags will take effect; if more than one is given, \n" ;
+		Printf.eprintf "  -intersect trumps everything else, and -s trumps -kbest.\n" ;
+		Printf.eprintf "      -intersect     Prints intersection grammar to stdout\n" ;
+		Printf.eprintf "      -s             Prints s-expression to stdout\n" ;
+		Printf.eprintf "      -kbest <k>     Reports the best <k> parses to stdout\n" ;
+		Printf.eprintf "\n" ;
+		Printf.eprintf "  Only one of the following two flags will take effect; if more than one is given, \n" ;
+		Printf.eprintf "  the last one overrides all others. If neither is given, the string is treated as 'exact'.\n" ;
+		Printf.eprintf "      -p             Treat the string to be parsed as a prefix\n" ;
+		Printf.eprintf "      -infix         Treat the string to be parsed as an infix\n" ;
+		Printf.eprintf "\n"
 	| (x::xs) ->
 		(* first arg is the grammar; the rest go to process_args *)
 		let grammar_file = x in
