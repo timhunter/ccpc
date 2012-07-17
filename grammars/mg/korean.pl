@@ -32,18 +32,14 @@
 []::['Case',-nom].
 []::['Case',-acc].
 
-% all the predicates are limited to transitives
 
 % One-place declarative predicates (intransitive verbs and adjectives)
 % In Korean, adjectives syntactically behave like intransitive verbs.
- ['Vi']::['V-Decl'].
+ ['Vdecl']::['V-Decl'].
 
 % Two-place declarative predicates (transitive verbs)
 % , which assign accusative case
- ['Vt']::[='Case',+acc,'V-Decl'].
-
-% declarative form predicates (transitive verbs)
- ['VTDecl']::[='Case',+acc,'V-Decl'].
+ ['Vdecl']::[='Case',+acc,'V-Decl'].
 
 % adnominal form of predicates
 % The same adnominal form is used for both relative and complement clauses.
