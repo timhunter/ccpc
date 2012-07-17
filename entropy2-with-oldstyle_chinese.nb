@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    421708,       9746]
-NotebookOptionsPosition[    402880,       9272]
-NotebookOutlinePosition[    403279,       9290]
-CellTagsIndexPosition[    403236,       9287]
+NotebookDataLength[    289195,       6585]
+NotebookOptionsPosition[    278822,       6305]
+NotebookOutlinePosition[    279221,       6323]
+CellTagsIndexPosition[    279178,       6320]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2023,9 +2023,10 @@ Cell[BoxData[
            RowBox[{"StringJoin", "[", 
             RowBox[{
             "\"\<./mcfg_nt \>\"", " ", ",", "unconditionedgrammarfilename", 
-             ",", "\"\< -p \\\"\>\"", ",", "fragstring", ",", 
-             "\"\<\\\" | \>\"", ",", "cleanupEpsilon", ",", "\"\< > \>\"", 
-             ",", "dest"}], "]"}]}], ";", "\[IndentingNewLine]", "\t\t", 
+             ",", "\"\< -intersect \>\"", ",", "\"\< -p \\\"\>\"", ",", 
+             "fragstring", ",", "\"\<\\\" | \>\"", ",", "cleanupEpsilon", 
+             ",", "\"\< > \>\"", ",", "dest"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", "\t\t", 
           RowBox[{"PrintTemporary", "[", "cmd", "]"}], ";", 
           "\[IndentingNewLine]", "\t\t", 
           RowBox[{"Run", "[", "cmd", "]"}], ";"}]}], "\[IndentingNewLine]", 
@@ -2046,7 +2047,9 @@ Cell[BoxData[
    3.5219763860000277`*^9}, {3.5219781371308413`*^9, 3.5219781523473787`*^9}, 
    3.522189994861129*^9, {3.523790408690002*^9, 3.5237904099016247`*^9}, {
    3.5237911033234043`*^9, 3.523791106648191*^9}, {3.524586243912176*^9, 
-   3.524586244961864*^9}, {3.5245862970273027`*^9, 3.524586298287682*^9}}],
+   3.524586244961864*^9}, {3.5245862970273027`*^9, 3.524586298287682*^9}, {
+   3.5515334652240562`*^9, 3.5515334696530037`*^9}, {3.55153367380278*^9, 
+   3.551533673928279*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -2153,9 +2156,9 @@ Cell[BoxData[
             RowBox[{"StringJoin", "[", 
              RowBox[{
              "\"\<./mcfg_nt \>\"", " ", ",", "unconditionedgrammarfilename", 
-              ",", "\"\< -p \\\"\>\"", ",", "fragstring", ",", 
-              "\"\<\\\" | \>\"", ",", "cleanupEpsilon", ",", 
-              "\"\< | sed -r -f \>\"", ",", "unlexicalizer", ",", 
+              ",", "\"\< -intersect \>\"", ",", "\"\< -p \\\"\>\"", ",", 
+              "fragstring", ",", "\"\<\\\" | \>\"", ",", "cleanupEpsilon", 
+              ",", "\"\< | sed -r -f \>\"", ",", "unlexicalizer", ",", 
               "\"\< | sort -k4 | uniq > \>\"", ",", "dest"}], "]"}]}],
            Background->GrayLevel[0.85]], 
           StyleBox[";",
@@ -2195,7 +2198,8 @@ Cell[BoxData[
    3.52218349336351*^9, {3.5221835242808447`*^9, 3.522183525272067*^9}, {
    3.522185790745825*^9, 3.522185794912475*^9}, {3.522189122206869*^9, 
    3.522189144015409*^9}, 3.522189994864298*^9, {3.52465750607883*^9, 
-   3.524657516209805*^9}, {3.5246577151489573`*^9, 3.5246577260979567`*^9}}],
+   3.524657516209805*^9}, {3.5246577151489573`*^9, 3.5246577260979567`*^9}, 
+   3.551533534523766*^9, {3.5515337144751463`*^9, 3.5515337147637444`*^9}}],
 
 Cell["\<\
 This re-creates all the prefix grammars for a given set of examples:\
@@ -2969,1359 +2973,102 @@ Cell[BoxData[
      "]"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.5511092414473267`*^9, 3.551109255292325*^9}}],
 
-Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637939887037`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794028747*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637940782223`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637941319427`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794176875*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794228559*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] is neither an integer nor a list of integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637942805357`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(2\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794324924*^9}],
-
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463794374772*^9}],
+ CellChangeTimes->{3.5515337536956244`*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637944300013`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637944800987`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(First :: first\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794563714*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794632647*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146379468332*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794745357*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
-\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146379481531*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794860118*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] does not exist.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463794910434*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637949543133`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partw\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795011141*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] is neither an integer nor a list of integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795055435*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification RowBox[{\\\"vertexNumber$2423\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"(\\\", InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False], \\\")\\\"}], \\\"\[LeftDoubleBracket]\\\", \\\"4\\\", \\\"\
-\[RightDoubleBracket]\\\"}], \\\"]\\\"}] is neither an integer nor a list of \
-integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795104354*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(2\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637951608562`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: pspec\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795203466*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795260433*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795309853*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(First :: first\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795359577*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637954078293`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795452483*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795508415*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
-\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637955575733`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2423, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2423\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795608427*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] does not exist.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637956516237`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637957083397`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partw\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637957576513`*^9}],
+ CellChangeTimes->{3.551533753730671*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637958007708`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification RowBox[{\\\"vertexNumber$2423\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"(\\\", InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False], \\\")\\\"}], \\\"\[LeftDoubleBracket]\\\", \\\"4\\\", \\\"\
-\[RightDoubleBracket]\\\"}], \\\"]\\\"}] is neither an integer nor a list of \
-integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795857623*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463795901394*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: pspec\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146379595761*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FromDigits :: \
-nlst\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637960004187`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796056938*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637961055202`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796156917*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637961993723`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2423[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637962551537`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Rule :: argr\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637962993917`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2423, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2423\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637963547297`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796405119*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2423[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796454788*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2497, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2497\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796498374*^9}],
+ CellChangeTimes->{3.5515337553645363`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637965544024`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796603939*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796683449*^9}],
+ CellChangeTimes->{3.551533755495718*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463796731215*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FromDigits :: \
-nlst\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796803792*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796847042*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146379690338*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Table :: iterb\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463796947699*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637970031433`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797053404*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Rule :: argr\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797102873*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FindRoot :: \
-vloc\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637971456823`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2497[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637972011023`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2571, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2571\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797247459*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2497, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2497\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797295726*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(ReplaceAll :: \
-reps\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797351246*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2497[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797401527*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797445198*^9}],
+ CellChangeTimes->{3.551533755933436*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463797500835*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Set :: pspec\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637975496683`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797595047*^9}],
+ CellChangeTimes->{3.551533755993608*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637976494293`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Table :: iterb\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637976941433`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797749881*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$2571[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797799947*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797849393*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FindRoot :: \
-vloc\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637978998737`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797942603*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$2571, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$2571\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463797998568*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463798049685*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(ReplaceAll :: \
-reps\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463798093689*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463798143306*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$2571[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514637981991053`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463798249097*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Set :: pspec\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146379829128*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463798348423*^9}],
+ CellChangeTimes->{3.5515337562494717`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798397835*^9}],
+ CellChangeTimes->{3.5515337564344463`*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637984462442`*^9}],
+ CellChangeTimes->{3.551533756497198*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5515337566200867`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5515337568485193`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637984910192`*^9}],
+ CellChangeTimes->{3.551533757070301*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551533757258787*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798545916*^9}],
+ CellChangeTimes->{3.551533757472958*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551533757688407*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798590577*^9}],
+ CellChangeTimes->{3.551533757840125*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551533757978965*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551533758198388*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798645409*^9}],
+ CellChangeTimes->{3.55153375826192*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551533758417865*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.55146379868992*^9}],
+ CellChangeTimes->{3.551533758695445*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798746861*^9}],
+ CellChangeTimes->{3.5515337590536613`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514637987949753`*^9}],
+ CellChangeTimes->{3.551533759386231*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463798841922*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(0\\)\[NoBreak] is not a \
-list of digits or a string of valid digits. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/FromDigits/nlst\\\", ButtonNote -> \
-\\\"FromDigits::nlst\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.5514637989806004`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator \[NoBreak]RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \
-\\\"[\\\", RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}]\[NoBreak] does \
-not have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
-\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799069592*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator \[NoBreak]RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \
-\\\"[\\\", RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}]\[NoBreak] does \
-not have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
-\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799073717*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(0\\)\[NoBreak] is not a \
-list of digits or a string of valid digits. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/FromDigits/nlst\\\", ButtonNote -> \
-\\\"FromDigits::nlst\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799077386*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(FromDigits[0]\\)\
-\[NoBreak] is neither an integer nor a list of integers. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/pspec\\\", \
-ButtonNote -> \\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.55146379908027*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \[NoBreak]\\!\\(0\\)\[NoBreak] is not a \
-list of digits or a string of valid digits. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/FromDigits/nlst\\\", ButtonNote -> \
-\\\"FromDigits::nlst\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799083145*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \
-\[NoBreak]\\!\\(\\*StyleBox[\\(FromDigits :: nlst\\), \\\"MessageName\\\"]\\)\
-\[NoBreak] will be suppressed during this calculation. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/stop\\\", \
-ButtonNote -> \\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.5514637990858603`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator \[NoBreak]RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \
-\\\"[\\\", RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}]\[NoBreak] does \
-not have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
-\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799088662*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Table :: \
-iterb\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799092012*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(FromDigits[0]\\)\
-\[NoBreak] is neither an integer nor a list of integers. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/pspec\\\", \
-ButtonNote -> \\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799094842*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(FromDigits[0]\\)\
-\[NoBreak] is neither an integer nor a list of integers. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/pspec\\\", \
-ButtonNote -> \\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.55146379909762*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Part :: \
-pspec\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551463799100337*^9}]
-}, Closed]],
+ CellChangeTimes->{3.551533759756228*^9}]
+}, Open  ]],
 
 Cell[TextData[{
  StyleBox["checkSentences:",
@@ -4872,1605 +3619,99 @@ Cell[BoxData[
 
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463482911829*^9}],
+ CellChangeTimes->{3.551533776079776*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514634829534283`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483034773*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483097666*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483149968*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483199629*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634832536993`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483319263*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483365869*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634834153767`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] is neither an integer nor a list of integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483468418*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] is neither an integer nor a list of integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634835189457`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(2\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634835666237`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(2\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483611681*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483667801*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
-element.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483717737*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(First :: first\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483766185*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(First :: first\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634838170853`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483866675*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483916389*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
-\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463483961583*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
-\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634840159273`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] does not exist.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484066742*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partw"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part \\!\\(4\\) of InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False] does not exist.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634841096783`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partw\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484164233*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partw\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634842094507`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification RowBox[{\\\"vertexNumber$1452\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"(\\\", InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False], \\\")\\\"}], \\\"\[LeftDoubleBracket]\\\", \\\"4\\\", \\\"\
-\[RightDoubleBracket]\\\"}], \\\"]\\\"}] is neither an integer nor a list of \
-integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484265622*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification RowBox[{\\\"vertexNumber$1452\\\", \
-\\\"[\\\", RowBox[{RowBox[{\\\"(\\\", InterpretationBox[StyleBox[RowBox[{\\\"\
-\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
-\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
-AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
--> False], \\\")\\\"}], \\\"\[LeftDoubleBracket]\\\", \\\"4\\\", \\\"\
-\[RightDoubleBracket]\\\"}], \\\"]\\\"}] is neither an integer nor a list of \
-integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484308978*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: pspec\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484363905*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: pspec\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634844146*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484463896*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146348451444*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484564533*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634846130447`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484662504*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1452[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484707148*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1452, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1452\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484764104*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1452, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1452\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484807276*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484862714*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1452[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634849070272`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463484961989*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485012004*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146348506211*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485112417*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146348516168*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485211541*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485260048*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634853112307`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485360574*^9}],
+ CellChangeTimes->{3.551533776126801*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463485410447*^9}],
+ CellChangeTimes->{3.551533777719409*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463485462348*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485510186*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485558515*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485610003*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634856597967`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
-are expected.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634857089577`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Rule :: argr\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485759252*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Rule :: argr\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485808807*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634858591547`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1533[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485909068*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1533, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1533\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463485952478*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1533, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1533\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486008162*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634860588408`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1533[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634861023817`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486158848*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486201599*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Eigenvalues :: \
-matsq\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486256916*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Eigenvalues :: \
-matsq\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634863078747`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634863571463`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486407947*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486450629*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634865066757`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634865576687`*^9}],
+ CellChangeTimes->{3.551533778302063*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514634865999813`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634866557627`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
-string of valid digits.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486706135*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FromDigits :: \
-nlst\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486755814*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FromDigits :: \
-nlst\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634868065863`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634868519983`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
-RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
-RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
-\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
-\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
-Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
-\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
-appropriate bounds.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634869046383`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Table :: iterb\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463486950128*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Table :: iterb\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634870046*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634870537*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
-\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - x\\_\
-\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
-\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
-\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
-\\(\\(vertexNumber$1614[\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] \
-4 \[RightDoubleBracket]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) + \
-\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
-\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
-\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
-cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634870982313`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FindRoot :: \
-vloc\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487148488*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(FindRoot :: \
-vloc\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634872033157`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1614, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1614\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487253684*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$1614, \
-\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$1614\\)\\), \
-\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
-replacement rules nor a valid dispatch table, and so cannot be used for \
-replacing.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487303437*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(ReplaceAll :: \
-reps\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634873534737`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(ReplaceAll :: \
-reps\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487403565*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.55146348745306*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
-\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\(FromDigits[0]\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
-\\(\\(\\(\\(Table[\\(\\(0, \
-\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
-\[LeftDoubleBracket] \\(\\(vertexNumber$1614[\\(\\(\\(\\({}\\)\\) \
-\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
-\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
-integer nor a list of integers.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634874966383`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Set :: pspec\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487553349*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Set :: pspec\\), \\\
-\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487602936*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487651339*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
-machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487701385*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(IdentityMatrix :: \
-dims\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634877517033`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(IdentityMatrix :: \
-dims\\), \\\"MessageName\\\"]\\) will be suppressed during this \
-calculation.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487801622*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487851956*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
-non-empty square matrix.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487900344*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Inverse :: \
-matsq\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463487950465*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Inverse :: \
-matsq\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488000033*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488049795*^9}],
+ CellChangeTimes->{3.551533778938436*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488100263*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488150413*^9}],
+ CellChangeTimes->{3.5515337793805027`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488199971*^9}],
+ CellChangeTimes->{3.551533779660389*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488250108*^9}],
+ CellChangeTimes->{3.551533779716709*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488299947*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5514634883503313`*^9}],
+ CellChangeTimes->{3.551533779954117*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488399488*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488449967*^9}],
+ CellChangeTimes->{3.551533780162816*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488498075*^9}],
+ CellChangeTimes->{3.551533781092621*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488549169*^9}],
+ CellChangeTimes->{3.5515337812032843`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5515337824357986`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.55146348859866*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488648444*^9}],
+ CellChangeTimes->{3.5515337824862757`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5514634886978483`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488749011*^9}],
+ CellChangeTimes->{3.551533782739156*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488793891*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463488847705*^9}],
+ CellChangeTimes->{3.551533783045991*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463488896538*^9}],
+ CellChangeTimes->{3.551533783278056*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \[NoBreak]\\!\\({}\\)\[NoBreak] at position \
-\[NoBreak]\\!\\(1\\)\[NoBreak] is not a non-empty square matrix. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/matsq\\\", \
-ButtonNote -> \\\"Inverse::matsq\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488945923*^9}],
+ CellChangeTimes->{3.551533783525077*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\[NoBreak]\\!\\({}\\)\[NoBreak] has a length of zero and \
-no first element. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/First/first\\\", ButtonNote -> \
-\\\"First::first\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488952231*^9}],
+ CellChangeTimes->{3.551533784011483*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\[NoBreak]\\!\\(idx$1476[\\(\\(First[\\(\\({}\\)\\)]\\)\\)]\\)\[NoBreak] is \
-neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/pspec\\\", ButtonNote -> \
-\\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.5514634889562263`*^9}],
+ CellChangeTimes->{3.55153378478785*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \[NoBreak]\\!\\({}\\)\[NoBreak] at position \
-\[NoBreak]\\!\\(1\\)\[NoBreak] is not a non-empty square matrix. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/matsq\\\", \
-ButtonNote -> \\\"Inverse::matsq\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488959858*^9}],
+ CellChangeTimes->{3.551533785901402*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\[NoBreak]\\!\\({}\\)\[NoBreak] has a length of zero and \
-no first element. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/First/first\\\", ButtonNote -> \
-\\\"First::first\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488963175*^9}],
+ CellChangeTimes->{3.551533786722446*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\[NoBreak]\\!\\(idx$1557[\\(\\(First[\\(\\({}\\)\\)]\\)\\)]\\)\[NoBreak] is \
-neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/pspec\\\", ButtonNote -> \
-\\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488966481*^9}],
+ CellChangeTimes->{3.551533787561318*^9}],
 
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Argument \[NoBreak]\\!\\({}\\)\[NoBreak] at position \
-\[NoBreak]\\!\\(1\\)\[NoBreak] is not a non-empty square matrix. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/matsq\\\", \
-ButtonNote -> \\\"Inverse::matsq\\\"]\\)\"\>"}]], "Message", "MSG",
+Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.5514634889698467`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Inverse \
-:: matsq\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.5514634889731617`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"First", "::", "first"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"\[NoBreak]\\!\\({}\\)\[NoBreak] has a length of zero and \
-no first element. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/First/first\\\", ButtonNote -> \
-\\\"First::first\\\"]\\)\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488976574*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(First :: \
-first\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.5514634889798393`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \
-\[NoBreak]\\!\\(idx$1638[\\(\\(First[\\(\\({}\\)\\)]\\)\\)]\\)\[NoBreak] is \
-neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\\\"\
-\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/pspec\\\", ButtonNote -> \
-\\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.551463488983202*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Part :: \
-pspec\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.551463394682497*^9, 3.5514634889865513`*^9}]
+ CellChangeTimes->{3.551533788410514*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -6582,67 +3823,46 @@ Cell[BoxData[
   3.529688326547227*^9, 3.529688340324298*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "bddir"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The search direction \
-\[NoBreak]\\!\\({\\(\\(-5.121518948610634`16.*^-17\\)\\), \
-\\(\\(-5.121518948610634`16.*^-17\\)\\), 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-1.496478746824677`16.*^-16, 1.496478746824677`16.*^-16, \
-6.237956541635072`16.*^-17, 1.724815183255735`16.*^-16}\\)\[NoBreak] is not a \
-descent direction for the merit function. The step will be taken without the \
-line search. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/FindRoot\\\", ButtonNote -> \
-\\\"FindRoot::bddir\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551213639544057*^9}],
-
-Cell[BoxData[
  RowBox[{"{", 
   RowBox[{
    RowBox[{"{", 
     RowBox[{
-    "3.16012496552697750678813728986149556022`14.358946929343961", ",", 
-     "2.22467008663435970248604247266099781965`14.150797605126018", ",", 
-     "1.63892121627687358648671478444924787254`14.049240371353164", ",", 
-     "2.76548054788810380500742314158202361796`14.083098247854014", ",", 
-     "2.32041302454715134642206086912352702711`14.020266248102356", ",", 
-     "0.97077583214328526785372869278845087138`13.572769307732408", ",", 
-     "0.59041693095827046456388481621146979705`13.368304310092409"}], "}"}], 
+    "2.98725505645791058318251967595990947757`14.341968313688685", ",", 
+     "1.8151703170516825444884972950987389595`14.07860705981482", ",", 
+     "1.41007436780282089153724933705547073259`13.996394453619818", ",", 
+     "2.14571163940836858970758610487550299695`13.987264444249847", ",", 
+     "1.73001278278804721682832684637176612341`13.907669906630446", ",", 
+     "0.87680156108646412332213726514851259708`13.528814966901857", ",", 
+     "0.62782692652780738867433416028340786852`13.393771134389873"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "3.16012496552697750678813728986149556022`14.358946929343961", ",", 
-     "2.08000218959116597443629800845421584654`14.22026926687195", ",", 
-     "1.37924467639500778127397209726900939586`14.013515191366455", ",", 
-     "2.46416506986964324176121732268285313694`13.982126904378946", ",", 
-     "1.55646890450880489491312236305375904521`13.791908209823882", ",", 
-     "0.97077583214328529035092377186266787703`13.572769307732408", ",", 
-     "0.5904169309582703698046149409783822648`13.368304310092403"}], "}"}], 
+    "2.98725505645791058318251967595990947757`14.341968313688685", ",", 
+     "1.99307001563953798751235163555506346711`14.205125469330948", ",", 
+     "1.28086728141027548897755081180882541503`13.977597780867468", ",", 
+     "1.86788592476020197250463281135601789629`13.84802549327295", ",", 
+     "0.96018975939936371911476511997740601601`13.568049000326768", ",", 
+     "0.87680156108646409925284903597031416211`13.528814966901857", ",", 
+     "0.62782692652780739404113491408665481686`13.393771134389873"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "3.16012496552697750678813728986149556022`14.358946929343961", ",", 
-     "2.08000218959116597443629800845421584654`14.22026926687195", ",", 
-     "1.37924467639500778127397209726900939586`14.013515191366455", ",", 
-     "2.19490215227314554893552414616131329694`13.918426698098983", ",", 
-     "1.32090565270326187365113046467968160869`13.710553551087239", ",", 
-     "1.20037328004290461672858361663607240644`13.673645791350147", ",", 
-     "0.62730178583205482790909751633634527934`13.396362972857583"}], "}"}], 
-   ",", 
+    "2.98725505645791058318251967595990947757`14.341968313688685", ",", 
+     "1.99307001563953798751235163555506346711`14.205125469330948", ",", 
+     "1.28086728141027548897755081180882541503`13.977597780867468", ",", 
+     "1.31505540595834174364938198853458573012`13.718050837662847", ",", 
+     "0.6292492238560346686036123253771279451`13.405087909610847", ",", 
+     "0.6292492238560346686036123253771279451`13.405087909610847", ",", 
+     "0``13.612938756431465"}], "}"}], ",", 
    RowBox[{"{", 
     RowBox[{
-    "3.16012496552697750678813728986149556022`14.358946929343961", ",", 
-     "2.08000218959116597443629800845421584654`14.22026926687195", ",", 
-     "1.37924467639500778127397209726900939586`14.013515191366455", ",", 
-     "0.59041693095827041626267803198224726202`13.702113600313458", ",", 
-     "0.90769616536083843586109332068900812374`13.561285054541923", ",", 
-     "0.90769616536083843586109332068900812374`13.561285054541923", ",", 
-     "0``13.612938756431465"}], "}"}]}], "}"}]], "Output",
+    "2.98725505645791058318251967595990947757`14.341968313688685", ",", 
+     "1.99307001563953798751235163555506346711`14.205125469330948", ",", 
+     "1.28086728141027548897755081180882541503`13.977597780867468", ",", 
+     "0.62782692652780745004017712296295883334`13.72617993600034", ",", 
+     "0.90769616536083845553936275130091360097`13.561285054541923", ",", 
+     "0.90769616536083845553936275130091360097`13.561285054541923", ",", 
+     "0``13.612938756431463"}], "}"}]}], "}"}]], "Output",
  CellChangeTimes->{
   3.529686665073412*^9, 3.529687057859044*^9, 3.529688408163126*^9, 
    3.529693742285076*^9, 3.530373145626376*^9, 3.5303739508222113`*^9, 
@@ -6760,7 +3980,7 @@ Cell[BoxData[
    3.542058406213636*^9, 3.542058518956107*^9, 3.542058668269896*^9, 
    3.5420587832557592`*^9, 3.542058911616845*^9, 3.551109365615321*^9, 
    3.551111314507238*^9, 3.551182811349827*^9, 3.5512043282784147`*^9, 
-   3.551213639781489*^9}]
+   3.551213639781489*^9, 3.5515338003304443`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -6780,59 +4000,39 @@ Cell[BoxData[
    3.530563794892082*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"FindRoot", "::", "bddir"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"The search direction \
-\[NoBreak]\\!\\({\\(\\(-5.121518948610634`16.*^-17\\)\\), \
-\\(\\(-5.121518948610634`16.*^-17\\)\\), 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-8.923103086656458`16.*^-17, 8.923103086656458`16.*^-17, \
-1.496478746824677`16.*^-16, 1.496478746824677`16.*^-16, \
-6.237956541635072`16.*^-17, 1.724815183255735`16.*^-16}\\)\[NoBreak] is not a \
-descent direction for the merit function. The step will be taken without the \
-line search. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/FindRoot\\\", ButtonNote -> \
-\\\"FindRoot::bddir\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.551213641991588*^9}],
-
-Cell[BoxData[
  RowBox[{"{", 
   RowBox[{
    RowBox[{"{", 
     RowBox[{
-    "0.93545487889261780430209481720049774057`13.500487480767331", ",", 
-     "0.58574887035748611599932768821174994711`13.285509379134387", ",", "0", 
-     ",", "0.44506752334095245858536227245849659085`12.9953587320882", ",", 
-     "1.34963719240386607856833217633507615573`13.447991801304338", ",", 
-     "0.38035890118501480328984387657698107433`12.870523486513195"}], "}"}], 
+    "1.17208473940622803869402238086117051807`13.610486197165324", ",", 
+     "0.40509594924886165295124795804326822691`13.139731921048371", ",", "0", 
+     ",", "0.41569885662032137287925925850373687354`12.980349846967725", ",", 
+     "0.85321122170158309350618958122325352633`13.255780066503824", ",", 
+     "0.24897463455865673464780310486510472856`12.686018649643257"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "1.08012277593581153235183928140727971368`13.612636153670447", ",", 
-     "0.70075751319615819316232591118520645068`13.432346453185717", ",", "0", 
-     ",", "0.90769616536083834684809495962909409173`13.251997988897926", ",", 
-     "0.58569307236551960456219859119109116818`13.059291787046925", ",", 
-     "0.38035890118501492054630883088428561223`12.870523486513195"}], "}"}], 
+    "0.99418504081837259567016804040484601046`13.582151143916013", ",", 
+     "0.71220273422926249853480082374623805208`13.439059104825985", ",", "0", 
+     ",", "0.90769616536083825338986769137861188028`13.238070641884448", ",", 
+     "0.0833881983128996198619160840070918539`12.205877372263219", ",", 
+     "0.24897463455865670521171412188365934525`12.686018649643257"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "1.08012277593581153235183928140727971368`13.612636153670447", ",", 
-     "0.70075751319615819316232591118520645068`13.432346453185717", ",", "0", 
-     ",", "0.87399649956988367528439368148163168825`13.223780136757574", ",", 
-     "0.12053237266035725692254684804360920225`12.372073104743217", ",", 
-     "0.5730714942108497888194861002997271271`13.053780794037635"}], "}"}], 
+    "0.99418504081837259567016804040484601046`13.582151143916013", ",", 
+     "0.71220273422926249853480082374623805208`13.439059104825985", ",", "0", 
+     ",", "0.68580618210230707504576966315745778502`13.137842655117131", ",", 
+     "0``13.305235225404257", ",", 
+     "0.6292492238560346685494022167528527234`13.10738186324201"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "1.08012277593581153235183928140727971368`13.612636153670447", ",", 
-     "0.70075751319615819316232591118520645068`13.432346453185717", ",", 
-     "0.78882774543673736501129406528676213384`13.497429397940085", ",", "0", 
+    "0.99418504081837259567016804040484601046`13.582151143916013", ",", 
+     "0.71220273422926249853480082374623805208`13.439059104825985", ",", 
+     "0.65304035488246803893737368884586658169`13.412151098700432", ",", "0", 
      ",", "0``13.302314558142402", ",", 
-     "0.90769616536083843586109332068900812374`13.265025666976738"}], "}"}]}],
+     "0.90769616536083845553936275130091360097`13.265025666976738"}], "}"}]}],
    "}"}]], "Output",
  CellChangeTimes->{
   3.52968661563721*^9, 3.5296870639007893`*^9, 3.529688474702001*^9, 
@@ -6952,7 +4152,7 @@ Cell[BoxData[
    3.5420583061291237`*^9, 3.542058407558825*^9, 3.542058520281165*^9, 
    3.542058669588382*^9, 3.542058784592577*^9, 3.542058913082466*^9, 
    3.551109380790485*^9, 3.55111131931981*^9, 3.551182812168043*^9, 
-   3.551204335395986*^9, 3.55121364218165*^9}]
+   3.551204335395986*^9, 3.55121364218165*^9, 3.551533807032563*^9}]
 }, Open  ]],
 
 Cell["Word-by-Word Comparison", "Subsection",
@@ -7870,48 +5070,7 @@ Cell[BoxData[
     ImageSize->552,
     PlotRange->{Automatic, {0, 2}},
     PlotRangePadding->Scaled[0.02],
-    Ticks->{None, Automatic},
-    ImageCache->GraphicsData["CompressedBitmap", "\<\
-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\
-\>"]], ",", 
+    Ticks->{None, Automatic}], ",", 
    GraphicsBox[{
      {Opacity[0], 
       PointBox[{{0.4545454545454546, 0.}, {0.4545454545454546, 2.}}]}, 
@@ -8104,51 +5263,7 @@ zs0H03pCda0psWURLaorPw2io7xi+mse51kPF7HzPxk2z4g=\
     ImageSize->552,
     PlotRange->{Automatic, {0, 2}},
     PlotRangePadding->Scaled[0.02],
-    Ticks->{None, Automatic},
-    ImageCache->GraphicsData["CompressedBitmap", "\<\
-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
-Uxh7\
-\>"]], ",", 
+    Ticks->{None, Automatic}], ",", 
    GraphicsBox[{
      {Opacity[0], 
       PointBox[{{0.4545454545454546, 0.}, {0.4545454545454546, 2.}}]}, 
@@ -8171,7 +5286,6 @@ Uxh7\
              
              RectangleBox[{0.5454545454545454, 0.}, {1.4545454545454546`, 
               0.9941850408183726}, "RoundingRadius" -> 0]},
-            
             ImageSizeCache->{{55.300619718309854`, 
              130.77498591549298`}, {-2.2432850645867006`, 
              161.20485858337324`}}],
@@ -8309,47 +5423,7 @@ Uxh7\
     ImageSize->552,
     PlotRange->{Automatic, {0, 2}},
     PlotRangePadding->Scaled[0.02],
-    Ticks->{None, Automatic},
-    ImageCache->GraphicsData["CompressedBitmap", "\<\
-eJztnT+M21Qcx9+1vba0hQ3Y4AoSFQhZYoAJIblFLW2FDKqAJcupwmqREFYp
-g1dvHr15QMpkMQQhPGXKgCcPePGSoRkipAx48GAQHjx8eX/sxNdLLjnuepzh
-d1Kc5P3e+77P7/2enRffe3kf7z5+8OXXu48f3t/dufVo13rw8P63Oze/ecST
-zm4xduZNxrY+32Hn+Gsw1j7cA/9jLyH2bMQlMB2YPF1DNJthFCbcmMHm70e5
-yJjD4eWcOEfi6vyZF0AKnemICyB2uKY14mkzWDwtKnBDyl/ERMq6KLic2/Mh
-1URhz4CblHc2y3ZjHWw+4u9tVayIpC0uSvi6gUiwjn2e5nH5HJ7GYI0y7l8I
-prmijC7lL9d+cp8LkTCFKf0Tzwx+lCB0tFoGTJV5WZbxLZ+nVRiYTHoxzVKE
-cXZULPaGrIO9I5/OirDVzQL2atMivovBqC9tbpRJnHCQyEzFOIRl2nAsAz03
-RF6M4ega+mmO6cjlZUykf8zgmwYsx0GPIzAzEO5dl/KXZERtLm0NZ1Iy8SwE
-kwqoJjzSDJphYzQpPzpcdqX+4oHw49CFaTuwDB1uOEbOnTEEcJFj5PbAegHy
-WQRT78Fxbd4XGcx+ylRXeQ7FJITJnfc5AmOG7KdZMoDDHTV5+/fjjF2vG1HU
-27d9DAORl/dfEbCCxzvJjsJybV34LvAOoMt0w09qUwbfGYB3DvZp7Ukei1BZ
-vD82WYYwnUi+nA1deFHGbh8i740N6r5XM/NmUL21ALtZlwNED5ZXEfhJfabm
-EdxgzN5b7fIr8niR90qOxHuapnoa/6uQDmx5cvST7JM6G7JYnndMs5DkleJL
-fCnJs93ZLNuHm1XauJvFvuwA8dzdixgPPRXQIJ0308DWZY1xVr272uNzS9Lk
-8avaUJWFaG357rslmS/9A+3fuqMj+5d8oT6W0ByuicPW+sre/+A2fk1L8WC3
-5FGlNfm2N8z3xTHn26CdCJ3QCZ3QCZ3QCZ3QCZ3Qn0KX5F0C7nBbEzqhEzqh
-EzqhEzqhEzqh0yid0Amd0Amd0Amd0Amd0Amd0E8Ynb5gEDqhEzqhEzqhEzqh
-EzqhnzZ0GqUTOqETOqETOqETeifQX6uzi9WQeZbz4wIdVYmiKPZgdtDFq/Lp
-CpAnsHQLQeDCsAZq2WX1BD3u0ve//Chd6zkubMvDuMCy5Ywd8XhHPr0ggzo0
-GcyhWsQc2dp8XXY++523QMUDXKrCsxB6LxCtcrbrnp+HWKHrML3+6QKxCl0D
-c+KGDlUCvV5h/1/wtkzmP8QgYxs50J34XONLlSHkoWet8G4Lf890zE0eL1db
-BDX1dBHUM3PGAgNLLWhnrCdWZi9dk9y14PKYBYY4idWJK05ofhI33Tb1Tdhh
-iqKsun+R3pa/uSAv0gN1kS7mZyi3lala6C8eRr9l66TLi4/eEnmuPmYv1GlV
-Ka7NKntzlnbQxQ4PjAid0Amd0Amd0An9/45O/9shdEIn9LX57oqkK6cP7idC
-IiRCIqSTRJIXw59PrlJ5vNeq75kM2/bVctJeHaW+u/Okz46uKI8B6ZAO6XRK
-51DXxVPvDemQDumcfh266pAO6RyjTjODoKrUXIGqNQekKnLkZbVH+3jqu4zx
-0JVa7iBWWynUs+j6T0okfQumF8AzewjG5THXrbajcDVD7AFTz4y4oOayzUKI
-bS/kTLcigsZszOoSx1t/Dq/eDkNpn5fzrTRbbbGh5mKJTV5Wz6NbfAn7Yb24
-mOWkuYv9OYTzUdGaxSXT/9zfSk8LFbHLKUebUMrjX0ry6py74g2dwFQ7qTSq
-1SSQ7S4nJ4mNa1S7b65aYjzqcxip2kxZS5te1DN4LyqWdaK22lu1veSdvqj2
-BnlVmWUnIdlP2L4wnyYqslPUyX7cdoo62alXPHP7si8Fm67o2a+zerC/ZMnM
-2jHX2kH88gUpSwfxy3UX4+fzc58PXuuxTke10/JVFBu6unckfsBKhX3j+RWD
-76ad103+bwMdOOLefHJ9W/Lt2r5utnq7zL99epAddNElO/UKslPU/792ivoJ
-25tblOvuy7fLNCvXY8+QebR6fGYOJgfdc99M9nmIYWhgmhhOS/k6CiO5T/lh
-b6e3tRfD3ikcw8a4asoc6jZ5W/L1RjIbwjDkxvD1KPPgm+NrW2AbZVkPW8V+
-1hpDMC3n0gfdLl8xTt/G0HEQizaspnIXdC8t5oJHulPOB+hZJAOuBuh+KxqH
-vl3e/tGH+uvW/OvDabqFzrb+BtfZP4Q=\
-\>"]], ",", 
+    Ticks->{None, Automatic}], ",", 
    GraphicsBox[{
      {Opacity[0], 
       PointBox[{{0.4545454545454546, 0.}, {0.4545454545454546, 2.}}]}, 
@@ -8469,7 +5543,6 @@ vl3e/tGH+uvW/OvDabqFzrb+BtfZP4Q=\
             
             ImageSizeCache->{{464.9096338028168, 540.3839999999999}, {
              11.888849988170335`, 161.20485858337324`}}],
-           
            StatusArea[#, 
             0.90769616536083845553936275130091360097`13.265025666976738]& ,
            
@@ -8511,47 +5584,7 @@ vl3e/tGH+uvW/OvDabqFzrb+BtfZP4Q=\
     ImageSize->552,
     PlotRange->{Automatic, {0, 2}},
     PlotRangePadding->Scaled[0.02],
-    Ticks->{None, Automatic},
-    ImageCache->GraphicsData["CompressedBitmap", "\<\
-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
-Ll/8gaD669bs68NpuoUutv4DuD5Luw==\
-\>"]]}], "}"}]], "Output",
+    Ticks->{None, Automatic}]}], "}"}]], "Output",
  CellChangeTimes->{{3.5419422890057287`*^9, 3.541942305213438*^9}, 
    3.541944037903675*^9, {3.541955667541201*^9, 3.541955677901929*^9}, 
    3.5419578032357264`*^9, 3.541957920299111*^9, {3.5511094265846453`*^9, 
@@ -9341,405 +6374,211 @@ Cell[82310, 1904, 265, 4, 27, "Input"],
 Cell[82578, 1910, 716, 14, 26, "Subsubtitle"],
 Cell[83297, 1926, 949, 21, 58, "Input"],
 Cell[84249, 1949, 1023, 17, 43, "Subsubtitle"],
-Cell[85275, 1968, 4068, 80, 223, "Input"],
-Cell[89346, 2050, 7043, 147, 403, "Input"],
-Cell[96392, 2199, 802, 12, 26, "Subsubtitle"],
-Cell[97197, 2213, 411, 9, 27, "Input"],
-Cell[97611, 2224, 757, 13, 27, "Input"],
-Cell[98371, 2239, 245, 6, 27, "Input"],
-Cell[98619, 2247, 248, 6, 27, "Input"],
-Cell[98870, 2255, 293, 7, 27, "Input"],
-Cell[99166, 2264, 632, 11, 26, "Subsubtitle"],
-Cell[99801, 2277, 1167, 28, 103, "Input"],
-Cell[100971, 2307, 799, 18, 26, "Subsubtitle"],
-Cell[101773, 2327, 3378, 60, 103, "Input"],
-Cell[105154, 2389, 3451, 61, 103, "Input"],
-Cell[108608, 2452, 711, 12, 43, "Subsubtitle"],
-Cell[109322, 2466, 3651, 90, 208, "Input"],
-Cell[112976, 2558, 713, 12, 26, "Subsubtitle"],
-Cell[113692, 2572, 1241, 23, 43, "Input"],
-Cell[114936, 2597, 1008, 20, 43, "Subsubtitle"],
-Cell[115947, 2619, 4041, 68, 88, "Input"],
+Cell[85275, 1968, 4211, 83, 223, "Input"],
+Cell[89489, 2053, 7148, 148, 403, "Input"],
+Cell[96640, 2203, 802, 12, 26, "Subsubtitle"],
+Cell[97445, 2217, 411, 9, 27, "Input"],
+Cell[97859, 2228, 757, 13, 27, "Input"],
+Cell[98619, 2243, 245, 6, 27, "Input"],
+Cell[98867, 2251, 248, 6, 27, "Input"],
+Cell[99118, 2259, 293, 7, 27, "Input"],
+Cell[99414, 2268, 632, 11, 26, "Subsubtitle"],
+Cell[100049, 2281, 1167, 28, 103, "Input"],
+Cell[101219, 2311, 799, 18, 26, "Subsubtitle"],
+Cell[102021, 2331, 3378, 60, 103, "Input"],
+Cell[105402, 2393, 3451, 61, 103, "Input"],
+Cell[108856, 2456, 711, 12, 43, "Subsubtitle"],
+Cell[109570, 2470, 3651, 90, 208, "Input"],
+Cell[113224, 2562, 713, 12, 26, "Subsubtitle"],
+Cell[113940, 2576, 1241, 23, 43, "Input"],
+Cell[115184, 2601, 1008, 20, 43, "Subsubtitle"],
+Cell[116195, 2623, 4041, 68, 88, "Input"],
 Cell[CellGroupData[{
-Cell[120013, 2691, 606, 11, 27, "Input"],
-Cell[120622, 2704, 118, 2, 20, "Print"],
-Cell[120743, 2708, 118, 2, 20, "Print"],
-Cell[120864, 2712, 118, 2, 20, "Print"],
-Cell[120985, 2716, 118, 2, 20, "Print"],
-Cell[121106, 2720, 118, 2, 20, "Print"],
-Cell[121227, 2724, 120, 2, 20, "Print"],
-Cell[121350, 2728, 118, 2, 20, "Print"],
-Cell[121471, 2732, 120, 2, 20, "Print"],
-Cell[121594, 2736, 118, 2, 20, "Print"],
-Cell[121715, 2740, 117, 2, 20, "Print"],
-Cell[121835, 2744, 118, 2, 20, "Print"],
-Cell[121956, 2748, 120, 2, 20, "Print"],
-Cell[122079, 2752, 120, 2, 20, "Print"],
-Cell[122202, 2756, 118, 2, 20, "Print"],
-Cell[122323, 2760, 118, 2, 20, "Print"],
-Cell[122444, 2764, 120, 2, 20, "Print"],
-Cell[122567, 2768, 120, 2, 20, "Print"],
-Cell[122690, 2772, 118, 2, 20, "Print"],
-Cell[122811, 2776, 118, 2, 20, "Print"],
-Cell[122932, 2780, 120, 2, 20, "Print"],
-Cell[123055, 2784, 120, 2, 20, "Print"],
-Cell[123178, 2788, 120, 2, 20, "Print"],
-Cell[123301, 2792, 118, 2, 20, "Print"],
-Cell[123422, 2796, 118, 2, 20, "Print"],
-Cell[123543, 2800, 120, 2, 20, "Print"],
-Cell[123666, 2804, 118, 2, 20, "Print"],
-Cell[123787, 2808, 118, 2, 20, "Print"],
-Cell[123908, 2812, 118, 2, 20, "Print"],
-Cell[124029, 2816, 117, 2, 20, "Print"],
-Cell[124149, 2820, 118, 2, 20, "Print"],
-Cell[124270, 2824, 118, 2, 20, "Print"],
-Cell[124391, 2828, 118, 2, 20, "Print"],
-Cell[124512, 2832, 118, 2, 20, "Print"],
-Cell[124633, 2836, 118, 2, 20, "Print"],
-Cell[124754, 2840, 118, 2, 20, "Print"],
-Cell[124875, 2844, 118, 2, 20, "Print"],
-Cell[124996, 2848, 118, 2, 20, "Print"],
-Cell[125117, 2852, 119, 2, 20, "Print"],
-Cell[125239, 2856, 120, 2, 20, "Print"],
-Cell[125362, 2860, 116, 2, 20, "Print"],
-Cell[125481, 2864, 118, 2, 20, "Print"],
-Cell[125602, 2868, 118, 2, 20, "Print"],
-Cell[125723, 2872, 120, 2, 20, "Print"],
-Cell[125846, 2876, 118, 2, 20, "Print"],
-Cell[125967, 2880, 118, 2, 20, "Print"],
-Cell[126088, 2884, 119, 2, 20, "Print"],
-Cell[126210, 2888, 118, 2, 20, "Print"],
-Cell[126331, 2892, 118, 2, 20, "Print"],
-Cell[126452, 2896, 120, 2, 20, "Print"],
-Cell[126575, 2900, 118, 2, 20, "Print"],
-Cell[126696, 2904, 120, 2, 20, "Print"],
-Cell[126819, 2908, 120, 2, 20, "Print"],
-Cell[126942, 2912, 118, 2, 20, "Print"],
-Cell[127063, 2916, 118, 2, 20, "Print"],
-Cell[127184, 2920, 118, 2, 20, "Print"],
-Cell[127305, 2924, 117, 2, 20, "Print"],
-Cell[127425, 2928, 120, 2, 20, "Print"],
-Cell[127548, 2932, 118, 2, 20, "Print"],
-Cell[127669, 2936, 118, 2, 20, "Print"],
-Cell[127790, 2940, 118, 2, 20, "Print"],
-Cell[127911, 2944, 118, 2, 20, "Print"],
-Cell[128032, 2948, 118, 2, 20, "Print"],
-Cell[128153, 2952, 119, 2, 20, "Print"],
-Cell[128275, 2956, 119, 2, 20, "Print"]
+Cell[120261, 2695, 606, 11, 27, "Input"],
+Cell[120870, 2708, 118, 2, 20, "Print"],
+Cell[120991, 2712, 118, 2, 20, "Print"],
+Cell[121112, 2716, 118, 2, 20, "Print"],
+Cell[121233, 2720, 118, 2, 20, "Print"],
+Cell[121354, 2724, 118, 2, 20, "Print"],
+Cell[121475, 2728, 120, 2, 20, "Print"],
+Cell[121598, 2732, 118, 2, 20, "Print"],
+Cell[121719, 2736, 120, 2, 20, "Print"],
+Cell[121842, 2740, 118, 2, 20, "Print"],
+Cell[121963, 2744, 117, 2, 20, "Print"],
+Cell[122083, 2748, 118, 2, 20, "Print"],
+Cell[122204, 2752, 120, 2, 20, "Print"],
+Cell[122327, 2756, 120, 2, 20, "Print"],
+Cell[122450, 2760, 118, 2, 20, "Print"],
+Cell[122571, 2764, 118, 2, 20, "Print"],
+Cell[122692, 2768, 120, 2, 20, "Print"],
+Cell[122815, 2772, 120, 2, 20, "Print"],
+Cell[122938, 2776, 118, 2, 20, "Print"],
+Cell[123059, 2780, 118, 2, 20, "Print"],
+Cell[123180, 2784, 120, 2, 20, "Print"],
+Cell[123303, 2788, 120, 2, 20, "Print"],
+Cell[123426, 2792, 120, 2, 20, "Print"],
+Cell[123549, 2796, 118, 2, 20, "Print"],
+Cell[123670, 2800, 118, 2, 20, "Print"],
+Cell[123791, 2804, 120, 2, 20, "Print"],
+Cell[123914, 2808, 118, 2, 20, "Print"],
+Cell[124035, 2812, 118, 2, 20, "Print"],
+Cell[124156, 2816, 118, 2, 20, "Print"],
+Cell[124277, 2820, 117, 2, 20, "Print"],
+Cell[124397, 2824, 118, 2, 20, "Print"],
+Cell[124518, 2828, 118, 2, 20, "Print"],
+Cell[124639, 2832, 118, 2, 20, "Print"],
+Cell[124760, 2836, 118, 2, 20, "Print"],
+Cell[124881, 2840, 118, 2, 20, "Print"],
+Cell[125002, 2844, 118, 2, 20, "Print"],
+Cell[125123, 2848, 118, 2, 20, "Print"],
+Cell[125244, 2852, 118, 2, 20, "Print"],
+Cell[125365, 2856, 119, 2, 20, "Print"],
+Cell[125487, 2860, 120, 2, 20, "Print"],
+Cell[125610, 2864, 116, 2, 20, "Print"],
+Cell[125729, 2868, 118, 2, 20, "Print"],
+Cell[125850, 2872, 118, 2, 20, "Print"],
+Cell[125971, 2876, 120, 2, 20, "Print"],
+Cell[126094, 2880, 118, 2, 20, "Print"],
+Cell[126215, 2884, 118, 2, 20, "Print"],
+Cell[126336, 2888, 119, 2, 20, "Print"],
+Cell[126458, 2892, 118, 2, 20, "Print"],
+Cell[126579, 2896, 118, 2, 20, "Print"],
+Cell[126700, 2900, 120, 2, 20, "Print"],
+Cell[126823, 2904, 118, 2, 20, "Print"],
+Cell[126944, 2908, 120, 2, 20, "Print"],
+Cell[127067, 2912, 120, 2, 20, "Print"],
+Cell[127190, 2916, 118, 2, 20, "Print"],
+Cell[127311, 2920, 118, 2, 20, "Print"],
+Cell[127432, 2924, 118, 2, 20, "Print"],
+Cell[127553, 2928, 117, 2, 20, "Print"],
+Cell[127673, 2932, 120, 2, 20, "Print"],
+Cell[127796, 2936, 118, 2, 20, "Print"],
+Cell[127917, 2940, 118, 2, 20, "Print"],
+Cell[128038, 2944, 118, 2, 20, "Print"],
+Cell[128159, 2948, 118, 2, 20, "Print"],
+Cell[128280, 2952, 118, 2, 20, "Print"],
+Cell[128401, 2956, 119, 2, 20, "Print"],
+Cell[128523, 2960, 119, 2, 20, "Print"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[128431, 2963, 268, 6, 21, "Input"],
-Cell[128702, 2971, 120, 2, 20, "Print"],
-Cell[128825, 2975, 267, 8, 23, "Message"],
-Cell[129095, 2985, 297, 8, 23, "Message"],
-Cell[129395, 2995, 269, 8, 23, "Message"],
-Cell[129667, 3005, 295, 8, 23, "Message"],
-Cell[129965, 3015, 717, 14, 58, "Message"],
-Cell[130685, 3031, 558, 12, 40, "Message"],
-Cell[131246, 3045, 258, 8, 21, "Message"],
-Cell[131507, 3055, 118, 2, 20, "Print"],
-Cell[131628, 3059, 269, 8, 23, "Message"],
-Cell[131900, 3069, 269, 8, 23, "Message"],
-Cell[132172, 3079, 341, 9, 23, "Message"],
-Cell[132516, 3090, 295, 8, 23, "Message"],
-Cell[132814, 3100, 257, 8, 21, "Message"],
-Cell[133074, 3110, 267, 8, 23, "Message"],
-Cell[133344, 3120, 379, 10, 23, "Message"],
-Cell[133726, 3132, 295, 8, 23, "Message"],
-Cell[134024, 3142, 524, 11, 40, "Message"],
-Cell[134551, 3155, 719, 14, 58, "Message"],
-Cell[135273, 3171, 340, 9, 23, "Message"],
-Cell[135616, 3182, 556, 12, 40, "Message"],
-Cell[136175, 3196, 733, 14, 40, "Message"],
-Cell[136911, 3212, 260, 8, 21, "Message"],
-Cell[137174, 3222, 340, 9, 23, "Message"],
-Cell[137517, 3233, 267, 8, 23, "Message"],
-Cell[137787, 3243, 283, 8, 23, "Message"],
-Cell[138073, 3253, 341, 9, 23, "Message"],
-Cell[138417, 3264, 285, 8, 23, "Message"],
-Cell[138705, 3274, 258, 8, 21, "Message"],
-Cell[138966, 3284, 2251, 37, 80, "Message"],
-Cell[141220, 3323, 382, 10, 23, "Message"],
-Cell[141605, 3335, 482, 11, 23, "Message"],
-Cell[142090, 3348, 526, 11, 40, "Message"],
-Cell[142619, 3361, 1332, 24, 60, "Message"],
-Cell[143954, 3387, 342, 9, 23, "Message"],
-Cell[144299, 3398, 120, 2, 20, "Print"],
-Cell[144422, 3402, 733, 14, 40, "Message"],
-Cell[145158, 3418, 295, 8, 23, "Message"],
-Cell[145456, 3428, 339, 9, 23, "Message"],
-Cell[145798, 3439, 347, 9, 23, "Message"],
-Cell[146148, 3450, 283, 8, 23, "Message"],
-Cell[146434, 3460, 719, 14, 58, "Message"],
-Cell[147156, 3476, 283, 8, 23, "Message"],
-Cell[147442, 3486, 285, 8, 23, "Message"],
-Cell[147730, 3496, 2253, 37, 80, "Message"],
-Cell[149986, 3535, 341, 9, 23, "Message"],
-Cell[150330, 3546, 484, 11, 23, "Message"],
-Cell[150817, 3559, 2251, 37, 80, "Message"],
-Cell[153071, 3598, 1330, 24, 60, "Message"],
-Cell[154404, 3624, 482, 11, 23, "Message"],
-Cell[154889, 3637, 120, 2, 20, "Print"],
-Cell[155012, 3641, 1330, 24, 60, "Message"],
-Cell[156345, 3667, 295, 8, 23, "Message"],
-Cell[156643, 3677, 118, 2, 20, "Print"],
-Cell[156764, 3681, 345, 9, 23, "Message"],
-Cell[157112, 3692, 717, 14, 58, "Message"],
-Cell[157832, 3708, 716, 14, 58, "Message"],
-Cell[158551, 3724, 341, 9, 23, "Message"],
-Cell[158895, 3735, 285, 8, 23, "Message"],
-Cell[159183, 3745, 2251, 37, 80, "Message"],
-Cell[161437, 3784, 339, 9, 23, "Message"],
-Cell[161779, 3795, 345, 9, 23, "Message"],
-Cell[162127, 3806, 2253, 37, 80, "Message"],
-Cell[164383, 3845, 482, 11, 23, "Message"],
-Cell[164868, 3858, 482, 11, 23, "Message"],
-Cell[165353, 3871, 345, 9, 23, "Message"],
-Cell[165701, 3882, 1330, 24, 60, "Message"],
-Cell[167034, 3908, 1330, 24, 60, "Message"],
-Cell[168367, 3934, 118, 2, 20, "Print"],
-Cell[168488, 3938, 341, 9, 23, "Message"],
-Cell[168832, 3949, 717, 14, 58, "Message"],
-Cell[169552, 3965, 120, 2, 20, "Print"],
-Cell[169675, 3969, 343, 9, 23, "Message"],
-Cell[170021, 3980, 118, 2, 20, "Print"],
-Cell[170142, 3984, 2251, 37, 80, "Message"],
-Cell[172396, 4023, 118, 2, 20, "Print"],
-Cell[172517, 4027, 345, 9, 23, "Message"],
-Cell[172865, 4038, 118, 2, 20, "Print"],
-Cell[172986, 4042, 482, 11, 23, "Message"],
-Cell[173471, 4055, 118, 2, 20, "Print"],
-Cell[173592, 4059, 345, 9, 23, "Message"],
-Cell[173940, 4070, 118, 2, 20, "Print"],
-Cell[174061, 4074, 1332, 24, 60, "Message"],
-Cell[175396, 4100, 118, 2, 20, "Print"],
-Cell[175517, 4104, 338, 9, 23, "Message"],
-Cell[175858, 4115, 118, 2, 20, "Print"],
-Cell[175979, 4119, 118, 2, 20, "Print"],
-Cell[176100, 4123, 120, 2, 20, "Print"],
-Cell[176223, 4127, 120, 2, 20, "Print"],
-Cell[176346, 4131, 118, 2, 20, "Print"],
-Cell[176467, 4135, 118, 2, 20, "Print"],
-Cell[176588, 4139, 118, 2, 20, "Print"],
-Cell[176709, 4143, 117, 2, 20, "Print"],
-Cell[176829, 4147, 118, 2, 20, "Print"],
-Cell[176950, 4151, 120, 2, 20, "Print"],
-Cell[177073, 4155, 118, 2, 20, "Print"],
-Cell[177194, 4159, 491, 10, 23, "Message"],
-Cell[177688, 4171, 905, 16, 58, "Message"],
-Cell[178596, 4189, 905, 16, 58, "Message"],
-Cell[179504, 4207, 489, 10, 23, "Message"],
-Cell[179996, 4219, 485, 10, 23, "Message"],
-Cell[180484, 4231, 489, 10, 23, "Message"],
-Cell[180976, 4243, 535, 11, 23, "Message"],
-Cell[181514, 4256, 905, 16, 58, "Message"],
-Cell[182422, 4274, 529, 11, 23, "Message"],
-Cell[182954, 4287, 486, 10, 23, "Message"],
-Cell[183443, 4299, 485, 10, 23, "Message"],
-Cell[183931, 4311, 528, 11, 23, "Message"]
-}, Closed]],
-Cell[184474, 4325, 910, 15, 26, "Subsubtitle"],
-Cell[185387, 4342, 869, 25, 27, "Input"],
-Cell[186259, 4369, 1139, 32, 43, "Input"],
-Cell[187401, 4403, 1006, 17, 26, "Subsubtitle"],
-Cell[188410, 4422, 1875, 46, 148, "Input"],
-Cell[190288, 4470, 1017, 17, 26, "Subsubtitle"],
-Cell[191308, 4489, 2162, 53, 118, "Input"],
-Cell[193473, 4544, 220, 3, 34, "Subsection"],
-Cell[193696, 4549, 1381, 27, 67, "Input"],
-Cell[CellGroupData[{
-Cell[195102, 4580, 374, 6, 27, "Input"],
-Cell[195479, 4588, 4347, 73, 89, "Output"]
+Cell[128679, 2967, 268, 6, 21, "Input"],
+Cell[128950, 2975, 120, 2, 20, "Print"],
+Cell[129073, 2979, 118, 2, 20, "Print"],
+Cell[129194, 2983, 120, 2, 20, "Print"],
+Cell[129317, 2987, 118, 2, 20, "Print"],
+Cell[129438, 2991, 118, 2, 20, "Print"],
+Cell[129559, 2995, 118, 2, 20, "Print"],
+Cell[129680, 2999, 120, 2, 20, "Print"],
+Cell[129803, 3003, 120, 2, 20, "Print"],
+Cell[129926, 3007, 118, 2, 20, "Print"],
+Cell[130047, 3011, 120, 2, 20, "Print"],
+Cell[130170, 3015, 120, 2, 20, "Print"],
+Cell[130293, 3019, 118, 2, 20, "Print"],
+Cell[130414, 3023, 118, 2, 20, "Print"],
+Cell[130535, 3027, 118, 2, 20, "Print"],
+Cell[130656, 3031, 118, 2, 20, "Print"],
+Cell[130777, 3035, 118, 2, 20, "Print"],
+Cell[130898, 3039, 118, 2, 20, "Print"],
+Cell[131019, 3043, 118, 2, 20, "Print"],
+Cell[131140, 3047, 117, 2, 20, "Print"],
+Cell[131260, 3051, 118, 2, 20, "Print"],
+Cell[131381, 3055, 118, 2, 20, "Print"],
+Cell[131502, 3059, 120, 2, 20, "Print"],
+Cell[131625, 3063, 118, 2, 20, "Print"],
+Cell[131746, 3067, 118, 2, 20, "Print"]
 }, Open  ]],
-Cell[199841, 4664, 177, 2, 34, "Subsection"],
-Cell[200021, 4668, 648, 14, 21, "Input"],
-Cell[200672, 4684, 1080, 28, 73, "Input"],
-Cell[201755, 4714, 3055, 56, 73, "Input"],
-Cell[204813, 4772, 3109, 57, 73, "Input"],
-Cell[207925, 4831, 1100, 29, 73, "Input"],
+Cell[131879, 3072, 910, 15, 26, "Subsubtitle"],
+Cell[132792, 3089, 869, 25, 27, "Input"],
+Cell[133664, 3116, 1139, 32, 43, "Input"],
+Cell[134806, 3150, 1006, 17, 26, "Subsubtitle"],
+Cell[135815, 3169, 1875, 46, 148, "Input"],
+Cell[137693, 3217, 1017, 17, 26, "Subsubtitle"],
+Cell[138713, 3236, 2162, 53, 118, "Input"],
+Cell[140878, 3291, 220, 3, 34, "Subsection"],
+Cell[141101, 3296, 1381, 27, 67, "Input"],
 Cell[CellGroupData[{
-Cell[209050, 4864, 243, 6, 27, "Input"],
-Cell[209296, 4872, 118, 2, 20, "Print"],
-Cell[209417, 4876, 120, 2, 20, "Print"],
-Cell[209540, 4880, 267, 8, 23, "Message"],
-Cell[209810, 4890, 267, 8, 23, "Message"],
-Cell[210080, 4900, 267, 8, 23, "Message"],
-Cell[210350, 4910, 267, 8, 23, "Message"],
-Cell[210620, 4920, 297, 8, 23, "Message"],
-Cell[210920, 4930, 295, 8, 23, "Message"],
-Cell[211218, 4940, 717, 14, 58, "Message"],
-Cell[211938, 4956, 719, 14, 58, "Message"],
-Cell[212660, 4972, 556, 12, 40, "Message"],
-Cell[213219, 4986, 558, 12, 40, "Message"],
-Cell[213780, 5000, 260, 8, 21, "Message"],
-Cell[214043, 5010, 258, 8, 21, "Message"],
-Cell[214304, 5020, 267, 8, 23, "Message"],
-Cell[214574, 5030, 267, 8, 23, "Message"],
-Cell[214844, 5040, 341, 9, 23, "Message"],
-Cell[215188, 5051, 343, 9, 23, "Message"],
-Cell[215534, 5062, 258, 8, 21, "Message"],
-Cell[215795, 5072, 258, 8, 21, "Message"],
-Cell[216056, 5082, 380, 10, 23, "Message"],
-Cell[216439, 5094, 382, 10, 23, "Message"],
-Cell[216824, 5106, 524, 11, 40, "Message"],
-Cell[217351, 5119, 526, 11, 40, "Message"],
-Cell[217880, 5132, 340, 9, 23, "Message"],
-Cell[218223, 5143, 342, 9, 23, "Message"],
-Cell[218568, 5154, 733, 14, 40, "Message"],
-Cell[219304, 5170, 733, 14, 40, "Message"],
-Cell[220040, 5186, 340, 9, 23, "Message"],
-Cell[220383, 5197, 338, 9, 23, "Message"],
-Cell[220724, 5208, 283, 8, 23, "Message"],
-Cell[221010, 5218, 282, 8, 23, "Message"],
-Cell[221295, 5228, 283, 8, 23, "Message"],
-Cell[221581, 5238, 285, 8, 23, "Message"],
-Cell[221869, 5248, 2251, 37, 80, "Message"],
-Cell[224123, 5287, 2251, 37, 80, "Message"],
-Cell[226377, 5326, 482, 11, 23, "Message"],
-Cell[226862, 5339, 482, 11, 23, "Message"],
-Cell[227347, 5352, 1330, 24, 60, "Message"],
-Cell[228680, 5378, 1332, 24, 60, "Message"],
-Cell[230015, 5404, 296, 8, 23, "Message"],
-Cell[230314, 5414, 296, 8, 23, "Message"],
-Cell[230613, 5424, 295, 8, 23, "Message"],
-Cell[230911, 5434, 296, 8, 23, "Message"],
-Cell[231210, 5444, 333, 9, 23, "Message"],
-Cell[231546, 5455, 334, 9, 23, "Message"],
-Cell[231883, 5466, 292, 8, 23, "Message"],
-Cell[232178, 5476, 294, 8, 23, "Message"],
-Cell[232475, 5486, 118, 2, 20, "Print"],
-Cell[232596, 5490, 118, 2, 20, "Print"],
-Cell[232717, 5494, 295, 8, 23, "Message"],
-Cell[233015, 5504, 295, 8, 23, "Message"],
-Cell[233313, 5514, 717, 14, 58, "Message"],
-Cell[234033, 5530, 717, 14, 58, "Message"],
-Cell[234753, 5546, 285, 8, 23, "Message"],
-Cell[235041, 5556, 285, 8, 23, "Message"],
-Cell[235329, 5566, 339, 9, 23, "Message"],
-Cell[235671, 5577, 339, 9, 23, "Message"],
-Cell[236013, 5588, 2253, 37, 80, "Message"],
-Cell[238269, 5627, 2251, 37, 80, "Message"],
-Cell[240523, 5666, 482, 11, 23, "Message"],
-Cell[241008, 5679, 482, 11, 23, "Message"],
-Cell[241493, 5692, 1332, 24, 60, "Message"],
-Cell[242828, 5718, 1332, 24, 60, "Message"],
-Cell[244163, 5744, 296, 8, 23, "Message"],
-Cell[244462, 5754, 296, 8, 23, "Message"],
-Cell[244761, 5764, 347, 9, 23, "Message"],
-Cell[245111, 5775, 349, 9, 23, "Message"],
-Cell[245463, 5786, 336, 9, 23, "Message"],
-Cell[245802, 5797, 334, 9, 23, "Message"],
-Cell[246139, 5808, 292, 8, 23, "Message"],
-Cell[246434, 5818, 294, 8, 23, "Message"],
-Cell[246731, 5828, 120, 2, 20, "Print"],
-Cell[246854, 5832, 120, 2, 20, "Print"],
-Cell[246977, 5836, 297, 8, 23, "Message"],
-Cell[247277, 5846, 295, 8, 23, "Message"],
-Cell[247575, 5856, 345, 9, 23, "Message"],
-Cell[247923, 5867, 347, 9, 23, "Message"],
-Cell[248273, 5878, 719, 14, 58, "Message"],
-Cell[248995, 5894, 719, 14, 58, "Message"],
-Cell[249717, 5910, 341, 9, 23, "Message"],
-Cell[250061, 5921, 339, 9, 23, "Message"],
-Cell[250403, 5932, 2249, 37, 80, "Message"],
-Cell[252655, 5971, 2253, 37, 80, "Message"],
-Cell[254911, 6010, 343, 9, 23, "Message"],
-Cell[255257, 6021, 345, 9, 23, "Message"],
-Cell[255605, 6032, 482, 11, 23, "Message"],
-Cell[256090, 6045, 482, 11, 23, "Message"],
-Cell[256575, 6058, 347, 9, 23, "Message"],
-Cell[256925, 6069, 345, 9, 23, "Message"],
-Cell[257273, 6080, 1329, 24, 60, "Message"],
-Cell[258605, 6106, 1332, 24, 60, "Message"],
-Cell[259940, 6132, 339, 9, 23, "Message"],
-Cell[260282, 6143, 339, 9, 23, "Message"],
-Cell[260624, 6154, 334, 9, 23, "Message"],
-Cell[260961, 6165, 334, 9, 23, "Message"],
-Cell[261298, 6176, 351, 9, 23, "Message"],
-Cell[261652, 6187, 349, 9, 23, "Message"],
-Cell[262004, 6198, 292, 8, 23, "Message"],
-Cell[262299, 6208, 292, 8, 23, "Message"],
-Cell[262594, 6218, 343, 9, 23, "Message"],
-Cell[262940, 6229, 343, 9, 23, "Message"],
-Cell[263286, 6240, 118, 2, 20, "Print"],
-Cell[263407, 6244, 118, 2, 20, "Print"],
-Cell[263528, 6248, 118, 2, 20, "Print"],
-Cell[263649, 6252, 118, 2, 20, "Print"],
-Cell[263770, 6256, 118, 2, 20, "Print"],
-Cell[263891, 6260, 118, 2, 20, "Print"],
-Cell[264012, 6264, 120, 2, 20, "Print"],
-Cell[264135, 6268, 118, 2, 20, "Print"],
-Cell[264256, 6272, 118, 2, 20, "Print"],
-Cell[264377, 6276, 118, 2, 20, "Print"],
-Cell[264498, 6280, 118, 2, 20, "Print"],
-Cell[264619, 6284, 117, 2, 20, "Print"],
-Cell[264739, 6288, 118, 2, 20, "Print"],
-Cell[264860, 6292, 120, 2, 20, "Print"],
-Cell[264983, 6296, 118, 2, 20, "Print"],
-Cell[265104, 6300, 118, 2, 20, "Print"],
-Cell[265225, 6304, 118, 2, 20, "Print"],
-Cell[265346, 6308, 118, 2, 20, "Print"],
-Cell[265467, 6312, 546, 11, 35, "Message"],
-Cell[266016, 6325, 497, 11, 35, "Message"],
-Cell[266516, 6338, 564, 12, 35, "Message"],
-Cell[267083, 6352, 546, 11, 35, "Message"],
-Cell[267632, 6365, 497, 11, 35, "Message"],
-Cell[268132, 6378, 562, 12, 35, "Message"],
-Cell[268697, 6392, 548, 11, 35, "Message"],
-Cell[269248, 6405, 577, 12, 35, "Message"],
-Cell[269828, 6419, 497, 11, 35, "Message"],
-Cell[270328, 6432, 575, 12, 35, "Message"],
-Cell[270906, 6446, 562, 12, 35, "Message"],
-Cell[271471, 6460, 574, 12, 35, "Message"]
+Cell[142507, 3327, 374, 6, 27, "Input"],
+Cell[142884, 3335, 4347, 73, 89, "Output"]
+}, Open  ]],
+Cell[147246, 3411, 177, 2, 34, "Subsection"],
+Cell[147426, 3415, 648, 14, 21, "Input"],
+Cell[148077, 3431, 1080, 28, 73, "Input"],
+Cell[149160, 3461, 3055, 56, 73, "Input"],
+Cell[152218, 3519, 3109, 57, 73, "Input"],
+Cell[155330, 3578, 1100, 29, 73, "Input"],
+Cell[CellGroupData[{
+Cell[156455, 3611, 243, 6, 27, "Input"],
+Cell[156701, 3619, 118, 2, 20, "Print"],
+Cell[156822, 3623, 118, 2, 20, "Print"],
+Cell[156943, 3627, 118, 2, 20, "Print"],
+Cell[157064, 3631, 118, 2, 20, "Print"],
+Cell[157185, 3635, 118, 2, 20, "Print"],
+Cell[157306, 3639, 120, 2, 20, "Print"],
+Cell[157429, 3643, 118, 2, 20, "Print"],
+Cell[157550, 3647, 118, 2, 20, "Print"],
+Cell[157671, 3651, 118, 2, 20, "Print"],
+Cell[157792, 3655, 118, 2, 20, "Print"],
+Cell[157913, 3659, 118, 2, 20, "Print"],
+Cell[158034, 3663, 120, 2, 20, "Print"],
+Cell[158157, 3667, 120, 2, 20, "Print"],
+Cell[158280, 3671, 120, 2, 20, "Print"],
+Cell[158403, 3675, 118, 2, 20, "Print"],
+Cell[158524, 3679, 118, 2, 20, "Print"],
+Cell[158645, 3683, 118, 2, 20, "Print"],
+Cell[158766, 3687, 118, 2, 20, "Print"],
+Cell[158887, 3691, 118, 2, 20, "Print"],
+Cell[159008, 3695, 117, 2, 20, "Print"],
+Cell[159128, 3699, 118, 2, 20, "Print"],
+Cell[159249, 3703, 118, 2, 20, "Print"],
+Cell[159370, 3707, 118, 2, 20, "Print"],
+Cell[159491, 3711, 118, 2, 20, "Print"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[272082, 6477, 911, 15, 27, "Input"],
-Cell[272996, 6494, 118, 2, 20, "Print"],
-Cell[273117, 6498, 118, 2, 20, "Print"],
-Cell[273238, 6502, 120, 2, 20, "Print"],
-Cell[273361, 6506, 120, 2, 20, "Print"],
-Cell[273484, 6510, 120, 2, 20, "Print"],
-Cell[273607, 6514, 118, 2, 20, "Print"],
-Cell[273728, 6518, 117, 2, 20, "Print"],
-Cell[273848, 6522, 117, 2, 20, "Print"],
-Cell[273968, 6526, 118, 2, 20, "Print"],
-Cell[274089, 6530, 120, 2, 20, "Print"],
-Cell[274212, 6534, 118, 2, 20, "Print"],
-Cell[274333, 6538, 118, 2, 20, "Print"],
-Cell[274454, 6542, 118, 2, 20, "Print"],
-Cell[274575, 6546, 118, 2, 20, "Print"],
-Cell[274696, 6550, 118, 2, 20, "Print"],
-Cell[274817, 6554, 118, 2, 20, "Print"],
-Cell[274938, 6558, 118, 2, 20, "Print"],
-Cell[275059, 6562, 118, 2, 20, "Print"],
-Cell[275180, 6566, 119, 2, 20, "Print"],
-Cell[275302, 6570, 118, 2, 20, "Print"]
+Cell[159646, 3718, 911, 15, 27, "Input"],
+Cell[160560, 3735, 118, 2, 20, "Print"],
+Cell[160681, 3739, 118, 2, 20, "Print"],
+Cell[160802, 3743, 120, 2, 20, "Print"],
+Cell[160925, 3747, 120, 2, 20, "Print"],
+Cell[161048, 3751, 120, 2, 20, "Print"],
+Cell[161171, 3755, 118, 2, 20, "Print"],
+Cell[161292, 3759, 117, 2, 20, "Print"],
+Cell[161412, 3763, 117, 2, 20, "Print"],
+Cell[161532, 3767, 118, 2, 20, "Print"],
+Cell[161653, 3771, 120, 2, 20, "Print"],
+Cell[161776, 3775, 118, 2, 20, "Print"],
+Cell[161897, 3779, 118, 2, 20, "Print"],
+Cell[162018, 3783, 118, 2, 20, "Print"],
+Cell[162139, 3787, 118, 2, 20, "Print"],
+Cell[162260, 3791, 118, 2, 20, "Print"],
+Cell[162381, 3795, 118, 2, 20, "Print"],
+Cell[162502, 3799, 118, 2, 20, "Print"],
+Cell[162623, 3803, 118, 2, 20, "Print"],
+Cell[162744, 3807, 119, 2, 20, "Print"],
+Cell[162866, 3811, 118, 2, 20, "Print"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[275457, 6577, 218, 4, 21, "Input"],
-Cell[275678, 6583, 929, 18, 90, "Message"],
-Cell[276610, 6603, 10561, 159, 84, "Output"]
+Cell[163021, 3818, 218, 4, 21, "Input"],
+Cell[163242, 3824, 10541, 158, 89, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[287208, 6767, 755, 12, 27, "Input"],
-Cell[287966, 6781, 929, 18, 90, "Message"],
-Cell[288898, 6801, 10119, 153, 84, "Output"]
+Cell[173820, 3987, 755, 12, 27, "Input"],
+Cell[174578, 4001, 10103, 153, 69, "Output"]
 }, Open  ]],
-Cell[299032, 6957, 255, 3, 34, "Subsection"],
+Cell[184696, 4157, 255, 3, 34, "Subsection"],
 Cell[CellGroupData[{
-Cell[299312, 6964, 1108, 29, 21, "Input"],
-Cell[300423, 6995, 25001, 595, 329, "Output"]
+Cell[184976, 4164, 1108, 29, 21, "Input"],
+Cell[186087, 4195, 25001, 595, 329, "Output"]
 }, Closed]],
-Cell[325439, 7593, 116, 2, 21, "Input"],
+Cell[211103, 4793, 116, 2, 21, "Input"],
 Cell[CellGroupData[{
-Cell[325580, 7599, 4563, 75, 43, "Input"],
-Cell[330146, 7676, 39355, 881, 725, "Output"]
+Cell[211244, 4799, 4563, 75, 43, "Input"],
+Cell[215810, 4876, 29633, 714, 725, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[369538, 8562, 5177, 84, 43, "Input"],
-Cell[374718, 8648, 1300, 22, 23, "Message"],
-Cell[376021, 8672, 1298, 21, 23, "Message"],
-Cell[377322, 8695, 25542, 574, 359, "Output"]
+Cell[245480, 5595, 5177, 84, 43, "Input"],
+Cell[250660, 5681, 1300, 22, 23, "Message"],
+Cell[251963, 5705, 1298, 21, 23, "Message"],
+Cell[253264, 5728, 25542, 574, 359, "Output"]
 }, Open  ]]
 }
 ]
