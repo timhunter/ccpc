@@ -179,11 +179,6 @@
  []::[='Dcleft',+f,'Case',-nom,-topic].    % record the fact that the topic is a cleft vs C-Emb
    % this enforces the contraint that wa can only take clefts.
 
-% DP can take CP as its complement and 
-% move the TP to its spec to satisfy the EPP feature.
-% Hoshi says this on page 14
- []::[='C-Rel',+epp,'Dcleft',-f].         % record the fact that the topic is a cleft vs C-Emb
-
 % adjectives
 [omosiroi]::[adj].   % interesting
 [oisii]::[adj].      % delicious
