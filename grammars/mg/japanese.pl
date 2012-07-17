@@ -10,7 +10,6 @@
 %   2. head-raising analysis of relative clauses (Schacter, Brame, Kayne)
 %     the headnoun is based generated as an arg of the embedded V. relativization
 %     is Wh-movement of this head to a position at the edge
-%   3. no-wa clefts are a type of relativization. "no" is ``formal pronoun'' of category D
 %  
 % auxiliary assumptions
 %  a. the copula doesn't assign structural case = doesn't select a CaseP
@@ -167,17 +166,6 @@
 
 % Relative CP can left-adjoin onto the head noun
  ['C-Rel']>>['Case'].
-
-
-%%% Cleft
-
-% complementizer can host topic
-[wa]::[='T-Decl',+topic,'C-Decl'].
-%[wa]::[='T-Decl',+topic,'C-Decl',-f]. % re-orderable if complement of "to"
-
-% also null topic case. only for nominatives
- []::[='Dcleft',+f,'Case',-nom,-topic].    % record the fact that the topic is a cleft vs C-Emb
-   % this enforces the contraint that wa can only take clefts.
 
 % adjectives
 [omosiroi]::[adj].   % interesting
