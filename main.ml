@@ -10,23 +10,6 @@ open Read
 open Chart
 (* open Rational *)
 
-let print_tree tree =
-	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
-		let item = Derivation.get_root_item t in
-		let children = Derivation.get_children t in
-		let yield =
-			match (children, Rule.get_expansion (Derivation.get_rule t)) with
-			| ([]    , PublicTerminating s) -> s
-			| ((_::_), PublicNonTerminating _) -> "--"
-			| _ -> failwith "Inconsistent tree in print_tree"
-		in
-		let first_line = Printf.sprintf "%s (%s) %s " (Chart.get_nonterm item) yield (show_weight (Derivation.get_weight t)) in
-		let children_printed : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_tree' children : (string list list))) in
-		let all_lines : (string list) = first_line :: children_printed in
-		all_lines
-	in
-	List.fold_right (Printf.sprintf("%s\n%s")) (print_tree' tree) ""
-
 let print_sexp tree = 
   let interdigitate s t =
     if (s = "") || (t = "") then
@@ -69,7 +52,7 @@ let print_kbest k chart start_symbol input_list =
         let goal = goal_item start_symbol (List.length input_list) in
         let trees = map_tr (fun i -> Derivation.get_nth_best_derivation i chart [] goal) (range 1 (k+1)) in  (** Not a great way to do this! Will fix. *)
         Printf.printf "Here are the %d best derivations of item %s:\n" k (debug_str goal) ;
-        List.iter (function (Some t) -> Printf.printf "%s\n" (print_tree t) | None -> Printf.printf "---\n") trees
+        List.iter (function (Some t) -> Printf.printf "%s\n" (Derivation.print_tree t) | None -> Printf.printf "---\n") trees
 
 (****************************************************************************************)
 

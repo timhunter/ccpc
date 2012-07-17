@@ -38,6 +38,22 @@ let rec one_from_each (lists : 'a list list) : ('a list list) =
 	| [] -> [[]]
 	| (l::ls) -> List.concat (map_tr (prepend_one_of l) (one_from_each ls))
 
+let print_tree tree =
+	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
+		let item = get_root_item t in
+		let children = get_children t in
+		let yield =
+			match (children, Rule.get_expansion (get_rule t)) with
+			| ([]    , Rule.PublicTerminating s) -> Printf.sprintf "\"%s\"" s
+			| ((_::_), Rule.PublicNonTerminating _) -> ""
+			| _ -> failwith "Inconsistent tree in print_tree"
+		in
+		let first_line = (Chart.get_nonterm item) ^^ yield ^^ (Printf.sprintf "(%s)" (show_weight (get_weight t))) in
+		let children_printed : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_tree' children : (string list list))) in
+		first_line :: children_printed
+	in
+	String.concat "\n" (print_tree' tree)
+
 let rec get_derivations chart item =
         let routes = Chart.get_routes item chart in
         let children_lists antecedent_items = one_from_each (map_tr (get_derivations chart) antecedent_items) in
