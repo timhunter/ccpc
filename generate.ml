@@ -62,29 +62,27 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
        end
 
 
-   (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
-   let sort_rules rules = 
-     let rulecompare r1 r2 =
-       match ((Rule.get_weight r1),(Rule.get_weight r2)) with
-	 | (Some (num1,_),Some (num2,_)) -> compare_num num1 num2 (* we're assuming here that all the denominators are equal *)
-	 | (None,_) -> 0 
-	 | (_,None) -> 0 
-     in
-       List.sort rulecompare rules
-
    let n_of num denom = div_num (num_of_int num) (num_of_int denom)
 
    exception Unweighted of string
 
    let numerator_of_rule r =
-     match (Rule.get_weight r) with
-	 Some (n,_) -> n
+     match Util.weight_numerator (Rule.get_weight r) with
+       | Some n -> n
        | None -> raise (Unweighted (Rule.to_string r))
 
    let denominator_of_rule r =
-     match (Rule.get_weight r) with
-	 Some (_,d) -> d
+     match Util.weight_denominator (Rule.get_weight r) with
+       | Some d -> d
        | None -> raise (Unweighted (Rule.to_string r))
+
+   (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
+   let sort_rules rules = 
+     let rulecompare r1 r2 =
+       try compare_num (numerator_of_rule r1) (numerator_of_rule r2) (* we're assuming here that all the denominators are equal *)
+       with (Unweighted _) -> 0
+     in
+       List.sort rulecompare rules
 
    let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n)
 
@@ -114,9 +112,10 @@ let rec generate_all g items w =
 	  let rule_selected = weighted_random productions in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
-	    match (Rule.get_weight rule_selected) with
-	      | Some (num,denom) -> mult_num (div_num num denom) w
-	      | None -> w in
+	    let rule_weight = Rule.get_weight rule_selected in
+	    match (Util.weight_numerator rule_weight, Util.weight_denominator rule_weight) with
+	      | (Some num, Some denom) -> mult_num (div_num num denom) w
+	      | _ -> w in
 	    if List.length rule_selected_rhs = 1 then 
 	      let child = generate_all g rule_selected_rhs current_w in
 	      (NonLeaf (List.hd items, [fst child], rule_selected), snd child)

@@ -19,7 +19,13 @@ val split : char -> string -> string list
 val uniques : 'a list -> 'a list
 val all_lists : 'a list -> int -> 'a list list
 
-type weight = (Num.num * Num.num) option
+type weight
+val no_weight : weight
+val make_weight : Num.num -> Num.num -> weight
 val show_weight : weight -> string
 val mult_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
+(* These last two functions are used only by generate.ml. Might be nice 
+ * to get rid of them when/if that becomes obsolete. *)
+val weight_numerator : weight -> Num.num option
+val weight_denominator : weight -> Num.num option

@@ -132,6 +132,19 @@ let concat_ranges range1 range2 =
 
 type weight = (Num.num * Num.num) option
 
+let no_weight = None
+let make_weight n1 n2 = Some(n1,n2)
+
+let weight_denominator w =
+  match w with
+  | Some (_,d) -> Some d
+  | None -> None
+
+let weight_numerator w =
+  match w with
+  | Some (n,_) -> Some n
+  | None -> None
+
 let show_weight w =
   match w with
   | Some (x,y) -> Printf.sprintf "%s / %s" (Num.string_of_num x) (Num.string_of_num y)
