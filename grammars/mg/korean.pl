@@ -1,87 +1,57 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean.pl
+%   File   : korean_adjunction.pl
 %   Author : Jiwon Yun
-%   Last Updated: March 8, 2012
+%   Last Updated: July 17, 2012
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % With this grammar, you can parse the followings:
 % - simple SV sentences
 % - simple SOV sentences
-% - relative/complement/adjunct clauses
-% - pro-drop
+% - pro-drop sentences (simple/adjunct/complement)
+% - relative clauses (under adjunction analyses)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Grammar
+% : abstracted version of korean.pl
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Let us assume that Korean (or every language) has DPs. 
-
-% Proper Nouns
-['Jiwon']::['D',-f].
-['Seongyeon']::['D',-f].
-
-% Determiner (null)
-[]::[='N','D',-f].
-
-['Det']::['N'].		% (abstracted)
+% Korean (or every language) has DPs. 
 
 % Common Nouns
-[kica]::['N'].			% reporter
-[uywon]::['N'].			% senator
-[phyencipcang]::['N'].	% editor
-[hyengsa]::['N'].		% detective
+['Noun']::['N'].
 
-['Noun']::['N'].		% (abstracted)
+% Determiners
+['Det']::['D',-f]. % proper nouns
+[]::[='N','D',-f]. % null
 
-% Case particles are heads of CaseP (cf. Hoshi 2004)
-% "morphological case is realized at the Case head position"
-%
-% DP moves to Spec-CaseP due to the word-order. 
+% Case particles
+['Nom']::[='D',+f,'Case',-nom].
+['Acc']::[='D',+f,'Case',-acc].
 
-[i]::[='D',+f,'Case',-nom].
-[ka]::[='D',+f,'Case',-nom].
-[ul]::[='D',+f,'Case',-acc].
-[lul]::[='D',+f,'Case',-acc].
-
-['Nom']::[='D',+f,'Case',-nom].		% (abstracted)
-['Acc']::[='D',+f,'Case',-acc].		% (abstracted)
-
-% Null argument (pro)
+% pro
 []::['Case',-nom].
 []::['Case',-acc].
 
-% One-place predicates (intransitive verbs and adjectives)
+% all the predicates are limited to transitives
+
+% One-place declarative predicates (intransitive verbs and adjectives)
 % In Korean, adjectives syntactically behave like intransitive verbs.
-[hwanassta]::['V-Decl'].			% got angry
-[yumyenghata]::['V-Decl'].			% be famous
-[yumyenghaycyessta]::['V-Decl'].	% became famous
-[palkhyecyessta]::['V-Decl'].		% was revealed
+ ['Vi']::['V-Decl'].
 
-['VIDecl']::['V-Decl'].	% (abstracted)
-
-% Two-place predicates (transitive verbs)
+% Two-place declarative predicates (transitive verbs)
 % , which assign accusative case
-[cohahanta]::[='Case',+acc,'V-Decl'].	% like
-[silhehanta]::[='Case',+acc,'V-Decl'].	% hate
-[kongkyekhayssta]::[='Case',+acc,'V-Decl'].	% attacked
-[hyeppakhayssta]::[='Case',+acc,'V-Decl'].	% threatened
-[koylophyessta]::[='Case',+acc,'V-Decl'].	% troubled
-[ttaylyessta]::[='Case',+acc,'V-Decl'].	% beat
+ ['Vt']::[='Case',+acc,'V-Decl'].
 
-['VTDecl']::[='Case',+acc,'V-Decl'].	% (abstracted)
+% declarative form predicates (transitive verbs)
+ ['VTDecl']::[='Case',+acc,'V-Decl'].
 
-% adnominal forms of predicates
+% adnominal form of predicates
 % The same adnominal form is used for both relative and complement clauses.
-[kongkyekhan]::[='Case',+acc,'V-Rel'].	% (the person that ...) attacked
-[kongkyekhan]::[='Case',+acc,'V-Emb'].	% (the fact that ...) attacked 
+['Vadn']::[='Case',+acc,'V-Rel'].	
+['Vadn']::[='Case',+acc,'V-Emb'].	
 
-['VTAdn']::[='Case',+acc,'V-Rel'].	% (abstracted)
-['VTAdn']::[='Case',+acc,'V-Emb'].	% (abstracted)
-
-% adjunctive forms of predicates
-[kongkyekhayse]::[='Case',+acc,'V-Adj'].	% (because ...) attacked
-
-['VTAdj']::[='Case',+acc,'V-Adj'].	% (abstracted)
+% adjunctive form of predicates
+['Vadj']::[='Case',+acc,'V-Adj'].	% (because ...) attacked
 
 % Little v
 % The subject starts from vP-Spec
@@ -107,19 +77,18 @@
 % showParse([uywon,i,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
 % 'The reporter who the senator attacked hates the editor.'
 
-% null wh Case - the raised CaseP does not have an overt case marker.
- []::[='D',+f,'Case',-nom,-wh].
- []::[='D',+f,'Case',-acc,-wh].
+% Null wh operator (Case/D)
+ []::['Case',-nom,-wh].
+ []::['Case',-acc,-wh].
 
-% TP is raised to Spec-DP due to EPP
- []::[='v-Rel',+nom,'T-Rel',-epp].
+% Nothing special for T
+ []::[='v-Rel',+nom,'T-Rel'].
 
 % Wh-hoisting complementizer
  []::[='T-Rel',+wh,'C-Rel'].
 
-% DP can take CP as its complement and 
-% move the TP to its spec to satisfy the EPP feature.
- []::[='C-Rel',+epp,'D',-f].
+% Relative CP can left-adjoin onto the head noun
+ ['C-Rel']>>['Case'].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -129,8 +98,7 @@
 
 % Common nouns that need complements
 % Assumption: Only dependent nouns can take CP-complement.
- [sasil]::[='C-Emb','N-Dep'].		% fact
- [kes]::[='C-Emb','N-Dep'].		% does not have any specific meaning...
+ ['fact']::[='C-Emb','N-Dep'].		% fact
 
 % Special determiner that takes as argument an NP that takes CP-complement
  []::[='N-Dep',+epp,'D',-f].

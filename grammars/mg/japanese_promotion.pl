@@ -23,7 +23,6 @@
 % modified by Jiwon Yun
 % April 9, 2012: proofreading with minor corrections
 % June 8, 2012: turned off short scrambling to avoid spurious ambiguity
-% July 17, 2012: adjunction analysis for RCs
 
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
@@ -152,36 +151,29 @@
 % Determiner (null)
 []::[='C-Emb',+f,'D',-f].
 
-
-%%% RC
-
-% Null wh operator (Case/D)
- []::['Case',-nom,-wh].
- []::['Case',-acc,-wh].
-
-% Nothing special for T
- []::[='v-Rel',+nom,'T-Rel'].
-
-% Wh-hoisting complementizer
- []::[='T-Rel',+wh,'C-Rel'].
-
-% Relative CP can left-adjoin onto the head noun
- ['C-Rel']>>['Case'].
-
-
-%%% Cleft
-
 % complementizer can host topic
 [wa]::[='T-Decl',+topic,'C-Decl'].
 %[wa]::[='T-Decl',+topic,'C-Decl',-f]. % re-orderable if complement of "to"
+
+
+% null wh Case - the raised CaseP does not have an overt case marker.
+  []::[='D',+f,'Case',-nom,-wh].
+  []::[='D',+f,'Case',-acc,-wh].
 
 % also null topic case. only for nominatives
  []::[='Dcleft',+f,'Case',-nom,-topic].    % record the fact that the topic is a cleft vs C-Emb
    % this enforces the contraint that wa can only take clefts.
 
+% TP is raised to Spec-DP due to EPP
+ []::[='v-Rel',+nom,'T-Rel',-epp].
+
+% Wh-hoisting complementizer
+ []::[='T-Rel',+wh,'C-Rel'].
+
 % DP can take CP as its complement and 
 % move the TP to its spec to satisfy the EPP feature.
 % Hoshi says this on page 14
+ []::[='C-Rel',+epp,'D',-f].
  []::[='C-Rel',+epp,'Dcleft',-f].         % record the fact that the topic is a cleft vs C-Emb
 
 % adjectives

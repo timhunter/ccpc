@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_adjunction.pl
+%   File   : korean.pl
 %   Author : Jiwon Yun
 %   Last Updated: July 17, 2012
 
@@ -8,7 +8,7 @@
 % - simple SV sentences
 % - simple SOV sentences
 % - pro-drop sentences (simple/adjunct/complement)
-% - relative clauses (under adjunction analyses)
+% - relative clauses (under adjunction analysis)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Grammar
