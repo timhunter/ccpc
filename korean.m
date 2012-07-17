@@ -16,3 +16,9 @@ koreanabs={{"Noun", "Acc", "Vdecl"},
 {"Noun", "Nom", "Vadj", "Noun", "Nom", "Vdecl"},
 {"Noun", "Nom", "Vadn", "fact", "Nom", "Vdecl"},
 {"Noun", "Nom", "Vadn", "Noun", "Nom", "Vdecl"}};
+
+koreanabsrc={
+{"Noun", "Acc", "Vadn", "Noun", "Nom", "Noun", "Acc", "VTDecl"},
+{"Noun", "Nom", "Vadn", "Noun", "Nom", "Noun", "Acc", "VTDecl"},
+{"Noun", "Nom", "Noun", "Acc", "Vadn", "Noun", "Acc", "VTDecl"},
+{"Noun", "Nom", "Noun", "Nom", "Vadn", "Noun", "Acc", "VTDecl"}};
