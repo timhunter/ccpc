@@ -16,6 +16,8 @@ val add : chart -> item -> route -> unit
 val get_status : chart -> item -> route -> item_route_status
 val length : chart -> int
 
+val goal_item : string -> int -> item
+
 val goal_items : chart -> string -> int -> item list
 val iter_items : chart -> (item -> unit) -> unit
 val map_items : chart -> (item -> 'a) -> 'a list

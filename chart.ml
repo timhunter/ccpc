@@ -57,7 +57,7 @@ let debug_str_long item chart =
 		| Pair (x,y) -> Printf.sprintf "%d:%d" x y
 		| VarRange _ -> Printf.sprintf "eps"
 	in
-	let show_backpointer (items,r,wt) = "(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")" in
+	let show_backpointer (items,r,wt) = show_weight wt ^^ (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in
 	let backpointers_str = List.fold_left (^^) "" (map_tr show_backpointer (get_routes item chart)) in
 	("[" ^^ (string_of_int (Hashtbl.hash item)) ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ backpointers_str ^^ "]")
 
@@ -73,6 +73,9 @@ let get_status c item route =
   | [] -> NewItem
   | rs -> if (List.mem route rs) then OldItemOldRoute else OldItemNewRoute
 
+(* This function is kind of a remnant from the bad old days when an item included a 
+ * list of backpointers. Now that an item is just a ``proposition'', it makes more 
+ * sense to just use the below function goal_item, and then call get_routes on the result. *)
 let goal_items c (start_symbol : string) (length : int) : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
     if (get_nonterm i = start_symbol) && (get_ranges i = [Pair (0,length)]) then
@@ -82,6 +85,8 @@ let goal_items c (start_symbol : string) (length : int) : (item list) =
   in
   match c with
   | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
+
+let goal_item start_symbol length = ParseItem(start_symbol, [Pair(0,length)])
 
 (*** WARNING: Functions below here are very slow. Not recommended outside of debugging contexts. ***)
 

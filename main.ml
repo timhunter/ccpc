@@ -10,18 +10,17 @@ open Read
 open Chart
 (* open Rational *)
 
-let get_yield (sentence : string list) (r : Util.range) : string =
-	match r with
-	| Pair (i,j) -> List.fold_left (^^) "" (map_tr (List.nth sentence) (range i j))
-	| VarRange _ -> ""
-
-let print_tree tree sentence =
+let print_tree tree =
 	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
 		let item = Derivation.get_root_item t in
-		let yields_list : (string list) = map_tr (get_yield sentence) (Chart.get_ranges item) in
-		let yields_string : string = List.fold_left (^^) "" (map_tr (Printf.sprintf "'%s'") yields_list) in
-		let first_line = Printf.sprintf "%s (%s) %s " (Chart.get_nonterm item) yields_string (show_weight (Derivation.get_weight t)) in
 		let children = Derivation.get_children t in
+		let yield =
+			match (children, Rule.get_expansion (Derivation.get_rule t)) with
+			| ([]    , PublicTerminating s) -> s
+			| ((_::_), PublicNonTerminating _) -> "--"
+			| _ -> failwith "Inconsistent tree in print_tree"
+		in
+		let first_line = Printf.sprintf "%s (%s) %s " (Chart.get_nonterm item) yield (show_weight (Derivation.get_weight t)) in
 		let children_printed : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_tree' children : (string list list))) in
 		let all_lines : (string list) = first_line :: children_printed in
 		all_lines
@@ -51,7 +50,7 @@ let run_parser sentence (rules, start_symbol) =
   let rec make_trees goals acc =
     match goals with
       [] -> acc
-    | h::t ->  make_trees t ((print_tree h sentence)::acc) in
+    | h::t ->  make_trees t ((print_tree h)::acc) in
   let result = make_trees goal_derivations [] in
  <:DEBUG< "%s\n" (String.concat "\n" (Chart.map_items chart (fun i -> Chart.to_string i sentence))) >> ;
  <:DEBUG< "Chart contains %d items, of which %d are goals\n" (Chart.length chart) (List.length goal_items) >> ;
@@ -84,33 +83,12 @@ let rec process_args args acc =
 
 (****************************************************************************************)
 
-(*
-let rec get_best item chart =
-        let build_derivation (antecedents, rule, weight) =
-                let sub_derivations : Derivation.derivation_tree list = List.map (fun i -> get_best i chart) antecedents in
-                let new_weight = List.fold_left mult_weights weight (map_tr Derivation.get_weight sub_derivations) in
-                Derivation.make_derivation_tree_weighted item sub_derivations new_weight
-        in
-        let candidates = List.map build_derivation (get_routes item chart) in
-        print_string ("Item: " ^ (debug_str item)) ;
-        print_string "Weights: " ;
-        List.iter (fun w -> print_string (show_weight w) ; print_string " ") (List.map Derivation.get_weight candidates) ;
-        print_newline () ;
-        (List.hd candidates)   (* assume for now that the first one is the ``best'' *)
-*)
-
 let print_kbest k chart start_symbol input_list =
-        let goal_items = goal_items chart start_symbol (List.length input_list) in
-        let goal_derivations = List.concat ((map_tr (Derivation.get_derivations chart)) goal_items) in
-        let compare_derivations d1 d2 = compare_weights (Derivation.get_weight d1) (Derivation.get_weight d2) in
-        let rec make_trees goals acc =
-                match goals with
-                | [] -> acc
-                | h::t ->  make_trees t ((print_tree h input_list)::acc)
-        in
-        let trees = make_trees (take k (List.sort compare_derivations goal_derivations)) [] in
-        Printf.printf "Found %d parses altogether, here are the best %d:\n" (List.length goal_derivations) k ;
-        List.iter (Printf.printf "%s\n") trees
+
+        let goal = goal_item start_symbol (List.length input_list) in
+        let trees = map_tr (fun i -> Derivation.get_nth_best_derivation i chart [] goal) (range 1 (k+1)) in  (** Not a great way to do this! Will fix. *)
+        Printf.printf "Here are the %d best derivations of item %s:\n" k (debug_str goal) ;
+        List.iter (function (Some t) -> Printf.printf "%s\n" (print_tree t) | None -> Printf.printf "---\n") trees
 
 (****************************************************************************************)
 
