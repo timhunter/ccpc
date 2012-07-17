@@ -22,7 +22,6 @@
 % modified by Jiwon Yun
 % April 9, 2012: proofreading with minor corrections
 % June 8, 2012: turned off short scrambling to avoid spurious ambiguity
-% July 17, 2012: adjunction analysis for RCs
 
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
@@ -151,21 +150,20 @@
 % Determiner (null)
 []::[='C-Emb',+f,'D',-f].
 
+% null wh Case - the raised CaseP does not have an overt case marker.
+  []::[='D',+f,'Case',-nom,-wh].
+  []::[='D',+f,'Case',-acc,-wh].
 
-%%% RC
-
-% Null wh operator (Case/D)
- []::['Case',-nom,-wh].
- []::['Case',-acc,-wh].
-
-% Nothing special for T
- []::[='v-Rel',+nom,'T-Rel'].
+% TP is raised to Spec-DP due to EPP
+ []::[='v-Rel',+nom,'T-Rel',-epp].
 
 % Wh-hoisting complementizer
  []::[='T-Rel',+wh,'C-Rel'].
 
-% Relative CP can left-adjoin onto the head noun
- ['C-Rel']>>['Case'].
+% DP can take CP as its complement and 
+% move the TP to its spec to satisfy the EPP feature.
+% Hoshi says this on page 14
+ []::[='C-Rel',+epp,'D',-f].
 
 % adjectives
 [omosiroi]::[adj].   % interesting
