@@ -63,39 +63,51 @@ let rec get_derivations chart item =
         map_tr (fun (children,rule,weight_factor) -> make_derivation_tree item children rule weight_factor) results_from_all_routes
 
 (* Return type: derivation_tree option
-   Returns None if there are less than n derivations of item. *)
+   Returns None if there are less than n derivations of item. 
+   This is basically Algorithm 0 from Huang & Chiang, ``Better k-best parsing'' *)
 let rec get_nth_best_derivation n chart (visited : (Chart.item * int) list) item =
         assert (n >= 1) ;
+
+        let new_visited = (item,n) :: visited in
+
+        (* merge is addition in the semiring, where elements are n-best lists *)
+        let merge xs ys = take n (List.sort (>*>) (xs @ ys)) in
+
+        (* mult f is folded multiplication in the semiring, where elements are n-best lists *)
+        (* mult : (derivation_tree list -> derivation_tree) -> (derivation_tree list) list -> derivation_tree list *)
+        let mult f lists =
+                let all_derivations = map_tr f lists in
+                take n (List.sort (>*>) all_derivations)
+        in
+
+        (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
+         * we've already visited. *)
+        let guarded_get_nth i chart it =
+                if List.exists (fun (it',i') -> (it = it') && (i >= i')) new_visited then
+                        None
+                else
+                        get_nth_best_derivation i chart new_visited it
+        in
+
+        let rec require_no_nones (lst : 'a option list) : 'a list option =
+                match lst with
+                | [] -> Some []
+                | (None :: xs) -> None
+                | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
+        in
+
         let get_n_best_by_route ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
                 match items with
                 | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
                 | _ ->
                         let route_arity = List.length items in        (* r = |e| *)
                         let rank_vectors = all_lists (range 1 (n+1)) route_arity in     (* use numbers [1..n] inclusive because 1 means best (0 is invalid) *)
-                        let zipped_vectors : (int * Chart.item) list list = map_tr (fun vec -> List.combine vec items) rank_vectors in
-                        let guarded_get_nth i chart it =
-                                let new_visited = (item,n)::visited in
-                                if List.exists (fun (x,y) -> (it = x) && (i >= y)) new_visited then (
-                                        None
-                                ) else
-                                        get_nth_best_derivation i chart new_visited it
-                        in
-                        let child_lists : (int * Chart.item) list -> (derivation_tree option) list = map_tr (fun (i,it) -> guarded_get_nth i chart it) in
-                        let all_child_lists : (derivation_tree option) list list = map_tr child_lists zipped_vectors in
-                        let rec require_no_nones (lst : 'a option list) : 'a list option =
-                                match lst with
-                                | [] -> Some []
-                                | (None :: xs) -> None
-                                | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
-                        in
-                        let all_complete_child_lists : derivation_tree list list = optlistmap require_no_nones all_child_lists in
-                        let derivations = map_tr (fun children -> make_derivation_tree item children r wt) all_complete_child_lists in
-                        take n derivations
+                        let child_list_from_vector vec = map_tr (fun (i,it) -> guarded_get_nth i chart it) (List.combine vec items) in
+                        let child_lists : (derivation_tree option) list list = map_tr child_list_from_vector rank_vectors in
+                        let complete_child_lists : derivation_tree list list = optlistmap require_no_nones child_lists in
+                        mult (fun children -> make_derivation_tree item children r wt) complete_child_lists
         in
-        let all_candidates = concatmap_tr get_n_best_by_route (Chart.get_routes item chart) in
-        if (List.length all_candidates >= n) then (
-                let sorted_candidates = List.sort (>*>) all_candidates in
-                Some (List.nth sorted_candidates (n-1))
-        ) else
-                None
+        let lists = map_tr get_n_best_by_route (Chart.get_routes item chart) in
+        let n_best_overall = List.fold_left merge [] lists in
+        try Some (List.nth n_best_overall (n-1)) with Failure _ -> None
 
