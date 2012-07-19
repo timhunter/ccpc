@@ -176,6 +176,7 @@ let get_timestamp () =
 
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
 let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist * num) list) filename =
+
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
 	   (and deals properly with rule markers in amongst the ids). *)
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
@@ -207,7 +208,15 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
 			Printf.printf "*** Output from Prolog tree-drawing: %s\n" (input_line channel)
 		done
 	with End_of_file ->
-		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file"
+		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file" ;
+
+        (* Unfortunate necessary hack: escape any underscores in the latex file produced by prolog *)
+        let channel' =
+                let command = Printf.sprintf "sed -i 's/_/\\\\_/g' %s" filename in
+                try Unix.open_process_in command
+                with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
+        in
+        check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
 let run_visualization grammar_files prolog_file kbest optional_seed =
 
