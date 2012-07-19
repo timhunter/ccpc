@@ -1,0 +1,34 @@
+# Simple SOV
+374 Noun Nom Noun Acc VTDecl
+
+# pro-drop in matrix clauses
+2 Noun Nom VTDecl
+44 Noun Acc VTDecl
+
+# pro-drop in adjunct clauses
+3 Noun Nom Vadj Noun Nom Noun Acc VTDecl    
+214 Noun Acc Vadj Noun Nom Noun Acc VTDecl
+
+# pro-drop in noun complement clauses
+73 Noun Acc Vadn fact Nom Noun Acc VTDecl
+2 Noun Nom Vadn fact Nom Noun Acc VTDecl
+126 Noun Nom Noun Acc Vadn fact Acc VTDecl
+1 Noun Nom Noun Nom Vadn fact Acc VTDecl
+
+# relative clauses
+182 Noun Acc Vadn Noun Nom Noun Acc VTDecl
+46 Noun Nom Vadn Noun Nom Noun Acc VTDecl
+163 Noun Nom Noun Acc Vadn Noun Acc VTDecl
+30 Noun Nom Noun Nom Vadn Noun Acc VTDecl
+
+##  extra possibility of both being omitted
+# as matrix OBJ
+1 Noun Nom Vadn fact Acc VTDecl
+# as matrix SBJ
+6 Vadn fact Nom Noun Acc VTDecl
+
+## extra possibility of PRO inside RC
+# as matrix SBJ 
+6 Vadn Noun Nom Noun Acc VTDecl
+# as matrix OBJ
+3 Noun Nom Vadn Noun Acc VTDecl
