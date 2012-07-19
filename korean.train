@@ -1,17 +1,17 @@
-374 Noun Nom Noun Acc Vdecl
-2 Noun Nom Vdecl
-44 Noun Acc Vdecl
-3 Noun Nom Vadj Noun Nom Noun Acc Vdecl
-214 Noun Acc Vadj Noun Nom Noun Acc Vdecl
-73 Noun Acc Vadn fact Nom Noun Acc Vdecl
-2 Noun Nom Vadn fact Nom Noun Acc Vdecl
-126 Noun Nom Noun Acc Vadn fact Acc Vdecl
-1 Noun Nom Noun Nom Vadn fact Acc Vdecl
-182 Noun Acc Vadn Noun Nom Noun Acc Vdecl
-46 Noun Nom Vadn Noun Nom Noun Acc Vdecl
-163 Noun Nom Noun Acc Vadn Noun Acc Vdecl
-30 Noun Nom Noun Nom Vadn Noun Acc Vdecl
-1 Noun Nom Vadn fact Acc Vdecl
-6 Vadn fact Nom Noun Acc Vdecl
-6 Vadn Noun Nom Noun Acc Vdecl
-3 Noun Nom Vadn Noun Acc Vdecl
+374 N nom N acc Vtd
+2 N nom Vtd
+44 N acc Vtd
+3 N nom Vta N nom N acc Vtd
+214 N acc Vta N nom N acc Vtd
+73 N acc Vtn fact nom N acc Vtd
+2 N nom Vtn fact nom N acc Vtd
+126 N nom N acc Vtn fact acc Vtd
+1 N nom N nom Vtn fact acc Vtd
+182 N acc Vtn N nom N acc Vtd
+46 N nom Vtn N nom N acc Vtd
+163 N nom N acc Vtn N acc Vtd
+30 N nom N nom Vtn N acc Vtd
+1 N nom Vtn fact acc Vtd
+6 Vtn fact nom N acc Vtd
+6 Vtn N nom N acc Vtd
+3 N nom Vtn N acc Vtd
