@@ -59,15 +59,15 @@ let print_kbest k chart start_symbol input_list =
 let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
-		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\") (-s) (-intersect) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
+		Printf.eprintf "Usage: %s grammar-file (-d) (-graph \"dot-output-file\") (-s) (-intersect) (-kbest <k>) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Flags in parentheses are optional.\n" ;
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Only one of the following three flags will take effect; if more than one is given, \n" ;
 		Printf.eprintf "  -intersect trumps everything else, and -s trumps -kbest.\n" ;
 		Printf.eprintf "      -intersect     Prints intersection grammar to stdout\n" ;
-		Printf.eprintf "      -s             Prints s-expression to stdout\n" ;
-		Printf.eprintf "      -kbest <k>     Reports the best <k> parses to stdout\n" ;
+		Printf.eprintf "      -s             Prints xml-ish derivation tree to stdout (not compatible with prefix or infix mode)\n" ;
+		Printf.eprintf "      -kbest <k>     Reports the best <k> parses to stdout (WARNING: UNSTABLE and/or VERY SLOW)\n" ;
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Only one of the following two flags will take effect; if more than one is given, \n" ;
 		Printf.eprintf "  the last one overrides all others. If neither is given, the string is treated as 'exact'.\n" ;
@@ -97,16 +97,11 @@ let main () =
 			         (intersection_grammar chart goal_items start_symbol input_list)
 			else 
 			  (if options.sexp then 
-			    let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-			    let rec make_trees goals acc =
-			      match goals with
-				  [] -> acc
-				| h::t ->  make_trees t ((print_sexp h)::acc) in
-			    begin
-			       (* print out each derivation *)
-   			       List.iter print_string (make_trees goal_derivations []);
-			      print_newline ()
-			    end
+			    match parser_argument with
+			    | Parser.Sentence _ -> 
+			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
+   			         List.iter print_endline (map_tr print_sexp goal_derivations)
+   			    | _ -> failwith "-s option is incompatible with prefix/infix mode"
 			   else 
 			     (match options.kbest with
 			      | None -> ()
