@@ -150,6 +150,11 @@ let show_weight w =
   | Some (x,y) -> Printf.sprintf "%s / %s" (Num.string_of_num x) (Num.string_of_num y)
   | None -> ""
 
+let show_weight_float w =
+  match w with
+  | Some (x,y) -> string_of_float (Num.float_of_num (Num.div_num x y))
+  | None -> ""
+
 let mult_weights w1 w2 =
   match (w1,w2) with
   | (None, None) -> None

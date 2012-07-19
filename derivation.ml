@@ -48,7 +48,7 @@ let print_tree tree =
 			| ((_::_), Rule.PublicNonTerminating _) -> ""
 			| _ -> failwith "Inconsistent tree in print_tree"
 		in
-		let first_line = (Chart.get_nonterm item) ^^ yield ^^ (Printf.sprintf "(%s)" (show_weight (get_weight t))) in
+		let first_line = (Chart.get_nonterm item) ^^ yield ^^ (Printf.sprintf "%s" (show_weight_float (get_weight t))) in
 		let children_printed : (string list) = map_tr ((^) "    ") (List.concat (map_tr print_tree' children : (string list list))) in
 		first_line :: children_printed
 	in

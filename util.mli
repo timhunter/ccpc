@@ -23,6 +23,7 @@ type weight
 val no_weight : weight
 val make_weight : Num.num -> Num.num -> weight
 val show_weight : weight -> string
+val show_weight_float : weight -> string
 val mult_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
 (* These last two functions are used only by generate.ml. Might be nice 
