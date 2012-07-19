@@ -10,9 +10,14 @@ open Read
 open Chart
 (* open Rational *)
 
-let print_grammar grammar_file prefix (rules, start_symbol) =
+let print_grammar grammar_file parser_arg (rules, start_symbol) =
 	Printf.printf "(* original grammar: %s *)\n" grammar_file ;
-	Printf.printf "(* prefix: %s *)\n" prefix ;
+	begin
+	match parser_arg with
+	| Parser.Prefix s   -> Printf.printf "(* intersected with prefix: %s *)\n" (String.concat " " s)
+	| Parser.Infix s    -> Printf.printf "(* intersected with infix: %s *)\n" (String.concat " " s)
+	| Parser.Sentence s -> Printf.printf "(* intersected with exact string: %s *)\n" (String.concat " " s)
+	end ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
 type options = { debug : bool ; graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
@@ -83,7 +88,7 @@ let main () =
 		      begin
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
 			if options.intersect
-			then print_grammar grammar_file input_string
+			then print_grammar grammar_file parser_argument
 			         (intersection_grammar chart goal_items start_symbol input_list)
 			else 
 			  (if options.trees then 
