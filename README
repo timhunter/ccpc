@@ -1,11 +1,9 @@
 
-===============================================
-======== Getting started with mcfgcky2 ========
-===============================================
-
 Prerequisites: OCaml, Mathematica, pdflatex.
 
+===========================================
 ==== Working with the bundled grammars ====
+===========================================
 
 To try things out with the grammars that are included in the SVN 
 repository, all you should need to do is the following:
@@ -34,7 +32,9 @@ prefix to intersect it with. For example:
 This will generate a PDF file showing up to 100 likely parses that are 
 consistent with the specified grammar and prefix.
 
+=================================================
 ==== Adding or modifying Minimalist Grammars ====
+=================================================
 
 Before adding to or modifying the existing Minimalist Grammars, you will need 
 to do the following:
@@ -88,3 +88,29 @@ can ignore the $NAME.train file and the last of the three make commands
 above, and instead just place your $NAME.wmcfg file in the grammars/wmcfg 
 directly. Our training tool does not do anything remotely fancy. You may 
 well have something more advanced.
+
+=============================================================
+==== Adding (M)CFGs not derived from Minimalist Grammars ====
+=============================================================
+
+Since the parser at the core of the system (the mcfg_nt executable) actually 
+works with MCFGs, you can also provide MCFGs of your own that are not 
+derived from Minimalist Grammars. The grammar used in these examples from 
+above, for example, is actually a (W)MCFG that was not derived from any MG.
+
+      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -trees "Jon hit the dog with the stick"
+      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -intersect -p "Jon hit"
+
+Notice that there are no associated files grammars/{mcfg,mg}/strauss.* of 
+the sort that connect strauss.wmcfg back to a Minimalist Grammar. This does 
+not cause a problem for anything you want to do using mcfg_nt, which only 
+uses the wmcfg file you provide on the command line itself.
+
+But topstrings.csh (and the underlying executable visualize, which does the 
+heavy lifting there) assumes that the MCFG it is given is the translation 
+of an MG, and uses the associated files in grammars/{mcfg,mg} to 
+``un-translate'' the sampled derivations back into MG derivations; notice 
+that the trees in the PDF produced by topstrings.csh shows MG derived trees 
+(or X-bar trees). So there is currently no equivalent way to sample the 
+likely derivations for a standalone MCFG.
+
