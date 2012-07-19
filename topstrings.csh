@@ -10,4 +10,5 @@ $RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
 $VISUAL $GRAMMAR.$PREFIX.global.chart 100
 pdflatex trees
 mv trees.pdf $GRAMMAR.$PREFIX.global.pdf
-rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart
+echo "*** Resulting pdf file is: $GRAMMAR.$PREFIX.global.pdf"
+rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart trees.tex trees.aux trees.log
