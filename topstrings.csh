@@ -11,4 +11,4 @@ $VISUAL $GRAMMAR.$PREFIX.global.chart 100
 sed -i 's/_/\\_/g' trees.tex   #This is a hack to deal with unescaped underscores (sweiss)
 pdflatex trees
 mv trees.pdf $GRAMMAR.$PREFIX.global.pdf
-rm *.chart
+rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart
