@@ -7,8 +7,7 @@ set RENORM=./renormalize.csh
 set VISUAL=./visualize
 $PARSE grammars/wmcfg/$GRAMMAR.wmcfg -intersect -p "$argv[2]" >! $GRAMMAR.$PREFIX.chart
 $RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
-$VISUAL $GRAMMAR.$PREFIX.global.chart 100
-pdflatex trees
-mv trees.pdf $GRAMMAR.$PREFIX.global.pdf
+$VISUAL $GRAMMAR.$PREFIX.global.chart 100 $GRAMMAR.$PREFIX.global.tex
+pdflatex $GRAMMAR.$PREFIX.global.tex
 echo "*** Resulting pdf file is: $GRAMMAR.$PREFIX.global.pdf"
-rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart trees.tex trees.aux trees.log
+rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart $GRAMMAR.$PREFIX.global.tex $GRAMMAR.$PREFIX.global.aux $GRAMMAR.$PREFIX.global.log
