@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    185693,       4278]
-NotebookOptionsPosition[    180360,       4126]
-NotebookOutlinePosition[    180759,       4144]
-CellTagsIndexPosition[    180716,       4141]
+NotebookDataLength[    210700,       4928]
+NotebookOptionsPosition[    203134,       4724]
+NotebookOutlinePosition[    203533,       4742]
+CellTagsIndexPosition[    203490,       4739]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -55,7 +55,7 @@ Cell[BoxData[
 ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/cdir\\\", \
 ButtonNote -> \\\"SetDirectory::cdir\\\"]\\)\"\>"}]], "Message", "MSG",
  CellChangeTimes->{3.551545424652401*^9, 3.551545583879715*^9, 
-  3.5515456238462048`*^9, 3.5515456856294413`*^9}]
+  3.5515456238462048`*^9, 3.5515456856294413`*^9, 3.551714004633484*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -1969,7 +1969,14 @@ Cell[BoxData[
    RowBox[{"{", 
     RowBox[{"\<\"N\"\>", ",", "\<\"ga\"\>", ",", "\<\"Vt\"\>", 
      ",", "\<\"no\"\>", ",", "\<\"ga\"\>", ",", "\<\"N\"\>", ",", "\<\"o\"\>",
-      ",", "\<\"Vt\"\>"}], "}"}]}], "}"}]], "Output",
+      ",", "\<\"Vt\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"N\"\>", ",", "\<\"o\"\>", ",", "\<\"Vt\"\>", 
+     ",", "\<\"N\"\>", ",", "\<\"ga\"\>", ",", "\<\"Vi\"\>"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\<\"N\"\>", ",", "\<\"ga\"\>", ",", "\<\"Vt\"\>", 
+     ",", "\<\"N\"\>", ",", "\<\"ga\"\>", ",", "\<\"Vi\"\>"}], "}"}]}], 
+  "}"}]], "Output",
  CellChangeTimes->{{3.5297768583084507`*^9, 3.529776870740069*^9}, 
    3.530116486954008*^9, 3.5301165432359257`*^9, {3.530799505574438*^9, 
    3.530799520150272*^9}, 3.530807943590139*^9, 3.531065978983184*^9, 
@@ -1978,7 +1985,8 @@ Cell[BoxData[
    3.548188497251657*^9, 3.548683256654339*^9, 3.551545425296983*^9, 
    3.5515455368923607`*^9, 3.55154558465983*^9, 3.5515456243788*^9, 
    3.5515456863609667`*^9, 3.551546338421544*^9, 3.551546382851574*^9, 
-   3.551546449501192*^9, 3.551546741367395*^9}]
+   3.551546449501192*^9, 3.551546741367395*^9, {3.551714005315442*^9, 
+   3.5517140221005697`*^9}}]
 }, Open  ]],
 
 Cell[TextData[{
@@ -2726,142 +2734,732 @@ Cell[BoxData[
  RowBox[{
   RowBox[{"ents", " ", "=", " ", 
    RowBox[{"doSentences", "[", 
-    RowBox[{"japanese", ",", "1", ",", "4", ",", "newStyle"}], "]"}]}], 
+    RowBox[{"japanese", ",", "1", ",", "6", ",", "newStyle"}], "]"}]}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.527862090917053*^9, 3.527862129281117*^9}, 
    3.527863970827118*^9, {3.529776986523217*^9, 3.529776990046344*^9}, 
    3.530116583739294*^9, 3.530655621408634*^9, 3.5306557134773006`*^9, 
    3.530799568988584*^9, 3.53080833847928*^9, {3.5479328623826838`*^9, 
    3.547932862443544*^9}, {3.547938141831316*^9, 3.547938141972328*^9}, {
-   3.551545531949217*^9, 3.551545532051103*^9}}],
-
-Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548801227146*^9}],
+   3.551545531949217*^9, 3.551545532051103*^9}, {3.551714051154909*^9, 
+   3.5517140512205667`*^9}}],
 
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548801321951*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548802892078*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548803024808*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548804481045*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548804621523*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548806293871*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.55154880647968*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548808429141*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5515488102743673`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548811204646*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548814388021*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-7.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.55154881572047*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix3-8.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548820092352*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-7.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.551548821697167*^9}],
+ CellChangeTimes->{3.551714052657312*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548824818747*^9}],
+ CellChangeTimes->{3.551714052707305*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548826400206*^9}],
+ CellChangeTimes->{3.5517140544139423`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517140544671717`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714056037492*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548828006755*^9}],
+ CellChangeTimes->{3.551714056093395*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix1-8.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548829998562*^9}],
+ CellChangeTimes->{3.5517140579617147`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548832401174*^9}],
+ CellChangeTimes->{3.551714060576486*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714061810457*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548836658173*^9}],
+ CellChangeTimes->{3.551714064660227*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548838088846*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5515488396443243`*^9}],
+ CellChangeTimes->{3.551714065898692*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548841158885*^9}],
+ CellChangeTimes->{3.551714069216281*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-7.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548841280658*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5515488454331713`*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.5515488492348833`*^9}],
+ CellChangeTimes->{3.551714073443718*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-7.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.55154885024965*^9}],
+ CellChangeTimes->{3.5517140782553997`*^9}],
 
-Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
+Cell[BoxData["\<\"/tmp/prefix1-8.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548853329193*^9}],
+ CellChangeTimes->{3.551714081730029*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix4-8.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.551548858150263*^9}],
+ CellChangeTimes->{3.5517140861619864`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517140896659403`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714091240982*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714092805237*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171409499142*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714096668487*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171409731284*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714098282566*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714100053502*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714100936445*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141038133583`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141049938087`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix5-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141078891478`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"First", "::", "first"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
+element.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108126519*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
+string of valid digits.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108381782*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
+RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
+RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
+\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
+\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
+Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
+\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
+appropriate bounds.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108471056*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification InterpretationBox[StyleBox[RowBox[{\\\"\
+\[SkeletonIndicator]\\\", \\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \
+\\\"Directed\\\", \\\">\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, \
+AutoSpacing -> False], Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable \
+-> False] is neither an integer nor a list of integers.\"\>"}]], "Message", \
+"MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141086109056`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partw"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part \\!\\(2\\) of \\!\\({}\\) does not exist.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108656942*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"First", "::", "first"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
+element.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108713133*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partw"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108779503*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \
+\\!\\(vertexNumber$110693[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
+\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
+\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108849324*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "partw"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part \\!\\(4\\) of \\!\\({}\\) does not exist.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171410891284*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partw\\), \
+\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714108983801*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \
+\\!\\(vertexNumber$110693[\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 4 \
+\[RightDoubleBracket]\\)\\)]\\) is neither an integer nor a list of integers.\
+\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141090779657`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: pspec\\), \
+\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109146243*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"First", "::", "first"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\({}\\) has a length of zero and no first \
+element.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109218169*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(First :: first\\), \
+\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109277893*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
+are expected.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141093480597`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
+are expected.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109418174*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
+\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
+\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$110693[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\
+\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - \
+x\\_\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
+\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
+\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$110693[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\
+\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - \
+x\\_\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
+\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
+\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
+\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$110693[\\(\\(\\(\\(FromDigits[0]\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
+\\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
+\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\(vertexNumber$110693[\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
+cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109476409*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$110693, \
+\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$110693\\)\\), \
+\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
+replacement rules nor a valid dispatch table, and so cannot be used for \
+replacing.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109562085*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \
+\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
+\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \
+\\(\\(vertexNumber$110693[\\(\\(\\(\\(FromDigits[0]\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
+\\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\(vertexNumber$110693[\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
+integer nor a list of integers.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714109625601*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
+non-empty square matrix.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171410969569*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
+non-empty square matrix.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141097586718`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
+machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
+"MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141098258*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
+non-empty square matrix.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171410989579*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141099641647`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141104766006`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714112112823*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-7.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5515488616567783`*^9}],
+ CellChangeTimes->{3.551714113509141*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141165821447`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141205490313`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-8.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5515488703341513`*^9}]
+ CellChangeTimes->{3.551714122996263*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix6-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714124689399*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FromDigits", "::", "nlst"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The expression \\!\\(0\\) is not a list of digits or a \
+string of valid digits.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714124835375*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator RowBox[{\\\"{\\\", RowBox[{\\\"V\\\", \\\"[\\\", \
+RowBox[{\\\"RootedEmbedding\\\", \\\"[\\\", \
+RowBox[{InterpretationBox[StyleBox[RowBox[{\\\"\[SkeletonIndicator]\\\", \
+\\\"Graph:<\\\", 0, \\\",\\\", 1, \\\",\\\", \\\"Directed\\\", \\\">\
+\[SkeletonIndicator]\\\"}], ShowAutoStyles -> False, AutoSpacing -> False], \
+Graph[{}, {{0, 0}}, EdgeDirection -> True], Editable -> False], \\\",\\\", \\\
+\\(FromDigits[0]\\\\)}], \\\"]\\\"}], \\\"]\\\"}], \\\"}\\\"}] does not have \
+appropriate bounds.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.55171412488452*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Rule", "::", "argr"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\(Rule\\) called with 1 argument; \\!\\(2\\) arguments \
+are expected.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714124932827*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Rule :: argr\\), \\\
+\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141250043507`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"FindRoot", "::", "vloc"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"The variable \\!\\(RootedEmbedding[\\(\\(\\(\\({\\({\\(\\(\
+\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\
+\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$124798[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\
+\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - \
+x\\_\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\), \
+\\(\\(\\(\\(\\(\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 2 \[RightDoubleBracket]\
+\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$124798[\\(\\(Part[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\
+\\)\\)]\\)\\)]\\)\\) \[RightDoubleBracket]\\)\\)\\)\\) - \
+x\\_\\(Graph[\\(\\(\\(\\({}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\(Rule[\\(\\(\[LeftSkeleton] 2 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)\\)}\\)}\\)\\), \
+\\(\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
+\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\
+\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] \
+\\(\\(vertexNumber$124798[\\(\\(\\(\\(FromDigits[0]\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
+\\(\\(\\(\\(Table[\\(\\(0, \\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\
+\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\(vertexNumber$124798[\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\)\\)\\)\\)]\\) \
+cannot be localized so that it can be assigned to numerical values.\"\>"}]], \
+"Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125303437*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"ReplaceAll", "::", "reps"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\\!\\({\\(FindRoot[\\(\\(eqns$124798, \
+\\(\\(\\(\\((\\(\\(\\({#1, 0}\\)\\) &\\))\\)\\)/@vars$124798\\)\\), \
+\\(\\(WorkingPrecision \[Rule] 16\\)\\)\\)\\)]\\)}\\) is neither a list of \
+replacement rules nor a valid dispatch table, and so cannot be used for \
+replacing.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125365744*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Set", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \
+\\!\\(\\(\\(\\(\\(\\(\\(FromDigits[0]\\)\\) \[LeftDoubleBracket] 2 \
+\[RightDoubleBracket]\\)\\)\\\\ \\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \
+\\(\\(vertexNumber$124798[\\(\\(\\(\\(FromDigits[0]\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) + \\(\\(\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 2 \[RightDoubleBracket]\\)\\)\\\\ \
+\\(\\(\\(\\(Table[\\(\\(0, \
+\\(\\({\\(V[\\(\\(RootedEmbedding[\\(\\(\\(\\(Graph[\\(\\(\[LeftSkeleton] 3 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(FromDigits[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)\\)\\)]\\)\\)]\\)}\\)\\)\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\(vertexNumber$124798[\\(\\(\\(\\({}\\)\\) \
+\[LeftDoubleBracket] 4 \[RightDoubleBracket]\\)\\)]\\)\\) \
+\[RightDoubleBracket]\\)\\)\\)\\) - x\\_\\(FromDigits[0]\\)\\) is neither an \
+integer nor a list of integers.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141254354143`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Eigenvalues", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
+non-empty square matrix.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125497744*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Eigenvalues :: \
+matsq\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
+\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125560124*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"IdentityMatrix", "::", "dims"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Dimension specification \\!\\(0\\) should be a positive \
+machine integer or a pair of positive machine integers.\"\>"}]], "Message", \
+"MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125625346*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \\!\\({}\\) at position \\!\\(1\\) is not a \
+non-empty square matrix.\"\>"}]], "Message", "MSG",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714125696391*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-1.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714131612502*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-2.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714133077463*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714134561249*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-4.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141362007008`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-5.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5517141381414537`*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-6.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714140529354*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-7.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714144688553*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix3-8.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.551714148719584*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\({}\\)\[NoBreak] at position \
+\[NoBreak]\\!\\(1\\)\[NoBreak] is not a non-empty square matrix. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/matsq\\\", \
+ButtonNote -> \\\"Inverse::matsq\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.551714153379528*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"First", "::", "first"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\({}\\)\[NoBreak] has a length of zero and \
+no first element. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/First/first\\\", ButtonNote -> \
+\\\"First::first\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.551714153555254*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(idx$110733[\\(\\(First[\
+\\(\\({}\\)\\)]\\)\\)]\\)\[NoBreak] is neither an integer nor a list of \
+integers. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/pspec\\\", ButtonNote -> \
+\\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5517141536898518`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Inverse", "::", "matsq"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Argument \[NoBreak]\\!\\({}\\)\[NoBreak] at position \
+\[NoBreak]\\!\\(1\\)\[NoBreak] is not a non-empty square matrix. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/matsq\\\", \
+ButtonNote -> \\\"Inverse::matsq\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.5517141536927023`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"First", "::", "first"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"\[NoBreak]\\!\\({}\\)\[NoBreak] has a length of zero and \
+no first element. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/First/first\\\", ButtonNote -> \
+\\\"First::first\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.551714153695178*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Part", "::", "pspec"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(idx$124821[\\(\\(First[\
+\\(\\({}\\)\\)]\\)\\)]\\)\[NoBreak] is neither an integer nor a list of \
+integers. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/pspec\\\", ButtonNote -> \
+\\\"Part::pspec\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.551714153697426*^9}]
 }, Open  ]],
 
 Cell[TextData[{
@@ -4148,131 +4746,183 @@ Cell[CellGroupData[{
 Cell[611, 21, 152, 2, 67, "Section"],
 Cell[CellGroupData[{
 Cell[788, 27, 893, 17, 27, "Input"],
-Cell[1684, 46, 572, 11, 70, "Message"]
+Cell[1684, 46, 594, 11, 70, "Message"]
 }, Open  ]],
-Cell[2271, 60, 155, 3, 27, "Input"],
-Cell[2429, 65, 320, 9, 27, "Input"],
-Cell[2752, 76, 710, 11, 43, "Subsubtitle"],
-Cell[3465, 89, 553, 12, 27, "Input"]
+Cell[2293, 60, 155, 3, 27, "Input"],
+Cell[2451, 65, 320, 9, 27, "Input"],
+Cell[2774, 76, 710, 11, 43, "Subsubtitle"],
+Cell[3487, 89, 553, 12, 27, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[4055, 106, 174, 2, 37, "Section"],
-Cell[4232, 110, 406, 9, 26, "Subsubtitle"],
-Cell[4641, 121, 8744, 189, 562, "Input"],
-Cell[13388, 312, 1448, 38, 133, "Input"],
-Cell[14839, 352, 9170, 196, 577, "Input"],
-Cell[24012, 550, 159, 2, 26, "Subsubtitle"],
-Cell[24174, 554, 3462, 86, 208, "Input"]
+Cell[4077, 106, 174, 2, 37, "Section"],
+Cell[4254, 110, 406, 9, 26, "Subsubtitle"],
+Cell[4663, 121, 8744, 189, 562, "Input"],
+Cell[13410, 312, 1448, 38, 133, "Input"],
+Cell[14861, 352, 9170, 196, 577, "Input"],
+Cell[24034, 550, 159, 2, 26, "Subsubtitle"],
+Cell[24196, 554, 3462, 86, 208, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[27673, 645, 133, 2, 37, "Section"],
-Cell[27809, 649, 4450, 102, 283, "Input"]
+Cell[27695, 645, 133, 2, 37, "Section"],
+Cell[27831, 649, 4450, 102, 283, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[32296, 756, 168, 2, 37, "Section"],
-Cell[32467, 760, 534, 11, 60, "Subsubtitle"],
-Cell[33004, 773, 1846, 46, 178, "Input"],
-Cell[34853, 821, 3012, 78, 133, "Input"],
-Cell[37868, 901, 1664, 43, 163, "Input"],
-Cell[39535, 946, 1854, 48, 103, "Input"],
-Cell[41392, 996, 1523, 30, 88, "Input"]
+Cell[32318, 756, 168, 2, 37, "Section"],
+Cell[32489, 760, 534, 11, 60, "Subsubtitle"],
+Cell[33026, 773, 1846, 46, 178, "Input"],
+Cell[34875, 821, 3012, 78, 133, "Input"],
+Cell[37890, 901, 1664, 43, 163, "Input"],
+Cell[39557, 946, 1854, 48, 103, "Input"],
+Cell[41414, 996, 1523, 30, 88, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[42952, 1031, 115, 1, 37, "Section"],
-Cell[43070, 1034, 233, 5, 26, "Subsubtitle"],
-Cell[43306, 1041, 22196, 466, 1078, "Input"]
+Cell[42974, 1031, 115, 1, 37, "Section"],
+Cell[43092, 1034, 233, 5, 26, "Subsubtitle"],
+Cell[43328, 1041, 22196, 466, 1078, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[65539, 1512, 145, 2, 37, "Section"],
-Cell[65687, 1516, 6424, 144, 430, "Input"]
+Cell[65561, 1512, 145, 2, 37, "Section"],
+Cell[65709, 1516, 6424, 144, 430, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[72148, 1665, 129, 2, 37, "Section"],
-Cell[72280, 1669, 2234, 51, 193, "Input"],
-Cell[74517, 1722, 4323, 100, 238, "Input"],
-Cell[78843, 1824, 3081, 71, 208, "Input"]
+Cell[72170, 1665, 129, 2, 37, "Section"],
+Cell[72302, 1669, 2234, 51, 193, "Input"],
+Cell[74539, 1722, 4323, 100, 238, "Input"],
+Cell[78865, 1824, 3081, 71, 208, "Input"]
 }, Closed]],
-Cell[81939, 1898, 225, 3, 37, "Section"],
-Cell[82167, 1903, 800, 16, 26, "Subsubtitle"],
+Cell[81961, 1898, 225, 3, 37, "Section"],
+Cell[82189, 1903, 800, 16, 26, "Subsubtitle"],
 Cell[CellGroupData[{
-Cell[82992, 1923, 1859, 28, 27, "Input"],
-Cell[84854, 1953, 1464, 27, 27, "Output"]
+Cell[83014, 1923, 1859, 28, 27, "Input"],
+Cell[84876, 1953, 1832, 35, 27, "Output"]
 }, Open  ]],
-Cell[86333, 1983, 716, 14, 26, "Subsubtitle"],
-Cell[87052, 1999, 949, 21, 58, "Input"],
-Cell[88004, 2022, 1023, 17, 43, "Subsubtitle"],
-Cell[89030, 2041, 4179, 82, 223, "Input"],
-Cell[93212, 2125, 7163, 149, 403, "Input"],
-Cell[100378, 2276, 802, 12, 26, "Subsubtitle"],
-Cell[101183, 2290, 199, 4, 27, "Input"],
-Cell[101385, 2296, 632, 11, 26, "Subsubtitle"],
-Cell[102020, 2309, 1167, 28, 103, "Input"],
-Cell[103190, 2339, 799, 18, 26, "Subsubtitle"],
-Cell[103992, 2359, 3378, 60, 103, "Input"],
-Cell[107373, 2421, 3451, 61, 103, "Input"],
-Cell[110827, 2484, 711, 12, 43, "Subsubtitle"],
-Cell[111541, 2498, 3676, 90, 208, "Input"],
-Cell[115220, 2590, 713, 12, 26, "Subsubtitle"],
-Cell[115936, 2604, 1365, 25, 43, "Input"],
-Cell[117304, 2631, 1008, 20, 43, "Subsubtitle"],
-Cell[118315, 2653, 3945, 67, 88, "Input"],
+Cell[86723, 1991, 716, 14, 26, "Subsubtitle"],
+Cell[87442, 2007, 949, 21, 58, "Input"],
+Cell[88394, 2030, 1023, 17, 43, "Subsubtitle"],
+Cell[89420, 2049, 4179, 82, 223, "Input"],
+Cell[93602, 2133, 7163, 149, 403, "Input"],
+Cell[100768, 2284, 802, 12, 26, "Subsubtitle"],
+Cell[101573, 2298, 199, 4, 27, "Input"],
+Cell[101775, 2304, 632, 11, 26, "Subsubtitle"],
+Cell[102410, 2317, 1167, 28, 103, "Input"],
+Cell[103580, 2347, 799, 18, 26, "Subsubtitle"],
+Cell[104382, 2367, 3378, 60, 103, "Input"],
+Cell[107763, 2429, 3451, 61, 103, "Input"],
+Cell[111217, 2492, 711, 12, 43, "Subsubtitle"],
+Cell[111931, 2506, 3676, 90, 208, "Input"],
+Cell[115610, 2598, 713, 12, 26, "Subsubtitle"],
+Cell[116326, 2612, 1365, 25, 43, "Input"],
+Cell[117694, 2639, 1008, 20, 43, "Subsubtitle"],
+Cell[118705, 2661, 3945, 67, 88, "Input"],
 Cell[CellGroupData[{
-Cell[122285, 2724, 586, 11, 27, "Input"],
-Cell[122874, 2737, 118, 2, 20, "Print"],
-Cell[122995, 2741, 118, 2, 20, "Print"],
-Cell[123116, 2745, 118, 2, 20, "Print"],
-Cell[123237, 2749, 118, 2, 20, "Print"],
-Cell[123358, 2753, 118, 2, 20, "Print"],
-Cell[123479, 2757, 118, 2, 20, "Print"],
-Cell[123600, 2761, 118, 2, 20, "Print"],
-Cell[123721, 2765, 117, 2, 20, "Print"],
-Cell[123841, 2769, 118, 2, 20, "Print"],
-Cell[123962, 2773, 120, 2, 20, "Print"],
-Cell[124085, 2777, 118, 2, 20, "Print"],
-Cell[124206, 2781, 118, 2, 20, "Print"],
-Cell[124327, 2785, 117, 2, 20, "Print"],
-Cell[124447, 2789, 118, 2, 20, "Print"],
-Cell[124568, 2793, 118, 2, 20, "Print"],
-Cell[124689, 2797, 118, 2, 20, "Print"],
-Cell[124810, 2801, 118, 2, 20, "Print"],
-Cell[124931, 2805, 118, 2, 20, "Print"],
-Cell[125052, 2809, 118, 2, 20, "Print"],
-Cell[125173, 2813, 118, 2, 20, "Print"],
-Cell[125294, 2817, 118, 2, 20, "Print"],
-Cell[125415, 2821, 118, 2, 20, "Print"],
-Cell[125536, 2825, 120, 2, 20, "Print"],
-Cell[125659, 2829, 118, 2, 20, "Print"],
-Cell[125780, 2833, 118, 2, 20, "Print"],
-Cell[125901, 2837, 120, 2, 20, "Print"],
-Cell[126024, 2841, 120, 2, 20, "Print"],
-Cell[126147, 2845, 117, 2, 20, "Print"],
-Cell[126267, 2849, 118, 2, 20, "Print"],
-Cell[126388, 2853, 118, 2, 20, "Print"],
-Cell[126509, 2857, 120, 2, 20, "Print"],
-Cell[126632, 2861, 120, 2, 20, "Print"]
+Cell[122675, 2732, 638, 12, 27, "Input"],
+Cell[123316, 2746, 118, 2, 20, "Print"],
+Cell[123437, 2750, 118, 2, 20, "Print"],
+Cell[123558, 2754, 120, 2, 20, "Print"],
+Cell[123681, 2758, 120, 2, 20, "Print"],
+Cell[123804, 2762, 118, 2, 20, "Print"],
+Cell[123925, 2766, 118, 2, 20, "Print"],
+Cell[124046, 2770, 120, 2, 20, "Print"],
+Cell[124169, 2774, 118, 2, 20, "Print"],
+Cell[124290, 2778, 118, 2, 20, "Print"],
+Cell[124411, 2782, 118, 2, 20, "Print"],
+Cell[124532, 2786, 118, 2, 20, "Print"],
+Cell[124653, 2790, 118, 2, 20, "Print"],
+Cell[124774, 2794, 118, 2, 20, "Print"],
+Cell[124895, 2798, 120, 2, 20, "Print"],
+Cell[125018, 2802, 118, 2, 20, "Print"],
+Cell[125139, 2806, 120, 2, 20, "Print"],
+Cell[125262, 2810, 120, 2, 20, "Print"],
+Cell[125385, 2814, 118, 2, 20, "Print"],
+Cell[125506, 2818, 118, 2, 20, "Print"],
+Cell[125627, 2822, 117, 2, 20, "Print"],
+Cell[125747, 2826, 118, 2, 20, "Print"],
+Cell[125868, 2830, 117, 2, 20, "Print"],
+Cell[125988, 2834, 118, 2, 20, "Print"],
+Cell[126109, 2838, 118, 2, 20, "Print"],
+Cell[126230, 2842, 118, 2, 20, "Print"],
+Cell[126351, 2846, 120, 2, 20, "Print"],
+Cell[126474, 2850, 120, 2, 20, "Print"],
+Cell[126597, 2854, 120, 2, 20, "Print"],
+Cell[126720, 2858, 267, 8, 23, "Message"],
+Cell[126990, 2868, 295, 8, 23, "Message"],
+Cell[127288, 2878, 717, 14, 58, "Message"],
+Cell[128008, 2894, 558, 12, 40, "Message"],
+Cell[128569, 2908, 258, 8, 21, "Message"],
+Cell[128830, 2918, 267, 8, 23, "Message"],
+Cell[129100, 2928, 258, 8, 21, "Message"],
+Cell[129361, 2938, 382, 10, 23, "Message"],
+Cell[129746, 2950, 257, 8, 21, "Message"],
+Cell[130006, 2960, 340, 9, 23, "Message"],
+Cell[130349, 2971, 384, 10, 23, "Message"],
+Cell[130736, 2983, 340, 9, 23, "Message"],
+Cell[131079, 2994, 267, 8, 23, "Message"],
+Cell[131349, 3004, 341, 9, 23, "Message"],
+Cell[131693, 3015, 285, 8, 23, "Message"],
+Cell[131981, 3025, 283, 8, 23, "Message"],
+Cell[132267, 3035, 2261, 38, 80, "Message"],
+Cell[134531, 3075, 486, 11, 23, "Message"],
+Cell[135020, 3088, 1336, 25, 60, "Message"],
+Cell[136359, 3115, 295, 8, 23, "Message"],
+Cell[136657, 3125, 298, 8, 23, "Message"],
+Cell[136958, 3135, 332, 9, 23, "Message"],
+Cell[137293, 3146, 291, 8, 23, "Message"],
+Cell[137587, 3156, 120, 2, 20, "Print"],
+Cell[137710, 3160, 120, 2, 20, "Print"],
+Cell[137833, 3164, 118, 2, 20, "Print"],
+Cell[137954, 3168, 118, 2, 20, "Print"],
+Cell[138075, 3172, 120, 2, 20, "Print"],
+Cell[138198, 3176, 120, 2, 20, "Print"],
+Cell[138321, 3180, 118, 2, 20, "Print"],
+Cell[138442, 3184, 118, 2, 20, "Print"],
+Cell[138563, 3188, 295, 8, 23, "Message"],
+Cell[138861, 3198, 716, 14, 58, "Message"],
+Cell[139580, 3214, 283, 8, 23, "Message"],
+Cell[139866, 3224, 341, 9, 23, "Message"],
+Cell[140210, 3235, 2261, 38, 80, "Message"],
+Cell[142474, 3275, 486, 11, 23, "Message"],
+Cell[142963, 3288, 1338, 25, 60, "Message"],
+Cell[144304, 3315, 296, 8, 23, "Message"],
+Cell[144603, 3325, 347, 9, 23, "Message"],
+Cell[144953, 3336, 334, 9, 23, "Message"],
+Cell[145290, 3347, 292, 8, 23, "Message"],
+Cell[145585, 3357, 118, 2, 20, "Print"],
+Cell[145706, 3361, 118, 2, 20, "Print"],
+Cell[145827, 3365, 118, 2, 20, "Print"],
+Cell[145948, 3369, 120, 2, 20, "Print"],
+Cell[146071, 3373, 120, 2, 20, "Print"],
+Cell[146194, 3377, 118, 2, 20, "Print"],
+Cell[146315, 3381, 118, 2, 20, "Print"],
+Cell[146436, 3385, 118, 2, 20, "Print"],
+Cell[146557, 3389, 502, 10, 23, "Message"],
+Cell[147062, 3401, 453, 10, 23, "Message"],
+Cell[147518, 3413, 522, 11, 23, "Message"],
+Cell[148043, 3426, 504, 10, 23, "Message"],
+Cell[148550, 3438, 453, 10, 23, "Message"],
+Cell[149006, 3450, 520, 11, 23, "Message"]
 }, Open  ]],
-Cell[126767, 2866, 910, 15, 26, "Subsubtitle"],
-Cell[127680, 2883, 869, 25, 27, "Input"],
-Cell[128552, 2910, 1139, 32, 43, "Input"],
-Cell[129694, 2944, 1006, 17, 26, "Subsubtitle"],
-Cell[130703, 2963, 1875, 46, 148, "Input"],
-Cell[132581, 3011, 1017, 17, 26, "Subsubtitle"],
-Cell[133601, 3030, 2162, 53, 118, "Input"],
-Cell[135766, 3085, 220, 3, 34, "Subsection"],
-Cell[135989, 3090, 1381, 27, 67, "Input"],
-Cell[137373, 3119, 298, 6, 27, "Input"],
-Cell[137674, 3127, 177, 2, 34, "Subsection"],
-Cell[137854, 3131, 648, 14, 21, "Input"],
-Cell[138505, 3147, 2714, 51, 73, "Input"],
+Cell[149541, 3464, 910, 15, 26, "Subsubtitle"],
+Cell[150454, 3481, 869, 25, 27, "Input"],
+Cell[151326, 3508, 1139, 32, 43, "Input"],
+Cell[152468, 3542, 1006, 17, 26, "Subsubtitle"],
+Cell[153477, 3561, 1875, 46, 148, "Input"],
+Cell[155355, 3609, 1017, 17, 26, "Subsubtitle"],
+Cell[156375, 3628, 2162, 53, 118, "Input"],
+Cell[158540, 3683, 220, 3, 34, "Subsection"],
+Cell[158763, 3688, 1381, 27, 67, "Input"],
+Cell[160147, 3717, 298, 6, 27, "Input"],
+Cell[160448, 3725, 177, 2, 34, "Subsection"],
+Cell[160628, 3729, 648, 14, 21, "Input"],
+Cell[161279, 3745, 2714, 51, 73, "Input"],
 Cell[CellGroupData[{
-Cell[141244, 3202, 276, 5, 27, "Input"],
-Cell[141523, 3209, 2349, 43, 93, "Output"]
+Cell[164018, 3800, 276, 5, 27, "Input"],
+Cell[164297, 3807, 2349, 43, 93, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[143909, 3257, 1474, 30, 27, "Input"],
-Cell[145386, 3289, 34881, 831, 665, "Output"]
+Cell[166683, 3855, 1474, 30, 27, "Input"],
+Cell[168160, 3887, 34881, 831, 665, "Output"]
 }, Open  ]],
-Cell[180282, 4123, 74, 1, 27, "Input"]
+Cell[203056, 4721, 74, 1, 27, "Input"]
 }
 ]
 *)
