@@ -1,16 +1,15 @@
 # basic sentences
-759 N ga N o Vt
+1665 N ga Vi	# simple SV
+759 N ga N o Vt	# simple SOV
 538 N o Vt   # subject PRO
 75 N ga Vt   # object PRO
 
 # relative clauses
-88 N o Vt N ga N o Vt # SRC modifying matrix SBJ
-23 N ga Vt N ga N o Vt # ORC modifying matrix SBJ
-53 N ga N o Vt N o Vt # SRC modifying matrix OBJ
-48 N ga N ga Vt N o Vt # ORC modifying matrix OBJ
+860 Vi N ga N o Vt	# SRC (vi)
+613 N o Vt N ga N o Vt	# SRC
+295 N ga Vt N ga N o Vt	# ORC
 
 # no-complements
-12 N o Vt no ga N o Vt   # SBJ-pro-complement modifying matrix SBJ
-1 N ga Vt no ga N o Vt   # OBJ-pro-complement modifying matrix SBJ
-1 N ga N o Vt no o Vt   # SBJ-pro-complement modifying matrix OBJ
-1 N ga N ga Vt no o Vt   # OBJ-pro-complement modifying matrix OBJ (0)
+21 Vi no ga N o Vt	# SBJ-pro (vi)
+51 N o Vt no ga N o Vt	# SBJ-pro
+10 N ga Vt no ga N o Vt	# OBJ-pro

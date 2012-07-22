@@ -20,8 +20,6 @@
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
 % modified by Jiwon Yun
-% April 9, 2012: proofreading with minor corrections
-% June 8, 2012: turned off short scrambling to avoid spurious ambiguity
 
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
@@ -89,6 +87,7 @@
 []::['Case',-acc].
 
 % verbs are all in the past tense
+
 % one-place predicate
 [kita]::['V-Decl'].                     % come
 [asonda]::['V-Decl'].                   % play
@@ -115,15 +114,17 @@
 
 
 % "modern Japanese lacks the affixal complementizers characteristic of adnominal clauses in Korean" (Kaplan & Whitman 95)
+% ...except for adjectival nouns (keiyoo-doosi), which is ignored in the current grammar (Jiwon)
 [tukutta]::[='Case',+acc,'V-Rel'].	% make (as in prepare food)
 [kaita]::[='Case',+acc,'V-Rel'].	% write
 [ketta]::[='Case',+acc,'V-Rel'].	% kick
 [katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
 [kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
 [oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
+['Vi']::['V-Rel'].		% (abstracted)
+['Vi']::['V-Comp'].		% (abstracted)
 ['Vt']::[='Case',+acc,'V-Rel'].		% (abstracted)
-
-['Vt']::[='Case',+acc,'V-Emb'].		% (abstracted)
+['Vt']::[='Case',+acc,'V-Comp'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
@@ -131,24 +132,24 @@
 %[]::[='V-Decl',+scramble,='Case','v-Decl'].   % optional short-scrambling
 []::[='V-Rel',='Case','v-Rel'].
 %[]::[='V-Rel',+scramble,='Case','v-Rel'].     % optional short-scrambling
-[]::[='V-Emb',='Case','v-Emb'].
+[]::[='V-Comp',='Case','v-Comp'].
 % []::[='V-Adj',='Case','v-Adj'].
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
 %[]::[='v-Decl',+nom,+scramble,'T-Decl'].
-[]::[='v-Emb',+nom,'T-Emb',-f].
+[]::[='v-Comp',+nom,'T-Comp',-f].
 % []::[='v-Adj',+nom,'T-Adj'].
 
 % Complementizer for declarative clauses
 []::[='T-Decl','C-Decl'].
 
 % the other `no' JBW says is used with the equivalent of gerunds and event nominalizations
-[no]::[='T-Emb',+f,'C-Emb',-f].
+[no]::[='T-Comp',+f,'C-Comp',-f].
 
 % Determiner (null)
-[]::[='C-Emb',+f,'D',-f].
+[]::[='C-Comp',+f,'D',-f].
 
 % null wh Case - the raised CaseP does not have an overt case marker.
   []::[='D',+f,'Case',-nom,-wh].

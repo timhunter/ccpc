@@ -1,34 +1,30 @@
 # Simple SOV
-374 Noun Nom Noun Acc Vdecl
+374 N nom N acc Vtd
 
 # pro-drop in matrix clauses
-2 Noun Nom Vdecl
-44 Noun Acc Vdecl
+44 N acc Vtd	# SBJ-pro
+2 N nom Vtd	# OBJ-pro
 
 # pro-drop in adjunct clauses
-3 Noun Nom Vadj Noun Nom Noun Acc Vdecl
-214 Noun Acc Vadj Noun Nom Noun Acc Vdecl
+214 N acc Vta N nom N acc Vtd	# SBJ-pro
+3 N nom Vta N nom N acc Vtd	# OBJ-pro
 
 # pro-drop in noun complement clauses
-73 Noun Acc Vadn fact Nom Noun Acc Vdecl
-2 Noun Nom Vadn fact Nom Noun Acc Vdecl
-126 Noun Nom Noun Acc Vadn fact Acc Vdecl
-1 Noun Nom Noun Nom Vadn fact Acc Vdecl
+73 N acc Vtn fact nom N acc Vtd		# SBJ-pro modifying SBJ
+126 N nom N acc Vtn fact acc Vtd	# SBJ-pro modifying OBJ	
+2 N nom Vtn fact nom N acc Vtd		# OBJ-pro modifying SBJ
+1 N nom N nom Vtn fact acc Vtd		# OBJ-pro modifying OBJ
 
 # relative clauses
-182 Noun Acc Vadn Noun Nom Noun Acc Vdecl
-46 Noun Nom Vadn Noun Nom Noun Acc Vdecl
-163 Noun Nom Noun Acc Vadn Noun Acc Vdecl
-30 Noun Nom Noun Nom Vadn Noun Acc Vdecl
+182 N acc Vtn N nom N acc Vtd	#SRC modifying SBJ
+163 N nom N acc Vtn N acc Vtd	#SRC modifying OBJ
+46 N nom Vtn N nom N acc Vtd	#ORC modifying SBJ
+30 N nom N nom Vtn N acc Vtd	#ORC modifying OBJ
 
-##  extra possibility of both being omitted
-# as matrix OBJ
-1 Noun Nom Vadn fact Acc Vdecl
-# as matrix SBJ
-6 Vadn fact Nom Noun Acc Vdecl
+# double pro-drop in noun complement clauses
+6 Vtn fact nom N acc Vtd	# double pro modifying SBJ	
+1 N nom Vtn fact acc Vtd	# double pro modifying OBJ
 
-## extra possibility of PRO inside RC
-# as matrix SBJ 
-6 Vadn Noun Nom Noun Acc Vdecl
-# as matrix OBJ
-3 Noun Nom Vadn Noun Acc Vdecl
+## relative clauses with pro-drop
+6 Vtn N nom N acc Vtd		# pro+gap modifying SBJ
+3 N nom Vtn N acc Vtd		# pro+gap modifying OBJ
