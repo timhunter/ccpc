@@ -22,7 +22,7 @@
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
 % modified by Jiwon Yun
-% adjunction analysis of RCs is added for testing
+% adjunction analysis of RCs is added
  
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
