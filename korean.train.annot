@@ -1,30 +1,27 @@
-# Simple SOV
-374 N nom N acc Vtd
+# matrix clauses
+79 N nom N acc Vtd	# SOV
+44 N acc Vtd		# SOV with SBJ-pro
+2 N nom Vtd		# SOV with OBJ-pro
+432 N nom Vid		# SV
+52 Vid			# SV with SBJ-pro
 
-# pro-drop in matrix clauses
-44 N acc Vtd	# SBJ-pro
-2 N nom Vtd	# OBJ-pro
+# adjunct clauses
+131 N nom N acc Vta N nom N acc Vtd	# SOV
+228 N acc Vta N nom N acc Vtd		# SOV with SBJ-pro
+3 N nom Vta N nom N acc Vtd		# SOV with OBJ-pro
+459 N nom Via N nom N acc Vtd		# SV
+44 Via N nom N acc Vtd			# SV with SBJ-pro
 
-# pro-drop in adjunct clauses
-214 N acc Vta N nom N acc Vtd	# SBJ-pro
-3 N nom Vta N nom N acc Vtd	# OBJ-pro
-
-# pro-drop in noun complement clauses
-73 N acc Vtn fact nom N acc Vtd		# SBJ-pro modifying SBJ
-126 N nom N acc Vtn fact acc Vtd	# SBJ-pro modifying OBJ	
-2 N nom Vtn fact nom N acc Vtd		# OBJ-pro modifying SBJ
-1 N nom N nom Vtn fact acc Vtd		# OBJ-pro modifying OBJ
+# noun complement clauses
+156 N nom N acc Vtn fact nom N acc Vtd	# SOV
+547 N acc Vtn fact nom N acc Vtd	# SOV with SBJ-pro
+6 N nom Vtn fact nom N acc Vtd		# SOV with OBJ-pro
+12 Vtn fact nom N acc Vtd		# SOV with both SBJ- and OBJ-pro
+475 N nom Vin fact nom N acc Vtd	# SV
+138 Vin fact nom N acc Vtd		# SV with SBJ-pro
 
 # relative clauses
-182 N acc Vtn N nom N acc Vtd	#SRC modifying SBJ
-163 N nom N acc Vtn N acc Vtd	#SRC modifying OBJ
-46 N nom Vtn N nom N acc Vtd	#ORC modifying SBJ
-30 N nom N nom Vtn N acc Vtd	#ORC modifying OBJ
-
-# double pro-drop in noun complement clauses
-6 Vtn fact nom N acc Vtd	# double pro modifying SBJ	
-1 N nom Vtn fact acc Vtd	# double pro modifying OBJ
-
-## relative clauses with pro-drop
-6 Vtn N nom N acc Vtd		# pro+gap modifying SBJ
-3 N nom Vtn N acc Vtd		# pro+gap modifying OBJ
+543 N acc Vtn N nom N acc Vtd	# SOV / SRC
+125 N nom Vtn N nom N acc Vtd	# SOV / ORC
+14 Vtn N nom N acc Vtd		# SOV / SRC with OBJ-pro or ORC with SBJ-pro
+2311 Vin N nom N acc Vtd	# SV / SRC
