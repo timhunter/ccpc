@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_promotion.pl
+%   File   : korean_adjunction.pl
 %   Author : Jiwon Yun
 %   Last Updated: July 22, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7,7 +7,7 @@
 % - simple SV sentences
 % - simple SOV sentences
 % - pro-drop sentences (in matrix/adjunct/complement clauses)
-% - relative clauses (under a promotion analysis)
+% - relative clauses (under a adjunction analysis)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -173,19 +173,20 @@
 % 'The reporter who the senator attacked hates the editor.'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% null wh Case - the raised CaseP does not have an overt case marker.
-[]::[='D',+f,'null-Case',-nom,-wh].
-[]::[='D',+f,'null-Case',-acc,-wh].
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2. adjunction analysis
+% Null wh operator (Case/D)
+ []::['null-Case',-nom,-wh].
+ []::['null-Case',-acc,-wh].
 
-% TP is raised to Spec-DP due to EPP
-[]::[='v-Rel',+nom,'T-Rel',-epp].
+% Nothing special for T
+ []::[='v-Rel',+nom,'T-Rel'].
 
 % Wh-hoisting complementizer
-[]::[='T-Rel',+wh,'C-Rel'].
+ []::[='T-Rel',+wh,'C-Rel'].
 
-% DP can take CP as its complement and 
-% move the TP to its spec to satisfy the EPP feature.
-[]::[='C-Rel',+epp,'D',-f].
+% Relative CP can left-adjoin onto the head noun
+ ['C-Rel']>>['Case'].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
