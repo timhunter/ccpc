@@ -7,16 +7,14 @@ chineseabs = {{"Vt","Noun","de","Noun","Vt","Noun"},
 {"Noun","Vt","de","Noun","Vt","Noun"},
 {"Noun","Vt","Vt","Noun","de","Noun"},
 {"Noun","Vt","Noun","Vt","de","Noun"},
-{"Det","Cl","Time","Vt","Noun","Freq","de","Noun","Vt","Noun"},
+{"Vt","Noun","de","Noun","Vi"},
+{"Noun","Vt","de","Noun","Vi"}
+};
+
+chineseabsdetcl = {{"Det","Cl","Time","Vt","Noun","Freq","de","Noun","Vt","Noun"},
 {"Det","Cl","Time","Noun","Vt","Freq","de","Noun","Vt","Noun"},
 {"Noun","Vt","Det","Cl","Time","Vt","Noun","Freq","de","Noun"},
 {"Noun","Vt","Det","Cl","Time","Noun","Vt","Freq","de","Noun"}
 };
 
-chineseabsbasic = {{"Vt","Noun","de","Noun","Vt","Noun"},
-{"Noun","Vt","de","Noun","Vt","Noun"},
-{"Noun","Vt","Vt","Noun","de","Noun"},
-{"Noun","Vt","Noun","Vt","de","Noun"},
-{"Vt","Noun","de","Noun","Vi"},
-{"Noun","Vt","de","Noun","Vi"}
-};
+
