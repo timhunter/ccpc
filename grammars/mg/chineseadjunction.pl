@@ -1,8 +1,9 @@
 %   File   : chinese3abs.pl
 %   Author : Zhong Chen
-%   Updated: Nov 14th 2011
+%   Updated: July 22nd 2012
 % This grammar assumes there is no DP in Chinese.
-
+% It takes the adjunction analysis that follows Aoun & Li (pp.190 (72)) in the sense that there is operator movement to the Spec of Comp
+% It follows Den Dikken & Singhapreecha (2004)'s theory of de (cf. Ou (2007)). de is treated as a LINKER.
 
 % pronouns
 
@@ -15,8 +16,9 @@
 ['Noun']::['N'].
 
 
-% Null argument (pro/the relativized NP)
+% Null argument (pro)
 []::['N-null',-case]. 
+%[]::['N',-case].
 
 % One-place predicates (intransitive verbs and adjective predicates)
 ['Vi']::['V'].
@@ -53,17 +55,24 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
-% Nothing special for T; -f is used to ensure RC preceeds de
- []::[='vRel',+case,'TRel',-f].
+% Null wh operator (Case/D)
+  []::['N-null',-case,-wh]. 
+% []::['N',-case,-wh].
 
- [de]::[='TRel',+f,'CRel'].
+% Nothing special for T; -f is used to ensure RC preceeds de
+ []::[='vRel',+case,'TRel'].
+
+% Wh-hoisting complementizer
+ []::[='TRel',+wh,'CRel',-f].
+
+ [de]::[='CRel',+f,'F'].
 
 % Relative CP can left-adjoin onto the NP head
- ['CRel']>>['N'].
-['CRel']>>['N-null'].
+ ['F']>>['N'].
+ ['F']>>['N-null'].
+
 % % genitive de
  [de]::[='N',='N','Poss',-case].
-
 
 % The root.
 startCategory('C').
