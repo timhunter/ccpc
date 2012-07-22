@@ -1,3 +1,5 @@
+% promotion analysis of RCs
+%
 % basic japanese grammar
 % put together by John Hale
 % trying to re-use as much as possible from
@@ -20,7 +22,8 @@
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
 % modified by Jiwon Yun
-
+% adjunction analysis of RCs is added.
+ 
 % Proper Nouns
 ['Taroo']::['D',-f].			% m
 ['Ziroo']::['D',-f].			% m
@@ -160,9 +163,11 @@
 % Determiner (null)
 []::[='C-Comp',+f,'D',-f].
 
+%% RC - promotion analysis
+
 % null wh Case - the raised CaseP does not have an overt case marker.
-  []::[='D',+f,'Case',-nom,-wh].
-  []::[='D',+f,'Case',-acc,-wh].
+  []::[='D',+f,'null-Case',-nom,-wh].
+  []::[='D',+f,'null-Case',-acc,-wh].
 
 % TP is raised to Spec-DP due to EPP
  []::[='v-Rel',+nom,'T-Rel',-epp].
@@ -174,6 +179,23 @@
 % move the TP to its spec to satisfy the EPP feature.
 % Hoshi says this on page 14
  []::[='C-Rel',+epp,'D',-f].
+
+%% RC - adjunction analysis
+
+% Null wh operator (Case/D)
+% []::['null-Case',-nom,-wh].
+% []::['null-Case',-acc,-wh].
+
+% Nothing special for T
+% []::[='v-Rel',+nom,'T-Rel'].
+
+% Wh-hoisting complementizer
+% []::[='T-Rel',+wh,'C-Rel'].
+
+% Relative CP can left-adjoin onto the head noun
+% ['C-Rel']>>['Case'].
+
+%%
 
 % adjectives
 [omosiroi]::[adj].   % interesting
