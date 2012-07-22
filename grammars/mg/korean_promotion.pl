@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   File   : korean_promotion.pl
 %   Author : Jiwon Yun
-%   Last Updated: July 19, 2012
+%   Last Updated: July 22, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % With this grammar, you can parse the followings:
 % - simple SV sentences
@@ -68,8 +68,10 @@
 ['acc']::[='D',+f,'Case',-acc].	% accusative (abstracted)
 
 % pro
-[]::['Case',-nom].
-[]::['Case',-acc].
+%[]::['Case',-nom].
+%[]::['Case',-acc].
+[]::['null-Case',-nom].
+[]::['null-Case',-acc].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,7 +98,7 @@
 [hyeppakhayssta]::[='Case',+acc,'V-Decl'].	% threaten
 [ttaylyessta]::[='Case',+acc,'V-Decl'].		% beat
 ['Vtd']::[='Case',+acc,'V-Decl'].			% transitive verb in declarative form (abstracted)
-
+['Vtd']::[='null-Case',+acc,'V-Decl'].		% transitive verb in declarative form (abstracted)
 
 % adnominal forms of predicates
 % -n: adnominal suffix
@@ -117,6 +119,8 @@
 [hyeppakhan]::[='Case',+acc,'V-Comp'].	% threaten
 ['Vtn']::[='Case',+acc,'V-Rel'].		% transitive verb in adnominal form in relative clauses (abstracted)
 ['Vtn']::[='Case',+acc,'V-Comp'].		% transitive verb in adnominal form in complement clauses (abstracted)
+['Vtn']::[='null-Case',+acc,'V-Rel'].		% transitive verb in adnominal form in relative clauses (abstracted)
+['Vtn']::[='null-Case',+acc,'V-Comp'].		% transitive verb in adnominal form in complement clauses (abstracted)
 
 
 % adjunctive forms of predicates 
@@ -131,7 +135,7 @@
 [kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
 [hyeppakhayse]::[='Case',+acc,'V-Adj'].		% threaten
 ['Vta']::[='Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
-
+['Vta']::[='null-Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functional Categories
@@ -143,6 +147,11 @@
 []::[='V-Rel',='Case','v-Rel'].
 []::[='V-Comp',='Case','v-Comp'].
 []::[='V-Adj',='Case','v-Adj'].
+
+[]::[='V-Decl',='null-Case','v-Decl'].
+[]::[='V-Rel',='null-Case','v-Rel'].
+[]::[='V-Comp',='null-Case','v-Comp'].
+[]::[='V-Adj',='null-Case','v-Adj'].
 
 % Tense 
 % , which assigns nominative case
@@ -165,8 +174,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % null wh Case - the raised CaseP does not have an overt case marker.
-[]::[='D',+f,'Case',-nom,-wh].
-[]::[='D',+f,'Case',-acc,-wh].
+[]::[='D',+f,'null-Case',-nom,-wh].
+[]::[='D',+f,'null-Case',-acc,-wh].
 
 % TP is raised to Spec-DP due to EPP
 []::[='v-Rel',+nom,'T-Rel',-epp].
