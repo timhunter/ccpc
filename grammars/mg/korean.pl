@@ -129,13 +129,13 @@
 % One-place predicates
 [yumyenghayse]::['V-Adj'].	% be famous
 [hwanase]::['V-Adj'].		% get angry
-['Via']::['V-Adj'].			% transitive verb in adjunctive form (abstracted)
+%['Via']::['V-Adj'].			% transitive verb in adjunctive form (abstracted)
 
 % Two-place predicates
 [kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
 [hyeppakhayse]::[='Case',+acc,'V-Adj'].		% threaten
-['Vta']::[='Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
-['Vta']::[='null-Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
+%['Vta']::[='Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
+%['Vta']::[='null-Case',+acc,'V-Adj'].		% transitive verb in adjunctive form (abstracted)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functional Categories
