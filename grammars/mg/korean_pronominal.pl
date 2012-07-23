@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_adjunction.pl
+%   File   : korean_pronominal.pl
 %   Author : Jiwon Yun
 %   Last Updated: July 23, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7,7 +7,7 @@
 % - simple SV sentences
 % - simple SOV sentences
 % - pro-drop sentences (in matrix/adjunct/complement clauses) -> no adjunct
-% - relative clauses (under adjunction analyses)
+% - relative clauses (under pronominal analyses)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -146,18 +146,18 @@
 []::[='V-Decl',='Case','v-Decl'].
 []::[='V-Rel',='Case','v-Rel'].
 []::[='V-Comp',='Case','v-Comp'].
-[]::[='V-Adj',='Case','v-Adj'].
+%[]::[='V-Adj',='Case','v-Adj'].
 
 []::[='V-Decl',='null-Case','v-Decl'].
 []::[='V-Rel',='null-Case','v-Rel'].
 []::[='V-Comp',='null-Case','v-Comp'].
-[]::[='V-Adj',='null-Case','v-Adj'].
+%[]::[='V-Adj',='null-Case','v-Adj'].
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp'].
-[]::[='v-Adj',+nom,'T-Adj'].
+%[]::[='v-Adj',+nom,'T-Adj'].
 
 % Complimentizer for declarative clauses
 []::[='T-Decl','C-Decl'].
@@ -165,7 +165,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Relative Clauses
-% (adjunction analysis)
+% (pronominal analysis)
 %
 % e.g.
 % showParse([uywon,ul,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
@@ -174,18 +174,16 @@
 % 'The reporter who the senator attacked hates the editor.'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Null wh operator (Case/D)
- []::['null-Case',-nom,-wh].
- []::['null-Case',-acc,-wh].
+% gaps are just pros.
 
 % Nothing special for T
- []::[='v-Rel',+nom,'T-Rel'].
+[]::[='v-Rel',+nom,'T-Rel'].
 
-% Wh-hoisting complementizer
- []::[='T-Rel',+wh,'C-Rel'].
+% Nothing special for C
+[]::[='T-Rel','C-Rel'].
 
 % Relative CP can left-adjoin onto the head noun
- ['C-Rel']>>['Case'].
+['C-Rel']>>['Case'].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

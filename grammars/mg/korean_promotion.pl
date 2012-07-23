@@ -146,18 +146,18 @@
 []::[='V-Decl',='Case','v-Decl'].
 []::[='V-Rel',='Case','v-Rel'].
 []::[='V-Comp',='Case','v-Comp'].
-[]::[='V-Adj',='Case','v-Adj'].
+%[]::[='V-Adj',='Case','v-Adj'].
 
 []::[='V-Decl',='null-Case','v-Decl'].
 []::[='V-Rel',='null-Case','v-Rel'].
 []::[='V-Comp',='null-Case','v-Comp'].
-[]::[='V-Adj',='null-Case','v-Adj'].
+%[]::[='V-Adj',='null-Case','v-Adj'].
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp'].
-[]::[='v-Adj',+nom,'T-Adj'].
+%[]::[='v-Adj',+nom,'T-Adj'].
 
 % Complimentizer for declarative clauses
 []::[='T-Decl','C-Decl'].
@@ -165,16 +165,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Relative Clauses
-%
+% (promotion analysis)
 % e.g.
 % showParse([uywon,ul,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
 % 'The reporter who attacked the senator hates the editor.'
 % showParse([uywon,i,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
 % 'The reporter who the senator attacked hates the editor.'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 1. promotion analysis
 
 % null wh Case - the raised CaseP does not have an overt case marker.
 []::[='D',+f,'null-Case',-nom,-wh].
@@ -189,22 +186,6 @@
 % DP can take CP as its complement and 
 % move the TP to its spec to satisfy the EPP feature.
 []::[='C-Rel',+epp,'D',-f].
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 2. adjunction analysis
-
-% Null wh operator (Case/D)
-% []::['null-Case',-nom,-wh].
-% []::['null-Case',-acc,-wh].
-
-% Nothing special for T
-% []::[='v-Rel',+nom,'T-Rel'].
-
-% Wh-hoisting complementizer
-% []::[='T-Rel',+wh,'C-Rel'].
-
-% Relative CP can left-adjoin onto the head noun
-% ['C-Rel']>>['Case'].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
