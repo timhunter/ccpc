@@ -100,6 +100,7 @@
 ['Vtd']::[='Case',+acc,'V-Decl'].			% transitive verb in declarative form (abstracted)
 ['Vtd']::[='null-Case',+acc,'V-Decl'].		% transitive verb in declarative form (abstracted)
 
+
 % adnominal forms of predicates
 % -n: adnominal suffix
 % The same adnominal form is used for both relative and complement clauses.
@@ -127,13 +128,13 @@
 % -se: 'because' 
 
 % One-place predicates
-[yumyenghayse]::['V-Adj'].	% be famous
-[hwanase]::['V-Adj'].		% get angry
-%['Via']::['V-Adj'].			% transitive verb in adjunctive form (abstracted)
+%[yumyenghayse]::['V-Adj'].	% be famous
+%[hwanase]::['V-Adj'].		% get angry
+%['Via']::['V-Adj'].		% transitive verb in adjunctive form (abstracted)
 
 % Two-place predicates
-[kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
-[hyeppakhayse]::[='Case',+acc,'V-Adj'].		% threaten
+%[kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
+%[hyeppakhayse]::[='Case',+acc,'V-Adj'].	% threaten
 %['Vta']::[='Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
 %['Vta']::[='null-Case',+acc,'V-Adj'].		% transitive verb in adjunctive form (abstracted)
 

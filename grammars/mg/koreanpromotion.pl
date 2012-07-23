@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_pronominal.pl
+%   File   : korean_promotion.pl
 %   Author : Jiwon Yun
 %   Last Updated: July 23, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7,7 +7,7 @@
 % - simple SV sentences
 % - simple SOV sentences
 % - pro-drop sentences (in matrix/adjunct/complement clauses) -> no adjunct
-% - relative clauses (under pronominal analyses)
+% - relative clauses (under promotion analyses)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -100,6 +100,7 @@
 ['Vtd']::[='Case',+acc,'V-Decl'].			% transitive verb in declarative form (abstracted)
 ['Vtd']::[='null-Case',+acc,'V-Decl'].		% transitive verb in declarative form (abstracted)
 
+
 % adnominal forms of predicates
 % -n: adnominal suffix
 % The same adnominal form is used for both relative and complement clauses.
@@ -127,13 +128,13 @@
 % -se: 'because' 
 
 % One-place predicates
-[yumyenghayse]::['V-Adj'].	% be famous
-[hwanase]::['V-Adj'].		% get angry
+%[yumyenghayse]::['V-Adj'].	% be famous
+%[hwanase]::['V-Adj'].		% get angry
 %['Via']::['V-Adj'].			% transitive verb in adjunctive form (abstracted)
 
 % Two-place predicates
-[kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
-[hyeppakhayse]::[='Case',+acc,'V-Adj'].		% threaten
+%[kongkyekhayse]::[='Case',+acc,'V-Adj'].	% attack
+%[hyeppakhayse]::[='Case',+acc,'V-Adj'].	% threaten
 %['Vta']::[='Case',+acc,'V-Adj'].			% transitive verb in adjunctive form (abstracted)
 %['Vta']::[='null-Case',+acc,'V-Adj'].		% transitive verb in adjunctive form (abstracted)
 
@@ -165,8 +166,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Relative Clauses
-% (pronominal analysis)
-%
+% (promotion analysis)
 % e.g.
 % showParse([uywon,ul,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
 % 'The reporter who attacked the senator hates the editor.'
@@ -174,16 +174,19 @@
 % 'The reporter who the senator attacked hates the editor.'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% gaps are just pros.
+% null wh Case - the raised CaseP does not have an overt case marker.
+[]::[='D',+f,'null-Case',-nom,-wh].
+[]::[='D',+f,'null-Case',-acc,-wh].
 
-% Nothing special for T
-[]::[='v-Rel',+nom,'T-Rel'].
+% TP is raised to Spec-DP due to EPP
+[]::[='v-Rel',+nom,'T-Rel',-epp].
 
-% Nothing special for C
-[]::[='T-Rel','C-Rel'].
+% Wh-hoisting complementizer
+[]::[='T-Rel',+wh,'C-Rel'].
 
-% Relative CP can left-adjoin onto the head noun
-['C-Rel']>>['Case'].
+% DP can take CP as its complement and 
+% move the TP to its spec to satisfy the EPP feature.
+[]::[='C-Rel',+epp,'D',-f].
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
