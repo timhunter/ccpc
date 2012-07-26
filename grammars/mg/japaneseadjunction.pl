@@ -155,6 +155,7 @@
 
 % the other `no' JBW says is used with the equivalent of gerunds and event nominalizations
 [no]::[='T-Comp',+f,'C-Comp',-f].
+[fact]::[='T-Comp',+f,'C-Comp',-f].
 
 % Determiner (null)
 []::[='C-Comp',+f,'D',-f].
