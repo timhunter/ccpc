@@ -174,7 +174,18 @@
 % Relative CP can left-adjoin onto the head noun
  ['C-Rel']>>['Case'].
 
-%%
+
+%% Adjunct Clauses
+
+['Via']::['V-Adj'].						% (abstracted)
+['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
+['Vta']::[='null-Case',+acc,'V-Adj'].		% (abstracted)
+[]::[='V-Adj',='Case','v-Adj'].
+[]::[='V-Adj',='null-Case','v-Adj'].
+[]::[='v-Adj',+nom,'T-Adj'].
+[]::[='T-Adj','C-Adj'].
+['C-Adj']>>['C-Decl'].
+
 
 % adjectives
 [omosiroi]::[adj].   % interesting
