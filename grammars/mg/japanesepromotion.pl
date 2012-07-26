@@ -137,7 +137,6 @@
 []::[='V-Rel',='Case','v-Rel'].
 %[]::[='V-Rel',+scramble,='Case','v-Rel'].     % optional short-scrambling
 []::[='V-Comp',='Case','v-Comp'].
-% []::[='V-Adj',='Case','v-Adj'].
 
 []::[='V-Decl',='null-Case','v-Decl'].
 []::[='V-Rel',='null-Case','v-Rel'].
@@ -148,13 +147,13 @@
 []::[='v-Decl',+nom,'T-Decl'].
 %[]::[='v-Decl',+nom,+scramble,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp',-f].
-% []::[='v-Adj',+nom,'T-Adj'].
 
 % Complementizer for declarative clauses
 []::[='T-Decl','C-Decl'].
 
 % the other `no' JBW says is used with the equivalent of gerunds and event nominalizations
 [no]::[='T-Comp',+f,'C-Comp',-f].
+[fact]::[='T-Comp',+f,'C-Comp',-f].
 
 % Determiner (null)
 []::[='C-Comp',+f,'D',-f].
@@ -176,6 +175,16 @@
 % Hoshi says this on page 14
  []::[='C-Rel',+epp,'D',-f].
 
+%% Adjunct Clauses
+
+['Via']::['V-Adj'].						% (abstracted)
+['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
+['Vta']::[='null-Case',+acc,'V-Adj'].		% (abstracted)
+[]::[='V-Adj',='Case','v-Adj'].
+[]::[='V-Adj',='null-Case','v-Adj'].
+[]::[='v-Adj',+nom,'T-Adj'].
+[]::[='T-Adj','C-Adj'].
+['C-Adj']>>['C-Decl'].
 
 % adjectives
 [omosiroi]::[adj].   % interesting
