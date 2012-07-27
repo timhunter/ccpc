@@ -1,4 +1,4 @@
-%   File   : chinese3abs.pl
+%   File   : chineseadjunction.pl
 %   Author : Zhong Chen
 %   Updated: July 22nd 2012
 % This grammar assumes there is no DP in Chinese.
@@ -55,7 +55,7 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
-% Null wh operator (Case/D)
+% Null wh operator
   []::['N-null',-case,-wh]. 
 % []::['N',-case,-wh].
 

@@ -1,7 +1,10 @@
 #!/bin/csh
 
 set MAKE=make
-set GRAMMAR=$argv[1]
-$MAKE grammars/mcfgs/$GRAMMAR.mcfg
-$MAKE grammars/mcfgs/$GRAMMAR.dict
-$MAKE grammars/wmcfg/$GRAMMAR.wmcfg
+set TRAIN=./train
+set LANGUAGE=$argv[1]
+set TYPE=$argv[2]
+$MAKE grammars/mcfgs/$LANGUAGE$TYPE.mcfg
+$MAKE grammars/mcfgs/$LANGUAGE$TYPE.dict
+#$MAKE grammars/wmcfg/$LANGUAGE$TYPE.wmcfg
+$TRAIN grammars/mcfgs/$LANGUAGE$TYPE.mcfg $LANGUAGE.train >! grammars/wmcfg/$LANGUAGE$TYPE.wmcfg

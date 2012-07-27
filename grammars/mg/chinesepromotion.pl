@@ -1,6 +1,6 @@
 %   File   : chineseabs_promotion.pl
 %   Author : Zhong Chen
-%   Updated: Mar 7th 2012
+%   Updated: July 22nd 2012
 %   altered by John to differentiate between overt Nouns and covert Nouns
 % It follows Den Dikken & Singhapreecha (2004)'s theory of de (cf. Ou (2007), pp.922). de is treated as a LINKER.
 
