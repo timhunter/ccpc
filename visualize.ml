@@ -205,7 +205,7 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
 	in
 	try
 		while true; do
-			Printf.printf "*** Output from Prolog tree-drawing: %s\n" (input_line channel)
+			Printf.eprintf "*** Output from Prolog tree-drawing: %s\n" (input_line channel)
 		done
 	with End_of_file ->
 		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file" ;
@@ -228,22 +228,17 @@ let run_visualization grammar_files prolog_file kbest output_filename optional_s
 		| None -> Random.self_init () ; Random.int 1000
 		| Some n -> n
 	in
-	Printf.printf "Using random seed %d\n" random_seed ;
+	Printf.eprintf "Using random seed %d\n" random_seed ;
 	Random.init random_seed ;
 
 	let treelist = generate grammar_files.wmcfg_file in
 	let kbest_trees = take kbest treelist in (*List.map (fun i -> List.nth treelist i) (range 0 kbest) in*)
 
-	(*** Just leaving this part in here for Sam, not actually relevant to what follows for now ***)
 	let process_tree (tree,weight) =
-		print_endline "===============================================" ;
-		Printf.printf "weight is %s\n" (string_of_num weight) ;
                 let sentence = Generate.get_sentence tree in 
-                List.iter (fun item -> Printf.printf "%s " item) sentence;
-		print_endline "\n===============================================" ;
+                Printf.printf "%.6g %s\n" (float_of_num weight) (String.concat " " sentence) ;
 	in
 	List.iter process_tree kbest_trees ;
-	(************************************************)
 
 	let kbest_derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) kbest_trees in
 	save_to_file random_seed grammar_files prolog_file kbest_derivations output_filename
