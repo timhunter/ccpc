@@ -107,13 +107,38 @@ let rec deriv_equal t1 t2 =
         | (NonLeaf(i1,cs1,r1,w1), NonLeaf(i2,cs2,r2,w2)) -> (i1 = i2) && (r1 = r2) && (compare_weights w1 w2 = 0) && (List.length cs1 = List.length cs2) &&
                                                             (List.for_all2 deriv_equal cs1 cs2)
 
+module VisitHistory :
+        sig
+                type t
+                val empty : t
+                val add : t -> Chart.item -> int -> t
+                val ok_to_visit : t -> Chart.item -> int -> bool
+        end
+=
+        struct
+                type t = (Chart.item, int) Hashtbl.t
+                let empty = Hashtbl.create 20
+                let add hist item n =
+                        let result = Hashtbl.copy hist in
+                        begin
+                        try     let current = Hashtbl.find hist item in
+                                if (n < current) then Hashtbl.replace result item n
+                        with Not_found -> Hashtbl.add result item n
+                        end ;
+                        result
+                let ok_to_visit hist item n = (*not (List.exists (fun (it',i') -> (item = it') && (n >= i')) lst) *)
+                        try     let current = Hashtbl.find hist item in
+                                n < current
+                        with Not_found -> true
+        end
+
 (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
  * we've already visited. *)
 let rec guarded_get_nth visited i chart it =
-        if List.exists (fun (it',i') -> (it = it') && (i >= i')) visited then
+        if not (VisitHistory.ok_to_visit visited it i) then
                 None
         else
-                get_nth_best_derivation i chart visited it
+                get_nth_best_derivation' visited i chart it
 
 (* The neighbours of a derivation are other derivations of the same item, that use 
  * the same route in their final step. *)
@@ -158,9 +183,10 @@ and get_n_best_by_route n chart item visited ((items,r,wt) : (Chart.item list * 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
    This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
-and get_nth_best_derivation n chart (visited : (Chart.item * int) list) item =
+and get_nth_best_derivation' visited n chart item =
         assert (n >= 1) ;
-        let lists = map_tr (get_n_best_by_route n chart item ((item,n)::visited)) (Chart.get_routes item chart) in
+        let lists = map_tr (get_n_best_by_route n chart item (VisitHistory.add visited item n)) (Chart.get_routes item chart) in
         let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
         try Some (List.nth n_best_overall (n-1)) with Failure _ -> None
 
+let get_nth_best_derivation = get_nth_best_derivation' VisitHistory.empty
