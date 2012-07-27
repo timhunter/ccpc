@@ -24,7 +24,15 @@ let get_rule t =
         | Leaf (_,r,_) -> r
         | NonLeaf (_,_,r,_) -> r
 
-let (>*>) t1 t2 = compare_weights (get_weight t2) (get_weight t1)
+(* Compare derivations by weight; if they're equal by weight, back off to the built-in 
+ * compare function. We don't want to return 0 in cases where the weights are equal, because 
+ * this would mean that two distinct derivations could be considered equal for the purposes 
+ * of sorting and k-best lists, which would destroy the one-to-one correspondence between 
+ * derivation trees and what Huang & Chiang call 'dbp's. *)
+let (>*>) t1 t2 =
+        match (compare_weights (get_weight t2) (get_weight t1)) with
+        | 0 -> compare t2 t1
+        | x -> x
 
 let make_derivation_tree item children rule weight_factor =
 	let product = List.fold_left (mult_weights) weight_factor (map_tr get_weight children) in
@@ -62,52 +70,102 @@ let rec get_derivations chart item =
         let results_from_all_routes = List.concat (map_tr use_route routes) in
         map_tr (fun (children,rule,weight_factor) -> make_derivation_tree item children rule weight_factor) results_from_all_routes
 
+(**************************************************************************)
+(****** Stuff for computing k-best lists **********************************)
+
+(* Viterbi search for the single best derivation. This in effect performs what 
+ * Huang & Chiang call the ``initial parsing phase'' of their Algorithm 3, although 
+ * we do it along the way whenever we need to find a 1-best derivation rather than 
+ * in an initial separated phase. *)
+let rec get_best_derivation chart item =
+
+        let get_best_by_route (antecedents,r,wt) =
+                if (List.mem item antecedents) then  (* No loops in the best derivation *)
+                        None
+                else
+                        let children = map_tr (get_best_derivation chart) antecedents in
+                        Some (make_derivation_tree item children r wt)
+        in
+
+        let routes = Chart.get_routes item chart in
+        let candidates = optlistmap get_best_by_route routes in
+        match (List.sort (>*>) candidates) with
+        | [] -> failwith (Printf.sprintf "Couldn't find any derivations for item: %s\n" (Chart.debug_str item))
+        | (x::_) -> x
+
+let rec require_no_nones (lst : 'a option list) : 'a list option =
+        match lst with
+        | [] -> Some []
+        | (None :: xs) -> None
+        | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
+
+let rec deriv_equal t1 t2 =
+        match (t1,t2) with
+        | (Leaf(_,_,_), NonLeaf(_,_,_,_)) -> false
+        | (NonLeaf(_,_,_,_), Leaf(_,_,_)) -> false
+        | (Leaf(i1,r1,w1), Leaf(i2,r2,w2)) -> (i1 = i2) && (r1 = r2) && (compare_weights w1 w2 = 0)
+        | (NonLeaf(i1,cs1,r1,w1), NonLeaf(i2,cs2,r2,w2)) -> (i1 = i2) && (r1 = r2) && (compare_weights w1 w2 = 0) && (List.length cs1 = List.length cs2) &&
+                                                            (List.for_all2 deriv_equal cs1 cs2)
+
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
-   This is basically Algorithm 0 from Huang & Chiang, ``Better k-best parsing'' *)
+   This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
 let rec get_nth_best_derivation n chart (visited : (Chart.item * int) list) item =
         assert (n >= 1) ;
-
-        let new_visited = (item,n) :: visited in
-
-        (* merge is addition in the semiring, where elements are n-best lists *)
-        let merge xs ys = take n (List.sort (>*>) (xs @ ys)) in
-
-        (* mult f is folded multiplication in the semiring, where elements are n-best lists *)
-        (* mult : (derivation_tree list -> derivation_tree) -> (derivation_tree list) list -> derivation_tree list *)
-        let mult f lists =
-                let all_derivations = map_tr f lists in
-                take n (List.sort (>*>) all_derivations)
-        in
 
         (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
          * we've already visited. *)
         let guarded_get_nth i chart it =
+                let new_visited = (item,n) :: visited in
                 if List.exists (fun (it',i') -> (it = it') && (i >= i')) new_visited then
                         None
                 else
                         get_nth_best_derivation i chart new_visited it
         in
 
-        let rec require_no_nones (lst : 'a option list) : 'a list option =
-                match lst with
-                | [] -> Some []
-                | (None :: xs) -> None
-                | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
+        (* NB: The neighbours of a derivation are other derivations of the same item, that use 
+         * the same route in their final step. *)
+        let neighbours ((d,vec) : (derivation_tree * int list)) : (derivation_tree * int list) list =
+                let rec add_one_at_position p lst =
+                        match (p,lst) with
+                        | (_,[]) -> []
+                        | (0,(x::xs)) -> (x+1)::xs
+                        | (n,(x::xs)) -> x :: (add_one_at_position (n-1) xs)
+                in
+                let neighbour_vecs = map_tr (fun p -> add_one_at_position p vec) (range 0 (List.length vec)) in
+                let antecedent_items = map_tr get_root_item (get_children d) in
+                let derivation_from_vec vec =
+                        let child_derivations = List.map2 (fun n -> fun it -> guarded_get_nth n chart it) vec antecedent_items in
+                        match (require_no_nones child_derivations) with
+                        | None -> None
+                        | Some cs -> Some (make_derivation_tree (get_root_item d) cs (get_rule d) (Rule.get_weight (get_rule d)), vec)
+                in
+                optlistmap derivation_from_vec neighbour_vecs
         in
 
         let get_n_best_by_route ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
                 match items with
                 | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
                 | _ ->
-                        let route_arity = List.length items in        (* r = |e| *)
-                        let rank_vectors = all_lists (range 1 (n+1)) route_arity in     (* use numbers [1..n] inclusive because 1 means best (0 is invalid) *)
-                        let child_list_from_vector vec = map_tr (fun (i,it) -> guarded_get_nth i chart it) (List.combine vec items) in
-                        let child_lists : (derivation_tree option) list list = map_tr child_list_from_vector rank_vectors in
-                        let complete_child_lists : derivation_tree list list = optlistmap require_no_nones child_lists in
-                        mult (fun children -> make_derivation_tree item children r wt) complete_child_lists
+                        let best_children = map_tr (get_best_derivation chart) items in
+                        let best = make_derivation_tree item best_children r wt in
+                        let result = ref [] in
+                        let candidates = ref [(best, map_tr (fun _ -> 1) items)] in
+                        while (List.length !result < n) && (!candidates <> []) do
+                                match (List.sort (fun (d1,_) -> fun (d2,_) -> d1 >*> d2) !candidates) with
+                                | [] -> assert false  (* Shouldn't be possible. This would not be so ugly if we had a break statement. *)
+                                | (next,vec)::rest ->
+                                        (* We check for doubles because it's possible to end up at the same vector twice.
+                                         * For example, we might go from [1,1] to [1,2] to [2,2], or from [1,1] to [2,1] to [2,2].
+                                         * But ideally we would somehow prevent this doubling-up before building up the whole derivation itself. *)
+                                        if (not (List.exists (deriv_equal next) !result)) then
+                                                result := next::(!result) ;
+                                        candidates := rest @ (neighbours (next,vec))
+                        done ;
+                        !result
         in
+
         let lists = map_tr get_n_best_by_route (Chart.get_routes item chart) in
-        let n_best_overall = List.fold_left merge [] lists in
+        let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
         try Some (List.nth n_best_overall (n-1)) with Failure _ -> None
 

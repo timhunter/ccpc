@@ -19,6 +19,8 @@ val split : char -> string -> string list
 val uniques : 'a list -> 'a list
 val all_lists : 'a list -> int -> 'a list list
 
+val show_list : ('a -> string) -> 'a list -> string
+
 type weight
 val no_weight : weight
 val make_weight : Num.num -> Num.num -> weight

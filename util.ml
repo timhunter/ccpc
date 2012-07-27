@@ -116,6 +116,8 @@ let rec split sep str =
   with Not_found ->
     [str] 
 
+let show_list f lst =
+        "[" ^ (String.concat ";" (map_tr f lst)) ^ "]"
 
 exception RangesNotAdjacentException
 
