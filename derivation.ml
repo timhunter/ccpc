@@ -134,15 +134,15 @@ module VisitHistory :
 
 (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
  * we've already visited. *)
-let rec guarded_get_nth visited i chart it =
+let rec guarded_get_nth mem visited i chart it =
         if not (VisitHistory.ok_to_visit visited it i) then
                 None
         else
-                get_nth_best_derivation' visited i chart it
+                get_nth_best_derivation' mem visited i chart it
 
 (* The neighbours of a derivation are other derivations of the same item, that use 
  * the same route in their final step. *)
-and neighbours chart visited ((d,vec) : (derivation_tree * int list)) : (derivation_tree * int list) list =
+and neighbours chart mem visited ((d,vec) : (derivation_tree * int list)) : (derivation_tree * int list) list =
         let rec add_one_at_position p lst =
                 match (p,lst) with
                 | (_,[]) -> []
@@ -152,14 +152,14 @@ and neighbours chart visited ((d,vec) : (derivation_tree * int list)) : (derivat
         let neighbour_vecs = map_tr (fun p -> add_one_at_position p vec) (range 0 (List.length vec)) in
         let antecedent_items = map_tr get_root_item (get_children d) in
         let derivation_from_vec vec =
-                let child_derivations = List.map2 (fun i -> fun it -> guarded_get_nth visited i chart it) vec antecedent_items in
+                let child_derivations = List.map2 (fun i -> fun it -> guarded_get_nth mem visited i chart it) vec antecedent_items in
                 match (require_no_nones child_derivations) with
                 | None -> None
                 | Some cs -> Some (make_derivation_tree (get_root_item d) cs (get_rule d) (Rule.get_weight (get_rule d)), vec)
         in
         optlistmap derivation_from_vec neighbour_vecs
 
-and get_n_best_by_route n chart item visited ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
+and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
         match items with
         | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
         | _ ->
@@ -176,17 +176,22 @@ and get_n_best_by_route n chart item visited ((items,r,wt) : (Chart.item list * 
                                  * But ideally we would somehow prevent this doubling-up before building up the whole derivation itself. *)
                                 if (not (List.exists (deriv_equal next) !result)) then
                                         result := next::(!result) ;
-                                candidates := rest @ (neighbours chart visited (next,vec))
+                                candidates := rest @ (neighbours chart mem visited (next,vec))
                 done ;
                 !result
 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
    This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
-and get_nth_best_derivation' visited n chart item =
+and get_nth_best_derivation' mem visited n chart item =
         assert (n >= 1) ;
-        let lists = map_tr (get_n_best_by_route n chart item (VisitHistory.add visited item n)) (Chart.get_routes item chart) in
-        let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
-        try Some (List.nth n_best_overall (n-1)) with Failure _ -> None
+        try Hashtbl.find (!mem) (n, visited, item)
+        with Not_found ->
+                let lists = map_tr (get_n_best_by_route mem n chart item (VisitHistory.add visited item n)) (Chart.get_routes item chart) in
+                let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
+                let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
+                Hashtbl.add (!mem) (n, visited, item) result ;
+                result
 
-let get_nth_best_derivation = get_nth_best_derivation' VisitHistory.empty
+let get_nth_best_derivation = get_nth_best_derivation' (ref (Hashtbl.create 1000)) VisitHistory.empty
+
