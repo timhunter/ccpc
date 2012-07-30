@@ -82,10 +82,8 @@
 %% [da]::[='Case',+acc,'V-Decl'].  % maybe the copula could, in some dialects
 
 % Null argument (pro)
-%[]::['Case',-nom].
-%[]::['Case',-acc].
-[]::['null-Case',-nom].
-[]::['null-Case',-acc].
+[]::['Case',-nom].
+[]::['Case',-acc].
 
 % verbs are all in the past tense
 
@@ -109,7 +107,6 @@
 [itta]::[='Case',+acc,'V-Decl'].		% say (needed for Kahraman examples)
 [mita]::[='Case',+acc,'V-Decl'].		% see
 ['Vt']::[='Case',+acc,'V-Decl'].		% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Decl'].		% (abstracted)
 
 % three-place. dative arg is naturally preverbal since nonfirst args go in specifiers stacked to the left
 [ageta]::[='Case',+acc,='Case',+dat,'V-Decl']. % give
@@ -127,8 +124,6 @@
 ['Vi']::['V-Comp'].		% (abstracted)
 ['Vt']::[='Case',+acc,'V-Rel'].		% (abstracted)
 ['Vt']::[='Case',+acc,'V-Comp'].	% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Rel'].	% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Comp'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
@@ -138,10 +133,6 @@
 %[]::[='V-Rel',+scramble,='Case','v-Rel'].     % optional short-scrambling
 []::[='V-Comp',='Case','v-Comp'].
 % []::[='V-Adj',='Case','v-Adj'].
-
-[]::[='V-Decl',='null-Case','v-Decl'].
-[]::[='V-Rel',='null-Case','v-Rel'].
-[]::[='V-Comp',='null-Case','v-Comp'].
 
 % Tense 
 % , which assigns nominative case
@@ -175,14 +166,12 @@
 
 %% Adjunct Clauses
 
-['Via']::['V-Adj'].						% (abstracted)
-['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
-['Vta']::[='null-Case',+acc,'V-Adj'].		% (abstracted)
-[]::[='V-Adj',='Case','v-Adj'].
-[]::[='V-Adj',='null-Case','v-Adj'].
-[]::[='v-Adj',+nom,'T-Adj'].
-[]::[='T-Adj','C-Adj'].
-['C-Adj']>>['C-Decl'].
+%['Via']::['V-Adj'].					% (abstracted)
+%['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
+%[]::[='V-Adj',='Case','v-Adj'].		
+%[]::[='v-Adj',+nom,'T-Adj'].
+%[]::[='T-Adj','C-Adj'].
+%['C-Adj']>>['C-Decl'].
 
 
 % adjectives
