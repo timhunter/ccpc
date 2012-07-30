@@ -1,10 +1,25 @@
-79 N nom N acc Vtd
-44 N acc Vtd
-2 N nom Vtd
+474 N nom N acc Vtd
+264 N acc Vtd
+12 N nom Vtd
+2592 N nom Vid
+312 Vid
 156 N nom N acc Vtn fact nom N acc Vtd
 547 N acc Vtn fact nom N acc Vtd
 6 N nom Vtn fact nom N acc Vtd
 12 Vtn fact nom N acc Vtd
+475 N nom Vin fact nom N acc Vtd
+138 Vin fact nom N acc Vtd
 543 N acc Vtn N nom N acc Vtd
 125 N nom Vtn N nom N acc Vtd
 14 Vtn N nom N acc Vtd
+2311 Vin N nom N acc Vtd
+780 N nom N acc Vtn fact nom Vid
+2735 N acc Vtn fact nom Vid
+30 N nom Vtn fact nom Vid
+60 Vtn fact nom Vid
+2375 N nom Vin fact nom Vid
+690 Vin fact nom Vid
+2715 N acc Vtn N nom Vid
+625 N nom Vtn N nom Vid
+70 Vtn N nom Vid
+11555 Vin N nom Vid
