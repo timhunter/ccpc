@@ -44,7 +44,6 @@
 
  []::[='T','C'].
 
-
 % Relative Clauses
 % SR:   showParse([Vt,Noun,de,Noun,Vt,Noun]).
 % OR:   showParse([Noun,Vt,de,Noun,Vt,Noun]).
@@ -70,9 +69,19 @@
 % need to move CP to Spec NP
 % []::[='N',+k,'N',-case].
 
+% complement clause
+
+ []::[=>'V',='N','vComp'].   	%v
+ []::[=>'V',='N-null','vComp'].   	%v
+ []::[=>'V',='Poss','vComp'].	%v
+ []::[='vComp',+case,'TComp',-f]. %tense
+ []::[='TComp','CComp'].
+ [fact]::[='CComp','NDep'].
+ [de]::[='NDep',+f,'F'].
 
 % possessive de
  [de]::[='N',='N','Poss',-case].
+
 
 
 % The root.

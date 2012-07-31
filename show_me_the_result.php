@@ -3,7 +3,7 @@
 /* by Jiwon Yun */
 /* It creates html files to show the ER changes */
 
-$language_array = array("chinese","japanese","korean");
+$language_array = array("chinese","korean");
 $grammar_type_array = array("promotion","adjunction","pronominal");
 $prefix_label_array = array("SRC","ORC");
 $prefix_array_array = array(
@@ -45,7 +45,7 @@ foreach ($language_array as $language)
 			"<BODY>\n";
 		fwrite($html_file, $html_text);
 
-		$html_text = "<a href=\"".$html_file_name."\">".$language." ".$grammar_type."</a><BR>"
+		$html_text = "<a href=\"".$html_file_name."\">".$language." ".$grammar_type."</a><BR>";
 		fwrite($index_file, $html_text);
 	
 		foreach($prefix_label_array as $prefix_label)

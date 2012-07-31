@@ -33,13 +33,12 @@
 
 
 []::[=>'V',='N','v']. %v
-[]::[=>'V',='N','vRel']. %v
 
 []::[=>'V',='N-null','v']. %v
-[]::[=>'V',='N-null','vRel']. %v
+
 
 []::[=>'V',='Poss','v']. %v
-[]::[=>'V',='Poss','vRel']. %v
+
 
 
 []::[='v',+case,'T']. %tense
@@ -59,7 +58,11 @@
   []::['N-null',-case,-wh]. 
 % []::['N',-case,-wh].
 
-% Nothing special for T; -f is used to ensure RC preceeds de
+[]::[=>'V',='N','vRel']. %v
+[]::[=>'V',='N-null','vRel']. %v
+[]::[=>'V',='Poss','vRel']. %v
+
+% Nothing special for T; 
  []::[='vRel',+case,'TRel'].
 
 % Wh-hoisting complementizer
@@ -70,6 +73,18 @@
 % Relative CP can left-adjoin onto the NP head
  ['F']>>['N'].
  ['F']>>['N-null'].
+
+
+% complement clause
+
+ []::[=>'V',='N','vComp'].   	%v
+ []::[=>'V',='N-null','vComp'].   	%v
+ []::[=>'V',='Poss','vComp'].	%v
+ []::[='vComp',+case,'TComp',-f]. %tense
+ []::[='TComp','CComp'].
+ [fact]::[='CComp','NDep'].
+ [de]::[='NDep',+f,'FDep'].
+ []::[='FDep','N',-case].
 
 % % genitive de
  [de]::[='N',='N','Poss',-case].
