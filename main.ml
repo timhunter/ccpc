@@ -23,6 +23,13 @@ let print_grammar grammar_file parser_arg (rules, start_symbol) =
 type options = { debug : bool ; graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string list -> Parser.input ; sentence : string option }
 let default_options = {debug = false ; graph = None; kbest = None ; trees = false; intersect = false; input = (fun s -> Parser.Sentence s); sentence = None }
 
+(* Removes spaces from the beginning and end of the string, 
+ * and collapses adjacent spaces into a single space. *)
+let cleanup_input s =
+        let trimmed = Str.global_replace (Str.regexp "^ *\\| *$") "" s in
+        let collapsed = Str.global_replace (Str.regexp " +") " " trimmed in
+        collapsed
+
 let rec process_args args acc =
 	match args with
 	| [] -> acc
@@ -33,7 +40,7 @@ let rec process_args args acc =
 	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Parser.Prefix s)}
         | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Parser.Infix  s)}
         | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
-	| (x::rest)          -> process_args rest {acc with sentence = Some x}
+	| (x::rest)          -> process_args rest {acc with sentence = Some (cleanup_input x)}
 
 (****************************************************************************************)
 
@@ -77,7 +84,7 @@ let main () =
 		let (rules,start_symbol) = Grammar.get_input_grammar grammar_file in
 		let (input_list,input_string,parser_argument) = match options.sentence with
 			None -> failwith "No sentence given; nothing to do!"
-		      | Some s -> (let x = Util.split ' ' s in
+		      | Some s -> (let x = Str.split (Str.regexp_string " ") s in
 				   (x,s,options.input x)) in
 		match (options.intersect,options.graph,options.trees,options.kbest) with
 		    (false,None,false,None) -> failwith "Please specify one of -intersect, -graph, -trees or -kbest"
