@@ -205,5 +205,9 @@ and get_nth_best_derivation' mem visited n chart item =
                 Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                 result
 
-let get_nth_best_derivation = get_nth_best_derivation' (ref (Hashtbl.create 1000)) VisitHistory.empty
+let get_n_best n chart item =
+        let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
+        let lst = map_tr (fun i -> get_nth_best_derivation' mem VisitHistory.empty i chart item) (range 1 (n+1)) in
+        let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
+        take_while_not_none lst
 
