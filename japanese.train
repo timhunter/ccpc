@@ -4,12 +4,6 @@
 132 Vt
 4950 N ga Vi
 1569 Vi
-465 N ga N o Vta N ga N o Vt
-360 N o Vta N ga N o Vt
-32 N ga Vta N ga N o Vt
-37 Vta N ga N o Vt
-837 N ga Via N ga N o Vt
-245 Via N ga N o Vt
 476 N ga N o Vt fact ga N o Vt
 415 N o Vt fact ga N o Vt
 21 N ga Vt fact ga N o Vt
@@ -20,19 +14,13 @@
 138 Vt N ga N o Vt
 855 Vi N ga N o Vt
 190 N o Vt N ga N o Vt
-930 N ga N o Vta N ga N Vi
-720 N o Vta N ga N Vi
-64 N ga Vta N ga N Vi
-74 Vta N ga N Vi
-1674 N ga Via N ga N Vi
-490 Via N ga N Vi
-952 N ga N o Vt fact ga N Vi
-830 N o Vt fact ga N Vi
-42 N ga Vt fact ga N Vi
-72 Vt fact ga N Vi
-1194 N ga Vi fact ga N Vi
-394 Vi fact ga N Vi
-1222 N ga Vt N ga N Vi
-276 Vt N ga N Vi
-1710 Vi N ga N Vi
-380 N o Vt N ga N Vi
+952 N ga N o Vt fact ga Vi
+830 N o Vt fact ga Vi
+42 N ga Vt fact ga Vi
+72 Vt fact ga Vi
+1194 N ga Vi fact ga Vi
+394 Vi fact ga Vi
+1222 N ga Vt N ga Vi
+276 Vt N ga Vi
+1710 Vi N ga Vi
+380 N o Vt N ga Vi
