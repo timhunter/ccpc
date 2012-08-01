@@ -171,6 +171,13 @@ and neighbours chart mem visited ((d,vec) : (derivation_tree * int list)) : (der
         in
         optlistmap derivation_from_vec neighbour_vecs
 
+module CandidateQueue = Set.Make(
+        struct
+                type t = derivation_tree * int list
+                let compare (d1,_) (d2,_) = d2 >*> d1
+        end
+)
+
 and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
         match items with
         | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
@@ -178,19 +185,21 @@ and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item lis
                 let best_children = map_tr (get_best_derivation mem chart) items in
                 let best = make_derivation_tree item best_children r wt in
                 let result = ref [] in
-                let candidates = ref [(best, map_tr (fun _ -> 1) items)] in
-                while (List.length !result < n) && (!candidates <> []) do
-                        match (List.sort (fun (d1,_) -> fun (d2,_) -> d1 >*> d2) !candidates) with
-                        | [] -> assert false  (* Shouldn't be possible. This would not be so ugly if we had a break statement. *)
-                        | (next,vec)::rest ->
+                let candidates = ref (CandidateQueue.singleton (best, map_tr (fun _ -> 1) items)) in
+                try
+                        while (List.length !result < n) do
+                                let (next,vec) = CandidateQueue.max_elt (!candidates) in
                                 (* We check for doubles because it's possible to end up at the same vector twice.
                                  * For example, we might go from [1,1] to [1,2] to [2,2], or from [1,1] to [2,1] to [2,2].
                                  * But ideally we would somehow prevent this doubling-up before building up the whole derivation itself. *)
                                 if (not (List.exists (deriv_equal next) !result)) then
                                         result := next::(!result) ;
-                                candidates := rest @ (neighbours chart mem visited (next,vec))
-                done ;
-                !result
+                                candidates := CandidateQueue.remove (next,vec) (!candidates) ;
+                                let add_candidate x = (candidates := CandidateQueue.add x (!candidates)) in
+                                List.iter add_candidate (neighbours chart mem visited (next,vec))
+                        done ;
+                        !result
+                with Not_found -> !result
 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
