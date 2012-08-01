@@ -144,6 +144,13 @@ module VisitHistory :
                         with Not_found -> true
         end
 
+module CandidateQueue = Set.Make(
+        struct
+                type t = derivation_tree * int list
+                let compare (d1,_) (d2,_) = d2 >*> d1
+        end
+)
+
 (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
  * we've already visited. *)
 let rec guarded_get_nth mem visited i chart it =
@@ -170,13 +177,6 @@ and neighbours chart mem visited ((d,vec) : (derivation_tree * int list)) : (der
                 | Some cs -> Some (make_derivation_tree (get_root_item d) cs (get_rule d) (Rule.get_weight (get_rule d)), vec)
         in
         optlistmap derivation_from_vec neighbour_vecs
-
-module CandidateQueue = Set.Make(
-        struct
-                type t = derivation_tree * int list
-                let compare (d1,_) (d2,_) = d2 >*> d1
-        end
-)
 
 and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
         match items with
