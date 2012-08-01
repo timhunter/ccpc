@@ -185,12 +185,12 @@ and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item lis
    This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
 and get_nth_best_derivation' mem visited n chart item =
         assert (n >= 1) ;
-        try Hashtbl.find (!mem) (n, visited, item)
+        try Hashtbl.find (!mem) (n, item)
         with Not_found ->
                 let lists = map_tr (get_n_best_by_route mem n chart item (VisitHistory.add visited item n)) (Chart.get_routes item chart) in
                 let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
                 let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
-                Hashtbl.add (!mem) (n, visited, item) result ;
+                Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                 result
 
 let get_nth_best_derivation = get_nth_best_derivation' (ref (Hashtbl.create 1000)) VisitHistory.empty
