@@ -66,6 +66,12 @@ let optlistmap f xs =
   in
   optlistmap' f xs []
 
+let rec require_no_nones (lst : 'a option list) : 'a list option =
+        match lst with
+        | [] -> Some []
+        | (None :: xs) -> None
+        | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
+
 let (^^) s t =
   if (s = "") || (t = "") then
     s ^ t

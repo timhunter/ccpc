@@ -77,39 +77,44 @@ let rec get_derivations chart item =
  * Huang & Chiang call the ``initial parsing phase'' of their Algorithm 3, although 
  * we do it along the way whenever we need to find a 1-best derivation rather than 
  * in an initial separated phase. *)
-let rec get_best_derivation mem chart item =
+(* Returns None if all derivations of item involve returning to items we have previously visited; 
+ * in other words, when there is no derivation of item that is part of the best derivation of all its parents. 
+ * Note this means that this function never returns None if visited is empty. *)
+let rec get_best_derivation' chart visited item =
 
-        try
-                (* Could probably clean up the types to make this nicer at some point *)
-                match (Hashtbl.find (!mem) (1, item)) with
+        let get_best_by_route (antecedents,r,wt) =
+                let new_visited = item::visited in
+                if (List.exists (fun v -> List.mem v antecedents) new_visited) then (* No loops in the best derivation *)
+                        None
+                else
+                        let children = map_tr (get_best_derivation' chart new_visited) antecedents in
+                        match (require_no_nones children) with
+                        | None -> None
+                        | Some xs -> Some (make_derivation_tree item xs r wt)
+        in
+
+        let routes = Chart.get_routes item chart in
+        let candidates = optlistmap get_best_by_route routes in
+        let result =
+                match (List.sort (>*>) candidates) with
+                | [] -> None
+                | (x::_) -> Some x
+        in
+        result
+
+(* Wrapper for the above: assumes no history of visited nodes, and therefore 
+ * does not return an option type. *) 
+let get_best_derivation mem chart item =
+        let result =
+                try Hashtbl.find (!mem) (1,item)
+                with Not_found ->
+                        let x = get_best_derivation' chart [] item in
+                        Hashtbl.add (!mem) (1,item) x ;
+                        x
+        in
+        match result with
                 | Some d -> d
-                | None -> failwith (Printf.sprintf "Something went very wrong: memoised None for best derivation of item %s\n" (Chart.debug_str item))
-
-        with Not_found ->
-
-                let get_best_by_route (antecedents,r,wt) =
-                        if (List.mem item antecedents) then  (* No loops in the best derivation *)
-                                None
-                        else
-                                let children = map_tr (get_best_derivation mem chart) antecedents in
-                                Some (make_derivation_tree item children r wt)
-                in
-
-                let routes = Chart.get_routes item chart in
-                let candidates = optlistmap get_best_by_route routes in
-                let result =
-                        match (List.sort (>*>) candidates) with
-                        | [] -> failwith (Printf.sprintf "Couldn't find any derivations for item: %s\n" (Chart.debug_str item))
-                        | (x::_) -> x
-                in
-                Hashtbl.add (!mem) (1, item) (Some result) ;
-                result
-
-let rec require_no_nones (lst : 'a option list) : 'a list option =
-        match lst with
-        | [] -> Some []
-        | (None :: xs) -> None
-        | ((Some x) :: xs) -> match (require_no_nones xs) with | None -> None | Some rest -> Some (x::rest)
+                | None   -> failwith (Printf.sprintf "Couldn't find a best derivation for %s, even with an empty list of visited items\n" (Chart.debug_str item))
 
 let rec deriv_equal t1 t2 =
         match (t1,t2) with

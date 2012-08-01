@@ -11,6 +11,7 @@ val map_tr : ('a -> 'b) -> 'a list -> 'b list
 val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
 val take : int -> 'a list -> 'a list
 val optlistmap : ('a -> 'b option) -> 'a list -> 'b list
+val require_no_nones : ('a option) list -> ('a list) option
 val concat_ranges : range -> range -> range
 val range : int -> int -> int list
 val (^^) : string -> string -> string
