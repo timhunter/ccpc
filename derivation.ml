@@ -77,21 +77,33 @@ let rec get_derivations chart item =
  * Huang & Chiang call the ``initial parsing phase'' of their Algorithm 3, although 
  * we do it along the way whenever we need to find a 1-best derivation rather than 
  * in an initial separated phase. *)
-let rec get_best_derivation chart item =
+let rec get_best_derivation mem chart item =
 
-        let get_best_by_route (antecedents,r,wt) =
-                if (List.mem item antecedents) then  (* No loops in the best derivation *)
-                        None
-                else
-                        let children = map_tr (get_best_derivation chart) antecedents in
-                        Some (make_derivation_tree item children r wt)
-        in
+        try
+                (* Could probably clean up the types to make this nicer at some point *)
+                match (Hashtbl.find (!mem) (1, item)) with
+                | Some d -> d
+                | None -> failwith (Printf.sprintf "Something went very wrong: memoised None for best derivation of item %s\n" (Chart.debug_str item))
 
-        let routes = Chart.get_routes item chart in
-        let candidates = optlistmap get_best_by_route routes in
-        match (List.sort (>*>) candidates) with
-        | [] -> failwith (Printf.sprintf "Couldn't find any derivations for item: %s\n" (Chart.debug_str item))
-        | (x::_) -> x
+        with Not_found ->
+
+                let get_best_by_route (antecedents,r,wt) =
+                        if (List.mem item antecedents) then  (* No loops in the best derivation *)
+                                None
+                        else
+                                let children = map_tr (get_best_derivation mem chart) antecedents in
+                                Some (make_derivation_tree item children r wt)
+                in
+
+                let routes = Chart.get_routes item chart in
+                let candidates = optlistmap get_best_by_route routes in
+                let result =
+                        match (List.sort (>*>) candidates) with
+                        | [] -> failwith (Printf.sprintf "Couldn't find any derivations for item: %s\n" (Chart.debug_str item))
+                        | (x::_) -> x
+                in
+                Hashtbl.add (!mem) (1, item) (Some result) ;
+                result
 
 let rec require_no_nones (lst : 'a option list) : 'a list option =
         match lst with
@@ -163,7 +175,7 @@ and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item lis
         match items with
         | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
         | _ ->
-                let best_children = map_tr (get_best_derivation chart) items in
+                let best_children = map_tr (get_best_derivation mem chart) items in
                 let best = make_derivation_tree item best_children r wt in
                 let result = ref [] in
                 let candidates = ref [(best, map_tr (fun _ -> 1) items)] in
