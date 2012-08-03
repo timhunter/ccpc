@@ -16,7 +16,7 @@
  * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
  */
 
-:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/3]).
+:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/4]).
 % latex_tree/1 is the top predicate
 % but draw_tree.pl makes direct calls to:
 %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
@@ -29,13 +29,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% New code for putting multiple trees into a single tex file.
 %%% Tim Hunter, October 2011
+%%% Zhong Chen, August 2012
 
-latex_trees(IntroLines, Trees, Filename) :-
+latex_trees(IntroLines, TableCaption, Trees, Filename) :-
 	start_file(IntroLines, Filename, Stream),
 	format(Stream, "\\section*{Surface strings}~n", []),
-	format(Stream, "\\begin{enumerate}    % every yield will be an item in this enumeration~n", []),
+	format(Stream, "\\begin{table}[h!t]~n", []),
+	format(Stream, "\\centering~n", []),
+	format(Stream, "\\caption{~w}~n", [TableCaption]),
+	format(Stream, "\\begin{tabular}{lll}    % every yield will be a row in this table~n", []),
+	format(Stream, "\\hline~n", []),
+	format(Stream, "Cond.~~Prob. & Remainder & Type\\\\~n", []),
+	format(Stream, "\\hline~n", []),
 	write_yields(Trees, Stream),
-	format(Stream, "\\end{enumerate}~n", []),
+	format(Stream, "\\dots & \\dots & \\dots \\\\~n", []),
+	format(Stream, "\\hline~n", []),
+	format(Stream, "\\end{tabular}~n", []),
+	format(Stream, "\\end{table}~n", []),
 	format(Stream, "\\section*{X-bar structures}~n", []),
 	format(Stream, "\\begin{enumerate}    % every tree will be an item in this enumeration~n", []),
 	draw_trees_inner(Trees, Stream),
@@ -59,7 +69,7 @@ write_yields([],_).
 write_yields([First|Rest],Stream) :-
 	[Note,Tree] = First,
 	yield(Tree,Yield),
-	format(Stream, "\\item ~w ``~s''~n", [Note,Yield]),
+	format(Stream, "~3f & ~s & \\\\~n", [Note,Yield]),
 	write_yields(Rest,Stream).
 
 start_tree(Xmax, Ymax, Stream, Tree, Note) :-
