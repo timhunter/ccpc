@@ -5,9 +5,10 @@ set GRAMMAR=$argv[1]
 set PREFIX=`echo "$argv[2]" | sed 's/ /-/g'`
 set RENORM=./renormalize.csh
 set VISUAL=./visualize
+set KBEST=$argv[3]
 $PARSE grammars/wmcfg/$GRAMMAR.wmcfg -intersect -p "$argv[2]" >! $GRAMMAR.$PREFIX.chart
 $RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
-$VISUAL $GRAMMAR.$PREFIX.global.chart 100 $GRAMMAR.$PREFIX.global.tex
+$VISUAL $GRAMMAR.$PREFIX.global.chart $KBEST $GRAMMAR.$PREFIX.global.tex
 pdflatex $GRAMMAR.$PREFIX.global.tex
 echo "*** Resulting pdf file is: $GRAMMAR.$PREFIX.global.pdf"
 rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart $GRAMMAR.$PREFIX.global.tex $GRAMMAR.$PREFIX.global.aux $GRAMMAR.$PREFIX.global.log

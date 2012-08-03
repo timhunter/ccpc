@@ -16,7 +16,7 @@
  * latex_tree(a/['$m'(b)/[],'$m'(c)/[]]).
  */
 
-:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/4]).
+:- module(latex_tree, [latex_tree/1, latex_tree/2, latex_trees/5]).
 % latex_tree/1 is the top predicate
 % but draw_tree.pl makes direct calls to:
 %	tree/3, label_size/3, xgap/1, ygap/1, drawline/6, drawlabel/5
@@ -31,18 +31,20 @@
 %%% Tim Hunter, October 2011
 %%% Zhong Chen, August 2012
 
-latex_trees(IntroLines, TableCaption, Trees, Filename) :-
+latex_trees(IntroLines, Prefix, Entropy, Trees, Filename) :-
 	start_file(IntroLines, Filename, Stream),
 	format(Stream, "\\section*{Surface strings}~n", []),
 	format(Stream, "\\begin{table}[h!t]~n", []),
 	format(Stream, "\\centering~n", []),
-	format(Stream, "\\caption{~w}~n", [TableCaption]),
+	format(Stream, "\\caption{Prefix: ~w}~n", [Prefix]),
 	format(Stream, "\\begin{tabular}{lll}    % every yield will be a row in this table~n", []),
 	format(Stream, "\\hline~n", []),
-	format(Stream, "Cond.~~Prob. & Remainder & Type\\\\~n", []),
+	format(Stream, "Probability & Remainder & Type\\\\~n", []),
 	format(Stream, "\\hline~n", []),
 	write_yields(Trees, Stream),
 	format(Stream, "\\dots & \\dots & \\dots \\\\~n", []),
+	format(Stream, "\\hline~n", []),
+	format(Stream, "Entropy = ~3f &  & \\\\~n", [Entropy]),
 	format(Stream, "\\hline~n", []),
 	format(Stream, "\\end{tabular}~n", []),
 	format(Stream, "\\end{table}~n", []),

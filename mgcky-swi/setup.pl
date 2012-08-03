@@ -40,11 +40,11 @@
 % - DerivLists is a list of lists, each of which has a 'note' with which to annotate 
 %   the tree as its head, and the derivation string to be passed to Stabler's code as its tail.
 % - Filename is the name of the latex file to save to.
-parse_and_display(IntroLines, TableCaption, DerivLists, Filename) :-
+parse_and_display(IntroLines, Prefix, Entropy, DerivLists, Filename) :-
 	strings_to_trees(DerivLists, Trees),
 	length(DerivLists,NumDerivs), length(Trees,NumTrees), 
 	format(user_output, 'Given ~w derivations; found trees for ~w of those~n', [NumDerivs,NumTrees]),
-	latex_trees(IntroLines, TableCaption, Trees, Filename).
+	latex_trees(IntroLines, Prefix, Entropy, Trees, Filename).
 
 % Given a list like the DerivList argument of parse_and_display, turns it into a list of 
 % pairs, each containing a 'note' and an x-bar tree.

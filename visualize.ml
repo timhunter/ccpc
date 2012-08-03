@@ -233,9 +233,8 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
 			             | None -> "Could not find intersection prefix"
 			             | Some s -> s
 			in
-			let table_caption = Printf.sprintf "Entropy: %s  Prefix: %s" entropy prefix in
-			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s',%s,'%s').\" 2>/dev/null" in
-			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string table_caption derivations_as_string filename in
+			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s',%f,%s,'%s').\" 2>/dev/null" in
+			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string prefix (float_of_string entropy) derivations_as_string filename in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
