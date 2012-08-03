@@ -53,6 +53,32 @@ let check_exit_code code name =
 
 (************************************************************************************************)
 
+(* Assumes that the result is meant to be unique, and returns None if there is not exactly one line produced. *)
+let get_comment_data grammar_file filter_command =
+        let channel =
+                if not (Sys.file_exists grammar_file) then
+                        failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
+                else
+                        let command = Printf.sprintf "cat %s | %s" grammar_file filter_command in
+                        try Unix.open_process_in command
+                        with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
+        in
+        let results =   (* will be a list of all lines that came back from running the command *)
+                let acc = ref [] in
+                try
+                        while true do
+                                acc := (input_line channel)::(!acc)
+                        done ;
+                        !acc
+                with End_of_file -> !acc
+        in
+        check_exit_code (Unix.close_process_in channel) "Shell command reading grammar file" ;
+        match results with
+        | (x::[]) -> Some x
+        | _ -> None
+
+(************************************************************************************************)
+
 (* Reads from the dict file a returns a mapping from guillaumin-generated 
    preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
 let get_guillaumin_dict filename =
@@ -198,7 +224,16 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
 			                    "\\\\\\\\end{itemize}" ;
 			                  ] in
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
-			let table_caption = "Here is the table caption, coming from OCaml code. TODO: Put entropy and prefix info here." in
+			let entropy = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\(\* entropy = [0-9\.]* \*\)/ {print $4}'") with
+			              | None -> "Could not find entropy"
+			              | Some s -> s
+			in
+			let prefix = match (get_comment_data grammar_files.wmcfg_file
+			                    "awk ' /^\(\* intersected with prefix: .* \*\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
+			             | None -> "Could not find intersection prefix"
+			             | Some s -> s
+			in
+			let table_caption = Printf.sprintf "Entropy: %s  Prefix: %s" entropy prefix in
 			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s',%s,'%s').\" 2>/dev/null" in
 			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string table_caption derivations_as_string filename in
 			try Unix.open_process_in command
@@ -264,27 +299,11 @@ let print_usage () =
    grammars_dir/{mg,mcfgs/wmcfg}/grammar_name.{pl,wmcfg,dict} *)
 let identify_original_grammar grammar_file =
 
-	let channel =
-		if not (Sys.file_exists grammar_file) then
-			failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
-		else
-			(* Might as well be picky about this regex *)
-			let command = Printf.sprintf "awk ' /^\(\* original grammar: [a-zA-Z0-9\/\.]* \*\)/ {print $4} ' %s" grammar_file in
-			try Unix.open_process_in command
-			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
-	in
-
 	let orig_grammar =
-		let line1 = try Some (input_line channel) with End_of_file -> None in
-		match line1 with
+		match (get_comment_data grammar_file "awk ' /^\(\* original grammar: [a-zA-Z0-9\/\.]* \*\)/ {print $4} '") with
 		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
-		| Some s ->
-			let line2 = try Some (input_line channel) with End_of_file -> None in
-			match line2 with
-			| None -> s                 (* Exactly one matching comment; use that one *)
-			| Some _ -> failwith (Printf.sprintf "Two distinct original grammars identified in %s, don't know what to do." grammar_file)
+		| Some s -> s
 	in
-	check_exit_code (Unix.close_process_in channel) "Shell command reading grammar file" ;
 
 	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
 	let regex = Str.regexp "^\([a-zA-Z0-9\.-]+\)\/wmcfg\/\([a-zA-Z0-9\.-]+\)\.wmcfg$" in
