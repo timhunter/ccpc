@@ -6,13 +6,14 @@
 #             (b) a tex file bringing together the tables of surfaces strings 
 #                 at each prefix.
 
-if [ $# -ne 2 ] ; then
-        echo "Usage: $0 <grammar-file> <sentence>" ;
+if [ $# -ne 3 ] ; then
+        echo "Usage: $0 <grammar-file> <sentence> <kbest>" ;
         exit 1
 fi
 
 grammar=$1
 sentence=$2
+kbest=$3
 
 if [ ! -f grammars/wmcfg/$grammar.wmcfg ] ; then
         echo "File grammars/wmcfg/$grammar.wmcfg does not exist"
@@ -55,15 +56,17 @@ function no_spaces () {
         echo $1 | sed 's/ /-/g'
 }
 
+
 tables_file=$grammar.`no_spaces "$sentence"`.combined.$$.tex
+
 
 get_prefixes "$sentence" |\
 while read prefix ; do
         prefix_no_spaces=`no_spaces "$prefix"`
         id=/tmp/$grammar.$prefix_no_spaces.$$
         ./mcfg_nt grammars/wmcfg/$grammar.wmcfg -intersect -p "$prefix" > $id.chart
-        cp $id.chart $id.global.chart    # TODO: Actually renormalize here!
-        ./visualize $id.chart 100 $id.tex >/dev/null
+	./renormalize.csh $id.chart > $id.global.chart
+        ./visualize $id.global.chart $3 $id.tex >/dev/null
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         get_tables $id.tex >> $tables_file
