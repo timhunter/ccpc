@@ -24,15 +24,35 @@ let get_rule t =
         | Leaf (_,r,_) -> r
         | NonLeaf (_,_,r,_) -> r
 
-(* Compare derivations by weight; if they're equal by weight, back off to the built-in 
- * compare function. We don't want to return 0 in cases where the weights are equal, because 
+(* Compare derivations by weight; if they're equal by weight, back off and compare the other 
+ * components. We don't want to return 0 in cases where the weights are equal, because 
  * this would mean that two distinct derivations could be considered equal for the purposes 
  * of sorting and k-best lists, which would destroy the one-to-one correspondence between 
  * derivation trees and what Huang & Chiang call 'dbp's. *)
-let (>*>) t1 t2 =
-        match (compare_weights (get_weight t2) (get_weight t1)) with
-        | 0 -> compare t2 t1
-        | x -> x
+let rec (>*>) t1 t2 =
+        let rec compare_lists f lst1 lst2 =
+                match lst1,lst2 with
+                | [],[] -> 0
+                | [],_ -> -1
+                | _,[] -> 1
+                | (x::xs),(y::ys) -> (match (f x y) with 0 -> compare_lists f xs ys | other -> other)
+        in
+        let weight_result = compare_weights (get_weight t2) (get_weight t1) in
+        if (weight_result <> 0) then
+                weight_result
+        else (
+                let children_result = compare_lists (>*>) (get_children t1) (get_children t2) in
+                if (children_result <> 0) then
+                        children_result
+                else (
+                        let item_result = compare (Chart.debug_str (get_root_item t1)) (Chart.debug_str (get_root_item t2)) in
+                        if (item_result <> 0) then
+                                item_result
+                        else (
+                                compare (Rule.to_string (get_rule t1)) (Rule.to_string (get_rule t2))
+                        )
+                )
+        )
 
 let make_derivation_tree item children rule weight_factor =
 	let product = List.fold_left (mult_weights) weight_factor (map_tr get_weight children) in
@@ -125,14 +145,6 @@ let get_best_derivation mem chart item =
         match result with
                 | Some d -> d
                 | None   -> failwith (Printf.sprintf "Couldn't find a best derivation for %s, even with an empty list of visited items\n" (Chart.debug_str item))
-
-let rec deriv_equal t1 t2 =
-        match (t1,t2) with
-        | (Leaf(_,_,_), NonLeaf(_,_,_,_)) -> false
-        | (NonLeaf(_,_,_,_), Leaf(_,_,_)) -> false
-        | (Leaf(i1,r1,w1), Leaf(i2,r2,w2)) -> (i1 = i2) && (r1 = r2) && (compare_weights w1 w2 = 0)
-        | (NonLeaf(i1,cs1,r1,w1), NonLeaf(i2,cs2,r2,w2)) -> (i1 = i2) && (r1 = r2) && (compare_weights w1 w2 = 0) && (List.length cs1 = List.length cs2) &&
-                                                            (List.for_all2 deriv_equal cs1 cs2)
 
 module VisitHistory :
         sig
@@ -244,7 +256,7 @@ and get_n_best_all_routes mem n chart item visited routes : derivation_tree list
                         let new_visited = VisitHistory.add visited item (List.length !result + 1) in
                         let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
                         candidates := new_cand ;
-                        if (not (List.exists (deriv_equal next) !result)) then
+                        if (not (List.exists (fun d -> ((d >*> next) = 0)) !result)) then
                                 result := next::(!result) ;
                         let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
                         List.iter add_candidate (neighbours recipe)
