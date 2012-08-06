@@ -46,6 +46,16 @@ let rec one_from_each (lists : 'a list list) : ('a list list) =
 	| [] -> [[]]
 	| (l::ls) -> List.concat (map_tr (prepend_one_of l) (one_from_each ls))
 
+let print_tree_compact tree =
+        let rec print_tree' t =
+                match (get_children t, Rule.get_expansion (get_rule t)) with
+                | ([], Rule.PublicTerminating s) -> s
+                | ([c], Rule.PublicNonTerminating _) -> print_tree' c
+                | (cs, Rule.PublicNonTerminating _) -> "[" ^ (String.concat " " (map_tr print_tree' cs)) ^ "]"
+                | _ -> failwith "Inconsistent tree in print_tree"
+        in
+        (show_weight_float (get_weight tree)) ^^ (print_tree' tree)
+
 let print_tree tree =
 	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
 		let item = get_root_item t in
@@ -149,62 +159,98 @@ module VisitHistory :
                         with Not_found -> true
         end
 
-module CandidateQueue = Set.Make(
-        struct
-                type t = derivation_tree * int list
-                let compare (d1,_) (d2,_) = d2 >*> d1
+module type MYQUEUE =
+        sig
+                type t
+                type recipe = ((Chart.item * int) list) * (derivation_tree list -> derivation_tree)
+                val empty : t
+                val size : t -> int
+                val add : t -> recipe -> t
+                val add' : t -> (derivation_tree * recipe) -> t
+                val max_elt : t -> (int -> Chart.item -> derivation_tree option) -> ((derivation_tree * recipe) * t)
         end
-)
+
+module CandidateVectorQueueFast : MYQUEUE =
+        struct
+                type recipe = ((Chart.item * int) list) * (derivation_tree list -> derivation_tree)
+                module EvaluatedCandidateQueue = Set.Make(
+                        struct
+                                type t = derivation_tree * recipe
+                                let compare (d1,_) (d2,_) = d2 >*> d1
+                        end
+                )
+                type t = (recipe list) * EvaluatedCandidateQueue.t
+                let empty = ([], EvaluatedCandidateQueue.empty)
+                let size (uneval,eval) = List.length uneval + EvaluatedCandidateQueue.cardinal eval
+                let add (uneval,eval) recipe = (recipe::uneval, eval)
+                let add' (uneval,eval) (d,recipe) = (uneval, EvaluatedCandidateQueue.add (d,recipe) eval)
+                let try_eval get_nth recipe =
+                        let (ingredients,f) = recipe in
+                        let child_derivations = map_tr (fun (it,i) -> get_nth i it) ingredients in
+                        match (require_no_nones child_derivations) with
+                        | None -> None
+                        | Some cs -> Some (f cs)
+                let update get_nth (uneval,eval) =
+                        let f (uneval',eval') recipe =
+                                match (try_eval get_nth recipe) with
+                                | None -> add (uneval',eval') recipe
+                                | Some d -> add' (uneval',eval') (d,recipe) in
+                        List.fold_left f ([],eval) uneval
+                let max_elt q get_nth =
+                        let (uneval,eval) = update get_nth q in
+                        let max = EvaluatedCandidateQueue.max_elt eval in
+                        (max, (uneval, EvaluatedCandidateQueue.remove max eval))
+        end
+
+module CandidateVectorQueue = CandidateVectorQueueFast
+
+(* The neighbours of a derivation are other derivations of the same item, that use 
+ * the same route in their final step. *)
+let neighbours (ingredients,f) =
+        let rec add_one_at_position p lst =
+                match (p,lst) with
+                | (_,[]) -> []
+                | (0,((it,i)::rest)) -> (it,i+1)::rest
+                | (n,((it,i)::rest)) -> (it,i) :: (add_one_at_position (n-1) rest)
+        in
+        let neighbour_ingredients = map_tr (fun p -> add_one_at_position p ingredients) (range 0 (List.length ingredients)) in
+        map_tr (fun ing -> (ing,f)) neighbour_ingredients
 
 (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
  * we've already visited. *)
 let rec guarded_get_nth mem visited i chart it =
-        if not (VisitHistory.ok_to_visit visited it i) then
+        if not (VisitHistory.ok_to_visit visited it i) then (
                 None
-        else
+        ) else (
                 get_nth_best_derivation' mem visited i chart it
+        )
 
-(* The neighbours of a derivation are other derivations of the same item, that use 
- * the same route in their final step. *)
-and neighbours chart mem visited ((d,vec) : (derivation_tree * int list)) : (derivation_tree * int list) list =
-        let rec add_one_at_position p lst =
-                match (p,lst) with
-                | (_,[]) -> []
-                | (0,(x::xs)) -> (x+1)::xs
-                | (n,(x::xs)) -> x :: (add_one_at_position (n-1) xs)
+and get_n_best_all_routes mem n chart item visited routes : derivation_tree list =
+        let result = ref [] in
+        let candidates = ref (CandidateVectorQueue.empty) in
+        let initialise (antecedents,r,wt) =
+                if (antecedents = []) then
+                        (* Initialise result list with the one corresponding derivation. *)
+                        result := (make_derivation_tree item [] r wt)::(!result)
+                else
+                        (* Initialise with the result of the ``initial parsing phase''. *)
+                        let best_children = map_tr (get_best_derivation mem chart) antecedents in
+                        let best = make_derivation_tree item best_children r wt in
+                        candidates := CandidateVectorQueue.add' (!candidates) (best, (map_tr (fun x -> (x,1)) antecedents, fun cs -> make_derivation_tree item cs r wt)) ;
         in
-        let neighbour_vecs = map_tr (fun p -> add_one_at_position p vec) (range 0 (List.length vec)) in
-        let antecedent_items = map_tr get_root_item (get_children d) in
-        let derivation_from_vec vec =
-                let child_derivations = List.map2 (fun i -> fun it -> guarded_get_nth mem visited i chart it) vec antecedent_items in
-                match (require_no_nones child_derivations) with
-                | None -> None
-                | Some cs -> Some (make_derivation_tree (get_root_item d) cs (get_rule d) (Rule.get_weight (get_rule d)), vec)
-        in
-        optlistmap derivation_from_vec neighbour_vecs
-
-and get_n_best_by_route mem n chart item visited ((items,r,wt) : (Chart.item list * Rule.r * Util.weight)) : derivation_tree list =
-        match items with
-        | [] -> [make_derivation_tree item [] r wt]    (* if item is an axiom, there's only one derivation *)
-        | _ ->
-                let best_children = map_tr (get_best_derivation mem chart) items in
-                let best = make_derivation_tree item best_children r wt in
-                let result = ref [] in
-                let candidates = ref (CandidateQueue.singleton (best, map_tr (fun _ -> 1) items)) in
-                try
-                        while (List.length !result < n) do
-                                let (next,vec) = CandidateQueue.max_elt (!candidates) in
-                                (* We check for doubles because it's possible to end up at the same vector twice.
-                                 * For example, we might go from [1,1] to [1,2] to [2,2], or from [1,1] to [2,1] to [2,2].
-                                 * But ideally we would somehow prevent this doubling-up before building up the whole derivation itself. *)
-                                if (not (List.exists (deriv_equal next) !result)) then
-                                        result := next::(!result) ;
-                                candidates := CandidateQueue.remove (next,vec) (!candidates) ;
-                                let add_candidate x = (candidates := CandidateQueue.add x (!candidates)) in
-                                List.iter add_candidate (neighbours chart mem visited (next,vec))
-                        done ;
-                        !result
-                with Not_found -> !result
+        List.iter initialise routes ;
+        begin try
+                while (List.length !result < n) do
+                        let new_visited = VisitHistory.add visited item (List.length !result + 1) in
+                        let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
+                        candidates := new_cand ;
+                        if (not (List.exists (deriv_equal next) !result)) then
+                                result := next::(!result) ;
+                        let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
+                        List.iter add_candidate (neighbours recipe)
+                done
+        with Not_found -> () end ;
+        List.sort (>*>) (!result)
 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
@@ -213,8 +259,7 @@ and get_nth_best_derivation' mem visited n chart item =
         assert (n >= 1) ;
         try Hashtbl.find (!mem) (n, item)
         with Not_found ->
-                let lists = map_tr (get_n_best_by_route mem n chart item (VisitHistory.add visited item n)) (Chart.get_routes item chart) in
-                let n_best_overall = take n (List.sort (>*>) (List.concat lists)) in
+                let n_best_overall = get_n_best_all_routes mem n chart item visited (Chart.get_routes item chart) in
                 let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
                 Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                 result

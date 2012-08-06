@@ -48,7 +48,7 @@ let print_kbest k chart start_symbol input_list =
         let goal = goal_item start_symbol (List.length input_list) in
         let trees = Derivation.get_n_best k chart goal in
         Printf.printf "Here are the %d best derivations of item %s:\n" k (debug_str goal) ;
-        List.iter (fun t -> Printf.printf "%s\n" (Derivation.print_tree t)) trees
+        List.iter (fun t -> Printf.printf "%s\n" (Derivation.print_tree_compact t)) trees
 
 (****************************************************************************************)
 
