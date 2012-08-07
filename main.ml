@@ -106,7 +106,7 @@ let main () =
 			   else 
 			     (match options.kbest with
 			      | None -> ()
-			      | Some k -> print_kbest k chart start_symbol input_list
+			      | Some k -> print_kbest k (fun i -> Chart.get_routes i chart) start_symbol input_list
 			     )
 			  );
 			(* ditto for graphs *)

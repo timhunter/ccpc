@@ -4,6 +4,8 @@ open Util
  * The weight introduced by any individual step in the derivation can be determined from the corresponding rule. *)
 type derivation_tree = Leaf of Chart.item * Rule.r * weight | NonLeaf of Chart.item * derivation_tree list * Rule.r * weight
 
+type hgraph = Chart.item -> (Chart.item list * Rule.r * Util.weight) list
+
 let get_children t =
 	match t with
 	| Leaf(_,_,_) -> []
@@ -110,20 +112,20 @@ let rec get_derivations chart item =
 (* Returns None if all derivations of item involve returning to items we have previously visited; 
  * in other words, when there is no derivation of item that is part of the best derivation of all its parents. 
  * Note this means that this function never returns None if visited is empty. *)
-let rec get_best_derivation' chart visited item =
+let rec get_best_derivation' graph_fn visited item =
 
         let get_best_by_route (antecedents,r,wt) =
                 let new_visited = item::visited in
                 if (List.exists (fun v -> List.mem v antecedents) new_visited) then (* No loops in the best derivation *)
                         None
                 else
-                        let children = map_tr (get_best_derivation' chart new_visited) antecedents in
+                        let children = map_tr (get_best_derivation' graph_fn new_visited) antecedents in
                         match (require_no_nones children) with
                         | None -> None
                         | Some xs -> Some (make_derivation_tree item xs r wt)
         in
 
-        let routes = Chart.get_routes item chart in
+        let routes = graph_fn item in
         let candidates = optlistmap get_best_by_route routes in
         let result =
                 match (List.sort (>*>) candidates) with
@@ -134,11 +136,11 @@ let rec get_best_derivation' chart visited item =
 
 (* Wrapper for the above: assumes no history of visited nodes, and therefore 
  * does not return an option type. *) 
-let get_best_derivation mem chart item =
+let get_best_derivation mem graph_fn item =
         let result =
                 try Hashtbl.find (!mem) (1,item)
                 with Not_found ->
-                        let x = get_best_derivation' chart [] item in
+                        let x = get_best_derivation' graph_fn [] item in
                         Hashtbl.add (!mem) (1,item) x ;
                         x
         in
@@ -230,14 +232,14 @@ let neighbours (ingredients,f) =
 
 (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
  * we've already visited. *)
-let rec guarded_get_nth mem visited i chart it =
+let rec guarded_get_nth mem visited i graph_fn it =
         if not (VisitHistory.ok_to_visit visited it i) then (
                 None
         ) else (
-                get_nth_best_derivation' mem visited i chart it
+                get_nth_best_derivation' mem visited i graph_fn it
         )
 
-and get_n_best_all_routes mem n chart item visited routes : derivation_tree list =
+and get_n_best_all_routes mem n graph_fn item visited routes : derivation_tree list =
         let result = ref [] in
         let candidates = ref (CandidateVectorQueue.empty) in
         let initialise (antecedents,r,wt) =
@@ -246,7 +248,7 @@ and get_n_best_all_routes mem n chart item visited routes : derivation_tree list
                         result := (make_derivation_tree item [] r wt)::(!result)
                 else
                         (* Initialise with the result of the ``initial parsing phase''. *)
-                        let best_children = map_tr (get_best_derivation mem chart) antecedents in
+                        let best_children = map_tr (get_best_derivation mem graph_fn) antecedents in
                         let best = make_derivation_tree item best_children r wt in
                         candidates := CandidateVectorQueue.add' (!candidates) (best, (map_tr (fun x -> (x,1)) antecedents, fun cs -> make_derivation_tree item cs r wt)) ;
         in
@@ -254,7 +256,7 @@ and get_n_best_all_routes mem n chart item visited routes : derivation_tree list
         begin try
                 while (List.length !result < n) do
                         let new_visited = VisitHistory.add visited item (List.length !result + 1) in
-                        let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
+                        let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i graph_fn it) in
                         candidates := new_cand ;
                         if (not (List.exists (fun d -> ((d >*> next) = 0)) !result)) then
                                 result := next::(!result) ;
@@ -267,18 +269,18 @@ and get_n_best_all_routes mem n chart item visited routes : derivation_tree list
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
    This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
-and get_nth_best_derivation' mem visited n chart item =
+and get_nth_best_derivation' mem visited n graph_fn item =
         assert (n >= 1) ;
         try Hashtbl.find (!mem) (n, item)
         with Not_found ->
-                let n_best_overall = get_n_best_all_routes mem n chart item visited (Chart.get_routes item chart) in
+                let n_best_overall = get_n_best_all_routes mem n graph_fn item visited (graph_fn item) in
                 let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
                 Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                 result
 
-let get_n_best n chart item =
+let get_n_best n graph_fn item =
         let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
-        let lst = map_tr (fun i -> get_nth_best_derivation' mem VisitHistory.empty i chart item) (range 1 (n+1)) in
+        let lst = map_tr (fun i -> get_nth_best_derivation' mem VisitHistory.empty i graph_fn item) (range 1 (n+1)) in
         let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
         take_while_not_none lst
 
