@@ -9,4 +9,7 @@
 # (only relevant for the comments)
 
 set RENORM=./renormalize.m
+if (`hostname` == garvin.compling.cornell.edu) then
+	set RENORM="/usr/local/bin/MathematicaScript -script $RENORM"
+endif
 $RENORM $argv[1] | sed -f unquote.sed | sed -e 's/\\"/\"/g'|  sed -f twospaces.sed | perl -pe 's/\\n/\n/g'
