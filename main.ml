@@ -46,8 +46,7 @@ let rec process_args args acc =
 
 let print_kbest k chart start_symbol input_list =
         let goal = goal_item start_symbol (List.length input_list) in
-        let trees = Derivation.get_n_best k chart goal in
-        Printf.printf "Here are the %d best derivations of item %s:\n" k (debug_str goal) ;
+        let trees = Derivation.get_n_best_from_chart k chart goal in
         List.iter (fun t -> Printf.printf "%s\n" (Derivation.print_tree_compact t)) trees
 
 (****************************************************************************************)

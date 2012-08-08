@@ -122,6 +122,20 @@ module ChartAsGraph =
                 let show = Chart.debug_str
                 let tails c i = Chart.get_routes i c
         end
+module GrammarAsGraph =
+        struct
+                type v = string   (* nonterminals *)
+                type g = Rule.r list
+                let compare = Pervasives.compare   (* fine for strings *)
+                let show nonterm = nonterm
+                let tails rules nonterm =
+                        let relevant_rules = List.filter (fun r -> Rule.get_nonterm r = nonterm) rules in
+                        let get_children r = match (Rule.get_expansion r) with
+                                             | Rule.PublicTerminating _ -> []
+                                             | Rule.PublicNonTerminating(xs,_) -> Nelist.to_list xs
+                        in
+                        map_tr (fun r -> (get_children r, r, Rule.get_weight r)) relevant_rules
+        end
 
 module KBestCalculation = functor (Graph : HYPERGRAPH) ->
 struct
@@ -302,10 +316,19 @@ struct
 end (* end of the KBestCalculation functor *)
 
 module KBestFromChart = KBestCalculation(ChartAsGraph)
+module KBestFromGrammar = KBestCalculation(GrammarAsGraph)
 
-let get_n_best n chart item =
+(* FIXME: Some redundancy here, should be eliminated by moving slightly more code into the functor. *)
+
+let get_n_best_from_chart n chart item =
         let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
         let lst = map_tr (fun i -> KBestFromChart.get_nth_best_derivation' mem KBestFromChart.VisitHistory.empty i chart item) (range 1 (n+1)) in
+        let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
+        take_while_not_none lst
+
+let get_n_best_from_grammar n grammar nonterm =
+        let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
+        let lst = map_tr (fun i -> KBestFromGrammar.get_nth_best_derivation' mem KBestFromGrammar.VisitHistory.empty i grammar nonterm) (range 1 (n+1)) in
         let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
         take_while_not_none lst
 
