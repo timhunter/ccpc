@@ -11,6 +11,8 @@ val to_string: item -> string list -> string
 val debug_str : item -> string
 val debug_str_long : item -> chart -> string
 
+val compare_items : item -> item -> int
+
 val create : int -> chart 
 val add : chart -> item -> route -> unit
 val get_status : chart -> item -> route -> item_route_status

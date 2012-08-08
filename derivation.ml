@@ -29,7 +29,7 @@ let get_rule t =
  * this would mean that two distinct derivations could be considered equal for the purposes 
  * of sorting and k-best lists, which would destroy the one-to-one correspondence between 
  * derivation trees and what Huang & Chiang call 'dbp's. *)
-let rec (>*>) t1 t2 =
+let rec compare_derivations compare_vertices t1 t2 =
         let rec compare_lists f lst1 lst2 =
                 match lst1,lst2 with
                 | [],[] -> 0
@@ -41,11 +41,11 @@ let rec (>*>) t1 t2 =
         if (weight_result <> 0) then
                 weight_result
         else (
-                let children_result = compare_lists (>*>) (get_children t1) (get_children t2) in
+                let children_result = compare_lists (compare_derivations compare_vertices) (get_children t1) (get_children t2) in
                 if (children_result <> 0) then
                         children_result
                 else (
-                        let item_result = compare (Chart.debug_str (get_root_item t1)) (Chart.debug_str (get_root_item t2)) in
+                        let item_result = compare_vertices (get_root_item t1) (get_root_item t2) in
                         if (item_result <> 0) then
                                 item_result
                         else (
@@ -126,7 +126,7 @@ let rec get_best_derivation' chart visited item =
         let routes = Chart.get_routes item chart in
         let candidates = optlistmap get_best_by_route routes in
         let result =
-                match (List.sort (>*>) candidates) with
+                match (List.sort (compare_derivations Chart.compare_items) candidates) with
                 | [] -> None
                 | (x::_) -> Some x
         in
@@ -188,7 +188,7 @@ module CandidateVectorQueueFast : MYQUEUE =
                 module EvaluatedCandidateQueue = Set.Make(
                         struct
                                 type t = Chart.item derivation_tree * recipe
-                                let compare (d1,_) (d2,_) = d2 >*> d1
+                                let compare (d1,_) (d2,_) = compare_derivations Chart.compare_items d2 d1
                         end
                 )
                 type t = (recipe list) * EvaluatedCandidateQueue.t
@@ -256,13 +256,13 @@ and get_n_best_all_routes mem n chart item visited routes =
                         let new_visited = VisitHistory.add visited item (List.length !result + 1) in
                         let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
                         candidates := new_cand ;
-                        if (not (List.exists (fun d -> ((d >*> next) = 0)) !result)) then
+                        if (not (List.exists (fun d -> (compare_derivations Chart.compare_items d next = 0)) !result)) then
                                 result := next::(!result) ;
                         let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
                         List.iter add_candidate (neighbours recipe)
                 done
         with Not_found -> () end ;
-        List.sort (>*>) (!result)
+        List.sort (compare_derivations Chart.compare_items) (!result)
 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 

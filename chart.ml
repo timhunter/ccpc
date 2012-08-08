@@ -61,6 +61,9 @@ let debug_str_long item chart =
 	let backpointers_str = List.fold_left (^^) "" (map_tr show_backpointer (get_routes item chart)) in
 	("[" ^^ (string_of_int (Hashtbl.hash item)) ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ backpointers_str ^^ "]")
 
+let compare_items i1 i2 =
+        compare (debug_str i1) (debug_str i2)
+
 let create i = TableWithHistory (Hashtbl.create i)
 
 let add c item route =
