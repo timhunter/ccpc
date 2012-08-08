@@ -101,12 +101,12 @@ let main () =
 			    match parser_argument with
 			    | Parser.Sentence _ -> 
 			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-   			         List.iter print_endline (map_tr Derivation.print_tree goal_derivations)
+   			         List.iter print_endline (map_tr (Derivation.print_tree Chart.get_nonterm) goal_derivations)
    			    | _ -> failwith "-trees option is incompatible with prefix/infix mode"
 			   else 
 			     (match options.kbest with
 			      | None -> ()
-			      | Some k -> print_kbest k (fun i -> Chart.get_routes i chart) start_symbol input_list
+			      | Some k -> print_kbest k chart start_symbol input_list
 			     )
 			  );
 			(* ditto for graphs *)
