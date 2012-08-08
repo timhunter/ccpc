@@ -103,6 +103,15 @@ let rec get_derivations chart item =
 (**************************************************************************)
 (****** Stuff for computing k-best lists **********************************)
 
+module Graph =
+        struct
+                type v = Chart.item
+                type g = Chart.chart
+                let compare = Chart.compare_items
+                let show = Chart.debug_str
+                let tails c i = Chart.get_routes i c
+        end
+
 (* Viterbi search for the single best derivation. This in effect performs what 
  * Huang & Chiang call the ``initial parsing phase'' of their Algorithm 3, although 
  * we do it along the way whenever we need to find a 1-best derivation rather than 
@@ -123,10 +132,10 @@ let rec get_best_derivation' chart visited item =
                         | Some xs -> Some (make_derivation_tree item xs r wt)
         in
 
-        let routes = Chart.get_routes item chart in
+        let routes = Graph.tails chart item in
         let candidates = optlistmap get_best_by_route routes in
         let result =
-                match (List.sort (compare_derivations Chart.compare_items) candidates) with
+                match (List.sort (compare_derivations Graph.compare) candidates) with
                 | [] -> None
                 | (x::_) -> Some x
         in
@@ -144,18 +153,18 @@ let get_best_derivation mem chart item =
         in
         match result with
                 | Some d -> d
-                | None   -> failwith (Printf.sprintf "Couldn't find a best derivation for %s, even with an empty list of visited items\n" (Chart.debug_str item))
+                | None   -> failwith (Printf.sprintf "Couldn't find a best derivation for %s, even with an empty list of visited items\n" (Graph.show item))
 
 module VisitHistory :
         sig
                 type t
                 val empty : t
-                val add : t -> Chart.item -> int -> t
-                val ok_to_visit : t -> Chart.item -> int -> bool
+                val add : t -> Graph.v -> int -> t
+                val ok_to_visit : t -> Graph.v -> int -> bool
         end
 =
         struct
-                type t = (Chart.item, int) Hashtbl.t
+                type t = (Graph.v, int) Hashtbl.t
                 let empty = Hashtbl.create 20
                 let add hist item n =
                         let result = Hashtbl.copy hist in
@@ -174,21 +183,21 @@ module VisitHistory :
 module type MYQUEUE =
         sig
                 type t
-                type recipe = ((Chart.item * int) list) * (Chart.item derivation_tree list -> Chart.item derivation_tree)
+                type recipe = ((Graph.v * int) list) * (Graph.v derivation_tree list -> Graph.v derivation_tree)
                 val empty : t
                 val size : t -> int
                 val add : t -> recipe -> t
-                val add' : t -> (Chart.item derivation_tree * recipe) -> t
-                val max_elt : t -> (int -> Chart.item -> Chart.item derivation_tree option) -> ((Chart.item derivation_tree * recipe) * t)
+                val add' : t -> (Graph.v derivation_tree * recipe) -> t
+                val max_elt : t -> (int -> Graph.v -> Graph.v derivation_tree option) -> ((Graph.v derivation_tree * recipe) * t)
         end
 
 module CandidateVectorQueueFast : MYQUEUE =
         struct
-                type recipe = ((Chart.item * int) list) * (Chart.item derivation_tree list -> Chart.item derivation_tree)
+                type recipe = ((Graph.v * int) list) * (Graph.v derivation_tree list -> Graph.v derivation_tree)
                 module EvaluatedCandidateQueue = Set.Make(
                         struct
-                                type t = Chart.item derivation_tree * recipe
-                                let compare (d1,_) (d2,_) = compare_derivations Chart.compare_items d2 d1
+                                type t = Graph.v derivation_tree * recipe
+                                let compare (d1,_) (d2,_) = compare_derivations Graph.compare d2 d1
                         end
                 )
                 type t = (recipe list) * EvaluatedCandidateQueue.t
@@ -256,13 +265,13 @@ and get_n_best_all_routes mem n chart item visited routes =
                         let new_visited = VisitHistory.add visited item (List.length !result + 1) in
                         let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
                         candidates := new_cand ;
-                        if (not (List.exists (fun d -> (compare_derivations Chart.compare_items d next = 0)) !result)) then
+                        if (not (List.exists (fun d -> (compare_derivations Graph.compare d next = 0)) !result)) then
                                 result := next::(!result) ;
                         let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
                         List.iter add_candidate (neighbours recipe)
                 done
         with Not_found -> () end ;
-        List.sort (compare_derivations Chart.compare_items) (!result)
+        List.sort (compare_derivations Graph.compare) (!result)
 
 (* Return type: derivation_tree option
    Returns None if there are less than n derivations of item. 
@@ -271,7 +280,7 @@ and get_nth_best_derivation' mem visited n chart item =
         assert (n >= 1) ;
         try Hashtbl.find (!mem) (n, item)
         with Not_found ->
-                let n_best_overall = get_n_best_all_routes mem n chart item visited (Chart.get_routes item chart) in
+                let n_best_overall = get_n_best_all_routes mem n chart item visited (Graph.tails chart item) in
                 let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
                 Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                 result
