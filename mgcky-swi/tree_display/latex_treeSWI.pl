@@ -71,7 +71,7 @@ write_yields([],_).
 write_yields([First|Rest],Stream) :-
 	[Note,Tree] = First,
 	yield(Tree,Yield),
-	format(Stream, "~3f & ~s & \\\\~n", [Note,Yield]),
+	format(Stream, "~3f & \\textit{~s} & \\\\~n", [Note,Yield]),
 	write_yields(Rest,Stream).
 
 start_tree(Xmax, Ymax, Stream, Tree, Note) :-
