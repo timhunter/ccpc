@@ -7,13 +7,13 @@
 #                 at each prefix.
 
 if [ $# -ne 3 ] ; then
-        echo "Usage: $0 <grammar-file> <sentence> <kbest>" ;
+        echo "Usage: $0 <grammar-file> <sentence> <number-of-trees>" ;
         exit 1
 fi
 
 grammar=$1
 sentence=$2
-kbest=$3
+num_trees=$3
 
 if [ ! -f grammars/wmcfg/$grammar.wmcfg ] ; then
         echo "File grammars/wmcfg/$grammar.wmcfg does not exist"
@@ -27,7 +27,7 @@ echo "Sentence is: $sentence"
 echo "============================"
 
 function get_prefixes () {
-        echo $1 | awk '
+        awk '
                 {
                         for (i=0; i<=NF; i++) {
                                 prefix="";
@@ -42,7 +42,7 @@ function get_prefixes () {
 }
 
 function get_tables () {
-        cat $1 | awk '
+        awk '
                 BEGIN { x=0 }
                 {
                         if ($0 ~ /\\begin{table}/) {x=1;}
@@ -60,16 +60,15 @@ function no_spaces () {
 tables_file=$grammar.`no_spaces "$sentence"`.combined.$$.tex
 
 
-get_prefixes "$sentence" |\
+echo "$sentence" | get_prefixes |\
 while read prefix ; do
-        prefix_no_spaces=`no_spaces "$prefix"`
-        id=/tmp/$grammar.$prefix_no_spaces.$$
+        id=/tmp/$grammar.`no_spaces "$prefix"`.$$
         ./mcfg_nt grammars/wmcfg/$grammar.wmcfg -intersect -p "$prefix" > $id.chart
         ./renormalize.csh $id.chart > $id.global.chart
-        ./visualize -sample $id.global.chart $3 $id.tex >/dev/null
+        ./visualize -sample $id.global.chart $num_trees $id.tex $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
-        get_tables $id.tex >> $tables_file
+        cat $id.tex | get_tables >> $tables_file
         rm -f $id.chart $id.global.chart `basename $id`.aux `basename $id`.log
 done
 
