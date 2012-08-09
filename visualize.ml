@@ -255,6 +255,27 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
         in
         check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
+(* Converts a tree of type:  string Derivation.derivation_tree
+ * into a pair of type:     (string Generate.tree * Num.num)
+ * FIXME: This is fairly ugly. We should eliminate one or the other tree type altogether. *)
+let rec convert_tree (dtree : string Derivation.derivation_tree) : (string Generate.tree * Num.num) =
+        let (children, root) = (Derivation.get_children dtree, Derivation.get_root_item dtree) in
+        let new_tree =
+                match children with
+                | [] -> let str = match (Rule.get_expansion (Derivation.get_rule dtree)) with
+                                  | Rule.PublicTerminating s -> s
+                                  | _ -> failwith "convert_tree: Node has no children but not a terminating rule" in
+                        NonLeaf (root, [Leaf str], Derivation.get_rule dtree)
+                | _ -> NonLeaf (root, map_tr fst (map_tr convert_tree children), Derivation.get_rule dtree)
+        in
+        let weight_as_num =
+                let w = Derivation.get_weight dtree in
+                match (weight_numerator w, weight_denominator w) with
+                | (Some n, Some d) -> Num.div_num n d
+                | otherwise -> failwith "convert_tree: This tree is unweighted"
+        in
+        (new_tree, weight_as_num)
+
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
 	let dict = get_guillaumin_dict grammar_files.dict_file in
@@ -264,8 +285,9 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                 match mode with
                 | KBest ->
                         if (optional_seed <> None) then Printf.eprintf "*** WARNING: using kbest mode, so ignoring random seed\n" ;
-                        Printf.eprintf "*** KBest mode not implemented yet, returning an empty list of derivations\n" ;
-                        ([], "exact k-best enumeration of most likely derivations")
+                        let (rules, start_symbol) = Grammar.get_input_grammar grammar_files.wmcfg_file in
+                        let derivation_trees = Derivation.get_n_best_from_grammar num_trees rules start_symbol in  (* of the type declared in derivation.ml *)
+                        (map_tr convert_tree derivation_trees, "exact k-best enumeration of most likely derivations")
                 | Sample ->
                         begin
                         let random_seed =
