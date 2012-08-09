@@ -31,12 +31,12 @@
 %%% Tim Hunter, October 2011
 %%% Zhong Chen, August 2012
 
-latex_trees(IntroLines, Prefix, Entropy, Trees, Filename) :-
+latex_trees(IntroLines, PrefixNote, EntropyNote, Trees, Filename) :-
 	start_file(IntroLines, Filename, Stream),
 	format(Stream, "\\section*{Surface strings}~n", []),
 	format(Stream, "\\begin{table}[h!t]~n", []),
 	format(Stream, "\\centering~n", []),
-	format(Stream, "\\caption{Prefix: ~w}~n", [Prefix]),
+	format(Stream, "\\caption{~w}~n", [PrefixNote]),
 	format(Stream, "\\begin{tabular}{lll}    % every yield will be a row in this table~n", []),
 	format(Stream, "\\hline~n", []),
 	format(Stream, "Probability & Remainder & Type\\\\~n", []),
@@ -44,7 +44,7 @@ latex_trees(IntroLines, Prefix, Entropy, Trees, Filename) :-
 	write_yields(Trees, Stream),
 	format(Stream, "\\dots & \\dots & \\dots \\\\~n", []),
 	format(Stream, "\\hline~n", []),
-	format(Stream, "Entropy = ~3f &  & \\\\~n", [Entropy]),
+	format(Stream, "~w &  & \\\\~n", [EntropyNote]),
 	format(Stream, "\\hline~n", []),
 	format(Stream, "\\end{tabular}~n", []),
 	format(Stream, "\\end{table}~n", []),

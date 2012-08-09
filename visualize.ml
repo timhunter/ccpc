@@ -226,17 +226,17 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			                    "\\\\\\\\end{itemize}" ;
 			                  ] in
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
-			let entropy = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\(\* entropy = [0-9\.]* \*\)/ {print $4}'") with
-			              | None -> "Could not find entropy"
-			              | Some s -> s
+			let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\(\* entropy = [0-9\.]* \*\)/ {print $4}'") with
+			                   | None -> "Could not find entropy"
+			                   | Some s -> try Printf.sprintf "Entropy = %.3f" (float_of_string s) with _ -> "Could not find entropy"
 			in
-			let prefix = match (get_comment_data grammar_files.wmcfg_file
+			let prefix_note = match (get_comment_data grammar_files.wmcfg_file
 			                    "awk ' /^\(\* intersected with prefix: .* \*\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
-			             | None -> "Could not find intersection prefix"
-			             | Some s -> s
+			                  | None -> "Could not find intersection prefix"
+			                  | Some s -> Printf.sprintf "Prefix: %s" s
 			in
-			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s',%f,%s,'%s').\" 2>/dev/null" in
-			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string prefix (float_of_string entropy) derivations_as_string filename in
+			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s','%s',%s,'%s').\" 2>/dev/null" in
+			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string prefix_note entropy_note derivations_as_string filename in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
