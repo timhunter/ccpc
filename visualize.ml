@@ -352,8 +352,8 @@ exception BadCommandLineArguments
 
 let main () =
         try
-                if not ((Array.length Sys.argv = 5) || (Array.length Sys.argv = 6)) then (prerr_endline "1" ; raise BadCommandLineArguments) ;
-                let mode = match Sys.argv.(1) with "-kbest" -> KBest | "-sample" -> Sample | _ -> (prerr_endline "2" ; raise BadCommandLineArguments) in
+                if not ((Array.length Sys.argv = 5) || (Array.length Sys.argv = 6)) then raise BadCommandLineArguments ;
+                let mode = match Sys.argv.(1) with "-kbest" -> KBest | "-sample" -> Sample | _ -> raise BadCommandLineArguments in
                 let grammar_file = Sys.argv.(2) in
                 let num_trees = try int_of_string Sys.argv.(3)
                                 with _ -> raise BadCommandLineArguments in
