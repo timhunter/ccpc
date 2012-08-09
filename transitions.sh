@@ -6,14 +6,24 @@
 #             (b) a tex file bringing together the tables of surfaces strings 
 #                 at each prefix.
 
-if [ $# -ne 3 ] ; then
-        echo "Usage: $0 <grammar-file> <sentence> <number-of-trees>" ;
+function print_usage_exit () {
+        echo "Usage: $0 <mode> <grammar-file> <sentence> <number-of-trees>"
+        echo "       where <mode> is either '-sample' or '-kbest'"
         exit 1
+}
+
+if [ $# -ne 4 ] ; then
+        print_usage_exit
 fi
 
-grammar=$1
-sentence=$2
-num_trees=$3
+mode=$1
+grammar=$2
+sentence=$3
+num_trees=$4
+
+if [ "$mode" != "-kbest" ] && [ "$mode" != "-sample" ] ; then
+        print_usage_exit
+fi
 
 if [ ! -f grammars/wmcfg/$grammar.wmcfg ] ; then
         echo "File grammars/wmcfg/$grammar.wmcfg does not exist"
@@ -65,7 +75,7 @@ while read prefix ; do
         id=/tmp/$grammar.`no_spaces "$prefix"`.$$
         ./mcfg_nt grammars/wmcfg/$grammar.wmcfg -intersect -p "$prefix" > $id.chart
         ./renormalize.csh $id.chart > $id.global.chart
-        ./visualize -sample $id.global.chart $num_trees $id.tex $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
+        ./visualize $mode $id.global.chart $num_trees $id.tex $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         cat $id.tex | get_tables >> $tables_file
