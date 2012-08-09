@@ -8,7 +8,7 @@ set VISUAL=./visualize
 set KBEST=$argv[3]
 $PARSE grammars/wmcfg/$GRAMMAR.wmcfg -intersect -p "$argv[2]" >! $GRAMMAR.$PREFIX.chart
 $RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
-$VISUAL $GRAMMAR.$PREFIX.global.chart $KBEST $GRAMMAR.$PREFIX.global.tex
+$VISUAL -sample $GRAMMAR.$PREFIX.global.chart $KBEST $GRAMMAR.$PREFIX.global.tex
 pdflatex $GRAMMAR.$PREFIX.global.tex
 echo "*** Resulting pdf file is: $GRAMMAR.$PREFIX.global.pdf"
 rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.chart $GRAMMAR.$PREFIX.global.tex $GRAMMAR.$PREFIX.global.aux $GRAMMAR.$PREFIX.global.log

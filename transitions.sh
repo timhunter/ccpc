@@ -65,8 +65,8 @@ while read prefix ; do
         prefix_no_spaces=`no_spaces "$prefix"`
         id=/tmp/$grammar.$prefix_no_spaces.$$
         ./mcfg_nt grammars/wmcfg/$grammar.wmcfg -intersect -p "$prefix" > $id.chart
-	./renormalize.csh $id.chart > $id.global.chart
-        ./visualize $id.global.chart $3 $id.tex >/dev/null
+        ./renormalize.csh $id.chart > $id.global.chart
+        ./visualize -sample $id.global.chart $3 $id.tex >/dev/null
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         get_tables $id.tex >> $tables_file

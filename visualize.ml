@@ -4,6 +4,8 @@ open Generate
 
 type grammar_files = {mg_file : string ; wmcfg_file : string ; dict_file : string}
 
+type mode = KBest | Sample
+
 (************************************************************************************************
 Tool for visualising the "expected" derivations of a weighted grammar; in particular for 
 visualising the "expected" continuations of a prefix, based on the weighted intersection grammar 
@@ -201,7 +203,7 @@ let get_timestamp () =
 	Printf.sprintf "%04d-%02d-%02d %02d:%02d:%02d" (tm.Unix.tm_year + 1900) (tm.Unix.tm_mon + 1) tm.Unix.tm_mday tm.Unix.tm_hour tm.Unix.tm_min tm.Unix.tm_sec;;
 
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
-let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist * num) list) filename =
+let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist * num) list) filename =
 
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
 	   (and deals properly with rule markers in amongst the ids). *)
@@ -217,10 +219,10 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
 			let intro_lines = [ "Here are some lines of latex code that go at the top of the file."; 
 			                    "Other useful info can be added here.";
 			                    "\\\\\\\\begin{itemize}" ;
-			                    Printf.sprintf "\\\\\\\\item random seed: %d" random_seed ;
-			                    Printf.sprintf "\\\\\\\\item WMCFG grammar file used for sampling: %s" grammar_files.wmcfg_file ;
+			                    Printf.sprintf "\\\\\\\\item %s" mode_note ;
+			                    Printf.sprintf "\\\\\\\\item WMCFG grammar file: %s" grammar_files.wmcfg_file ;
 			                    Printf.sprintf "\\\\\\\\item md5sum for this grammar file: %s" (Digest.to_hex (Digest.file grammar_files.wmcfg_file)) ;
-			                    Printf.sprintf "\\\\\\\\item timestamp for generating this sample: %s" (get_timestamp ()) ;
+			                    Printf.sprintf "\\\\\\\\item timestamp: %s" (get_timestamp ()) ;
 			                    "\\\\\\\\end{itemize}" ;
 			                  ] in
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
@@ -253,36 +255,46 @@ let save_to_file random_seed grammar_files prolog_file (derivations : (int dlist
         in
         check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
-let run_visualization grammar_files prolog_file kbest output_filename optional_seed =
+let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
 	let dict = get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 
-	let random_seed =
-		match optional_seed with
-		| None -> Random.self_init () ; Random.int 1000
-		| Some n -> n
-	in
-	Printf.eprintf "Using random seed %d\n" random_seed ;
-	Random.init random_seed ;
-
-	let treelist = generate grammar_files.wmcfg_file in
-	let kbest_trees = take kbest treelist in (*List.map (fun i -> List.nth treelist i) (range 0 kbest) in*)
+        let (trees,mode_note) =
+                match mode with
+                | KBest ->
+                        if (optional_seed <> None) then Printf.eprintf "*** WARNING: using kbest mode, so ignoring random seed\n" ;
+                        Printf.eprintf "*** KBest mode not implemented yet, returning an empty list of derivations\n" ;
+                        ([], "exact k-best enumeration of most likely derivations")
+                | Sample ->
+                        begin
+                        let random_seed =
+                                match optional_seed with
+                                | None -> Random.self_init () ; Random.int 1000
+                                | Some n -> n
+                        in
+                        Printf.eprintf "Using random seed %d\n" random_seed ;
+                        Random.init random_seed ;
+                        (take num_trees (generate grammar_files.wmcfg_file), Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
+                        end
+        in
 
 	let process_tree (tree,weight) =
                 let sentence = Generate.get_sentence tree in 
                 Printf.printf "%.6g %s\n" (float_of_num weight) (String.concat " " sentence) ;
 	in
-	List.iter process_tree kbest_trees ;
+	List.iter process_tree trees ;
 
-	let kbest_derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) kbest_trees in
-	save_to_file random_seed grammar_files prolog_file kbest_derivations output_filename
+	let derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) trees in
+	save_to_file mode_note grammar_files prolog_file derivations output_filename
 
 (************************************************************************************************)
 
 let print_usage () =
 	Printf.eprintf "\n" ;
-	Printf.eprintf "Usage: %s <grammar file> <number of trees> <output file> (<random seed>)\n" Sys.argv.(0) ;
+	Printf.eprintf "Usage: %s (-kbest|-sample) <grammar file> <number of trees> <output latex file> (<random seed>)\n" Sys.argv.(0) ;
+	Printf.eprintf "\n" ;
+	Printf.eprintf "Exactly one of -kbest or -sample should be given. Random seed is ignored if -kbest is specified.\n" ;
 	Printf.eprintf "\n" ;
 	Printf.eprintf "The grammar file should\n" ;
 	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
@@ -314,20 +326,26 @@ let identify_original_grammar grammar_file =
 		else
 			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg/$NAME.wmcfg" orig_grammar)
 
+exception BadCommandLineArguments
+
 let main () =
-	if (Array.length Sys.argv = 4) || (Array.length Sys.argv = 5) then (
-		let grammar_file = Sys.argv.(1) in
-		let kbest = int_of_string Sys.argv.(2) in
-		let output_filename = Sys.argv.(3) in
-		let random_seed = if (Array.length Sys.argv = 5) then (Some (int_of_string Sys.argv.(4))) else None in
-		let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
-		let prolog_file  = "mgcky-swi/setup.pl" in
-		let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
-		                      wmcfg_file = grammar_file ;
-		                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
-		                    } in
-		run_visualization grammar_files prolog_file kbest output_filename random_seed
-	) else
-		print_usage ()
+        try
+                if not ((Array.length Sys.argv = 5) || (Array.length Sys.argv = 6)) then (prerr_endline "1" ; raise BadCommandLineArguments) ;
+                let mode = match Sys.argv.(1) with "-kbest" -> KBest | "-sample" -> Sample | _ -> (prerr_endline "2" ; raise BadCommandLineArguments) in
+                let grammar_file = Sys.argv.(2) in
+                let num_trees = try int_of_string Sys.argv.(3)
+                                with _ -> raise BadCommandLineArguments in
+                let output_filename = Sys.argv.(4) in
+                let random_seed = try if (Array.length Sys.argv = 6) then (Some (int_of_string Sys.argv.(5))) else None
+                                  with _ -> raise BadCommandLineArguments in
+                let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
+                let prolog_file  = "mgcky-swi/setup.pl" in
+                let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
+                                      wmcfg_file = grammar_file ;
+                                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
+                                    } in
+                run_visualization grammar_files prolog_file num_trees output_filename mode random_seed
+        with BadCommandLineArguments ->
+                print_usage ()
 
 let _ = if (!Sys.interactive) then () else main ()
