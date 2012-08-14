@@ -141,13 +141,13 @@
 []::[='V-Decl',='Case','v-Decl'].
 []::[='V-Rel',='Case','v-Rel'].
 []::[='V-Comp',='Case','v-Comp'].
-[]::[='V-Adj',='Case','v-Adj'].
+%[]::[='V-Adj',='Case','v-Adj'].
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp'].
-[]::[='v-Adj',+nom,'T-Adj'].
+%[]::[='v-Adj',+nom,'T-Adj'].
 
 % Complimentizer for declarative clauses
 []::[='T-Decl','C-Decl'].
