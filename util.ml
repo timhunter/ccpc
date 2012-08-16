@@ -55,6 +55,11 @@ let rec take n lst =
     | [] -> []
     | (x::xs) -> x :: (take (n-1) xs)
 
+let rec take_while p lst =
+  match lst with
+  | [] -> []
+  | (x::xs) -> if p x then (x::(take_while p xs)) else []
+
 let optlistmap f xs =
   let rec optlistmap' f lst acc =
     match lst with

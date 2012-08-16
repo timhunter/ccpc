@@ -202,6 +202,9 @@ let get_timestamp () =
 	let tm = Unix.localtime(Unix.gettimeofday ()) in
 	Printf.sprintf "%04d-%02d-%02d %02d:%02d:%02d" (tm.Unix.tm_year + 1900) (tm.Unix.tm_mon + 1) tm.Unix.tm_mday tm.Unix.tm_hour tm.Unix.tm_min tm.Unix.tm_sec;;
 
+(* We report the number of parses that have probability greater than this threshold *)
+let const_THRESHOLD = div_num (num_of_int 1) (num_of_int 1000)
+
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
 let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist * num) list) filename =
 
@@ -228,7 +231,11 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
 			let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\(\* entropy = [0-9\.]* \*\)/ {print $4}'") with
 			                   | None -> "Could not find entropy"
-			                   | Some s -> try Printf.sprintf "Entropy = %.3f" (float_of_string s) with _ -> "Could not find entropy"
+			                   | Some s -> try Printf.sprintf "Entropy = %.3f, with %d parses above %.3f"
+			                                                  (float_of_string s)
+			                                                  (List.length (take_while (fun (_,w) -> w >/ const_THRESHOLD) derivations))
+			                                                  (float_of_num const_THRESHOLD)
+			                               with _ -> "Could not find entropy"
 			in
 			let prefix_note = match (get_comment_data grammar_files.wmcfg_file
 			                    "awk ' /^\(\* intersected with prefix: .* \*\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
