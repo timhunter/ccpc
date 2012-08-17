@@ -7,6 +7,6 @@ set RENORM=./renormalize.csh
 set VISUAL=./visualize
 $PARSE grammars/wmcfg/$GRAMMAR.wmcfg -intersect -p "$argv[2]" >! $GRAMMAR.$PREFIX.chart
 $RENORM $GRAMMAR.$PREFIX.chart >! $GRAMMAR.$PREFIX.global.chart
-$VISUAL -sample $GRAMMAR.$PREFIX.global.chart 100 $GRAMMAR.$PREFIX.global.tex
+$VISUAL -kbest $GRAMMAR.$PREFIX.global.chart 100 $GRAMMAR.$PREFIX.global.tex
 pdflatex $GRAMMAR.$PREFIX.global.tex
 rm $GRAMMAR.$PREFIX.chart $GRAMMAR.$PREFIX.global.tex $GRAMMAR.$PREFIX.global.aux $GRAMMAR.$PREFIX.global.log
