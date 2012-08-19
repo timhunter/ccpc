@@ -310,7 +310,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
 
 	let process_tree (tree,weight) =
                 let sentence = Generate.get_sentence tree in 
-                Printf.printf "%.6g %s\n" (float_of_num weight) (String.concat " " sentence) ;
+                Printf.printf "%.6g\t%s\n" (float_of_num weight) (String.concat " " sentence) ;
 	in
 	List.iter process_tree trees ;
 
