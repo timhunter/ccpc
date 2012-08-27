@@ -1,5 +1,5 @@
 
-Prerequisites: OCaml, Mathematica, pdflatex.
+Prerequisites: OCaml, Mathematica, pdflatex, swipl.
 
 ===========================================
 ==== Working with the bundled grammars ====
@@ -25,12 +25,16 @@ simple things like:
       ./mcfg_nt grammars/wmcfg/strauss.wmcfg -intersect -p "Jon hit"
 
 To view the ``predictions'' of a normalized intersection grammar, use the 
-topstrings.csh script, which requires two arguments: the basename of the 
-(pre-intersection) grammar file inside the grammars/wmcfg directory, and the 
-prefix to intersect it with. For example:
-      ./topstrings.csh larsonian1 "the story"
-This will generate a PDF file showing up to 100 likely parses that are 
-consistent with the specified grammar and prefix.
+transitions.sh script, which requires four command-line arguments: a choice of 
+``mode'', which is either `-kbest' or `-sample'; the basename of the 
+(pre-intersection) grammar file inside the grammars/wmcfg directory; the 
+initial fragment of the sentence you're interested in; and the number of 
+derivations to show. For example:
+      ./transitions -kbest larsonian1 "the story" 30
+This will generate three PDF files, one for each of three positions in the 
+sentence up to this point (i.e. one for each of the three prefixes "", "the" 
+and "the story"), each showing the 30 best parses that are possible from that 
+position.
 
 =================================================
 ==== Adding or modifying Minimalist Grammars ====
@@ -106,11 +110,10 @@ the sort that connect strauss.wmcfg back to a Minimalist Grammar. This does
 not cause a problem for anything you want to do using mcfg_nt, which only 
 uses the wmcfg file you provide on the command line itself.
 
-But topstrings.csh (and the underlying executable visualize, which does the 
+But transitions.sh (and the underlying executable visualize, which does the 
 heavy lifting there) assumes that the MCFG it is given is the translation 
 of an MG, and uses the associated files in grammars/{mcfg,mg} to 
-``un-translate'' the sampled derivations back into MG derivations; notice 
-that the trees in the PDF produced by topstrings.csh shows MG derived trees 
-(or X-bar trees). So there is currently no equivalent way to sample the 
-likely derivations for a standalone MCFG.
+``un-translate'' the likely derivations back into MG derivations; notice 
+that the trees in the PDFs produced by transitions.sh shows MG derived trees 
+(or X-bar trees).
 

@@ -63,7 +63,7 @@ let main () =
 		Printf.eprintf "  If more than one is given, -intersect trumps everything else, and -trees trumps -kbest.\n" ;
 		Printf.eprintf "      -intersect     Prints intersection grammar to stdout\n" ;
 		Printf.eprintf "      -trees         Prints (all) derivation trees to stdout (not compatible with prefix or infix mode)\n" ;
-		Printf.eprintf "      -kbest <k>     Prints the best <k> derivation trees to stdout (WARNING: UNSTABLE and/or VERY SLOW)\n" ;
+		Printf.eprintf "      -kbest <k>     Prints the best <k> derivation trees to stdout\n" ;
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Only one of the following two flags will take effect. If more than one is given, \n" ;
 		Printf.eprintf "  the last one overrides all others. If neither is given, the string is treated as 'exact'.\n" ;
