@@ -22,7 +22,7 @@ OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo c
 OCAMLINT= util.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi
 OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx
 
-all: $(EXE)_nt train visualize
+all: $(EXE)_nt train visualize cycles
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc)  main.cmo
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma unix.cma graph.cma $(OCAMLOBJ_bc) main.cmo
@@ -36,11 +36,14 @@ train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
 visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) visualize.cmx
 
+cycles: $(OCAMLINT) $(OCAMLOBJ_nt) cycles.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) cycles.cmx
+
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
 	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx
-	rm -f $(EXE)_bc $(EXE)_nt train visualize
+	rm -f $(EXE)_bc $(EXE)_nt train visualize cycles
 
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 
