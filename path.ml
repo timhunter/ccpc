@@ -69,7 +69,6 @@ end
 
 (***********************************************************************************)
 
-type 'a choice = 'a list * 'a * 'a list
 type 'a history = ('a, 'a list * 'a list * Util.weight) MyList.t
 
 let singleton x = MyList.singleton x
