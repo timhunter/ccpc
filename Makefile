@@ -17,10 +17,10 @@ YACC=ocamlyacc
 GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 FLAGS= -I mcfgread -I +ocamlgraph
-OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo 
+OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo path.cmo
 
-OCAMLINT= util.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi
-OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx
+OCAMLINT= util.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi path.cmi
+OCAMLOBJ_nt= util.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx path.cmx
 
 all: $(EXE)_nt train visualize cycles
 
