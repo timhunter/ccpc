@@ -57,10 +57,10 @@
 []::[=>'V',='Poss','vRel']. %v
 
 % Nothing special for T; 
- []::[='vRel',+case,'TRel'].
+ []::[='vRel',+case,'TRel',-f].
 
 % Wh-hoisting complementizer
- []::[='TRel','CRel',-f].
+ []::[='TRel','CRel'].
 
  [de]::[='CRel',+f,'F'].
 
