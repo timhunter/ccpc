@@ -1,27 +1,27 @@
-474 N nom N acc Vtd
-264 pro N acc Vtd
-12 N nom pro Vtd
-2592 N nom Vid
+474 N Nom N Acc Vtd
+264 pro N Acc Vtd
+12 N Nom pro Vtd
+2592 N Nom Vid
 312 pro Vid
-156 N nom N acc Vtn fact nom N acc Vtd
-547 pro N acc Vtn fact nom N acc Vtd
-6 N nom pro Vtn fact nom N acc Vtd
-12 pro pro Vtn fact nom N acc Vtd
-475 N nom Vin fact nom N acc Vtd
-138 pro Vin fact nom N acc Vtd
-543 t N acc Vtn N nom N acc Vtd
-125 N nom t Vtn N nom N acc Vtd
-4 t pro Vtn N nom N acc Vtd
-10 pro t Vtn N nom N acc Vtd
-2311 t Vin N nom N acc Vtd
-780 N nom N acc Vtn fact nom Vid
-2735 pro N acc Vtn fact nom Vid
-30 N nom pro Vtn fact nom Vid
-60 pro pro Vtn fact nom Vid
-2375 N nom Vin fact nom Vid
-690 pro Vin fact nom Vid
-2715 t N acc Vtn N nom Vid
-625 N nom t Vtn N nom Vid
-20 t pro Vtn N nom Vid
-50 pro t Vtn N nom Vid
-11555 Vin N nom Vid
+156 N Nom N Acc Vtn fact Nom N Acc Vtd
+547 pro N Acc Vtn fact Nom N Acc Vtd
+6 N Nom pro Vtn fact Nom N Acc Vtd
+12 pro pro Vtn fact Nom N Acc Vtd
+475 N Nom Vin fact Nom N Acc Vtd
+138 pro Vin fact Nom N Acc Vtd
+543 t N Acc Vtn N Nom N Acc Vtd
+125 N Nom t Vtn N Nom N Acc Vtd
+4 t pro Vtn N Nom N Acc Vtd
+10 pro t Vtn N Nom N Acc Vtd
+2311 t Vin N Nom N Acc Vtd
+780 N Nom N Acc Vtn fact Nom Vid
+2735 pro N Acc Vtn fact Nom Vid
+30 N Nom pro Vtn fact Nom Vid
+60 pro pro Vtn fact Nom Vid
+2375 N Nom Vin fact Nom Vid
+690 pro Vin fact Nom Vid
+2715 t N Acc Vtn N Nom Vid
+625 N Nom t Vtn N Nom Vid
+20 t pro Vtn N Nom Vid
+50 pro t Vtn N Nom Vid
+11555 Vin N Nom Vid
