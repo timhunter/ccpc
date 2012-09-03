@@ -112,7 +112,7 @@
 [yumyenghan]::['V-Comp'].	% be famous
 [hwanan]::['V-Rel'].		% get angry
 [hwanan]::['V-Comp'].		% get angry
-['Vin']::['V-Rel'].			% intransitive verb in adnominal form in relative clauses (abstracted)
+['Vin']::['V-SRel'].			% intransitive verb in adnominal form in relative clauses (abstracted)
 ['Vin']::['V-Comp'].		% intransitive verb in adnominal form in complement clauses (abstracted)
 
 % Two-place predicates
