@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_pronominal2.pl
+%   File   : korean_adjunction2.pl
 %   Author : Jiwon Yun
 %   Last Updated: September 2, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7,11 +7,12 @@
 % - simple SV sentences
 % - simple SOV sentences
 % - pro-drop sentences (in matrix/adjunct/complement clauses) -> no adjunct
-% - relative clauses (under pronominal analyses)
+% - relative clauses (under adjunction analyses)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% the same as korean_pronominal.pl
+% the same as korean_adjunction.pl
 % except that traces have different grandparent nodes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Arguments
@@ -73,10 +74,6 @@
 []::['Case',-nom].
 []::['Case',-acc].
 
-% trace
-[]::['Case-t',-nom].
-[]::['Case-t',-acc].
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Predicates
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,7 +109,7 @@
 [yumyenghan]::['V-Comp'].	% be famous
 %[hwanan]::['V-Rel'].		% get angry
 [hwanan]::['V-Comp'].		% get angry
-['Vin']::['V-SR'].			% intransitive verb in adnominal form in relative clauses (abstracted)
+['Vin']::['V-SR'].		% intransitive verb in adnominal form in relative clauses (abstracted)
 ['Vin']::['V-Comp'].		% intransitive verb in adnominal form in complement clauses (abstracted)
 
 % Two-place predicates
@@ -162,7 +159,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Relative Clauses
-% (pronominal analysis)
+% (adjunction analysis)
 %
 % e.g.
 % showParse([uywon,ul,kongkyekhan,kica,ka,phyencipcang,ul,silhehanta]). 
@@ -171,20 +168,21 @@
 % 'The reporter who the senator attacked hates the editor.'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% gaps are just pros.
+% Null wh operator (Case/D)
+ []::['Case-t',-nom,-wh].
+ []::['Case-t',-acc,-wh].
 
 % Nothing special for T
-[]::[='v-SR',+nom,'T-SR'].
-[]::[='v-OR',+nom,'T-OR'].
+ []::[='v-SR',+nom,'T-SR'].
+ []::[='v-OR',+nom,'T-OR'].
 
-% Nothing special for C
-[]::[='T-SR','C-SR'].
-[]::[='T-OR','C-OR'].
+% Wh-hoisting complementizer
+ []::[='T-SR',+wh,'C-SR'].
+ []::[='T-OR',+wh,'C-OR'].
 
 % Relative CP can left-adjoin onto the head noun
-['C-SR']>>['Case'].
-['C-OR']>>['Case'].
-
+ ['C-SR']>>['Case'].
+ ['C-OR']>>['Case'].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Complement clauses (fact-clause)
