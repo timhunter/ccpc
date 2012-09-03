@@ -108,17 +108,17 @@
 % The same adnominal form is used for both relative and complement clauses.
 
 % One-place predicates
-[yumyenghan]::['V-Rel'].	% be famous
+%[yumyenghan]::['V-Rel'].	% be famous
 [yumyenghan]::['V-Comp'].	% be famous
-[hwanan]::['V-Rel'].		% get angry
+%[hwanan]::['V-Rel'].		% get angry
 [hwanan]::['V-Comp'].		% get angry
 ['Vin']::['V-SRel'].			% intransitive verb in adnominal form in relative clauses (abstracted)
 ['Vin']::['V-Comp'].		% intransitive verb in adnominal form in complement clauses (abstracted)
 
 % Two-place predicates
-[kongkyekhan]::[='Case',+acc,'V-Rel'].	% attack
+%[kongkyekhan]::[='Case',+acc,'V-Rel'].	% attack
 [kongkyekhan]::[='Case',+acc,'V-Comp'].	% attack
-[hyeppakhan]::[='Case',+acc,'V-Rel'].	% threaten
+%[hyeppakhan]::[='Case',+acc,'V-Rel'].	% threaten
 [hyeppakhan]::[='Case',+acc,'V-Comp'].	% threaten
 ['Vtn']::[='Case-t',+acc,'V-ORel'].		% transitive verb in adnominal form in relative clauses (abstracted)
 ['Vtn']::[='Case',+acc,'V-SRel'].		% transitive verb in adnominal form in relative clauses (abstracted)
