@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   File   : korean_pronominal2.pl
+%   File   : korean_pronominal3.pl
 %   Author : Jiwon Yun
 %   Last Updated: September 2, 2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,7 +10,7 @@
 % - relative clauses (under pronominal analyses)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the same as korean_pronominal.pl
-% except that empty categories are marked overtly
+% except that traces have different grandparent nodes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -174,7 +174,8 @@
 % gaps are just pros.
 
 % Nothing special for T
-[]::[='v-Rel',+nom,'T-Rel'].
+[]::[='v-SRel',+nom,'T-Rel'].
+[]::[='v-ORel',+nom,'T-Rel'].
 
 % Nothing special for C
 []::[='T-Rel','C-Rel'].
