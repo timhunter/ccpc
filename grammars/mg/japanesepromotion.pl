@@ -11,13 +11,13 @@
 % auxiliary assumptions
 %  a. the copula doesn't assign structural case = doesn't select a CaseP
 %  b. classifiers turn nouns into more complex nouns
-%  c. accusative arguments can short-scramble past adjuncts
+%  c. accusative arguments can short-scramble past adjuncts -> disabled by Jiwon
 %
 %  d. the particle "to" is a complementizer (p172 of Tsujimura)
 %  e. "to" can scramble past a subject, or an object to the left edge of TP
 
 % last updated by Jiwon Yun 
-% July 23, 2012
+% September 3, 2012
 % RC - promotion analysis 
  
 % Proper Nouns
@@ -60,17 +60,13 @@
 %
 % DP moves to Spec-CaseP due to the word-order. 
 [ga]::[='D',+f,'Case',-nom].
-
-%[o]::[='D',+f,'Case',-acc,-scramble].  % "short" scrambling
 [o]::[='D',+f,'Case',-acc].
-
 [ni]::[='D',+f,'Case',-dat].
-
 [de]::[='D',+f,'Loc']. [de]::[='D',+f,'Manner'].
 
-%[to]::[='C-Decl',+f,'Case',-acc].
+['Nom']::[='D',+f,'Case',-nom].	% abstracted
+['Acc']::[='D',+f,'Case',-acc].	% abstracted
 
-%%[to]::[='C-Decl',+f,'Case',-acc,-scramble].  %ADDED
 % ignore other particles for now
 
 % classifiers as noun-transformers
@@ -79,7 +75,6 @@
 
 % predicate nominal
 [da]::[='D',+f,'V-Decl'].  % copula prefers uncasemarked arg
-%% [da]::[='Case',+acc,'V-Decl'].  % maybe the copula could, in some dialects
 
 % Null argument (pro)
 []::['Case',-nom].
@@ -114,30 +109,29 @@
 
 % "modern Japanese lacks the affixal complementizers characteristic of adnominal clauses in Korean" (Kaplan & Whitman 95)
 % ...except for adjectival nouns (keiyoo-doosi), which is ignored in the current grammar (Jiwon)
-[tukutta]::[='Case',+acc,'V-Rel'].	% make (as in prepare food)
-[kaita]::[='Case',+acc,'V-Rel'].	% write
-[ketta]::[='Case',+acc,'V-Rel'].	% kick
-[katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
-[kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
-[oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
-['Vi']::['V-Rel'].		% (abstracted)
+%[tukutta]::[='Case',+acc,'V-Rel'].	% make (as in prepare food)
+%[kaita]::[='Case',+acc,'V-Rel'].	% write
+%[ketta]::[='Case',+acc,'V-Rel'].	% kick
+%[katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
+%[kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
+%[oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
+['Vi']::['V-SR'].		% (abstracted)
 ['Vi']::['V-Comp'].		% (abstracted)
-['Vt']::[='Case',+acc,'V-Rel'].		% (abstracted)
+['Vt']::[='Case',+acc,'V-SR'].		% (abstracted)
+['Vt']::[='Case-t',+acc,'V-OR'].	% (abstracted)
 ['Vt']::[='Case',+acc,'V-Comp'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
 []::[='V-Decl',='Case','v-Decl'].
-%[]::[='V-Decl',+scramble,='Case','v-Decl'].   % optional short-scrambling
-[]::[='V-Rel',='Case','v-Rel'].
-%[]::[='V-Rel',+scramble,='Case','v-Rel'].     % optional short-scrambling
+[]::[='V-SR',='Case-t','v-SR'].
+[]::[='V-OR',='Case','v-OR'].
 []::[='V-Comp',='Case','v-Comp'].
 
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
-%[]::[='v-Decl',+nom,+scramble,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp',-f].
 
 % Complementizer for declarative clauses
@@ -153,28 +147,22 @@
 %% RC - promotion analysis
 
 % null wh Case - the raised CaseP does not have an overt case marker.
-  []::[='D',+f,'Case',-nom,-wh].
-  []::[='D',+f,'Case',-acc,-wh].
+  []::[='D',+f,'Case-t',-nom,-wh].
+  []::[='D',+f,'Case-t',-acc,-wh].
 
 % TP is raised to Spec-DP due to EPP
- []::[='v-Rel',+nom,'T-Rel',-epp].
+ []::[='v-SR',+nom,'T-SR',-epp].
+ []::[='v-OR',+nom,'T-OR',-epp].
 
 % Wh-hoisting complementizer
- []::[='T-Rel',+wh,'C-Rel'].
+ []::[='T-SR',+wh,'C-SR'].
+ []::[='T-OR',+wh,'C-OR'].
 
 % DP can take CP as its complement and 
 % move the TP to its spec to satisfy the EPP feature.
 % Hoshi says this on page 14
- []::[='C-Rel',+epp,'D',-f].
-
-%% Adjunct Clauses
-
-%['Via']::['V-Adj'].					% (abstracted)
-%['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
-%[]::[='V-Adj',='Case','v-Adj'].		
-%[]::[='v-Adj',+nom,'T-Adj'].
-%[]::[='T-Adj','C-Adj'].
-%['C-Adj']>>['C-Decl'].
+ []::[='C-SR',+epp,'D',-f].
+ []::[='C-OR',+epp,'D',-f].
 
 
 % adjectives
@@ -192,9 +180,13 @@
 
 
 % locative modifiers can left-adjoin to VP
-['Loc']>>['V-Rel']. ['Loc']>>['V-Decl'].
+['Loc']>>['V-SR']. 
+['Loc']>>['V-OR']. 
+['Loc']>>['V-Decl'].
 
 % same for manner
-['Manner']>>['V-Rel']. ['Manner']>>['V-Decl'].
+['Manner']>>['V-SR']. 
+['Manner']>>['V-OR']. 
+['Manner']>>['V-Decl'].
 
 startCategory('C-Decl').
