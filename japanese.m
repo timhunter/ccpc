@@ -1,6 +1,6 @@
 japanese = {
-{"N","o","Vt","N","ga","N","o","Vt"},
-{"N","ga","Vt","N","ga","N","o","Vt"},
-{"N","o","Vt","fact","ga","N","o","Vt"},
-{"N","ga","Vt","fact","ga","N","o","Vt"}
-}
+{"N","Acc","Vt","N","Nom","N","Acc","Vt"},
+{"N","Nom","Vt","N","Nom","N","Acc","Vt"},
+{"N","Acc","Vt","fact","Nom","N","Acc","Vt"},
+{"N","Nom","Vt","fact","Nom","N","Acc","Vt"}
+};

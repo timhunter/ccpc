@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    180950,       4133]
-NotebookOptionsPosition[    175810,       3985]
-NotebookOutlinePosition[    176209,       4003]
-CellTagsIndexPosition[    176166,       4000]
+NotebookDataLength[    183471,       4177]
+NotebookOptionsPosition[    178322,       4029]
+NotebookOutlinePosition[    178721,       4047]
+CellTagsIndexPosition[    178678,       4044]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2242,7 +2242,7 @@ This re-creates all the prefix grammars for a given set of examples:\
 
 Cell[BoxData[
  RowBox[{"getCharts", "[", 
-  RowBox[{"\"\<grammars/wmcfg/koreanadjunction.wmcfg\>\"", ",", "korean"}], 
+  RowBox[{"\"\<grammars/wmcfg/koreanadjunction2.wmcfg\>\"", ",", "korean"}], 
   "]"}]], "Input",
  CellChangeTimes->{{3.529776903698646*^9, 3.5297769148708572`*^9}, {
    3.540296734990093*^9, 3.540296749583577*^9}, {3.5402968492160187`*^9, 
@@ -2250,11 +2250,11 @@ Cell[BoxData[
    3.551525450253628*^9}, {3.551535004828871*^9, 3.551535006012391*^9}, {
    3.551536881725316*^9, 3.551536882464143*^9}, {3.5520444094636993`*^9, 
    3.5520444154114523`*^9}, {3.552044578009756*^9, 3.552044578482245*^9}, 
-   3.552645564636859*^9}],
+   3.552645564636859*^9, 3.555760282625544*^9}],
 
 Cell[BoxData[
  RowBox[{"getCharts", "[", 
-  RowBox[{"\"\<grammars/wmcfg/koreanpronominal.wmcfg\>\"", ",", "korean"}], 
+  RowBox[{"\"\<grammars/wmcfg/koreanpronominal2.wmcfg\>\"", ",", "korean"}], 
   "]"}]], "Input",
  CellChangeTimes->{{3.529776903698646*^9, 3.5297769148708572`*^9}, {
    3.540296734990093*^9, 3.540296749583577*^9}, {3.5402968492160187`*^9, 
@@ -2262,11 +2262,12 @@ Cell[BoxData[
    3.551525450253628*^9}, {3.551535004828871*^9, 3.551535006012391*^9}, {
    3.551536881725316*^9, 3.551536882464143*^9}, {3.5520444094636993`*^9, 
    3.55204442521165*^9}, {3.5520445822092123`*^9, 3.55204458247327*^9}, {
-   3.552048254440344*^9, 3.552048257598507*^9}, 3.552645568303152*^9}],
+   3.552048254440344*^9, 3.552048257598507*^9}, 3.552645568303152*^9, 
+   3.555760283590787*^9}],
 
 Cell[BoxData[
  RowBox[{"getCharts", "[", 
-  RowBox[{"\"\<grammars/wmcfg/koreanpromotion.wmcfg\>\"", ",", "korean"}], 
+  RowBox[{"\"\<grammars/wmcfg/koreanpromotion2.wmcfg\>\"", ",", "korean"}], 
   "]"}]], "Input",
  CellChangeTimes->{{3.529776903698646*^9, 3.5297769148708572`*^9}, {
    3.540296734990093*^9, 3.540296749583577*^9}, {3.5402968492160187`*^9, 
@@ -2274,7 +2275,7 @@ Cell[BoxData[
    3.551525450253628*^9}, {3.551535004828871*^9, 3.551535006012391*^9}, {
    3.551536881725316*^9, 3.551536882464143*^9}, {3.5520444094636993`*^9, 
    3.55204442521165*^9}, {3.5520445822092123`*^9, 3.55204458247327*^9}, 
-   3.552645570167927*^9}],
+   3.552645570167927*^9, 3.555760284589802*^9}],
 
 Cell[TextData[{
  StyleBox["GloballyNormalize ",
@@ -2721,67 +2722,67 @@ Cell[BoxData[
 
 Cell[BoxData["\<\"/tmp/prefix1-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188577219141*^9}],
+ CellChangeTimes->{3.555760497234742*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-1.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188577253993*^9}],
+ CellChangeTimes->{3.5557604972805653`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188578570826*^9}],
+ CellChangeTimes->{3.555760499581169*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-2.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188578614122*^9}],
-
-Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
- ShowCellLabel->True,
- CellChangeTimes->{3.553188579819933*^9}],
+ CellChangeTimes->{3.555760499749486*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-3.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188579940269*^9}],
+ CellChangeTimes->{3.555760502506996*^9}],
+
+Cell[BoxData["\<\"/tmp/prefix1-3.chart\"\>"], "Print",
+ ShowCellLabel->True,
+ CellChangeTimes->{3.5557605025626917`*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188581371654*^9}],
+ CellChangeTimes->{3.555760505063526*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-4.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5531885829057417`*^9}],
+ CellChangeTimes->{3.555760508880621*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188583873872*^9}],
+ CellChangeTimes->{3.555760510626112*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188586567061*^9}],
+ CellChangeTimes->{3.55576051776537*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-5.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188587959673*^9}],
+ CellChangeTimes->{3.555760522542322*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-7.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188592120098*^9}],
+ CellChangeTimes->{3.5557605298398*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-6.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188594462329*^9}],
+ CellChangeTimes->{3.555760538845875*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix1-8.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188597901868*^9}],
+ CellChangeTimes->{3.555760540875325*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-7.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.553188604223374*^9}],
+ CellChangeTimes->{3.555760558810359*^9}],
 
 Cell[BoxData["\<\"/tmp/prefix2-8.chart\"\>"], "Print",
  ShowCellLabel->True,
- CellChangeTimes->{3.5531886138434877`*^9}]
+ CellChangeTimes->{3.555760579433465*^9}]
 }, Open  ]],
 
 Cell[TextData[{
@@ -3080,7 +3081,7 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"unconditioned", " ", "=", " ", 
       RowBox[{
-      "newStyle", "[", "\"\<grammars/wmcfg/koreanadjunction.wmcfg\>\"", 
+      "newStyle", "[", "\"\<grammars/wmcfg/koreanadjunction2.wmcfg\>\"", 
        "]"}]}], ";", " ", 
      RowBox[{"(*", " ", 
       StyleBox[
@@ -3118,7 +3119,7 @@ Cell[BoxData[
    3.527863151497109*^9, 3.527863152770685*^9}, {3.529777537716029*^9, 
    3.529777538814546*^9}, {3.540297600138886*^9, 3.540297602632023*^9}, {
    3.5515346148214207`*^9, 3.551534615454649*^9}, {3.5520448356140327`*^9, 
-   3.552044837556134*^9}, 3.552645612415834*^9}],
+   3.552044837556134*^9}, 3.552645612415834*^9, 3.555760371621546*^9}],
 
 Cell[BoxData[
  RowBox[{
@@ -3135,7 +3136,7 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"unconditioned", " ", "=", " ", 
       RowBox[{
-      "newStyle", "[", "\"\<grammars/wmcfg/koreanpronominal.wmcfg\>\"", 
+      "newStyle", "[", "\"\<grammars/wmcfg/koreanpronominal2.wmcfg\>\"", 
        "]"}]}], ";", " ", 
      RowBox[{"(*", " ", 
       StyleBox[
@@ -3174,7 +3175,7 @@ Cell[BoxData[
    3.529777538814546*^9}, {3.540297600138886*^9, 3.540297602632023*^9}, {
    3.5515346148214207`*^9, 3.551534615454649*^9}, {3.5520448356140327`*^9, 
    3.552044845475642*^9}, {3.552048287384717*^9, 3.552048289776122*^9}, 
-   3.552645614079583*^9}],
+   3.552645614079583*^9, 3.5557603734684258`*^9}],
 
 Cell[BoxData[
  RowBox[{
@@ -3191,7 +3192,7 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"unconditioned", " ", "=", " ", 
       RowBox[{
-      "newStyle", "[", "\"\<grammars/wmcfg/koreanpromotion.wmcfg\>\"", 
+      "newStyle", "[", "\"\<grammars/wmcfg/koreanpromotion2.wmcfg\>\"", 
        "]"}]}], ";", " ", 
      RowBox[{"(*", " ", 
       StyleBox[
@@ -3229,7 +3230,8 @@ Cell[BoxData[
    3.527863151497109*^9, 3.527863152770685*^9}, {3.529777537716029*^9, 
    3.529777538814546*^9}, {3.540297600138886*^9, 3.540297602632023*^9}, {
    3.5515346148214207`*^9, 3.551534615454649*^9}, {3.5520448356140327`*^9, 
-   3.552044845475642*^9}, {3.552645615542143*^9, 3.5526456184392242`*^9}}],
+   3.552044845475642*^9}, {3.552645615542143*^9, 3.5526456184392242`*^9}, {
+   3.555760374733423*^9, 3.555760377808506*^9}}],
 
 Cell[CellGroupData[{
 
@@ -3245,22 +3247,22 @@ Cell[BoxData[
   RowBox[{
    RowBox[{"{", 
     RowBox[{
-    "2.01544285956514615423644520841861549343`13.636679373574582", ",", "0", 
-     ",", "0.03220732833244422288650199437398669033`11.599080560530767", ",", 
-     "1.92959813718507360963102040263272840548`13.392689261413251", ",", 
-     "1.03035230554780442893117106684108819081`13.161304777471265", ",", "0", 
-     ",", "0.44272515760816912483736548789003961701`12.711619381862484", ",", 
-     "2.81093223626903777645795121098437618912`13.571606279789188"}], "}"}], 
+    "2.02145962608021382688350958689582625993`13.615996519040362", ",", "0", 
+     ",", "0.0146367582192501054683293759683948565`11.213020352151876", ",", 
+     "1.53102273736420301157588463012696644531`13.237136426920319", ",", 
+     "1.38688500246334684510642824308587028933`13.226854800485729", ",", "0", 
+     ",", "0.68031762018050159063469600750906352005`12.848780481086227", ",", 
+     "3.27729592774066676033953293689648944564`13.597689266636827"}], "}"}], 
    ",", 
    RowBox[{"{", 
     RowBox[{
-    "2.01544285956514615423644520841861549343`13.636679373574582", ",", 
-     "1.06038860270868762718373887188327842068`13.454450467796672", ",", "0", 
-     ",", "1.01483712630195648083004933415196546776`13.059627024411386", ",", 
-     "1.03035230554780424266523783383142642833`13.076680150080136", ",", "0", 
-     ",", "0.44272515760816962123933016037824472733`12.631031395686138", ",", 
-     "4.05682119775999439856848174934533801661`13.683154187924718"}], "}"}]}],
-   "}"}]], "Output",
+    "2.02145962608021382688350958689582625993`13.615996519040362", ",", 
+     "0.7677520502629536881334174069912990035`13.287315133819655", ",", "0", 
+     ",", "2.12752971579647963506529746240404887402`13.356004949208643", ",", 
+     "1.58209687121326453570648464448387715976`13.281063152541332", ",", "0", 
+     ",", "0.68031762018050166576990656075452079676`12.845570881167827", ",", 
+     "3.4347603524943816166812432522092990439`13.616198525304414"}], "}"}]}], 
+  "}"}]], "Output",
  CellChangeTimes->{3.5402914979165373`*^9, 3.5402976142053003`*^9, 
   3.55153462104177*^9, 3.551535149051359*^9, 3.551536995024004*^9, 
   3.551549234448826*^9, 3.551549600650139*^9, 3.55171713237313*^9, 
@@ -3268,7 +3270,8 @@ Cell[BoxData[
   3.551972875763612*^9, 3.551974097687456*^9, 3.552044854707335*^9, 
   3.5520451060272627`*^9, 3.5520483500736027`*^9, 3.5520510769713087`*^9, 
   3.552645659906043*^9, 3.552645849912539*^9, 3.552646202349382*^9, 
-  3.553188414153172*^9, 3.55318852721065*^9, 3.5531886149518003`*^9}]
+  3.553188414153172*^9, 3.55318852721065*^9, 3.5531886149518003`*^9, 
+  3.555760418465973*^9, 3.5557604804233217`*^9, 3.55576058050768*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3298,20 +3301,21 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"{", 
         RowBox[{
-        "\"\<korean\>\"", ",", "\"\<Promotion\>\"", ",", "\"\<OR\>\""}], 
+        "\"\<Korean\>\"", ",", "\"\<Promotion\>\"", ",", "\"\<OR\>\""}], 
         "}"}], ",", 
        RowBox[{
         RowBox[{"entropyreductions", "[", 
          RowBox[{"[", "2", "]"}], "]"}], "[", 
         RowBox[{"[", 
          RowBox[{"1", ";;", "4"}], "]"}], "]"}]}], "]"}], ",", 
-     RowBox[{"{", "}"}]}], "}"}]}], "\n"}], "\[IndentingNewLine]", 
+     RowBox[{"{", "}"}]}], "}"}]}], "\[IndentingNewLine]"}], "\n", 
  RowBox[{"Export", "[", 
   RowBox[{
   "\"\<Results/koreanpromotion.csv\>\"", ",", "koreanER", ",", 
    "\"\<CSV\>\""}], "]"}]}], "Input",
  CellChangeTimes->{{3.553188325012672*^9, 3.553188325014689*^9}, {
-  3.553188388824188*^9, 3.553188401812096*^9}}],
+  3.553188388824188*^9, 3.553188401812096*^9}, {3.555761387851426*^9, 
+  3.55576138815492*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -3322,21 +3326,21 @@ Cell[BoxData[
      ",", "\<\"W4\"\>"}], "}"}], ",", 
    RowBox[{"{", 
     RowBox[{"\<\"korean\"\>", ",", "\<\"Promotion\"\>", ",", "\<\"SR\"\>", 
-     ",", "2.02145962608021393687581998555025108999`13.616177768071903", ",", 
-     "0", ",", "0.01463675821924992310552396390654905645`11.213139647571118", 
-     ",", "1.53102273736420317590453161641909585611`13.237225083832534"}], 
+     ",", "2.02145962608021382688350958689582625993`13.615996519040362", ",", 
+     "0", ",", "0.0146367582192501054683293759683948565`11.213020352151876", 
+     ",", "1.53102273736420301157588463012696644531`13.237136426920319"}], 
     "}"}], ",", 
    RowBox[{"{", 
     RowBox[{"\<\"korean\"\>", ",", "\<\"Promotion\"\>", ",", "\<\"OR\"\>", 
-     ",", "2.02145962608021393687581998555025108999`13.616177768071903", ",", 
-     "0.76775205026295364736741572153633228481`13.287394518935345", ",", "0", 
-     ",", "2.12752971579648139271507105595724588616`13.356150859252509"}], 
+     ",", "2.02145962608021382688350958689582625993`13.615996519040362", ",", 
+     "0.7677520502629536881334174069912990035`13.287315133819655", ",", "0", 
+     ",", "2.12752971579647963506529746240404887402`13.356004949208643"}], 
     "}"}], ",", 
    RowBox[{"{", "}"}]}], "}"}]], "Output",
- CellChangeTimes->{3.553188414295272*^9}],
+ CellChangeTimes->{3.553188414295272*^9, 3.5557605806098633`*^9}],
 
 Cell[BoxData["\<\"Results/koreanpromotion.csv\"\>"], "Output",
- CellChangeTimes->{3.5531884143470716`*^9}]
+ CellChangeTimes->{3.553188414295272*^9, 3.5557605807589912`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3366,18 +3370,19 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"{", 
         RowBox[{
-        "\"\<korean\>\"", ",", "\"\<Adjunction\>\"", ",", "\"\<OR\>\""}], 
+        "\"\<Korean\>\"", ",", "\"\<Adjunction\>\"", ",", "\"\<OR\>\""}], 
         "}"}], ",", 
        RowBox[{
         RowBox[{"entropyreductions", "[", 
          RowBox[{"[", "2", "]"}], "]"}], "[", 
         RowBox[{"[", 
          RowBox[{"1", ";;", "4"}], "]"}], "]"}]}], "]"}], ",", 
-     RowBox[{"{", "}"}]}], "}"}]}], "\[IndentingNewLine]"}], "\n", 
+     RowBox[{"{", "}"}]}], "}"}]}], "\n"}], "\[IndentingNewLine]", 
  RowBox[{"Export", "[", 
   RowBox[{
   "\"\<Results/koreanadjunction.csv\>\"", ",", "koreanER", ",", 
-   "\"\<CSV\>\""}], "]"}]}], "Input"],
+   "\"\<CSV\>\""}], "]"}]}], "Input",
+ CellChangeTimes->{{3.555761382868228*^9, 3.55576138315526*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -3388,21 +3393,21 @@ Cell[BoxData[
      ",", "\<\"W4\"\>"}], "}"}], ",", 
    RowBox[{"{", 
     RowBox[{"\<\"korean\"\>", ",", "\<\"Adjunction\"\>", ",", "\<\"SR\"\>", 
-     ",", "1.91000503757463199711952653303548288477`13.611311523299598", ",", 
-     "0", ",", "0.03487908310812901611919212285783942207`11.629795608186729", 
-     ",", "1.88593893731634049658069801624904471282`13.378422378586109"}], 
+     ",", "1.91000503757463178136329420842010051729`13.611139498648525", ",", 
+     "0", ",", "0.03487908310812912996042023383580499285`11.629673482641586", 
+     ",", "1.88593893731634057345063204547130908395`13.378344179777844"}], 
     "}"}], ",", 
    RowBox[{"{", 
     RowBox[{"\<\"korean\"\>", ",", "\<\"Adjunction\"\>", ",", "\<\"OR\"\>", 
-     ",", "1.91000503757463199711952653303548288477`13.611311523299598", ",", 
-     "1.07230196036659925195580131407346868854`13.457767477033261", ",", "0", 
-     ",", "2.10242619186279496240957187502829128789`13.412753922189303"}], 
+     ",", "1.91000503757463178136329420842010051729`13.611139498648525", ",", 
+     "1.07230196036659929564914886523929737904`13.457735244047104", ",", "0", 
+     ",", "2.10242619186279411445505277411527345067`13.412650417742867"}], 
     "}"}], ",", 
    RowBox[{"{", "}"}]}], "}"}]], "Output",
- CellChangeTimes->{3.553188527360026*^9}],
+ CellChangeTimes->{3.553188527360026*^9, 3.55576041859722*^9}],
 
 Cell[BoxData["\<\"Results/koreanadjunction.csv\"\>"], "Output",
- CellChangeTimes->{3.5531885273634787`*^9}]
+ CellChangeTimes->{3.553188527360026*^9, 3.5557604186306477`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3432,45 +3437,49 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"{", 
         RowBox[{
-        "\"\<korean\>\"", ",", "\"\<Pronominal\>\"", ",", "\"\<OR\>\""}], 
+        "\"\<Korean\>\"", ",", "\"\<Pronominal\>\"", ",", "\"\<OR\>\""}], 
         "}"}], ",", 
        RowBox[{
         RowBox[{"entropyreductions", "[", 
          RowBox[{"[", "2", "]"}], "]"}], "[", 
         RowBox[{"[", 
          RowBox[{"1", ";;", "4"}], "]"}], "]"}]}], "]"}], ",", 
-     RowBox[{"{", "}"}]}], "}"}]}], "\n"}], "\[IndentingNewLine]", 
+     RowBox[{"{", "}"}]}], "}"}]}], "\[IndentingNewLine]"}], "\n", 
  RowBox[{"Export", "[", 
   RowBox[{
   "\"\<Results/koreanpronominal.csv\>\"", ",", "koreanER", ",", 
-   "\"\<CSV\>\""}], "]"}]}], "Input"],
+   "\"\<CSV\>\""}], "]"}]}], "Input",
+ CellChangeTimes->{{3.5557613790685177`*^9, 3.555761379436001*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{
    RowBox[{"{", 
-    RowBox[{"\<\"Language\"\>", ",", "\<\"Grammar\"\>", ",", "\<\"Type\"\>", 
-     ",", "\<\"W1\"\>", ",", "\<\"W2\"\>", ",", "\<\"W3\"\>", 
-     ",", "\<\"W4\"\>"}], "}"}], ",", 
-   RowBox[{"{", 
-    RowBox[{"\<\"korean\"\>", ",", "\<\"Pronominal\"\>", ",", "\<\"SR\"\>", 
-     ",", "2.01544285956514615423644520841861549343`13.636679373574582", ",", 
-     "0", ",", "0.03220732833244422288650199437398669033`11.599080560530767", 
-     ",", "1.92959813718507360963102040263272840548`13.392689261413251"}], 
+    RowBox[{
+    "\"\<Language\>\"", ",", "\"\<Grammar\>\"", ",", "\"\<Type\>\"", ",", 
+     "\"\<W1\>\"", ",", "\"\<W2\>\"", ",", "\"\<W3\>\"", ",", "\"\<W4\>\""}], 
     "}"}], ",", 
    RowBox[{"{", 
-    RowBox[{"\<\"korean\"\>", ",", "\<\"Pronominal\"\>", ",", "\<\"OR\"\>", 
-     ",", "2.01544285956514615423644520841861549343`13.636679373574582", ",", 
-     "1.06038860270868762718373887188327842068`13.454450467796672", ",", "0", 
-     ",", "1.01483712630195648083004933415196546776`13.059627024411386"}], 
+    RowBox[{
+    "\"\<korean\>\"", ",", "\"\<Pronominal\>\"", ",", "\"\<SR\>\"", ",", 
+     "1.91000503757463178136329420842010051729`13.613274670065472", ",", "0", 
+     ",", "0.03487908310812906328198662597728230139`11.633073204034838", ",", 
+     "1.88593893731634051376530245014428999184`13.382088130451876"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<korean\>\"", ",", "\"\<Pronominal\>\"", ",", "\"\<OR\>\"", ",", 
+     "1.91000503757463178136329420842010051729`13.613274670065472", ",", 
+     "1.07230196036659929564914886523929737904`13.458519140295548", ",", "0", 
+     ",", "2.10242619186279411467189320861237433747`13.416950226981761"}], 
     "}"}], ",", 
-   RowBox[{"{", "}"}]}], "}"}]], "Output",
- CellChangeTimes->{
-  3.553188472883065*^9, {3.553188615086358*^9, 3.5531886151646633`*^9}}],
+   RowBox[{"{", "}"}]}], "}"}]], "Input",
+ CellChangeTimes->{{3.555761371913341*^9, 3.555761374221162*^9}}],
 
 Cell[BoxData["\<\"Results/koreanpronominal.csv\"\>"], "Output",
  CellChangeTimes->{
-  3.553188472883065*^9, {3.553188615086358*^9, 3.553188615167913*^9}}]
+  3.553188472883065*^9, {3.553188615086358*^9, 3.5531886151646633`*^9}, 
+   3.5557604805425777`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3739,7 +3748,41 @@ Cell[BoxData[
     ImageSize->504,
     PlotRange->{Automatic, {0, 4}},
     PlotRangePadding->Scaled[0.02],
-    Ticks->{None, Automatic}], ",", 
+    Ticks->{None, Automatic},
+    ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJztnT+M40QUxme5vTtOCCSoQHDHFnSAOaRbCQmEcAOiQK4RblYnrFshhHWs
+kNy6S2kqd6lSRSfkyhJSClwgF1hCadykSJPGhQs3PsnFx5uxnSyQvfVm/yZ5
+keIkM/Pe+31vZrOzY3vnm4OjJ9//eHB0+Phg76unB/aTw8c/733501MqurUj
+xM5zen6yJ3bpPYQ4fvgC9BB3EPs9DEd9WYZelFFhjmCYPFTVryIdOjAdD45h
+IpxWVFgg7Dlw6alrFpIcSAMPtuvC1HT4SS4+ULavIbQplB3KTygSH/ZgQu9K
+BLYGoRnwf/8TvmU0ttTWGpB3aMr8LoHEcL0AA+lG85ApNwHiDE2IN1DNIli6
+WeOQAqs/VuHSoAfLcWEbOnpBiiojXwaFpbamrsF0fXiOpVT7SfZhh5AfNapQ
+ppQNC55nk5sQFf6XATJK4dmUJceEZvUppXi/NZ+FKmo4U2mBbzqYkI9qOlTl
+pu1jUsok23A8mXgB3UseKHPxnnq5pVo2D/FWA5/6uio3/KSpyuC7Q0o4xMPG
+DlWJsqrtHqnjPYKIoJFdMK0auxlc05PQlN+QKOKmLSWoGqs8C2EizuvWeeRj
+kJbihw5tPm44yrKNteCIXeofK0Bbk4UujUhFgRH1L72VCmr7sQfdjdWn+yen
+5k11fJm6I4RFI0yrR5hyOaaRLYSGfpJZTTOZsb6lqeJBkjXoMSw1spL9NmGU
+mtCzautx4y9P4OgUwR7IUSMOz9C2DZ/FvqLX63L1SPrS1qIRWO22fSj7lUaF
+1ovFC4bFS0vK1PHZ3E+Fou4H8fqSxvdW8P3H+viRT/FcHnZOd/zZ51/jr3Ep
+nzSG5bEua9t92rFdV3/XFbdDjjsh7cui3Y4Wayz2iCWyRJbIElkiS2SJLJEl
+ssTLkqgUbqKwLeg7lsgSWSJLZIkskSWyRJbIElki/wnFfccSb6bEM53Cu4Ei
+uvpjdEZndEZndEZn9ItEv9bJ9pblmtEZndEZndEZndEZndF5qruhuWZ0Rmd0
+Rmf0jUG/3zSvqvrmz6qsRHvqaW3l7CINewq/N4zlbaftzatrq0gKKNDTDMQl
+1r+DpJwcnm4gKjZTzm2pZp34i03ojnfUixRQIZ8lsAT9wBTYCEUl0lEf+hUr
+Utci/HI25qv4dfisYztGYiRGYiRGWnekS1no25DcMBIjMRIjMRIjMRJPSRiJ
+kRiJkRiJkRhpm5B4SsJIjMRIjMRIjMRINwCJpySMxEiMxEjbgaQuGfvt6oKq
+47dni1dfVncbsWeomHIXHvlqDSfiPBcLr85yB/IazIFlIZyW6n0URHInoDb0
+VeEsLgmdwjUcpNX5LgldheFBy5CFMAxfpqHulq6X1Z5nTCx2SCrhawKDaXny
+mNife/putWih69Z7NVVTOOTdGxdLo6njr6vFQBbBbEa4oHTO2nReQIzFcKlQ
+FKX6tGy4rOJ72bcC+2E/a+1n4WYT1LAf9sN+Ls8Pf1uwH/bDfvjbgv2wH/Zz
+kX4u6dtCLYm8ckrL8XbUz/+9QlnMd/8+cXWksWlXbca+XJs04XkuvGEid+cW
+J67a/Me2Ksv5bt6RY6CfLl/DOm77blM/sjW4avfvxSLfi/XtIksCOGa9f3cw
+rU4LdXzRaDJyodvhsdvmVcu//y0oDYZI1erSFBYFkTeqd02GXP6ydb3eGt1U
++5CfanucMM+LTh133YNtK+oX1TeJiuu517avnnt1E+u5V6+4fn62s0xg6F6n
++cnb6kWeNC4xm6QYpynSeEBzHAvRJOtmfpdmNykMamO6LlzbVO0tb0ROT5/7
+tdOrLPLQG+WqQuKXLf6Jkzk5qQodB6NJBIss8g6C25kmqglcnSZyujotfJpZ
+m9tyMoDQuoW67P4WO/8AGjd/ng==\
+\>"]], ",", 
    GraphicsBox[{
      {Opacity[0], 
       PointBox[{{0.4545454545454546, 0.}, {0.4545454545454546, 4.}}]}, 
@@ -3765,6 +3808,7 @@ Cell[BoxData[
             
             ImageSizeCache->{{40.79716129032259, 
              93.69909677419358}, {-4.17797439017437, 147.13253975257817`}}],
+           
            StatusArea[#, 
             2.01544285956514615423644520841861549343`13.636679373574582]& ,
            
@@ -4057,76 +4101,76 @@ Cell[85942, 1975, 1023, 17, 43, "Subsubtitle"],
 Cell[86968, 1994, 4159, 82, 223, "Input"],
 Cell[91130, 2078, 7123, 148, 403, "Input"],
 Cell[98256, 2228, 802, 12, 26, "Subsubtitle"],
-Cell[99061, 2242, 601, 10, 27, "Input"],
-Cell[99665, 2254, 645, 10, 27, "Input"],
-Cell[100313, 2266, 598, 10, 27, "Input"],
-Cell[100914, 2278, 632, 11, 26, "Subsubtitle"],
-Cell[101549, 2291, 1167, 28, 103, "Input"],
-Cell[102719, 2321, 799, 18, 26, "Subsubtitle"],
-Cell[103521, 2341, 3378, 60, 103, "Input"],
-Cell[106902, 2403, 3451, 61, 103, "Input"],
-Cell[110356, 2466, 711, 12, 43, "Subsubtitle"],
-Cell[111070, 2480, 3676, 90, 208, "Input"],
-Cell[114749, 2572, 713, 12, 26, "Subsubtitle"],
-Cell[115465, 2586, 1291, 24, 43, "Input"],
-Cell[116759, 2612, 1008, 20, 43, "Subsubtitle"],
-Cell[117770, 2634, 3945, 67, 88, "Input"],
+Cell[99061, 2242, 624, 10, 27, "Input"],
+Cell[99688, 2254, 672, 11, 27, "Input"],
+Cell[100363, 2267, 621, 10, 27, "Input"],
+Cell[100987, 2279, 632, 11, 26, "Subsubtitle"],
+Cell[101622, 2292, 1167, 28, 103, "Input"],
+Cell[102792, 2322, 799, 18, 26, "Subsubtitle"],
+Cell[103594, 2342, 3378, 60, 103, "Input"],
+Cell[106975, 2404, 3451, 61, 103, "Input"],
+Cell[110429, 2467, 711, 12, 43, "Subsubtitle"],
+Cell[111143, 2481, 3676, 90, 208, "Input"],
+Cell[114822, 2573, 713, 12, 26, "Subsubtitle"],
+Cell[115538, 2587, 1291, 24, 43, "Input"],
+Cell[116832, 2613, 1008, 20, 43, "Subsubtitle"],
+Cell[117843, 2635, 3945, 67, 88, "Input"],
 Cell[CellGroupData[{
-Cell[121740, 2705, 777, 14, 27, "Input"],
-Cell[122520, 2721, 118, 2, 20, "Print"],
-Cell[122641, 2725, 118, 2, 20, "Print"],
-Cell[122762, 2729, 118, 2, 20, "Print"],
-Cell[122883, 2733, 118, 2, 20, "Print"],
-Cell[123004, 2737, 118, 2, 20, "Print"],
-Cell[123125, 2741, 118, 2, 20, "Print"],
-Cell[123246, 2745, 118, 2, 20, "Print"],
-Cell[123367, 2749, 120, 2, 20, "Print"],
-Cell[123490, 2753, 118, 2, 20, "Print"],
-Cell[123611, 2757, 118, 2, 20, "Print"],
-Cell[123732, 2761, 118, 2, 20, "Print"],
-Cell[123853, 2765, 118, 2, 20, "Print"],
-Cell[123974, 2769, 118, 2, 20, "Print"],
-Cell[124095, 2773, 118, 2, 20, "Print"],
-Cell[124216, 2777, 118, 2, 20, "Print"],
-Cell[124337, 2781, 120, 2, 20, "Print"]
+Cell[121813, 2706, 777, 14, 27, "Input"],
+Cell[122593, 2722, 118, 2, 20, "Print"],
+Cell[122714, 2726, 120, 2, 20, "Print"],
+Cell[122837, 2730, 118, 2, 20, "Print"],
+Cell[122958, 2734, 118, 2, 20, "Print"],
+Cell[123079, 2738, 118, 2, 20, "Print"],
+Cell[123200, 2742, 120, 2, 20, "Print"],
+Cell[123323, 2746, 118, 2, 20, "Print"],
+Cell[123444, 2750, 118, 2, 20, "Print"],
+Cell[123565, 2754, 118, 2, 20, "Print"],
+Cell[123686, 2758, 117, 2, 20, "Print"],
+Cell[123806, 2762, 118, 2, 20, "Print"],
+Cell[123927, 2766, 116, 2, 20, "Print"],
+Cell[124046, 2770, 118, 2, 20, "Print"],
+Cell[124167, 2774, 118, 2, 20, "Print"],
+Cell[124288, 2778, 118, 2, 20, "Print"],
+Cell[124409, 2782, 118, 2, 20, "Print"]
 }, Open  ]],
-Cell[124472, 2786, 910, 15, 26, "Subsubtitle"],
-Cell[125385, 2803, 869, 25, 27, "Input"],
-Cell[126257, 2830, 1139, 32, 43, "Input"],
-Cell[127399, 2864, 1006, 17, 26, "Subsubtitle"],
-Cell[128408, 2883, 1875, 46, 148, "Input"],
-Cell[130286, 2931, 1017, 17, 26, "Subsubtitle"],
-Cell[131306, 2950, 2162, 53, 118, "Input"],
-Cell[133471, 3005, 220, 3, 34, "Subsection"],
-Cell[133694, 3010, 1381, 27, 67, "Input"],
-Cell[135078, 3039, 298, 6, 27, "Input"],
-Cell[135379, 3047, 177, 2, 34, "Subsection"],
-Cell[135559, 3051, 648, 14, 21, "Input"],
-Cell[136210, 3067, 2896, 53, 73, "Input"],
-Cell[139109, 3122, 2946, 54, 73, "Input"],
-Cell[142058, 3178, 2921, 53, 73, "Input"],
+Cell[124542, 2787, 910, 15, 26, "Subsubtitle"],
+Cell[125455, 2804, 869, 25, 27, "Input"],
+Cell[126327, 2831, 1139, 32, 43, "Input"],
+Cell[127469, 2865, 1006, 17, 26, "Subsubtitle"],
+Cell[128478, 2884, 1875, 46, 148, "Input"],
+Cell[130356, 2932, 1017, 17, 26, "Subsubtitle"],
+Cell[131376, 2951, 2162, 53, 118, "Input"],
+Cell[133541, 3006, 220, 3, 34, "Subsection"],
+Cell[133764, 3011, 1381, 27, 67, "Input"],
+Cell[135148, 3040, 298, 6, 27, "Input"],
+Cell[135449, 3048, 177, 2, 34, "Subsection"],
+Cell[135629, 3052, 648, 14, 21, "Input"],
+Cell[136280, 3068, 2919, 53, 73, "Input"],
+Cell[139202, 3123, 2971, 54, 73, "Input"],
+Cell[142176, 3179, 2972, 54, 73, "Input"],
 Cell[CellGroupData[{
-Cell[145004, 3235, 276, 5, 27, "Input"],
-Cell[145283, 3242, 1622, 28, 43, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[146942, 3275, 1349, 38, 73, "Input"],
-Cell[148294, 3315, 1009, 20, 43, "Output"],
-Cell[149306, 3337, 106, 1, 27, "Output"]
+Cell[145173, 3237, 276, 5, 27, "Input"],
+Cell[145452, 3244, 1689, 29, 43, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[149449, 3343, 1237, 36, 73, "Input"],
-Cell[150689, 3381, 1011, 20, 43, "Output"],
-Cell[151703, 3403, 107, 1, 27, "Output"]
+Cell[147178, 3278, 1397, 39, 73, "Input"],
+Cell[148578, 3319, 1031, 20, 43, "Output"],
+Cell[149612, 3341, 128, 1, 27, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[151847, 3409, 1237, 36, 73, "Input"],
-Cell[153087, 3447, 1062, 21, 43, "Output"],
-Cell[154152, 3470, 154, 2, 27, "Output"]
+Cell[149777, 3347, 1302, 37, 73, "Input"],
+Cell[151082, 3386, 1032, 20, 43, "Output"],
+Cell[152117, 3408, 129, 1, 27, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[154343, 3477, 1568, 31, 27, "Input"],
-Cell[155914, 3510, 19880, 472, 329, "Output"]
+Cell[152283, 3414, 1305, 37, 73, "Input"],
+Cell[153591, 3453, 1047, 23, 88, InheritFromParent],
+Cell[154641, 3478, 184, 3, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[154862, 3486, 1568, 31, 27, "Input"],
+Cell[156433, 3519, 21873, 507, 329, "Output"]
 }, Open  ]]
 }
 ]

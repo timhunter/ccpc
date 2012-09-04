@@ -1,8 +1,8 @@
 korean={
-{"N", "acc", "Vtn", "N", "nom", "N", "acc", "Vtd"},
-{"N", "nom", "Vtn", "N", "nom", "N", "acc", "Vtd"},
-{"N", "acc", "Vtn", "fact", "nom", "N", "acc", "Vtd"},
-{"N", "nom", "Vtn", "fact", "nom", "N", "acc", "Vtd"},
-{"N", "acc", "Vta", "N", "nom", "N", "acc", "Vtd"},
-{"N", "nom", "Vta", "N", "nom", "N", "acc", "Vtd"}
+{"N", "Acc", "Vtn", "N", "Nom", "N", "Acc", "Vtd"},
+{"N", "Nom", "Vtn", "N", "Nom", "N", "Acc", "Vtd"},
+{"N", "Acc", "Vtn", "fact", "Nom", "N", "Acc", "Vtd"},
+{"N", "Nom", "Vtn", "fact", "Nom", "N", "Acc", "Vtd"},
+{"N", "Acc", "Vta", "N", "Nom", "N", "Acc", "Vtd"},
+{"N", "Nom", "Vta", "N", "Nom", "N", "Acc", "Vtd"}
 };
