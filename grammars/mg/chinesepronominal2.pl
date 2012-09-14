@@ -49,7 +49,6 @@
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
 []::[=>'V',='N','vRel']. %v
-[]::[=>'V',='N-pro','vRel']. %v
 []::[=>'V',='N-trace','vRel']. %v
 []::[=>'V',='Poss','vRel']. %v
 
