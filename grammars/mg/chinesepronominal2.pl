@@ -47,13 +47,20 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
+% V (optionally taking obj)
 ['Vi']::['V-SR'].
+
 ['Vt']::[='N',+case,'V-SR'].
+['Vt']::[='N-pro',+case,'V-SR'].
+['Vt']::[='Poss',+case,'V-SR'].
+
 ['Vt']::[='N-trace',+case,'V-OR'].
 
-% little v
+% little v (taking sbj)
 []::[=>'V-OR',='N','v-OR']. 
+[]::[=>'V-OR',='N-pro','v-OR']. 
 []::[=>'V-OR',='Poss','v-OR']. 
+
 []::[=>'V-SR',='N-trace','v-SR'].
 
 % Tense
