@@ -28,7 +28,6 @@
 % Two-place predicates (transitive verbs)
  ['Vt']::[='N',+case,'V'].
  ['Vt']::[='N-pro',+case,'V'].
- ['Vt']::[='N-trace',+case,'V'].
  ['Vt']::[='Poss',+case,'V'].	% take possessive as arguments
 
 % ['Vt']::[='F',+case,'V'].
@@ -37,14 +36,10 @@
  []::[=>'V',='N','v']. %v
  []::[=>'V',='N-pro','v']. %v
  []::[=>'V',='Poss','v']. %v
-
-
 % []::[=>'V',='F','v']. %v
-
 
 % tense
  []::[='v',+case,'T']. %tense
-
 
  []::[='T','C'].
 
@@ -52,17 +47,34 @@
 % SR:   showParse([Vt,Noun,de,Noun,Vt,Noun]).
 % OR:   showParse([Noun,Vt,de,Noun,Vt,Noun]).
 
- []::[=>'V',='N','vRel'].   	%v
- []::[=>'V',='N-trace','vRel'].   	%v  %JTH
- []::[=>'V',='Poss','vRel'].	%v
- []::[='vRel',+case,'TRel',-f]. %tense
+% V (optionally taking obj)
+['Vi']::['V-SR'].
 
+['Vt']::[='N',+case,'V-SR'].
+['Vt']::[='N-pro',+case,'V-SR'].
+['Vt']::[='Poss',+case,'V-SR'].
 
- []::[='TRel',+wh,'CRel'].
+['Vt']::[='N-trace',+case,'V-OR'].
 
- [de]::[='CRel',+f,'F'].
+% little v (taking sbj)
+[]::[=>'V-OR',='N','v-OR']. 
+[]::[=>'V-OR',='N-pro','v-OR']. 
+[]::[=>'V-OR',='Poss','v-OR']. 
 
- []::[='F','N',-case].
+[]::[=>'V-SR',='N-trace','v-SR'].
+
+% Tense
+[]::[='v-SR',+case,'T-SR',-f].
+[]::[='v-OR',+case,'T-OR',-f].
+
+% Wh-hoisting complementizer
+[]::[='T-SR',+wh,'C-SR'].
+[]::[='T-OR',+wh,'C-OR'].
+
+[de]::[='C-SR',+f,'F'].
+[de]::[='C-OR',+f,'F'].
+
+[]::[='F','N',-case].
 
 % relativizer de hoist TRel to Spec CP
 % [de]::[='TRel',+f,'CRel',-k].

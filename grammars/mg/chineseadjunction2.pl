@@ -32,24 +32,15 @@
 % used in an RC, only have NP arguments
 ['Vt']::[='N',+case,'V'].
 ['Vt']::[='N-pro',+case,'V'].
-['Vt']::[='N-trace',+case,'V'].
 ['Vt']::[='Poss',+case,'V'].
 
-
 []::[=>'V',='N','v']. %v
-
 []::[=>'V',='N-pro','v']. %v
-
-
 []::[=>'V',='Poss','v']. %v
-
-
 
 []::[='v',+case,'T']. %tense
 
-
 []::[='T','C'].
-
 
 
 % Relative Clauses: an Adjunction Analysis
@@ -62,22 +53,36 @@
   []::['N-trace',-case,-wh]. 
 % []::['N',-case,-wh].
 
-[]::[=>'V',='N','vRel']. %v
-[]::[=>'V',='N-trace','vRel']. %v
-[]::[=>'V',='Poss','vRel']. %v
+% V (optionally taking obj)
+['Vi']::['V-SR'].
 
-% Nothing special for T; 
- []::[='vRel',+case,'TRel',-f].
+['Vt']::[='N',+case,'V-SR'].
+['Vt']::[='N-pro',+case,'V-SR'].
+['Vt']::[='Poss',+case,'V-SR'].
+
+['Vt']::[='N-trace',+case,'V-OR'].
+
+% little v (taking sbj)
+[]::[=>'V-OR',='N','v-OR']. 
+[]::[=>'V-OR',='N-pro','v-OR']. 
+[]::[=>'V-OR',='Poss','v-OR']. 
+
+[]::[=>'V-SR',='N-trace','v-SR'].
+
+% Tense
+[]::[='v-SR',+case,'T-SR',-f].
+[]::[='v-OR',+case,'T-OR',-f].
 
 % Wh-hoisting complementizer
- []::[='TRel',+wh,'CRel'].
+[]::[='T-SR',+wh,'C-SR'].
+[]::[='T-OR',+wh,'C-OR'].
 
- [de]::[='CRel',+f,'F'].
+[de]::[='C-SR',+f,'F'].
+[de]::[='C-OR',+f,'F'].
 
 % Relative CP can left-adjoin onto the NP head
- ['F']>>['N'].
- ['F']>>['N-trace'].
-
+['F']>>['N'].
+['F']>>['N-pro']. % headless RC
 
 % complement clause
 
