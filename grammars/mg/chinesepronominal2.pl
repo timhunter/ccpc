@@ -31,7 +31,6 @@
 % used in an RC, only have NP arguments
 ['Vt']::[='N',+case,'V'].
 ['Vt']::[='N-pro',+case,'V'].
-['Vt']::[='N-trace',+case,'V'].
 ['Vt']::[='Poss',+case,'V'].
 
 []::[=>'V',='N','v']. %v
@@ -48,14 +47,18 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
-[]::[=>'V',='N','vRel']. %v
-[]::[=>'V',='N-trace','vRel']. %v
-[]::[=>'V',='Poss','vRel']. %v
+['Vt']::[='N',+case,'VRel'].
+['Vt']::[='N-trace',+case,'VRel']. % ORC
 
-% Nothing special for T; 
+% little v
+[]::[=>'VRel',='N','vRel']. 
+[]::[=>'VRel',='N-trace','vRel']. % SRC
+[]::[=>'VRel',='Poss','vRel']. 
+
+% Tense
  []::[='vRel',+case,'TRel',-f].
 
-% Wh-hoisting complementizer
+% Complementizer
  []::[='TRel','CRel'].
 
  [de]::[='CRel',+f,'F'].
