@@ -63,7 +63,7 @@
 
 % Relative CP can left-adjoin onto the NP head
  ['F']>>['N'].
- ['F']>>['N-trace'].
+ ['F']>>['N-pro']. % headless RC
 
 % complement clause
 
