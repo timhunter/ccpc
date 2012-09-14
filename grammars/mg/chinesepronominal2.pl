@@ -47,26 +47,29 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
-['Vi']::['VRel'].
-['Vt']::[='N',+case,'VRel'].
-['Vt']::[='N-trace',+case,'VRel']. % ORC
+['Vi']::['V-SR'].
+['Vt']::[='N',+case,'V-SR'].
+['Vt']::[='N-trace',+case,'V-OR'].
 
 % little v
-[]::[=>'VRel',='N','vRel']. 
-[]::[=>'VRel',='N-trace','vRel']. % SRC
-[]::[=>'VRel',='Poss','vRel']. 
+[]::[=>'V-OR',='N','v-OR']. 
+[]::[=>'V-OR',='Poss','v-OR']. 
+[]::[=>'V-SR',='N-trace','v-SR'].
 
 % Tense
- []::[='vRel',+case,'TRel',-f].
+[]::[='v-SR',+case,'T-SR',-f].
+[]::[='v-OR',+case,'T-OR',-f].
 
 % Complementizer
- []::[='TRel','CRel'].
+[]::[='T-SR','C-SR'].
+[]::[='T-OR','C-OR'].
 
- [de]::[='CRel',+f,'F'].
+[de]::[='C-SR',+f,'F'].
+[de]::[='C-OR',+f,'F'].
 
 % Relative CP can left-adjoin onto the NP head
- ['F']>>['N'].
- ['F']>>['N-pro']. % headless RC
+['F']>>['N'].
+['F']>>['N-pro']. % headless RC
 
 % complement clause
 
