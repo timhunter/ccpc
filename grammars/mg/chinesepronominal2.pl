@@ -34,22 +34,13 @@
 ['Vt']::[='N-trace',+case,'V'].
 ['Vt']::[='Poss',+case,'V'].
 
-
 []::[=>'V',='N','v']. %v
-
 []::[=>'V',='N-pro','v']. %v
-
-
 []::[=>'V',='Poss','v']. %v
-
-
 
 []::[='v',+case,'T']. %tense
 
-
 []::[='T','C'].
-
-
 
 % Relative Clauses: an Adjunction Analysis
 % SSR showParse([Vt,Noun,de,Noun,Vt,Noun]).
@@ -58,6 +49,7 @@
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
 []::[=>'V',='N','vRel']. %v
+[]::[=>'V',='N-pro','vRel']. %v
 []::[=>'V',='N-trace','vRel']. %v
 []::[=>'V',='Poss','vRel']. %v
 
