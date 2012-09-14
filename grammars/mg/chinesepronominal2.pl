@@ -47,6 +47,7 @@
 % OSR showParse([Noun,Vt,Vt,Noun,de,Noun]).
 % OOR showParse([Noun,Vt,Noun,Vt,de,Noun]).
 
+['Vi']::['VRel'].
 ['Vt']::[='N',+case,'VRel'].
 ['Vt']::[='N-trace',+case,'VRel']. % ORC
 
