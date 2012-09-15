@@ -16,7 +16,7 @@
  ['Noun']::['N-trace',-case,-wh].  % nouns that can be relativized
 
 % Null argument (trace)
-%[]::['N-trace',-case,-wh]. 
+[]::['N-trace',-case,-wh]. % for null-head RCs
 
 % Null argument (pro)
 []::['N-pro',-case]. 
