@@ -11,19 +11,18 @@
  ['Pronoun']::['N',-case].
 
 % Nouns
- ['Noun']::['N'].    % in possessives
+ ['Noun']::['N'].	% in possessives
  ['Noun']::['N',-case].
- ['Noun']::['N',-case,-wh].  % nouns that can be relativized
+ ['Noun']::['N-trace',-case,-wh].  % nouns that can be relativized
 
 % Null argument (trace)
-[]::['N-trace',-case,-wh]. 
+%[]::['N-trace',-case,-wh]. 
 
 % Null argument (pro)
 []::['N-pro',-case]. 
 
 % One-place predicates (intransitive verbs and adjectives)
  ['Vi']::['V'].	% had bad intensions
-
 
 % Two-place predicates (transitive verbs)
  ['Vt']::[='N',+case,'V'].
@@ -33,15 +32,17 @@
 % ['Vt']::[='F',+case,'V'].
 
 % little v
- []::[=>'V',='N','v']. %v
- []::[=>'V',='N-pro','v']. %v
- []::[=>'V',='Poss','v']. %v
-% []::[=>'V',='F','v']. %v
+ []::[=>'V',='N','v'].
+ []::[=>'V',='N-pro','v'].
+ []::[=>'V',='Poss','v'].
+% []::[=>'V',='F','v'].
 
 % tense
- []::[='v',+case,'T']. %tense
+ []::[='v',+case,'T'].
 
+% complimentizer
  []::[='T','C'].
+
 
 % Relative Clauses
 % SR:   showParse([Vt,Noun,de,Noun,Vt,Noun]).
@@ -49,19 +50,17 @@
 
 % V (optionally taking obj)
 ['Vi']::['V-SR'].
-
 ['Vt']::[='N',+case,'V-SR'].
 ['Vt']::[='N-pro',+case,'V-SR'].
 ['Vt']::[='Poss',+case,'V-SR'].
-
+['Vt']::[='N-trace',+case,'V-OR'].
 ['Vt']::[='N-trace',+case,'V-OR'].
 
 % little v (taking sbj)
+[]::[=>'V-SR',='N-trace','v-SR'].
 []::[=>'V-OR',='N','v-OR']. 
 []::[=>'V-OR',='N-pro','v-OR']. 
 []::[=>'V-OR',='Poss','v-OR']. 
-
-[]::[=>'V-SR',='N-trace','v-SR'].
 
 % Tense
 []::[='v-SR',+case,'T-SR',-f].
