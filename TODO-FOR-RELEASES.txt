@@ -1,0 +1,67 @@
+
+=== Miscellaneous cleaning up ===
+
+Training files should be moved out of the root, into somewhere close to the 
+grammars they are relevant to. Wherever that ends up being (see below).
+
+Move Ken's Haskell code somewhere else. Out of the root at the very least, 
+but it probably doesn't really belong in this repository.
+
+Get rid of debug.ml and the dependency on camlp5? (It's so cool, but it has 
+probably overstayed its welcome.)
+
+=== Managing separation of grammars from code ===
+
+We don't want users who download the software to be bombarded with our CJK 
+project files (and whatever other grammar-related files we start working 
+with in the future). We do want to provide them with a couple of sample 
+grammars (perhaps chomskyan.pl, larsonian.pl and strauss.wmcfg), but that's 
+all. I can't see any way to systematically exclude the grammars directory 
+from SVN's releases. (We could manually exclude them every time we copy the 
+trunk over to a release branch. But IMO this would be annoying and 
+error-prone.)
+
+I suggest the following. The grammars directory in the repository should 
+contain only the two or three grammars we want to provide as sample grammars. 
+Most users will probably only want to play around with those grammars, and 
+perhaps add one or two other grammars of their own to the grammars directory, 
+which they can then use without changing any configuration.
+
+For more advanced users, we provide a mechanism for pointing to a directory 
+that is not inside mcfgcky2_repos, but has the same internal structure as 
+the grammars directory inside the repository. This could be a variable set 
+in some sort of config file, or a command-line option to various executables, 
+or a genuine environment variable, etc. Typical values would perhaps be 
+things like "../grammars" or "../grammars-CJK" (interpreted relative to the 
+repository root). These other directories may be kept under version control 
+independently.
+
+=== Documentation ===
+
+We could use ocamldoc. Looks easy. Can create latex or html output. 
+We should do it.
+
+=== Unit/regression testing ===
+
+Not specifically about releases, but this would be another thing that would 
+help get the code really stable. Particularly since we are starting to end 
+up with a situation where certain chunks of code are used by multiple distinct 
+executables. In this situation it's worth checking that the changes you made 
+to module Foo in order to add a feature to executable Bar do not adversely 
+affect the behaviour of executable Baz which also uses module Foo.
+
+Question 1: How to implement tests?
+OUnit seems like a popular OCaml unit testing framework. But it occurs to 
+me that a number of the tests that we might want to run might be testing at 
+the level of an executable rather than at the level of a specific OCaml 
+function (e.g. run mcfg_nt to intersect the grammar in this file with this 
+prefix, and make sure the output matches this stored file).
+
+Question 2: Where to put tests?
+Putting testing code inside the main repository will mean that users who 
+download the code will get it too. This may or may not be a bad thing. It 
+will probably be more convenient to do function-level OUnit-style testing 
+if the testing code is in the same repository as the production code. But 
+to the extent that we mainly want to do executable-level testing, this 
+might not count as an advantage.
+
