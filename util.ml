@@ -1,29 +1,3 @@
-(********************************************************************)
-(***** Stuff for global debug settings ******************************)
-
-let _debug_mode = ref false
-
-let set_debug_mode b =
-	_debug_mode := b
-
-let debug fmt =
-	if (!_debug_mode) then
-		Printf.ksprintf print_string fmt
-	else
-		Printf.ksprintf ignore fmt
-
-(* Faster version of the above which only evaluates its 
-   argument if necessary. Intended to be invoked via the 
-   <:DEBUG< ... >> quotation. *)
-let debug_fast s =
-	if (!_debug_mode) then
-		prerr_string (Lazy.force s)
-	else
-		()
-
-(********************************************************************)
-(********************************************************************)
-
 let reverse_tr lst =
   let rec reverse' lst acc =
     match lst with

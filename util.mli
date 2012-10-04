@@ -2,10 +2,6 @@ type range = Pair of int * int | VarRange of int * int   (* VarRange n means (i,
 exception RangesNotAdjacentException
 exception EmptyListException
 
-val set_debug_mode : bool -> unit
-val debug : ('a, unit, string, unit) format4 -> 'a
-val debug_fast : string Lazy.t -> unit
-
 val reverse_tr : 'a list -> 'a list
 val map_tr : ('a -> 'b) -> 'a list -> 'b list
 val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
