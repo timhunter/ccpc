@@ -108,6 +108,15 @@ let show_history f h =
         (Util.show_weight_float (weight_product h))
         (String.concat " -- " (Util.map_tr f (to_list h)))
 
+let show_history_full f h =
+        let rec worker hist =
+                match (MyList.unpack hist) with
+                | (a, None)       -> f a
+                | (a, Some ((ls,rs,wt),rest)) -> Printf.sprintf "%s -- (%s,%s,%s) -- %s"
+                                                                (f a) (Util.show_list f ls) (Util.show_list f rs) (Util.show_weight_float wt) (worker rest)
+        in
+        Printf.sprintf "%s %s" (Util.show_weight_float (weight_product h)) (worker h)
+
 let rotate x hist = MyList.rotate hist x
 
 let canonicalise cmp hist =
@@ -125,4 +134,49 @@ let try_ending_cycle lst =
                 | (_, None) -> None                                          (* after is just the last link in the list, hence no cycle *)
                 | _ -> Some (MyList.extend before link endpoint, after)      (* after starts somewhere else, in the middle of the list, hence it's a cycle *)
 
+let rec choices lst =
+        match lst with
+        | [] -> []
+        | (x::xs) -> let rest = choices xs in
+                     let add_x (ls,y,rs) = (x::ls,y,rs) in
+                     ([],x,xs) :: (List.map add_x rest)
+
+let get_cycles tree =
+        let rec worker history t =
+                let (_,endpoint,_) = last history in
+                assert (endpoint = Derivation.get_root_item t) ;
+                let (new_history, cycles_here) =
+                        match (try_ending_cycle history) with
+                        | None -> (history, [])
+                        | Some (before,cycle) -> (before, [(before,cycle)])
+                in
+                let f (ls,child,rs) = worker (MyList.extend new_history (Util.map_tr Derivation.get_root_item ls, 
+                                                                         Util.map_tr Derivation.get_root_item rs, 
+                                                                         Rule.get_weight (Derivation.get_rule t)) (Derivation.get_root_item child)) child in
+                let cycles_from_children = Util.map_tr f (choices (Derivation.get_children t)) in
+                cycles_here @ (List.concat cycles_from_children)
+        in
+        worker (singleton (Derivation.get_root_item tree)) tree
+
+(* Returns the path from the root of tree extending downward as 
+ * far as possible using nodes that satisfy the predicate p. 
+ * Fails if multiple children at a particular level satisfy p.*)
+let get_path p tree =
+        let rec worker history t =
+                let (_,endpoint,_) = last history in
+                let root = Derivation.get_root_item t in
+                assert (endpoint = root) ;
+                assert (p root) ;
+                let child_choices = choices (Derivation.get_children t) in
+                let candidate_choices = List.filter (fun (_,x,_) -> p (Derivation.get_root_item x)) child_choices in
+                match candidate_choices with
+                | [] -> history
+                | (ls,child,rs)::[] -> let extended_history = MyList.extend history (Util.map_tr Derivation.get_root_item ls, 
+                                                                                     Util.map_tr Derivation.get_root_item rs, 
+                                                                                     Rule.get_weight (Derivation.get_rule t)) (Derivation.get_root_item child) in
+                                       worker extended_history child
+                | _ -> failwith (Printf.sprintf "get_path: not sure how to choose among these candidates: %s" 
+                                                (Util.show_list (fun (_,x,_) -> Derivation.get_root_item x) candidate_choices))
+        in
+        worker (singleton (Derivation.get_root_item tree)) tree
 
