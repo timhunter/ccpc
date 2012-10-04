@@ -35,7 +35,7 @@ let get_input_grammar grammar_file =
 (* This function is the ``inverse'' (sort of) of build_symbol below.
    Must be kept in sync if that changes. *)
 let desituate nonterm =
-	let regex = Str.regexp "\(_[0-9]+-[0-9]+\|_eps\)*$" in
+	let regex = Str.regexp "\\(_[0-9]+-[0-9]+\\|_eps\\)*$" in
 	let idx = Str.search_forward regex nonterm 0 in
 	Str.string_before nonterm idx
 
@@ -74,7 +74,7 @@ let new_intersection_grammar_rules prefix chart item =
       )
     | PublicNonTerminating (nts,func) -> (
         assert (Nelist.to_list nts = map_tr Chart.get_nonterm items) ;
-        Some make_new_rule sit_nonterm (map_tr Chart.get_nonterm items) func (map_tr Chart.get_ranges items) (Rule.get_weight rule)
+        Some (make_new_rule sit_nonterm (map_tr Chart.get_nonterm items) func (map_tr Chart.get_ranges items) (Rule.get_weight rule))
       )
   in
   let results_to_combine : (Rule.r * Chart.item list) list = optlistmap make_rule_for_route routes in

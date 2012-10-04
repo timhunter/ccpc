@@ -146,7 +146,7 @@ let main () =
                         None
         in
         let (rules, start_symbol) = Grammar.get_input_grammar grammar_file in
-        let dict = match dict_file with None -> None | Some f -> Some get_guillaumin_dict f in
+        let dict = match dict_file with None -> None | Some f -> Some (get_guillaumin_dict f) in
         let broken_paths = find_cycles rules start_symbol in    (* a broken path is a pair of histories, the first of which is a cycle *)
         let sort xs = Util.reverse_tr (List.sort (fun (c1,_) (c2,_) -> compare_by_weight c1 c2) xs) in
         let cycles = sort (group broken_paths) in

@@ -81,13 +81,10 @@ open Chart
       get_items (left_nts @ right_nts)
   
     let rec consequences max_depth prims chart q tables =
-      <:DEBUG< "===== Size of queue is %d\n" (Queue.length q) >> ;
-      (* Queue.iter (fun item -> <:DEBUG< "%s\n" (Chart.debug_str item) >>) q ; *)
       if (Queue.is_empty q)
       then chart
       else
         let trigger = Queue.pop q in
-          <:DEBUG< "      Trigger item: %s\n" (Chart.debug_str trigger) >> ;
           let left_rules = filter_rules tables.lRule_map trigger in 
 
           let right_rules = filter_rules tables.rRule_map trigger in
@@ -98,19 +95,16 @@ open Chart
           let possible_items = filter_chart tables.item_map left_rules right_rules in    (* Limits the chart to other items the trigger might combine with *)
           let all_new_items = ( build_items possible_rules trigger possible_items : ((item * route) list) ) in 
          
-          <:DEBUG< "%d new items\n" (List.length all_new_items) >> ;
           let process (item,route) =
             match (Chart.get_status chart item route) with
             | NewItem ->
-              <:DEBUG< "  %s \tnew item (hence new route)\n" (Chart.debug_str item) >> ;
               add_item tables.item_map item ;
               Queue.add item q ;
               Chart.add chart item route
             | OldItemNewRoute ->
-              <:DEBUG< "  %s \told item, new route\n" (Chart.debug_str item) >> ;
               Chart.add chart item route
             | OldItemOldRoute ->
-              <:DEBUG< "  %s \told item, old route\n" (Chart.debug_str item) >> ;
+              ()
           in
           List.iter process all_new_items ;
           consequences (max_depth -1) prims chart q tables
@@ -146,6 +140,5 @@ open Chart
       let queue = Queue.create () in 
       List.iter (fun (item,_,_) -> Queue.add item queue) axioms_list ;
       let chart = consequences max_depth prims axioms queue tables in
-      <:DEBUG< "Chart contains %d propositions\n" (Chart.length chart) >> ;
       chart
 

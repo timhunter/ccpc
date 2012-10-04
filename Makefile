@@ -59,14 +59,11 @@ grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train train
 %.train:	%.train.annot stripcomment.sed blanks.grep killtrailingblanks.sed
 	sed -E -f stripcomment.sed $< | sed -E -f killtrailingblanks.sed | egrep -v -f blanks.grep > $@
 
-debug.cmo: debug.ml
-	$(COMPILER_BYTECODE) -c -I +camlp5 -pp 'camlp5o pa_extend.cmo q_MLast.cmo -loc loc' debug.ml
+%.cmx: %.ml
+	$(COMPILER_NATIVE) $(FLAGS) -c $*.ml
 
-%.cmx: %.ml debug.cmo
-	$(COMPILER_NATIVE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -c $*.ml
-
-%.cmo: %.ml debug.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -pp 'camlp5o -I . debug.cmo' -c $*.ml
+%.cmo: %.ml
+	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
 
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
