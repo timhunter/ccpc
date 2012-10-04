@@ -24,7 +24,7 @@ let get_guillaumin_dict filename =
 		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
 	in
 
-	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (\(::? .*\))$" in
+	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (\\(::? .*\\))$" in
 
 	let result = Hashtbl.create 100 in
 	begin

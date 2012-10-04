@@ -94,7 +94,7 @@ let get_guillaumin_dict filename =
 	   We record both in the dictionary, without recording the distinction anywhere. Therefore 
 	   some feature-sequences appear twice in the range of this mapping, 
 	   eg. if t123 represents ":: D" and t234 represents ": D", both will simply be mapped to "D" here. *)
-	let regex = Str.regexp "^\([a-z]+[0-9]+\) : (::? \(.*\))$" in
+	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (::? \\(.*\\))$" in
 
 	let result = Hashtbl.create 100 in
 	begin
@@ -129,7 +129,7 @@ let get_stabler_index grammar_files prolog_file =
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
 	let result = Hashtbl.create 100 in
-	let regex = Str.regexp "^\([0-9]+\)\. \[\(.*\)\]::\[\(.*\)\]$" in
+	let regex = Str.regexp "^\\([0-9]+\\)\\. \\[\\(.*\\)\\]::\\[\\(.*\\)\\]$" in
 	let remove_commas s = Str.global_replace (Str.regexp ", *") " " s in
 	begin
 		try
@@ -159,7 +159,7 @@ let clean_preterminal preterminal leaf =
 	let new_preterminal = Grammar.desituate preterminal in
 	if ((new_preterminal = "E") && (new_leaf = "")) then
 		None
-	else if (Str.string_match (Str.regexp "\([a-z]+[0-9]+\)_tmp[0-9]+") new_preterminal 0) then
+	else if (Str.string_match (Str.regexp "\\([a-z]+[0-9]+\\)_tmp[0-9]+") new_preterminal 0) then
 		Some (Str.matched_group 1 new_preterminal, new_leaf)
 	else
 		Some (new_preterminal, new_leaf)
@@ -229,7 +229,7 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			                    "\\\\\\\\end{itemize}" ;
 			                  ] in
 			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
-			let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\(\* entropy = [0-9\.]* \*\)/ {print $4}'") with
+			let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\\(\\* entropy = [0-9\\.]* \\*\\)/ {print $4}'") with
 			                   | None -> "Could not find entropy"
 			                   | Some s -> try Printf.sprintf "Entropy = %.3f, with %d parses above %.3f"
 			                                                  (float_of_string s)
@@ -238,7 +238,7 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			                               with _ -> "Could not find entropy"
 			in
 			let prefix_note = match (get_comment_data grammar_files.wmcfg_file
-			                    "awk ' /^\(\* intersected with prefix: .* \*\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
+			                    "awk ' /^\\(\\* intersected with prefix: .* \\*\\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
 			                  | None -> "Could not find intersection prefix"
 			                  | Some s -> Printf.sprintf "Prefix: %s" s
 			in
@@ -340,13 +340,13 @@ let print_usage () =
 let identify_original_grammar grammar_file =
 
 	let orig_grammar =
-		match (get_comment_data grammar_file "awk ' /^\(\* original grammar: [a-zA-Z0-9\/\.]* \*\)/ {print $4} '") with
+		match (get_comment_data grammar_file "awk ' /^\\(\\* original grammar: [a-zA-Z0-9\\/\\.]* \\*\\)/ {print $4} '") with
 		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
 		| Some s -> s
 	in
 
 	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
-	let regex = Str.regexp "^\([a-zA-Z0-9\.-]+\)\/wmcfg\/\([a-zA-Z0-9\.-]+\)\.wmcfg$" in
+	let regex = Str.regexp "^\\([a-zA-Z0-9\\.-]+\\)\\/wmcfg\\/\\([a-zA-Z0-9\\.-]+\\)\\.wmcfg$" in
 	if (Str.string_match regex orig_grammar 0) then
 		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
 	else
