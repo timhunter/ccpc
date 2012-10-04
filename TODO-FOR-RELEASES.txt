@@ -8,9 +8,6 @@ Possibly the same goes for the Results directory.
 Move Ken's Haskell code somewhere else. Out of the root at the very least, 
 but it probably doesn't really belong in this repository.
 
-Get rid of debug.ml and the dependency on camlp5? (It's so cool, but it has 
-probably overstayed its welcome.)
-
 === Managing separation of grammars from code ===
 
 We don't want users who download the software to be bombarded with our CJK 
