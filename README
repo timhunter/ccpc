@@ -1,5 +1,5 @@
 
-Prerequisites: OCaml, Mathematica, pdflatex, swipl.
+Prerequisites: OCaml, ocamlgraph, Mathematica, pdflatex, swipl.
 
 ===========================================
 ==== Working with the bundled grammars ====
