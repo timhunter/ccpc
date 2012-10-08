@@ -3,7 +3,16 @@
 OUT=`mktemp /tmp/out.XXXX`
 ERR=`mktemp /tmp/err.XXXX`
 
+# Make sure we're in the testing directory
 cd `dirname $0`
+
+# Check whether make is up to date
+pushd .. >/dev/null
+make -q
+if [ $? -ne 0 ] ; then
+        echo "WARNING: make is not up to date" >&2
+fi
+popd >/dev/null
 
 function run_test () {
         f=$1
@@ -24,7 +33,11 @@ if [[ $# -eq 0 ]] ; then
         done
 else
         for x in $@ ; do
-                run_test $x
+                if [ -f $x ] ; then
+                        run_test $x
+                else
+                        echo "WARNING: Test script $x doesn't exist, skipping it" >&2
+                fi
         done
 fi
 
