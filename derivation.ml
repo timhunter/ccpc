@@ -313,22 +313,19 @@ struct
                         Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                         result
 
+        (* Wrapper function, to be used from outside this module/functor *)
+        let get_n_best n graph vertex =
+                assert (n >= 1) ;
+                let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
+                let lst = map_tr (fun i -> get_nth_best_derivation' mem VisitHistory.empty i graph vertex) (range 1 (n+1)) in
+                let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
+                take_while_not_none lst
+
 end (* end of the KBestCalculation functor *)
 
 module KBestFromChart = KBestCalculation(ChartAsGraph)
 module KBestFromGrammar = KBestCalculation(GrammarAsGraph)
 
-(* FIXME: Some redundancy here, should be eliminated by moving slightly more code into the functor. *)
-
-let get_n_best_from_chart n chart item =
-        let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
-        let lst = map_tr (fun i -> KBestFromChart.get_nth_best_derivation' mem KBestFromChart.VisitHistory.empty i chart item) (range 1 (n+1)) in
-        let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
-        take_while_not_none lst
-
-let get_n_best_from_grammar n grammar nonterm =
-        let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
-        let lst = map_tr (fun i -> KBestFromGrammar.get_nth_best_derivation' mem KBestFromGrammar.VisitHistory.empty i grammar nonterm) (range 1 (n+1)) in
-        let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
-        take_while_not_none lst
+let get_n_best_from_chart = KBestFromChart.get_n_best
+let get_n_best_from_grammar = KBestFromGrammar.get_n_best
 
