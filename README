@@ -30,7 +30,7 @@ transitions.sh script, which requires four command-line arguments: a choice of
 (pre-intersection) grammar file inside the grammars/wmcfg directory; the 
 initial fragment of the sentence you're interested in; and the number of 
 derivations to show. For example:
-      ./transitions -kbest larsonian1 "the story" 30
+      ./transitions.sh -kbest grammars/wmcfg/larsonian1.wmcfg "the story" 30
 This will generate three PDF files, one for each of three positions in the 
 sentence up to this point (i.e. one for each of the three prefixes "", "the" 
 and "the story"), each showing the 30 best parses that are possible from that 

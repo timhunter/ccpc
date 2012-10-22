@@ -25,8 +25,8 @@ if [ "$mode" != "-kbest" ] && [ "$mode" != "-sample" ] ; then
         print_usage_exit
 fi
 
-if [ ! -f grammars/wmcfg/$grammar.wmcfg ] ; then
-        echo "File grammars/wmcfg/$grammar.wmcfg does not exist"
+if [ ! -f $grammar ] ; then
+        echo "File $grammar does not exist"
         exit 1
 fi
 
@@ -67,13 +67,13 @@ function no_spaces () {
 }
 
 
-tables_file=$grammar.`no_spaces "$sentence"`.combined.$$.tex
+tables_file=`basename $grammar .wmcfg`.`no_spaces "$sentence"`.combined.$$.tex
 
 
 echo "$sentence" | get_prefixes |\
 while read prefix ; do
-        id=/tmp/$grammar.`no_spaces "$prefix"`.$$
-        ./mcfg_nt grammars/wmcfg/$grammar.wmcfg -intersect -p "$prefix" > $id.chart
+        id=/tmp/`basename $grammar .wmcfg`.`no_spaces "$prefix"`.$$
+        ./mcfg_nt $grammar -intersect -p "$prefix" > $id.chart
         ./renormalize.csh $id.chart > $id.global.chart
         ./visualize $mode $id.global.chart $num_trees $id.tex $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
         pdflatex $id.tex >/dev/null
