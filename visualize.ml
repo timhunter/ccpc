@@ -340,13 +340,13 @@ let print_usage () =
 let identify_original_grammar grammar_file =
 
 	let orig_grammar =
-		match (get_comment_data grammar_file "awk ' /^\\(\\* original grammar: [a-zA-Z0-9\\/\\.]* \\*\\)/ {print $4} '") with
+		match (get_comment_data grammar_file "awk ' /^\\(\\* original grammar: [a-zA-Z0-9\\/\\._-]* \\*\\)/ {print $4} '") with
 		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
 		| Some s -> s
 	in
 
 	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
-	let regex = Str.regexp "^\\([a-zA-Z0-9\\.-]+\\)\\/wmcfg\\/\\([a-zA-Z0-9\\.-]+\\)\\.wmcfg$" in
+	let regex = Str.regexp "^\\([a-zA-Z0-9\\.\\/_-]+\\)\\/wmcfg\\/\\([a-zA-Z0-9\\._-]+\\)\\.wmcfg$" in
 	if (Str.string_match regex orig_grammar 0) then
 		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
 	else
