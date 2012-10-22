@@ -5,6 +5,9 @@ Training files should be moved out of the root, into somewhere close to the
 grammars they are relevant to. Wherever that ends up being (see below). 
 Possibly the same goes for the Results directory.
 
+Also, we need a way to manage the many-to-one relationship between 
+training files and grammars.
+
 === Managing separation of grammars from code ===
 
 We don't want users who download the software to be bombarded with our CJK 
