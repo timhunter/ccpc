@@ -16,6 +16,10 @@ YACC=ocamlyacc
 #GUILLAUMIN=../bach-etal-replication/embed/guillaumin/hmg2mcfg/hmg2mcfg
 GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
+# Default to the grammars directory inside this directory.
+# Any definition of GRAMMARS given on the command line will override this.
+GRAMMARS=grammars
+
 FLAGS= -I mcfgread -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo path.cmo
 
@@ -47,14 +51,19 @@ clean:
 
 # the fig13.txt file is the sentence file with "whose--->who s" as appropriate for the Kaynian promotion analysis.
 
-grammars/mcfgs/%.mcfg:	grammars/mg/%.pl $(GUILLAUMIN)
+# For reasons I do not understand, make thinks that mcfg files are ``intermediate'' 
+# and should be deleted (even though they are mentioned explicitly).
+# Anyway, this line stops it from deleting intermediate files.
+.SECONDARY:
+
+$(GRAMMARS)/mcfgs/%.mcfg: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -o $@
 
-grammars/mcfgs/%.dict:	grammars/mg/%.pl $(GUILLAUMIN)
+$(GRAMMARS)/mcfgs/%.dict: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -dict $@ -o /dev/null
 
-grammars/wmcfg/%.wmcfg: grammars/mcfgs/%.mcfg %.train train
-	./train grammars/mcfgs/$*.mcfg $*.train > $@
+$(GRAMMARS)/wmcfg/%.wmcfg: $(GRAMMARS)/mcfgs/%.mcfg train
+	./train $(GRAMMARS)/mcfgs/$*.mcfg `./find_training_file.sh $(GRAMMARS)/mcfgs/$*.mcfg` > $@
 
 %.train:	%.train.annot stripcomment.sed blanks.grep killtrailingblanks.sed
 	sed -E -f stripcomment.sed $< | sed -E -f killtrailingblanks.sed | egrep -v -f blanks.grep > $@
