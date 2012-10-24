@@ -78,10 +78,8 @@
 %% [da]::[='Case',+acc,'V-Decl'].  % maybe the copula could, in some dialects
 
 % Null argument (pro)
-%[]::['Case',-nom].
-%[]::['Case',-acc].
-[]::['null-Case',-nom].
-[]::['null-Case',-acc].
+[]::['Case',-nom].
+[]::['Case',-acc].
 
 % verbs are all in the past tense
 
@@ -105,7 +103,6 @@
 [itta]::[='Case',+acc,'V-Decl'].		% say (needed for Kahraman examples)
 [mita]::[='Case',+acc,'V-Decl'].		% see
 ['Vt']::[='Case',+acc,'V-Decl'].		% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Decl'].		% (abstracted)
 
 % three-place. dative arg is naturally preverbal since nonfirst args go in specifiers stacked to the left
 [ageta]::[='Case',+acc,='Case',+dat,'V-Decl']. % give
@@ -113,38 +110,29 @@
 
 % "modern Japanese lacks the affixal complementizers characteristic of adnominal clauses in Korean" (Kaplan & Whitman 95)
 % ...except for adjectival nouns (keiyoo-doosi), which is ignored in the current grammar (Jiwon)
-[tukutta]::[='Case',+acc,'V-Rel'].	% make (as in prepare food)
-[kaita]::[='Case',+acc,'V-Rel'].	% write
-[ketta]::[='Case',+acc,'V-Rel'].	% kick
-[katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
-[kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
-[oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
-['Vi']::['V-Rel'].		% (abstracted)
+%[tukutta]::[='Case',+acc,'V-Rel'].	% make (as in prepare food)
+%[kaita]::[='Case',+acc,'V-Rel'].	% write
+%[ketta]::[='Case',+acc,'V-Rel'].	% kick
+%[katta]::[='Case',+acc,'V-Rel'].	% buy (needed for Cho/Whitman/Yanagida examples)
+%[kaihoushita]::[='Case',+acc,'V-Rel'].	% nurse (needed for Kahraman examples)
+%[oikaketa]::[='Case',+acc,'V-Rel'].	% chase (could also have been relativized)
+['Vi']::['V-SR'].		% (abstracted)
 ['Vi']::['V-Comp'].		% (abstracted)
-['Vt']::[='Case',+acc,'V-Rel'].		% (abstracted)
+['Vt']::[='Case',+acc,'V-SR'].		% (abstracted)
+['Vt']::[='Case-t',+acc,'V-OR'].	% (abstracted)
 ['Vt']::[='Case',+acc,'V-Comp'].	% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Rel'].	% (abstracted)
-['Vt']::[='null-Case',+acc,'V-Comp'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
 []::[='V-Decl',='Case','v-Decl'].
-%[]::[='V-Decl',+scramble,='Case','v-Decl'].   % optional short-scrambling
-[]::[='V-Rel',='Case','v-Rel'].
-%[]::[='V-Rel',+scramble,='Case','v-Rel'].     % optional short-scrambling
+[]::[='V-SR',='Case-t','v-SR'].
+[]::[='V-OR',='Case','v-OR'].
 []::[='V-Comp',='Case','v-Comp'].
-% []::[='V-Adj',='Case','v-Adj'].
-
-[]::[='V-Decl',='null-Case','v-Decl'].
-[]::[='V-Rel',='null-Case','v-Rel'].
-[]::[='V-Comp',='null-Case','v-Comp'].
 
 % Tense 
 % , which assigns nominative case
 []::[='v-Decl',+nom,'T-Decl'].
-%[]::[='v-Decl',+nom,+scramble,'T-Decl'].
 []::[='v-Comp',+nom,'T-Comp',-f].
-% []::[='v-Adj',+nom,'T-Adj'].
 
 % Complementizer for declarative clauses
 []::[='T-Decl','C-Decl'].
@@ -159,12 +147,12 @@
 %% RC - adjunction analysis
 
 % Null wh operator (Case/D)
- []::['null-Case',-nom,-wh].
- []::['null-Case',-acc,-wh].
+ []::['Case-t',-nom,-wh].
+ []::['Case-t',-acc,-wh].
 
 % Nothing special for T
- []::[='v-Rel',+nom,'T-SR'].
- []::[='v-Rel',+nom,'T-OR'].
+ []::[='v-SR',+nom,'T-SR'].
+ []::[='v-OR',+nom,'T-OR'].
 
 % Wh-hoisting complementizer
  []::[='T-SR',+wh,'C-SR'].
@@ -173,18 +161,6 @@
 % Relative CP can left-adjoin onto the head noun
  ['C-SR']>>['Case'].
  ['C-OR']>>['Case'].
-
-
-%% Adjunct Clauses
-
-['Via']::['V-Adj'].						% (abstracted)
-['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
-['Vta']::[='null-Case',+acc,'V-Adj'].		% (abstracted)
-[]::[='V-Adj',='Case','v-Adj'].
-[]::[='V-Adj',='null-Case','v-Adj'].
-[]::[='v-Adj',+nom,'T-Adj'].
-[]::[='T-Adj','C-Adj'].
-['C-Adj']>>['C-Decl'].
 
 
 % adjectives
@@ -202,9 +178,13 @@
 
 
 % locative modifiers can left-adjoin to VP
-['Loc']>>['V-Rel']. ['Loc']>>['V-Decl'].
+['Loc']>>['V-SR']. 
+['Loc']>>['V-OR']. 
+['Loc']>>['V-Decl'].
 
 % same for manner
-['Manner']>>['V-Rel']. ['Manner']>>['V-Decl'].
+['Manner']>>['V-SR']. 
+['Manner']>>['V-OR']. 
+['Manner']>>['V-Decl'].
 
 startCategory('C-Decl').

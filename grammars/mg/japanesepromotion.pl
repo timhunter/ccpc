@@ -77,8 +77,10 @@
 [da]::[='D',+f,'V-Decl'].  % copula prefers uncasemarked arg
 
 % Null argument (pro)
-[]::['Case',-nom].
-[]::['Case',-acc].
+%[]::['Case',-nom].
+%[]::['Case',-acc].
+[]::['null-Case',-nom].
+[]::['null-Case',-acc].
 
 % verbs are all in the past tense
 
@@ -102,6 +104,7 @@
 [itta]::[='Case',+acc,'V-Decl'].		% say (needed for Kahraman examples)
 [mita]::[='Case',+acc,'V-Decl'].		% see
 ['Vt']::[='Case',+acc,'V-Decl'].		% (abstracted)
+['Vt']::[='null-Case',+acc,'V-Decl'].		% (abstracted)
 
 % three-place. dative arg is naturally preverbal since nonfirst args go in specifiers stacked to the left
 [ageta]::[='Case',+acc,='Case',+dat,'V-Decl']. % give
@@ -120,6 +123,8 @@
 ['Vt']::[='Case',+acc,'V-SR'].		% (abstracted)
 ['Vt']::[='Case-t',+acc,'V-OR'].	% (abstracted)
 ['Vt']::[='Case',+acc,'V-Comp'].	% (abstracted)
+['Vt']::[='null-Case',+acc,'V-Rel'].	% (abstracted)
+['Vt']::[='null-Case',+acc,'V-Comp'].	% (abstracted)
 
 % Little v
 % The subject starts from vP-Spec
@@ -128,6 +133,9 @@
 []::[='V-OR',='Case','v-OR'].
 []::[='V-Comp',='Case','v-Comp'].
 
+[]::[='V-Decl',='null-Case','v-Decl'].
+[]::[='V-Rel',='null-Case','v-Rel'].
+[]::[='V-Comp',='null-Case','v-Comp'].
 
 % Tense 
 % , which assigns nominative case
@@ -147,8 +155,8 @@
 %% RC - promotion analysis
 
 % null wh Case - the raised CaseP does not have an overt case marker.
-  []::[='D',+f,'Case-t',-nom,-wh].
-  []::[='D',+f,'Case-t',-acc,-wh].
+  []::[='D',+f,'null-Case',-nom,-wh].
+  []::[='D',+f,'null-Case',-acc,-wh].
 
 % TP is raised to Spec-DP due to EPP
  []::[='v-SR',+nom,'T-SR',-epp].
@@ -164,6 +172,15 @@
  []::[='C-SR',+epp,'D',-f].
  []::[='C-OR',+epp,'D',-f].
 
+
+['Via']::['V-Adj'].						% (abstracted)
+['Vta']::[='Case',+acc,'V-Adj'].		% (abstracted)
+['Vta']::[='null-Case',+acc,'V-Adj'].		% (abstracted)
+[]::[='V-Adj',='Case','v-Adj'].
+[]::[='V-Adj',='null-Case','v-Adj'].
+[]::[='v-Adj',+nom,'T-Adj'].
+[]::[='T-Adj','C-Adj'].
+['C-Adj']>>['C-Decl'].
 
 % adjectives
 [omosiroi]::[adj].   % interesting
