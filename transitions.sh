@@ -79,7 +79,7 @@ while read prefix ; do
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         cat $id.tex | get_tables >> $tables_file
-        rm -f $id.chart $id.global.chart `basename $id`.aux `basename $id`.log
+        rm -f $id.chart $id.global.chart $id.tex `basename $id`.aux `basename $id`.log
 done
 
 echo "============================"
