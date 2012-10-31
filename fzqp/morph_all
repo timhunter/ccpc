@@ -1,6 +1,0 @@
-#!/bin/bash
-
-N=0
-cat $1 | while read LINE ; do
-    echo `./morph "$LINE"`
-done
