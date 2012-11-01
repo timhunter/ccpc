@@ -36,7 +36,6 @@ base=`basename $mcfg_file .mcfg`
 
 prefixes=`echo $base | awk '{ for (i=length($0); i>0; i--) print substr($0,1,i); }'`
 
-result=$dir/$base.train   # default
 for p in $prefixes; do
     candidate=$dir/$p.train
     if [ -f $candidate ] ; then
@@ -45,5 +44,11 @@ for p in $prefixes; do
     fi
 done
 
-echo "*** `basename $0`: Using $result as training file for grammar $mcfg_file" >&2 ;
-echo $result
+# test if $result is empty
+if [ -z "$result" ] ; then
+    echo "*** `basename $0`: No training file found for grammar $mcfg_file" >&2 ;
+else
+    echo "*** `basename $0`: Using $result as training file for grammar $mcfg_file" >&2 ;
+    echo $result
+fi
+

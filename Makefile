@@ -62,8 +62,19 @@ $(GRAMMARS)/mcfgs/%.mcfg: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 $(GRAMMARS)/mcfgs/%.dict: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -dict $@ -o /dev/null
 
+define weights_from_corpus
+    @echo "*** Makefile: Using training corpus $(CORPUS)"
+    ./train $(GRAMMARS)/mcfgs/$*.mcfg $(CORPUS) > $@
+endef
+
+define weights_uniform
+    @echo "*** Makefile: Defaulting to uniform distribution"
+    awk -f uniform.awk $(GRAMMARS)/mcfgs/$*.mcfg > $@
+endef
+
 $(GRAMMARS)/wmcfg/%.wmcfg: $(GRAMMARS)/mcfgs/%.mcfg train
-	./train $(GRAMMARS)/mcfgs/$*.mcfg `./find_training_file.sh $(GRAMMARS)/mcfgs/$*.mcfg` > $@
+	$(eval CORPUS=$(shell ./find_training_file.sh $(GRAMMARS)/mcfgs/$*.mcfg))
+	$(if $(CORPUS), $(weights_from_corpus), $(weights_uniform))
 
 %.train:	%.train.annot stripcomment.sed blanks.grep killtrailingblanks.sed
 	sed -E -f stripcomment.sed $< | sed -E -f killtrailingblanks.sed | egrep -v -f blanks.grep > $@
