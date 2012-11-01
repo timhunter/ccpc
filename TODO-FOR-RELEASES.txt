@@ -1,0 +1,30 @@
+
+=== Documentation ===
+
+We could use ocamldoc. Looks easy. Can create latex or html output. 
+We should do it.
+
+=== Unit/regression testing ===
+
+Not specifically about releases, but this would be another thing that would 
+help get the code really stable. Particularly since we are starting to end 
+up with a situation where certain chunks of code are used by multiple distinct 
+executables. In this situation it's worth checking that the changes you made 
+to module Foo in order to add a feature to executable Bar do not adversely 
+affect the behaviour of executable Baz which also uses module Foo.
+
+Question 1: How to implement tests?
+OUnit seems like a popular OCaml unit testing framework. But it occurs to 
+me that a number of the tests that we might want to run might be testing at 
+the level of an executable rather than at the level of a specific OCaml 
+function (e.g. run mcfg_nt to intersect the grammar in this file with this 
+prefix, and make sure the output matches this stored file).
+
+Question 2: Where to put tests?
+Putting testing code inside the main repository will mean that users who 
+download the code will get it too. This may or may not be a bad thing. It 
+will probably be more convenient to do function-level OUnit-style testing 
+if the testing code is in the same repository as the production code. But 
+to the extent that we mainly want to do executable-level testing, this 
+might not count as an advantage.
+
