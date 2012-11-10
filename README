@@ -8,8 +8,8 @@ Prerequisites: OCaml, ocamlgraph, Mathematica, pdflatex, swipl.
 To try things out with the grammars that are included in the SVN 
 repository, all you should need to do is the following:
 
-(1) Run 'make' in the mcfgcky2_repos directory. This should produce an 
-    executable called mcfg_nt.
+(1) Run 'make' in the root directory of your working copy. This should 
+    produce an executable called mcfg_nt.
 
 (2) Set the first line of renormalize.m to point to your installation 
     of Mathematica.
@@ -46,14 +46,13 @@ to do the following:
 (1) Download and unzip Mathieu Guillaumin's MG-to-MCFG translator:
       http://www.linguistics.ucla.edu/people/stabler/guillaumin.tgz
     You should unzip this file in the same directory that contains your 
-    SVN working copy, such that guillaumin and mcfgcky2_repos are sister 
-    directories.
+    SVN working copy, such that guillaumin and your working copy are 
+    sister directories.
 
-(2) Apply hmgtransform-fixity.patch to Guillaumin's code. From the root 
-    of the SVN working copy, the following command works for us:
-      patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
-    (If you get errors about a file name with a '..' component, try copying 
-    the patch file into the guillaumin directory and patching from there.)
+(2) Apply hmgtransform-fixity.patch to Guillaumin's code. If your working 
+    copy is in a directory called ccpc, then from the directory containing 
+    cpcc do the following:
+      patch guillaumin/hmg2mcfg/hmgtransform.ml ccpc/hmgtransform-fixity.patch
 
 (3) In the guillaumin/hmg2mcfg directory, run 'make clean' and 'make' to 
     compile the newly-patched Guillaumin translator. This should produce an 
