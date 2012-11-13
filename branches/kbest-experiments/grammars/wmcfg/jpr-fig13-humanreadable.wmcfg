@@ -1,0 +1,39 @@
+2 / 10 NP -> SPECNP NBAR [0,0;1,0]  
+4 / 10 NP -> "I"
+4 / 10 NP -> "John" 
+1 / 1 SPECNP -> DT [0,0] 
+1 / 2 NBAR -> NBAR S[+R] [0,0;1,0]  
+1 / 2 NBAR -> N [0,0] 
+1 / 1 S -> NP VP [0,0;1,0]  
+4768 / 5489 S[+R] -> NP[+R] VP [0,0;1,0]  
+721 / 5489 S[+R] -> NP[+R] S/NP [0,0;1,0]  
+1 / 1 S/NP -> NP VP/NP [0,0;1,0]  
+1 / 2 VP/NP -> V[SUBCAT2] NP/NP [0,0;1,0]  
+1 / 2 VP/NP -> Z0 PP[to] [0,0;1,0]  
+1 / 1 Z0 -> V[SUBCAT3] NP/NP [0,0;1,0]  
+1 / 3 VP -> V[SUBCAT2] NP [0,0;1,0]  
+1 / 3 VP -> Z1 PP[to] [0,0;1,0]  
+1 / 1 Z1 -> V[SUBCAT3] NP [0,0;1,0]  
+1 / 3 VP -> V[SUBCAT4] PP[for] [0,0;1,0]  
+1 / 3 V[SUBCAT2] -> "met" 
+1 / 3 V[SUBCAT2] -> "attacked" 
+1 / 3 V[SUBCAT2] -> "disliked" 
+1 / 1 V[SUBCAT3] -> "sent" 
+1 / 1 V[SUBCAT4] -> "hoped" 
+1 / 1 PP[to] -> PBAR[to] NP [0,0;1,0]  
+1 / 1 PBAR[to] -> P[to] [0,0] 
+1 / 1 P[to] -> "to" 
+1 / 1 PP[for] -> PBAR[for] NP [0,0;1,0]  
+1 / 1 PBAR[for] -> P[for] [0,0] 
+1 / 1 P[for] -> "for" 
+1 / 1 NP[+R] -> "who" 
+1 / 2 DT -> "the" 
+1 / 2 DT -> "a" 
+1 / 6 N -> "editor" 
+1 / 6 N -> "senator" 
+1 / 6 N -> "reporter" 
+1 / 6 N -> "photographer" 
+1 / 6 N -> "story" 
+1 / 6 N -> ADJ N [0,0;1,0]  
+1 / 1 ADJ -> "good" 
+1 / 1 NP/NP -> " " 
