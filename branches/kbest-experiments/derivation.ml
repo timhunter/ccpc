@@ -189,8 +189,18 @@ struct
                         val empty : t
                         val add : t -> Graph.v -> int -> t
                         val ok_to_visit : t -> Graph.v -> int -> bool
+                        val has_visited_some_n : t -> Graph.v -> bool
+                        (*val show : t -> string*)
                 end
         =
+                (*struct
+                        type t = (Graph.v * int) list
+                        let empty = []
+                        let add hist item n = (item,n)::hist
+                        let ok_to_visit hist item n = not (List.exists (fun (it',i') -> (item = it') && (n >= i')) hist)
+                        let has_visited_some_n hist item = List.mem_assoc item hist
+                        let show hist = Util.show_list (fun (v,i) -> Printf.sprintf "(%s,%d)" (Graph.show v) i) hist
+                end*)
                 struct
                         type t = (Graph.v, int) Hashtbl.t
                         let empty = Hashtbl.create 20
@@ -203,9 +213,21 @@ struct
                                 end ;
                                 result
                         let ok_to_visit hist item n = (*not (List.exists (fun (it',i') -> (item = it') && (n >= i')) lst) *)
+                                (* Printf.eprintf "ok_to_visit %d-th best derivation of %s?\t" n (Graph.show item) ;
+                                if (Hashtbl.mem hist item) then (
+                                        let current = Hashtbl.find hist item in
+                                        if (n < current) then
+                                                Printf.eprintf "    yes, so far we've only visited the %d-th\n" current
+                                        else
+                                                Printf.eprintf "    no, we've already visited the %d-th\n" current
+                                ) else (
+                                        Printf.eprintf "    yes, we've never been to any derivation of this nonterminal\n"
+                                ) ; *)
                                 try     let current = Hashtbl.find hist item in
+                                        assert (n < current) ;
                                         n < current
                                 with Not_found -> true
+                        let has_visited_some_n hist item = Hashtbl.mem hist item
                 end
 
         module type MYQUEUE =
@@ -269,15 +291,24 @@ struct
          * we've already visited. *)
         let rec guarded_get_nth mem visited i chart it =
                 if not (VisitHistory.ok_to_visit visited it i) then (
+                        (* Turns out we never get here; the core algorithm ``knows'' never to ask for 
+                         * a ``worse'' derivation of a node than we have already chosen to pursue. *)
+                        assert false ;
                         None
                 ) else (
-                        get_nth_best_derivation' mem visited i chart it
+                        if (VisitHistory.has_visited_some_n visited it) then (
+                                assert (Hashtbl.mem (!mem) (i,it)) ;
+                                if (Graph.show it = "[ S 0:0 ]") then Printf.eprintf "    Pulling %d-th best out of memowy\n" i ;
+                                Hashtbl.find (!mem) (i,it)
+                        ) else
+                                get_nth_best_derivation' mem visited i chart it
                 )
 
         and get_n_best_all_routes mem n chart item visited routes =
                 let result = ref [] in
                 let candidates = ref (CandidateVectorQueue.empty) in
                 let initialise (antecedents,r,wt) =
+                        Printf.eprintf "Initialising result and candidates for item %s\n" (Graph.show item) ;
                         if (antecedents = []) then
                                 (* Initialise result list with the one corresponding derivation. *)
                                 result := (make_derivation_tree item [] r wt)::(!result)
@@ -292,24 +323,54 @@ struct
                         while (List.length !result < n) do
                                 let new_visited = VisitHistory.add visited item (List.length !result + 1) in
                                 let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
+                                if (Graph.show item = "[ S 0:0 ]") then Printf.eprintf "Just got %d-th best out of CandidateVectorQueue\n" (1 + List.length !result) ;
                                 candidates := new_cand ;
                                 if (not (List.exists (fun d -> (compare_derivations Graph.compare d next = 0)) !result)) then
                                         result := next::(!result) ;
                                 let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
-                                List.iter add_candidate (neighbours recipe)
+                                List.iter add_candidate (neighbours recipe) ;
+                                if (Graph.show item = "[ S 0:0 ]") then (
+                                        Printf.eprintf "    Working out %d best, got %d so far:\n" n (List.length !result) ;
+                                        List.iter (fun t -> Printf.eprintf "        %s\n" (print_tree_compact t)) (List.sort (compare_derivations Graph.compare) !result) ;
+                                        let max_recorded mem it =
+                                            let i = ref 1 in
+                                            while (Hashtbl.mem (!mem) (!i,it)) do i := (!i)+1 done ;
+                                            (!i) - 1
+                                        in
+                                        Printf.eprintf "    And memowy contains results down to %d-th best\n" (max_recorded mem item)
+                                )
                         done
                 with Not_found -> () end ;
-                List.sort (compare_derivations Graph.compare) (!result)
+                reverse_tr (!result)
 
         (* Return type: derivation_tree option
            Returns None if there are less than n derivations of item. 
            This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
         and get_nth_best_derivation' mem visited n chart item =
                 assert (n >= 1) ;
-                try Hashtbl.find (!mem) (n, item)
+                assert (List.for_all (fun i -> Hashtbl.mem (!mem) (i,item)) (range 1 n)) ;
+                (* Every time this function is called on a repeat nonterminal, we have the result memoised *)
+                (* if (Graph.show item = "[ S 0:0 ]") then (
+                        Printf.eprintf "*** Call for the %d-th best derivation of %s      \trepeat nonterminal: %b        \tmemoised: %b\n"
+                                       n (Graph.show item) (VisitHistory.has_visited_some_n visited item) (Hashtbl.mem !mem (n,item))
+                ) ; *)
+                try
+                        let result = Hashtbl.find (!mem) (n, item) in
+                        if (Graph.show item = "[ S 0:0 ]") then Printf.eprintf "    Pulling %d-th best out of memowy\n" n ;
+                        result
                 with Not_found ->
+                        if (Graph.show item = "[ S 0:0 ]") then (
+                                Printf.eprintf "Don't have %d-th best saved, going to work it out ...\n" n
+                        ) ;
+                        assert ((n=1) || (Hashtbl.mem (!mem) (n-1, item))) ;
+                        assert (not (VisitHistory.has_visited_some_n visited item)) ;
+                        (* At this point, we know the nth best derivation of item isn't memoised.
+                         * So we call get_n_best_all_routes for the full list of n, because then we can take the last.
+                         * But if the first (n-1) derivations are all memoised, we don't take advantage of them! *)
                         let n_best_overall = get_n_best_all_routes mem n chart item visited (Graph.tails chart item) in
                         let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
+                        assert (not (Hashtbl.mem (!mem) (n,item))) ;
+                        if (Graph.show item = "[ S 0:0 ]") then Printf.eprintf "Memoising %d-th best derivation of S\n" n ;
                         Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
                         result
 
@@ -321,6 +382,13 @@ struct
                 let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
                 take_while_not_none lst
 
+        let get_nth_best n graph vertex =
+                assert (n >= 1) ;
+                let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
+                match (get_nth_best_derivation' mem VisitHistory.empty n graph vertex) with
+                | None -> []
+                | Some d -> [d]
+
 end (* end of the KBestCalculation functor *)
 
 module KBestFromChart = KBestCalculation(ChartAsGraph)
@@ -328,4 +396,162 @@ module KBestFromGrammar = KBestCalculation(GrammarAsGraph)
 
 let get_n_best_from_chart = KBestFromChart.get_n_best
 let get_n_best_from_grammar = KBestFromGrammar.get_n_best
+
+module Koller_KBestCalculation = functor (Graph : HYPERGRAPH) ->
+struct
+
+        (* AK's UnEvaluatedItem *)
+        type recipe = ((Graph.v * int) list) * (Graph.v * Rule.r * Util.weight)  (* second component is everything we need for make_derivation_tree, except the children *)
+
+        (* AK's EvaluatedItem *)
+        type evaluated_item = recipe * (Graph.v derivation_tree)
+
+        (* recipe -> recipe list *)
+        let make_variations recipe =
+                let rec add_one_at_position p lst =
+                        match (p,lst) with
+                        | (_,[]) -> []
+                        | (0,((it,i)::rest)) -> (it,i+1)::rest
+                        | (n,((it,i)::rest)) -> (it,i) :: (add_one_at_position (n-1) rest)
+                in
+                map_tr (fun p -> add_one_at_position p recipe) (range 0 (List.length recipe))
+
+        module rec StreamForRule :
+                sig
+                        type t
+                        val init : Graph.v -> (Graph.v list * Rule.r * Util.weight) -> t
+                        val peek : t -> Graph.g -> Graph.v list -> Graph.v derivation_tree option
+                        val pop : t -> Graph.g -> Graph.v list -> Graph.v derivation_tree option
+                end
+        =
+                struct
+                        type t = { mutable evaled : evaluated_item list ;   (* evaluated items, stored in order *)
+                                   mutable unevaled : recipe list ;         (* unevaluated items, order not meaningful *)
+                                   mutable discovered : recipe list         (* things we've already added to unevaled (and shouldn't add again) *)
+                                 }
+
+                        let init parent (child_list, r, w) =
+                                let best_vector = map_tr (fun i -> (i,0)) child_list in
+                                let f = (parent,r,w) in
+                                let best_recipe = (best_vector,f) in
+                                {evaled = [] ; unevaled = [best_recipe] ; discovered = [best_recipe]}
+
+                        let try_eval_all g visited stream =
+                                let to_be_removed = ref [] in
+                                let try_eval recipe =
+                                        let (child_vertices, (parent,r,wt)) = recipe in
+                                        let children = map_tr (fun (v,i) -> StreamForVertex.get_tree (StreamForVertex.get_stream g v) i visited) child_vertices in
+                                        match (require_no_nones children) with
+                                        | None -> ()
+                                        | Some xs ->
+                                                let new_tree = make_derivation_tree parent xs r wt in
+                                                stream.evaled <- (recipe, new_tree)::(stream.evaled) ;
+                                                to_be_removed := recipe::(!to_be_removed)
+                                in
+                                List.iter try_eval stream.unevaled ;
+                                stream.unevaled <- List.filter (fun x -> not (List.mem x !to_be_removed)) stream.unevaled ;
+                                let compare_evaled_items (r1,t1) (r2,t2) = compare_derivations Graph.compare t1 t2 in
+                                stream.evaled <- List.sort compare_evaled_items stream.evaled
+
+                        let peek stream g visited =
+                                try_eval_all g visited stream ;
+                                match stream.evaled with
+                                | []                 -> None
+                                | ((recipe,tree)::_) -> Some tree
+
+                        let pop stream g visited =
+                                try_eval_all g visited stream ;
+                                match stream.evaled with
+                                | []                  -> None
+                                | ((recipe,tree)::xs) -> stream.evaled <- xs ;
+                                                         let (children,prw) = recipe in
+                                                         let variations = make_variations children in
+                                                         let new_variations = List.filter (fun v -> not (List.mem (v,prw) stream.discovered)) variations in
+                                                         stream.discovered <- stream.discovered @ (map_tr (fun v -> (v,prw)) new_variations) ;
+                                                         stream.unevaled   <- stream.unevaled   @ (map_tr (fun v -> (v,prw)) new_variations) ;
+                                                         Some tree
+                end
+
+        and StreamForVertex :
+                sig
+                        type t
+                        val get_stream : Graph.g -> Graph.v -> t
+                        val get_tree : t -> int -> (Graph.v list) -> Graph.v derivation_tree option   (* second arg is list of visited states *)
+                end
+        =
+                struct
+                        type t = {         g : Graph.g ;                           (* the graph we're part of *)
+                                           vertex : Graph.v ;                      (* the nonterminal we're responsible for *)
+                                           rule_streams : StreamForRule.t list ;   (* the streams corresponding to the rules expanding this nonterminal *)
+                                   mutable known : (Graph.v derivation_tree) list  (* evaluated items, stored in order *)
+                                 }
+
+                        let streams = Hashtbl.create 100
+
+                        let init g v =
+                                let routes = Graph.tails g v in
+                                { g = g ; vertex = v ; rule_streams = reverse_tr (map_tr (StreamForRule.init v) routes) ; known = [] }
+
+                        let get_stream g v =
+                                try Hashtbl.find streams v
+                                with Not_found ->
+                                        let s = init g v in
+                                        Hashtbl.add streams v s ;
+                                        s
+
+                        let get_tree vstream n visited =
+                                let rand = Random.int 10000 in
+                                if (List.length (Graph.tails vstream.g vstream.vertex) != 1) then
+                                        Printf.eprintf "%04d: Trying for the %d-th best tree for %s\n" rand n (Graph.show vstream.vertex) ;
+                                assert (n >= 0) ;
+                                try
+                                        let tree = List.nth vstream.known n in
+                                        Some tree
+                                with Failure _ -> (
+                                        assert (n = List.length vstream.known) ; (* Assert we're looking for the very next thing not in our known list *)
+                                        if (List.mem vstream.vertex visited) then (
+                                                assert (n = 0) ;
+                                                if (List.length (Graph.tails vstream.g vstream.vertex) != 1) then
+                                                    Printf.eprintf "%04d: Turning back from %s with visitedStates %s\n"
+                                                                   rand (Graph.show vstream.vertex) (show_list Graph.show visited) ;
+                                                None
+                                        ) else (
+                                                let new_visited = vstream.vertex :: visited in
+                                                if (List.length (Graph.tails vstream.g vstream.vertex) != 1) then
+                                                    Printf.eprintf "%04d: Looking at streams for %d-th best derivation of %s, with visitedStates %s\n"
+                                                                   rand n (Graph.show vstream.vertex) (show_list Graph.show visited) ;
+                                                let try_each_rule = map_tr (fun s -> (StreamForRule.peek s vstream.g new_visited, s)) vstream.rule_streams in
+                                                let results = optlistmap (function (None,_) -> None | (Some y, s) -> Some (y,s)) try_each_rule in
+                                                let cmp (t1,s1) (t2,s2) = compare_derivations Graph.compare t1 t2 in
+                                                match (List.sort cmp results) with
+                                                | [] ->         None
+                                                | ((t,s)::_) -> vstream.known <- (vstream.known @ [t]) ;
+                                                                if (List.length (Graph.tails vstream.g vstream.vertex) != 1) then
+                                                                    Printf.eprintf "%04d: Recorded %s as %d-th best derivation of %s, with visitedStates %s\n"
+                                                                                   rand (print_tree_compact t) n (Graph.show vstream.vertex) (show_list Graph.show visited) ;
+                                                                let t' = StreamForRule.pop s vstream.g visited in
+                                                                let derivations_equal d1 d2 = (compare_derivations Graph.compare d1 d2 = 0) in
+                                                                assert (match t' with (Some t'') -> derivations_equal t'' t | _ -> false) ;
+                                                                t'
+                                        )
+                                )
+                end
+
+        let get_n_best n graph vertex =
+                assert (n >= 0) ;
+                let s = StreamForVertex.get_stream graph vertex in
+                let result = ref [] in
+                let finished = ref false in
+                while ((not !finished) && (List.length !result < n)) do
+                        let next_tree = StreamForVertex.get_tree s (List.length !result) [] in
+                        match next_tree with
+                        | None   -> finished := true
+                        | Some t -> result := t::(!result)
+                done ;
+                reverse_tr !result
+
+end (* end of the Koller_KBestCalculation functor *)
+
+module Koller = Koller_KBestCalculation(ChartAsGraph)
+let get_n_best_koller = Koller.get_n_best
 
