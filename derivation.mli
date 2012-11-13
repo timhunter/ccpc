@@ -8,6 +8,8 @@ val get_rule : 'a derivation_tree -> Rule.r
 val get_n_best_from_chart : int -> Chart.chart -> Chart.item -> (Chart.item derivation_tree) list
 val get_n_best_from_grammar : int -> Rule.r list -> string -> (string derivation_tree) list  (* both occurrences of 'string' here represent nonterminals *)
 
+val get_n_best_koller : int -> Chart.chart -> Chart.item -> (Chart.item derivation_tree) list
+
 val make_derivation_tree : 'a -> ('a derivation_tree list) -> Rule.r -> Util.weight -> 'a derivation_tree
 val compare_derivations: ('a -> 'a -> int) -> ('a derivation_tree) -> ('a derivation_tree) -> int
 
