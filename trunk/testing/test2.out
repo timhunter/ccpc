@@ -7,7 +7,7 @@ Other useful info can be added here.
 \begin{itemize}
 \item exact k-best enumeration of most likely derivations
 \item WMCFG grammar file: grammars/wmcfg/larsonian1.wmcfg
-\item md5sum for this grammar file: fa7f5949cc030e7bf87608fbed122f8a
+\item md5sum for this grammar file: 42a69e5c4cfb9d14b64eedae8e64db9f
 \end{itemize}
 \section*{Surface strings}
 \begin{table}[h!t]

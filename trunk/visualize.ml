@@ -368,7 +368,7 @@ let main () =
                 let random_seed = try if (Array.length Sys.argv = 6) then (Some (int_of_string Sys.argv.(5))) else None
                                   with _ -> raise BadCommandLineArguments in
                 let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
-                let prolog_file  = "mgcky-swi/setup.pl" in
+                let prolog_file  = (Filename.dirname Sys.executable_name) ^ "/mgcky-swi/setup.pl" in
                 let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
                                       wmcfg_file = grammar_file ;
                                       dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
