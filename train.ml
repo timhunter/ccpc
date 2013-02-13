@@ -52,8 +52,10 @@ let process_sentence (rules : Rule.r list) start_symbol rule_uses nonterm_uses (
 	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
-	else
+	else (
+		if (List.length goal_derivations <> 1) then Printf.eprintf "Warning: found %d different parses for sentence \"%s\"\n" (List.length goal_derivations) sentence ;
 		List.iter (process_tree w split_sentence chart rule_uses nonterm_uses) goal_derivations
+	)
 
 let run_training grammar_file sentence_file =
 
