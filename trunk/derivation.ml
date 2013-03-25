@@ -76,6 +76,17 @@ let print_tree_compact tree =
         in
         (show_weight_float (get_weight tree)) ^^ (print_tree' tree)
 
+let print_tree_sexp f tree =
+    let rec print' t =
+        match (get_children t, Rule.get_expansion (get_rule t)) with
+        | ([], Rule.PublicTerminating s) -> Printf.sprintf "(%s \"%s\")" (f (get_root_item t)) s
+        | (cs, Rule.PublicNonTerminating _) -> "(" ^ (f (get_root_item t)) ^ " " ^  (String.concat " " (map_tr print' cs)) ^ ")"
+        | _ -> failwith "Inconsistent tree in print_tree"
+    in
+    (print' tree)
+
+(* Of the three print_tree functions here, this is really the only one 
+ * that's even remotely human-readable. *)
 let print_tree f tree =
 	let rec print_tree' t =      (* returns a list of strings, each representing one line *)
 		let item = get_root_item t in

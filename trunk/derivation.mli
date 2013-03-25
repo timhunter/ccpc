@@ -12,4 +12,5 @@ val make_derivation_tree : 'a -> ('a derivation_tree list) -> Rule.r -> Util.wei
 val compare_derivations: ('a -> 'a -> int) -> ('a derivation_tree) -> ('a derivation_tree) -> int
 
 val print_tree : ('a -> string) -> 'a derivation_tree -> string
+val print_tree_sexp : ('a -> string) -> 'a derivation_tree -> string
 val print_tree_compact : 'a derivation_tree -> string
