@@ -96,7 +96,7 @@ let main () =
 			    match parser_argument with
 			    | Parser.Sentence _ -> 
 			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-   			         List.iter print_endline (map_tr (Derivation.print_tree Chart.get_nonterm) goal_derivations)
+   			         List.iter print_endline (map_tr (Derivation.print_tree_sexp Chart.get_nonterm) goal_derivations)
    			    | _ -> failwith "-trees option is incompatible with prefix/infix mode"
 			   else 
 			     (match options.kbest with
