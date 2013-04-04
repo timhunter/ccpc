@@ -16,6 +16,8 @@ END {
         split(line,fields)
         nonterm = fields[1]
         weight = "1 / " counters[nonterm] "    "
+        gsub(/ *\(\*.*\*\)/, "", line)   # remove ocaml-style comments in grammar rule
+        gsub(/\"\"/, "\" \"", line)      # mimicking output format from train and mcfg_nt
         print weight, line
     }
 }
