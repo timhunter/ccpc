@@ -11,7 +11,7 @@ fi
 
 script=$1
 basename=`basename $script .sh`
-pushd .. >/dev/null
+pushd `dirname $script` >/dev/null
 source testing/$script 1>testing/$basename.out 2>testing/$basename.err
 popd >/dev/null
 
