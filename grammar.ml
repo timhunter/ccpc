@@ -58,26 +58,32 @@ let make_new_rule sit_nonterm rights func range_lists weight =
   let new_agenda_items = List.map2 Chart.create_item rights range_lists in
   (Rule.create_rule (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
+(* This implements step (b) on p.293 of Albro's dissertation. *)
+(* Given a particular item that we have just pulled off the agenda, it returns a list of 
+   new agenda items and a list of new grammar rules. *)
 let new_intersection_grammar_rules prefix chart item =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   let routes = Chart.get_routes item chart in
-  let make_rule_for_route ((items, rule, weight) : Chart.route) : (Rule.r * Chart.item list) option =
+  let make_rule_for_route ((items, rule, weight) : Chart.route) : (Rule.r * Chart.item list) =
     match (Rule.get_expansion rule) with
     | PublicTerminating str -> (
-        assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
-        match (Chart.get_ranges item) with
-        | [Pair (i,j)] -> if (i < j) && not (List.map (List.nth prefix) (range i j) = [str]) then (* I think maybe this could become an assert *)
-                             None
-                          else
-                             Some (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
-        | _ -> Some (Rule.create_terminating (sit_nonterm, str, (Rule.get_weight rule)), [])
+        begin  (* This begin-end block is just a bunch of assertions. *)
+            assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
+            match (Chart.get_ranges item) with
+            | [Pair (i,j)] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
+                              if (i < j) then assert (List.map (List.nth prefix) (range i j) = [str])
+                                         else assert (i = j) ;
+            | [VarRange _] -> () ;
+            | _ -> assert false ; (* Since rule is a terminating rule, the item it derived should cover exactly one range *)
+        end ;
+        (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
       )
     | PublicNonTerminating (nts,func) -> (
         assert (Nelist.to_list nts = map_tr Chart.get_nonterm items) ;
-        Some (make_new_rule sit_nonterm (map_tr Chart.get_nonterm items) func (map_tr Chart.get_ranges items) (Rule.get_weight rule))
+        (make_new_rule sit_nonterm (map_tr Chart.get_nonterm items) func (map_tr Chart.get_ranges items) (Rule.get_weight rule))
       )
   in
-  let results_to_combine : (Rule.r * Chart.item list) list = optlistmap make_rule_for_route routes in
+  let results_to_combine : (Rule.r * Chart.item list) list = List.rev_map make_rule_for_route routes in
   let new_rules = map_tr fst results_to_combine in
   let new_agenda_items = concatmap_tr snd results_to_combine in
   (new_rules, new_agenda_items)
@@ -96,19 +102,25 @@ let add_if_new mq x =
 	) else ()
 (********************************************************************)
 
+(* This is a recursive version of the while-loop on p.292-293 of Albro's dissertation. *)
+(* q is the agenda, maintained as mutable state. *)
+(* grammar_so_far is the accumulating list of rules that will comprise the intersection grammar. *)
+(* The function new_intersection_grammar_rules implements the guts of the process, and returns the 
+   new agenda items and the new grammar rules that are added to q and grammar_so_far in a single iteration. *)
 let rec build_intersection_grammar prefix chart q grammar_so_far =
   if (is_empty_myqueue q) then
     grammar_so_far
   else
     let trigger = pop_myqueue q in
     let (new_rules, new_agenda_items) = new_intersection_grammar_rules prefix chart trigger in
-    List.iter (fun item -> add_if_new q item) new_agenda_items ;
-    build_intersection_grammar prefix chart q (grammar_so_far @ new_rules)
+    List.iter (fun item -> add_if_new q item) new_agenda_items ;             (* Add new agenda items to q *)
+    build_intersection_grammar prefix chart q (grammar_so_far @ new_rules)   (* Go round again, with new grammar rules added *)
 
-
+(* goal_items :   the items already in the chart that we're going to ``search backwards from'' *)
+(* symbols :      the prefix to intersect with *)
 let intersection_grammar chart goal_items start_symbol symbols = 
   let q = create_myqueue () in
-  List.iter (fun item -> add_if_new q item) goal_items ;
+  List.iter (fun item -> add_if_new q item) goal_items ;    (* initialise q to contain goal_items *)
   let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
   let new_rules = build_intersection_grammar symbols chart q [] in
   (new_rules, new_start_symbol)
