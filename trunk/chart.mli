@@ -4,8 +4,8 @@ type route = (item list) * Rule.r * Util.weight
 type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 
 val get_nonterm: item -> string
-val create_item: string -> Util.range list -> item
-val get_ranges: item -> Util.range list
+val create_item: string -> Fsa.range list -> item
+val get_ranges: item -> Fsa.range list
 val get_routes : item -> chart -> route list
 val to_string: item -> string list -> string 
 val debug_str : item -> string
@@ -18,7 +18,7 @@ val add : chart -> item -> route -> unit
 val get_status : chart -> item -> route -> item_route_status
 val length : chart -> int
 
-val goal_item : string -> Util.fsa -> item
+val goal_item : string -> Fsa.fsa -> item
 
 val goal_items : chart -> string -> int -> item list
 val iter_items : chart -> (item -> unit) -> unit
