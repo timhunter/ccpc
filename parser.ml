@@ -4,8 +4,6 @@ open Tables
 open Chart
 open Fsa
 
-    type prim = Rule.r
-    type input = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
     type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
 
     
@@ -13,11 +11,11 @@ open Fsa
       (get_nonterm item = start_symbol) && (map_tr get_consumed_span (get_ranges item) = [Some (0,length)])
 
     (* return type is Chart.item * Rule.r * Rational.rat option *)
-    let get_axioms grammar input =
-      let (symbols, fsa, epsilon, unsituated_ranges) = match input with
-        | Infix    symbols -> let len = List.length symbols in (symbols, Fsa.Infix(len),    (if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
-        | Prefix   symbols -> let len = List.length symbols in (symbols, Fsa.Prefix(len),   (if 0 < len then [None] else []), [Some (len,len)])
-        | Sentence symbols -> let len = List.length symbols in (symbols, Fsa.Sentence(len),                  [None]         , []) in
+    let get_axioms grammar fsa =
+      let (epsilon, unsituated_ranges) = match fsa with
+        | Infix    _ -> let len = (end_state fsa) in ((if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
+        | Prefix   _ -> let len = (end_state fsa) in ((if 0 < len then [None] else []), [Some (len,len)])
+        | Sentence _ ->                              (                 [None]         , []) in
       let get_axiom rule =
         match Rule.get_expansion rule with
         | PublicTerminating str ->
@@ -27,7 +25,7 @@ open Fsa
                  ((* an item that can go anywhere in the input (i.e. VarRange), if the terminating rule produces the empty string *)
                   (if str = " " then epsilon else []) @
                   (* items that cover non-empty chunks of the input *)
-                  map_tr (fun index -> Some (index,index+1)) (find_in_list str symbols) @
+                  map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str) @
                   (* items that hypothesize non-empty chunks of unseen "input" *)
                   unsituated_ranges)
         | PublicNonTerminating _ -> []
