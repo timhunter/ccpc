@@ -1,5 +1,6 @@
 open Util
 open Rule
+open Fsa
 
 (* Convert a string to a list of characters *)
 let rec string_to_list str =
@@ -156,9 +157,9 @@ module SituatedNode =
 (* apply the relation m to "old" and "current". Used to calculate subgraph widths in get_subgraph below *)
 let extremum m old current = match current with
   | Range(_, Some (i,j)) -> m (m i j) old
-  | Range(Util.Infix(n),    None) -> m (m 1 (n-1)) old
-  | Range(Util.Prefix(n),   None) -> m (m 0 (n-1)) old
-  | Range(Util.Sentence(n), None) -> m (m 0 n) old
+  | Range(Infix(n),    None) -> m (m 1 (n-1)) old
+  | Range(Prefix(n),   None) -> m (m 0 (n-1)) old
+  | Range(Sentence(n), None) -> m (m 0 n) old
 
 module SituatedGraph =
   struct

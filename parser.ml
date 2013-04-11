@@ -2,6 +2,7 @@ open Util
 open Rule
 open Tables
 open Chart
+open Fsa
 
     type prim = Rule.r
     type input = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
@@ -14,9 +15,9 @@ open Chart
     (* return type is Chart.item * Rule.r * Rational.rat option *)
     let get_axioms grammar input =
       let (symbols, fsa, epsilon, unsituated_ranges) = match input with
-        | Infix    symbols -> let len = List.length symbols in (symbols, Util.Infix(len),    (if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
-        | Prefix   symbols -> let len = List.length symbols in (symbols, Util.Prefix(len),   (if 0 < len then [None] else []), [Some (len,len)])
-        | Sentence symbols -> let len = List.length symbols in (symbols, Util.Sentence(len),                  [None]         , []) in
+        | Infix    symbols -> let len = List.length symbols in (symbols, Fsa.Infix(len),    (if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
+        | Prefix   symbols -> let len = List.length symbols in (symbols, Fsa.Prefix(len),   (if 0 < len then [None] else []), [Some (len,len)])
+        | Sentence symbols -> let len = List.length symbols in (symbols, Fsa.Sentence(len),                  [None]         , []) in
       let get_axiom rule =
         match Rule.get_expansion rule with
         | PublicTerminating str ->

@@ -1,4 +1,5 @@
 open Util
+open Fsa
 
 type item = ParseItem of string * (range list)  (*range defined in Util*) 
 
