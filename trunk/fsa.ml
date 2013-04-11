@@ -1,16 +1,28 @@
+open Util
 
-type fsa = Prefix of int | Infix of int | Sentence of int
+type fsa = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
 type range = Range of fsa * ((int * int) option)
 
 exception RangesNotAdjacentException
 
 let get_consumed_span (Range(input,span)) = span
 
-let goal_span fsa =
+let end_state fsa =
     match fsa with
-    | Infix n -> Some(0,n)
-    | Prefix n -> Some(0,n)
-    | Sentence n -> Some(0,n)
+    | Infix ws    -> List.length ws
+    | Prefix ws   -> List.length ws
+    | Sentence ws -> List.length ws
+
+let goal_span fsa = Some(0, end_state fsa)
+
+let find_arcs fsa str =
+    let indices =
+        match fsa with
+        | Infix ws    -> find_in_list str ws
+        | Prefix ws   -> find_in_list str ws
+        | Sentence ws -> find_in_list str ws
+    in
+    map_tr (fun i -> (i,i+1)) indices
 
 (* Are we able to use an epsilon transition from i to i? *)
 (* Note that this is only intended to accommodate epsilons that are "hidden in the input". 
@@ -21,9 +33,9 @@ let goal_span fsa =
 (* In other words: is the transition from i to i one that can ONLY emit an epsilon? *)
 let epsilon_transition_possible input i =
     match input with
-        | Infix(len)    -> (i >  0 && i <  len)       (* true for all states except the first and last one *)
-        | Prefix(len)   -> (i >= 0 && i <  len)       (* true for all states except the last one *)
-        | Sentence(len) -> (i >= 0 && i <= len)       (* true for all states *)
+        | Infix ws    -> let len = List.length ws in (i >  0 && i <  len)       (* true for all states except the first and last one *)
+        | Prefix ws   -> let len = List.length ws in (i >= 0 && i <  len)       (* true for all states except the last one *)
+        | Sentence ws -> let len = List.length ws in (i >= 0 && i <= len)       (* true for all states *)
 
 let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     assert (input1 = input2) ;
