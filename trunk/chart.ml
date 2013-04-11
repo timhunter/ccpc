@@ -28,9 +28,9 @@ let get_string sentence range_list =
   let rec get' lst acc =
     match lst with 
       [] -> acc
-    | h::t -> match h with 
-                | Pair (x,y) -> get' t ((find_words (x,y))::acc)
-                | VarRange _ -> get' t acc
+    | h::t -> match (get_consumed_span h) with 
+                | Some(x,y) -> get' t ((find_words (x,y))::acc)
+                | None -> get' t acc
     in
   List.flatten (get' range_list [])
 
@@ -44,18 +44,18 @@ let to_string item sentence =
 let debug_str item =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
-		match r with
-		| Pair (x,y) -> Printf.sprintf "%d:%d" x y
-		| VarRange _ -> Printf.sprintf "eps"
+		match (get_consumed_span r) with
+		| Some (x,y) -> Printf.sprintf "%d:%d" x y
+		| None -> Printf.sprintf "eps"
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
 
 let debug_str_long item chart =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
-		match r with
-		| Pair (x,y) -> Printf.sprintf "%d:%d" x y
-		| VarRange _ -> Printf.sprintf "eps"
+		match (get_consumed_span r) with
+		| Some (x,y) -> Printf.sprintf "%d:%d" x y
+		| None -> Printf.sprintf "eps"
 	in
 	let show_backpointer (items,r,wt) = show_weight wt ^^ (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in
 	let backpointers_str = List.fold_left (^^) "" (map_tr show_backpointer (get_routes item chart)) in
@@ -81,7 +81,7 @@ let get_status c item route =
  * sense to just use the below function goal_item, and then call get_routes on the result. *)
 let goal_items c (start_symbol : string) (length : int) : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
-    if (get_nonterm i = start_symbol) && (get_ranges i = [Pair (0,length)]) then
+    if (get_nonterm i = start_symbol) && (map_tr get_consumed_span (get_ranges i) = [Some(0,length)]) then
       i::acc
     else
       acc
@@ -89,7 +89,7 @@ let goal_items c (start_symbol : string) (length : int) : (item list) =
   match c with
   | TableWithHistory tbl -> Hashtbl.fold check_item tbl []
 
-let goal_item start_symbol length = ParseItem(start_symbol, [Pair(0,length)])
+let goal_item start_symbol fsa = ParseItem(start_symbol, [Range(fsa, goal_span fsa)])
 
 (*** WARNING: Functions below here are very slow. Not recommended outside of debugging contexts. ***)
 

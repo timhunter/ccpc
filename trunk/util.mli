@@ -1,4 +1,5 @@
-type range = Pair of int * int | VarRange of int * int   (* VarRange n means (i,i) for any i, 0 <= i < n *)
+type fsa = Prefix of int | Infix of int | Sentence of int
+type range = Range of fsa * ((int * int) option)
 exception RangesNotAdjacentException
 exception EmptyListException
 
@@ -10,6 +11,8 @@ val take_while : ('a -> bool) -> 'a list -> 'a list
 val optlistmap : ('a -> 'b option) -> 'a list -> 'b list
 val require_no_nones : ('a option) list -> ('a list) option
 val concat_ranges : range -> range -> range
+val get_consumed_span : range -> (int * int) option
+val goal_span : fsa -> (int * int) option
 val range : int -> int -> int list
 val (^^) : string -> string -> string
 val find_in_list : 'a -> 'a list -> int list
