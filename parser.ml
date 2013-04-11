@@ -9,24 +9,24 @@ open Chart
 
     
     let is_goal start_symbol length item =
-      (get_nonterm item = start_symbol) && (get_ranges item = [Pair (0,length)])
+      (get_nonterm item = start_symbol) && (map_tr get_consumed_span (get_ranges item) = [Some (0,length)])
 
     (* return type is Chart.item * Rule.r * Rational.rat option *)
     let get_axioms grammar input =
-      let (symbols, epsilon, unsituated_ranges) = match input with
-        | Prefix   symbols -> let len = List.length symbols in (symbols, (if 0 < len then [VarRange (0,len  )] else []), [Pair (len,len)])
-        | Infix    symbols -> let len = List.length symbols in (symbols, (if 1 < len then [VarRange (1,len  )] else []), [Pair (len,len); Pair (0,0)])
-        | Sentence symbols -> let len = List.length symbols in (symbols,                  [VarRange (0,len+1)]         , []) in
+      let (symbols, fsa, epsilon, unsituated_ranges) = match input with
+        | Infix    symbols -> let len = List.length symbols in (symbols, Util.Infix(len),    (if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
+        | Prefix   symbols -> let len = List.length symbols in (symbols, Util.Prefix(len),   (if 0 < len then [None] else []), [Some (len,len)])
+        | Sentence symbols -> let len = List.length symbols in (symbols, Util.Sentence(len),                  [None]         , []) in
       let get_axiom rule =
         match Rule.get_expansion rule with
         | PublicTerminating str ->
           map_tr (let nt = Rule.get_nonterm rule in
                   let wt = Rule.get_weight rule in
-                  fun range -> (create_item nt [range], rule, wt))
+                  fun span -> (create_item nt [Range(fsa,span)], rule, wt))
                  ((* an item that can go anywhere in the input (i.e. VarRange), if the terminating rule produces the empty string *)
                   (if str = " " then epsilon else []) @
                   (* items that cover non-empty chunks of the input *)
-                  map_tr (fun index -> Pair (index,index+1)) (find_in_list str symbols) @
+                  map_tr (fun index -> Some (index,index+1)) (find_in_list str symbols) @
                   (* items that hypothesize non-empty chunks of unseen "input" *)
                   unsituated_ranges)
         | PublicNonTerminating _ -> []

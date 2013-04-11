@@ -49,9 +49,11 @@ let desituate_rule r =
 
 let rec build_symbol sym ranges =
   match ranges with
-    [] -> sym
-  | (Pair (p,q))::rs -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
-  | (VarRange _)::rs -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
+  | [] -> sym
+  | (r::rs) -> (match get_consumed_span r with
+                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
+                | None       -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
+               )
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
@@ -69,11 +71,11 @@ let new_intersection_grammar_rules prefix chart item =
     | PublicTerminating str -> (
         begin  (* This begin-end block is just a bunch of assertions. *)
             assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
-            match (Chart.get_ranges item) with
-            | [Pair (i,j)] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
+            match (map_tr get_consumed_span (Chart.get_ranges item)) with
+            | [Some (i,j)] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
                               if (i < j) then assert (List.map (List.nth prefix) (range i j) = [str])
                                          else assert (i = j) ;
-            | [VarRange _] -> () ;
+            | [None] -> () ;
             | _ -> assert false ; (* Since rule is a terminating rule, the item it derived should cover exactly one range *)
         end ;
         (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
@@ -153,8 +155,10 @@ module SituatedNode =
 
 (* apply the relation m to "old" and "current". Used to calculate subgraph widths in get_subgraph below *)
 let extremum m old current = match current with
-    Pair (i,j) -> m (m i j) old
-  | VarRange (i,j) -> m (m i j) old
+  | Range(_, Some (i,j)) -> m (m i j) old
+  | Range(Util.Infix(n),    None) -> m (m 1 (n-1)) old
+  | Range(Util.Prefix(n),   None) -> m (m 0 (n-1)) old
+  | Range(Util.Sentence(n), None) -> m (m 0 n) old
 
 module SituatedGraph =
   struct

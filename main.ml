@@ -43,8 +43,13 @@ let rec process_args args acc =
 
 (****************************************************************************************)
 
-let print_kbest k chart start_symbol input_list =
-        let goal = goal_item start_symbol (List.length input_list) in
+let print_kbest k chart start_symbol parser_argument =
+        let fsa = match parser_argument with
+                  | Parser.Infix xs    -> Util.Infix(List.length xs)
+                  | Parser.Prefix xs   -> Util.Prefix(List.length xs)
+                  | Parser.Sentence xs -> Util.Sentence(List.length xs)
+        in
+        let goal = goal_item start_symbol fsa in
         let trees = Derivation.get_n_best_from_chart k chart goal in
         List.iter (fun t -> Printf.printf "%s\n" (Derivation.print_tree_compact t)) trees
 
@@ -101,7 +106,7 @@ let main () =
 			   else 
 			     (match options.kbest with
 			      | None -> ()
-			      | Some k -> print_kbest k chart start_symbol input_list
+			      | Some k -> print_kbest k chart start_symbol parser_argument
 			     )
 			  );
 			(* ditto for graphs *)
