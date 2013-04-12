@@ -70,7 +70,7 @@ open Fsa
       let right_nts = List.map (get_nts 0) right_rules in 
       get_items (left_nts @ right_nts)
   
-    let rec consequences max_depth prims chart q tables =
+    let rec consequences prims chart q tables =
       if (Queue.is_empty q)
       then chart
       else
@@ -97,7 +97,7 @@ open Fsa
               ()
           in
           List.iter process all_new_items ;
-          consequences (max_depth -1) prims chart q tables
+          consequences prims chart q tables
        
     (* Produces a length-three array of rule lists; nullary, unary and binary rules *)
     let build_arity_map rules =
@@ -112,7 +112,7 @@ open Fsa
                     | _ -> build' t in 
      build' rules
 
-    let deduce max_depth prims input =
+    let deduce prims input =
       let arity_map = build_arity_map prims in 
       let left_map = build_rule_map (Array.get arity_map 2) 0 in 
       let right_map = build_rule_map (Array.get arity_map 2) 1 in
@@ -129,6 +129,6 @@ open Fsa
       let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
       let queue = Queue.create () in 
       List.iter (fun (item,_,_) -> Queue.add item queue) axioms_list ;
-      let chart = consequences max_depth prims axioms queue tables in
+      let chart = consequences prims axioms queue tables in
       chart
 
