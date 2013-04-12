@@ -10,18 +10,13 @@ open Read
 open Chart
 (* open Rational *)
 
-let print_grammar grammar_file parser_arg (rules, start_symbol) =
+let print_grammar grammar_file fsa (rules, start_symbol) =
 	Printf.printf "(* original grammar: %s *)\n" grammar_file ;
-	begin
-	match parser_arg with
-	| Fsa.Prefix s   -> Printf.printf "(* intersected with prefix: %s *)\n" (String.concat " " s)
-	| Fsa.Infix s    -> Printf.printf "(* intersected with infix: %s *)\n" (String.concat " " s)
-	| Fsa.Sentence s -> Printf.printf "(* intersected with exact string: %s *)\n" (String.concat " " s)
-	end ;
+	Printf.printf "(* intersected with %s *)\n" (Fsa.description fsa) ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
 type options = { graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string list -> Fsa.fsa ; sentence : string option }
-let default_options = { graph = None; kbest = None ; trees = false; intersect = false; input = (fun s -> Fsa.Sentence s); sentence = None }
+let default_options = { graph = None; kbest = None ; trees = false; intersect = false; input = Fsa.make_fsa_exact; sentence = None }
 
 (* Removes spaces from the beginning and end of the string, 
  * and collapses adjacent spaces into a single space. *)
@@ -36,8 +31,8 @@ let rec process_args args acc =
 	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
 	| ("-trees" :: rest)               -> process_args rest {acc with trees = true}
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
-	| ("-p" :: rest)     -> process_args rest {acc with input = (fun s -> Fsa.Prefix s)}
-        | ("-infix" :: rest) -> process_args rest {acc with input = (fun s -> Fsa.Infix  s)}
+	| ("-p" :: rest)     -> process_args rest {acc with input = Fsa.make_fsa_prefix}
+        | ("-infix" :: rest) -> process_args rest {acc with input = Fsa.make_fsa_infix}
         | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
 	| (x::rest)          -> process_args rest {acc with sentence = Some (cleanup_input x)}
 
@@ -92,12 +87,13 @@ let main () =
 			then print_grammar grammar_file fsa
 			         (intersection_grammar chart goal_items start_symbol input_list)
 			else 
-			  (if options.trees then 
-			    match fsa with
-			    | Fsa.Sentence _ -> 
+			  (if options.trees then (
+			    if (Fsa.is_exact fsa) then
 			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
    			         List.iter print_endline (map_tr (Derivation.print_tree_sexp Chart.get_nonterm) goal_derivations)
-   			    | _ -> failwith "-trees option is incompatible with prefix/infix mode"
+   			    else
+   			         failwith "-trees option is incompatible with prefix/infix mode"
+   			   )
 			   else 
 			     (match options.kbest with
 			      | None -> ()
