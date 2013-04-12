@@ -18,7 +18,7 @@ val start_state : fsa -> state
 val end_state : fsa -> state
 val axiom_spans : fsa -> string -> ((state * state) option) list
 
-val symbol_on_arc : fsa -> (state * state) -> string option
+val symbol_on_arc : fsa -> (state * state) -> string -> bool
 
 val description : fsa -> string
 

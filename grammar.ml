@@ -74,7 +74,7 @@ let new_intersection_grammar_rules chart item =
             assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
             match (Chart.get_ranges item) with
             | [Range(fsa,Some (i,j))] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
-                                         if (i != j) then (assert (symbol_on_arc fsa (i,j) = Some str)) ;
+                                         if (i != j) then (assert (symbol_on_arc fsa (i,j) str)) ;
             | [Range(_,None)] -> () ;
             | _ -> assert false ; (* Since rule is a terminating rule, the item it derived should cover exactly one range *)
         end ;
