@@ -24,6 +24,23 @@ let find_arcs fsa str =
     in
     map_tr (fun i -> (i,i+1)) indices
 
+let axiom_spans fsa str =
+    let len = end_state fsa in
+    let string_independent_results =    (* Axiom spans that we allow because of the structure of the FSA, not dependent at all on the string *)
+        match fsa with
+        | Infix _ -> [Some (len,len); Some (0,0)]
+        | Prefix _   -> [Some (len,len)]
+        | Sentence _ -> []
+    in
+    let string_dependent_results =
+        match (str, fsa) with
+        | (" ", Infix _)    -> if (len > 1) then [None] else []
+        | (" ", Prefix _)   -> if (len > 0) then [None] else []
+        | (" ", Sentence _) -> [None]
+        | _                 -> map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str)
+    in
+    string_dependent_results @ string_independent_results
+
 (* Are we able to use an epsilon transition from i to i? *)
 (* Note that this is only intended to accommodate epsilons that are "hidden in the input". 
    For example, if we're parsing a prefix of length n, then this function will return 

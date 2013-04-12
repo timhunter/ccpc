@@ -12,22 +12,13 @@ open Fsa
 
     (* return type is Chart.item * Rule.r * Rational.rat option *)
     let get_axioms grammar fsa =
-      let (epsilon, unsituated_ranges) = match fsa with
-        | Infix    _ -> let len = (end_state fsa) in ((if 1 < len then [None] else []), [Some (len,len); Some (0,0)])
-        | Prefix   _ -> let len = (end_state fsa) in ((if 0 < len then [None] else []), [Some (len,len)])
-        | Sentence _ ->                              (                 [None]         , []) in
       let get_axiom rule =
         match Rule.get_expansion rule with
         | PublicTerminating str ->
           map_tr (let nt = Rule.get_nonterm rule in
                   let wt = Rule.get_weight rule in
                   fun span -> (create_item nt [Range(fsa,span)], rule, wt))
-                 ((* an item that can go anywhere in the input (i.e. VarRange), if the terminating rule produces the empty string *)
-                  (if str = " " then epsilon else []) @
-                  (* items that cover non-empty chunks of the input *)
-                  map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str) @
-                  (* items that hypothesize non-empty chunks of unseen "input" *)
-                  unsituated_ranges)
+                 (axiom_spans fsa str)
         | PublicNonTerminating _ -> []
       in
       concatmap_tr get_axiom grammar
