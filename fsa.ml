@@ -2,17 +2,21 @@ open Util
 
 type state = int
 
-type fsa = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
-         | File of (string * state * state * ((state * state), (string * float)) Hashtbl.t)
+type string_construal = Infix | Prefix | Exact
+
+type fsa = StringBased of (string_construal * string list)
+         | FileBased of (string * state * state * ((state * state), (string * float)) Hashtbl.t)
 
 type range = Range of fsa * ((state * state) option)
 
 exception RangesNotAdjacentException
 
-let make_fsa_prefix s = Prefix   (Str.split (Str.regexp_string " ") s)
-let make_fsa_infix s  = Infix    (Str.split (Str.regexp_string " ") s)
-let make_fsa_exact s  = Sentence (Str.split (Str.regexp_string " ") s)
-let is_exact = function Sentence _ -> true | _ -> false
+exception FileBasedNotYetImplementedException
+
+let make_fsa_infix s  = StringBased(Infix,  (Str.split (Str.regexp_string " ") s))
+let make_fsa_prefix s = StringBased(Prefix, (Str.split (Str.regexp_string " ") s))
+let make_fsa_exact s  = StringBased(Exact,  (Str.split (Str.regexp_string " ") s))
+let is_exact = function StringBased(Exact,_) -> true | _ -> false
 
 let make_fsa_from_file filename =
     let channel = try open_in filename
@@ -26,7 +30,6 @@ let make_fsa_from_file filename =
             while true; do
                 let line = input_line channel in
                 let fields = Str.split (Str.regexp_string "\t") line in
-                Printf.eprintf "Got %d fields\n" (List.length fields) ;
                 match fields with
                 | [state1_str; state2_str; word_str; weight_str] ->
                     let (state1, state2, weight) =
@@ -44,20 +47,10 @@ let make_fsa_from_file filename =
             done
         with End_of_file -> close_in channel
     end ;
-    let result =
-        match (!start_state, !end_state) with
-        | (Some x, Some y) -> File(filename, x, y, tbl)
-        | (None, _) -> failwith (Printf.sprintf "Couldn't determine start state in FSA file %s" filename)
-        | _         -> failwith (Printf.sprintf "Couldn't determine end state in FSA file %s" filename)
-    in
-    let File(filename, x, y, tbl) = result in
-    Printf.eprintf "======================\n" ;
-    Printf.eprintf "FSA from file: %s\n" filename ;
-    Printf.eprintf "Start: %d     End: %d\n" x y ;
-    Hashtbl.iter (fun (s1,s2) (word,wt) -> Printf.eprintf "Arc from %d to %d:\tWord:%s\tWeight:%f\n" s1 s2 word wt) tbl ;
-    Printf.eprintf "======================\n" ;
-    failwith "Parsing with FSA from file not yet implemented. But it looks like the FSA has at least been read from the file correctly. :-)" ;
-    result
+    match (!start_state, !end_state) with
+    | (Some x, Some y) -> FileBased(filename, x, y, tbl)
+    | (None, _) -> failwith (Printf.sprintf "Couldn't determine start state in FSA file %s" filename)
+    | _         -> failwith (Printf.sprintf "Couldn't determine end state in FSA file %s" filename)
 
 let string_of n = string_of_int n
 
@@ -67,35 +60,32 @@ let start_state fsa = 0
 
 let end_state fsa =
     match fsa with
-    | Infix ws    -> List.length ws
-    | Prefix ws   -> List.length ws
-    | Sentence ws -> List.length ws
+    | StringBased(_,ws) -> List.length ws
+    | FileBased _       -> raise FileBasedNotYetImplementedException
 
 let goal_span fsa = Some(0, end_state fsa)
 
 let find_arcs fsa str =
-    let indices =
-        match fsa with
-        | Infix ws    -> find_in_list str ws
-        | Prefix ws   -> find_in_list str ws
-        | Sentence ws -> find_in_list str ws
-    in
-    map_tr (fun i -> (i,i+1)) indices
+    match fsa with
+    | StringBased(_,ws) -> map_tr (fun i -> (i,i+1)) (find_in_list str ws)
+    | FileBased _       -> raise FileBasedNotYetImplementedException
 
 let axiom_spans fsa str =
     let len = end_state fsa in
     let string_independent_results =    (* Axiom spans that we allow because of the structure of the FSA, not dependent at all on the string *)
         match fsa with
-        | Infix _ -> [Some (len,len); Some (0,0)]
-        | Prefix _   -> [Some (len,len)]
-        | Sentence _ -> []
+        | StringBased(Infix,_)  -> [Some (len,len); Some (0,0)]
+        | StringBased(Prefix,_) -> [Some (len,len)]
+        | StringBased(Exact,_)  -> []
+        | FileBased _           -> raise FileBasedNotYetImplementedException
     in
     let string_dependent_results =
         match (str, fsa) with
-        | (" ", Infix _)    -> if (len > 1) then [None] else []
-        | (" ", Prefix _)   -> if (len > 0) then [None] else []
-        | (" ", Sentence _) -> [None]
-        | _                 -> map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str)
+        | (" ", StringBased(Infix,_))  -> if (len > 1) then [None] else []
+        | (" ", StringBased(Prefix,_)) -> if (len > 0) then [None] else []
+        | (" ", StringBased(Exact,_))  -> [None]
+        | (_,   StringBased _)         -> map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str)
+        | (_, FileBased _)             -> raise FileBasedNotYetImplementedException
     in
     string_dependent_results @ string_independent_results
 
@@ -108,9 +98,15 @@ let axiom_spans fsa str =
 (* In other words: is the transition from i to i one that can ONLY emit an epsilon? *)
 let epsilon_transition_possible input i =
     match input with
-        | Infix ws    -> let len = List.length ws in (i >  0 && i <  len)       (* true for all states except the first and last one *)
-        | Prefix ws   -> let len = List.length ws in (i >= 0 && i <  len)       (* true for all states except the last one *)
-        | Sentence ws -> let len = List.length ws in (i >= 0 && i <= len)       (* true for all states *)
+    | StringBased(form,ws) ->
+        begin
+        let len = List.length ws in
+        match form with
+        | Infix  -> (i >  0 && i <  len)       (* true for all states except the first and last one *)
+        | Prefix -> (i >= 0 && i <  len)       (* true for all states except the last one *)
+        | Exact  -> (i >= 0 && i <= len)       (* true for all states *)
+        end
+    | FileBased _ -> raise FileBasedNotYetImplementedException
 
 let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     assert (input1 = input2) ;
@@ -125,19 +121,19 @@ let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     Range(input, new_span)
 
 let symbol_on_arc fsa (i,j) =
-    if (i+1 != j) then
-        None
-    else Some (
-        match fsa with
-        | Infix ws    -> List.nth ws i
-        | Prefix ws   -> List.nth ws i
-        | Sentence ws -> List.nth ws i
-    )
+    match fsa with
+    | StringBased(form,ws) ->
+        if (i+1 != j) then
+            None
+        else
+            Some (List.nth ws i)
+    | FileBased _ -> raise FileBasedNotYetImplementedException
 
 let description fsa =
     match fsa with
-    | Infix ws    -> Printf.sprintf "infix: %s" (String.concat " " ws)
-    | Prefix ws   -> Printf.sprintf "prefix: %s" (String.concat " " ws)
-    | Sentence ws -> Printf.sprintf "exact string: %s" (String.concat " " ws)
+    | StringBased(Infix,ws)  -> Printf.sprintf "infix: %s" (String.concat " " ws)
+    | StringBased(Prefix,ws) -> Printf.sprintf "prefix: %s" (String.concat " " ws)
+    | StringBased(Exact,ws)  -> Printf.sprintf "exact string: %s" (String.concat " " ws)
+    | FileBased _ -> raise FileBasedNotYetImplementedException
 
 let index_of x = x
