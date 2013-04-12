@@ -15,7 +15,7 @@ let print_grammar grammar_file fsa (rules, start_symbol) =
 	Printf.printf "(* intersected with %s *)\n" (Fsa.description fsa) ;
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
-type options = { graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string list -> Fsa.fsa ; sentence : string option }
+type options = { graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string -> Fsa.fsa ; sentence : string option }
 let default_options = { graph = None; kbest = None ; trees = false; intersect = false; input = Fsa.make_fsa_exact; sentence = None }
 
 (* Removes spaces from the beginning and end of the string, 
@@ -72,10 +72,10 @@ let main () =
 		let grammar_file = x in
 		let options = process_args xs default_options in
 		let (rules,start_symbol) = Grammar.get_input_grammar grammar_file in
-		let (input_list,input_string,fsa) = match options.sentence with
+		let (input_list,fsa) = match options.sentence with
 			None -> failwith "No sentence given; nothing to do!"
 		      | Some s -> (let x = Str.split (Str.regexp_string " ") s in
-				   (x,s,options.input x)) in
+				   (x,options.input s)) in
 		match (options.intersect,options.graph,options.trees,options.kbest) with
 		    (false,None,false,None) -> failwith "Please specify one of -intersect, -graph, -trees or -kbest"
 		  | (_,_,_,_) -> 
@@ -85,7 +85,7 @@ let main () =
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
 			if options.intersect
 			then print_grammar grammar_file fsa
-			         (intersection_grammar chart goal_items start_symbol input_list)
+			         (intersection_grammar chart goal_items start_symbol fsa)
 			else 
 			  (if options.trees then (
 			    if (Fsa.is_exact fsa) then

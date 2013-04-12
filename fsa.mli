@@ -3,9 +3,9 @@ type state
 type range = Range of fsa * ((state * state) option)
 exception RangesNotAdjacentException
 
-val make_fsa_prefix : string list -> fsa
-val make_fsa_infix : string list -> fsa
-val make_fsa_exact : string list -> fsa
+val make_fsa_prefix : string -> fsa
+val make_fsa_infix : string -> fsa
+val make_fsa_exact : string -> fsa
 val is_exact : fsa -> bool
 
 val string_of : state -> string
