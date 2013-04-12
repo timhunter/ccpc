@@ -47,8 +47,9 @@ let rec process_tree weight sentence chart rule_uses nonterm_uses tree =
 let process_sentence (rules : Rule.r list) start_symbol rule_uses nonterm_uses (sentence : string) =
         let w = int_of_string (List.hd (Util.split ' ' sentence)) in
 	let split_sentence = List.tl (Util.split ' ' sentence) in
-	let chart = Parser.deduce rules (Fsa.make_fsa_exact split_sentence) in
-	let goal_items = Chart.goal_items chart start_symbol (List.length split_sentence) in
+	let fsa = Fsa.make_fsa_exact split_sentence in
+	let chart = Parser.deduce rules fsa in
+	let goal_items = Chart.goal_items chart start_symbol fsa in
 	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
 	if (goal_items = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence

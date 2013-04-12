@@ -6,10 +6,6 @@ open Fsa
 
     type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
 
-    
-    let is_goal start_symbol length item =
-      (get_nonterm item = start_symbol) && (map_tr get_consumed_span (get_ranges item) = [Some (0,length)])
-
     (* return type is Chart.item * Rule.r * Rational.rat option *)
     let get_axioms grammar fsa =
       let get_axiom rule =

@@ -52,7 +52,7 @@ let rec build_symbol sym ranges =
   match ranges with
   | [] -> sym
   | (r::rs) -> (match get_consumed_span r with
-                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%d-%d" p q)) rs
+                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%s-%s" (string_of p) (string_of q))) rs
                 | None       -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
                )
 
@@ -72,11 +72,10 @@ let new_intersection_grammar_rules prefix chart item =
     | PublicTerminating str -> (
         begin  (* This begin-end block is just a bunch of assertions. *)
             assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
-            match (map_tr get_consumed_span (Chart.get_ranges item)) with
-            | [Some (i,j)] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
-                              if (i < j) then assert (List.map (List.nth prefix) (range i j) = [str])
-                                         else assert (i = j) ;
-            | [None] -> () ;
+            match (Chart.get_ranges item) with
+            | [Range(fsa,Some (i,j))] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
+                                         if (i != j) then (assert (symbol_on_arc fsa (i,j) = Some str)) ;
+            | [Range(_,None)] -> () ;
             | _ -> assert false ; (* Since rule is a terminating rule, the item it derived should cover exactly one range *)
         end ;
         (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
@@ -156,8 +155,10 @@ module SituatedNode =
 
 (* apply the relation m to "old" and "current". Used to calculate subgraph widths in get_subgraph below *)
 let extremum m old current = match current with
-  | Range(_,   Some (i,j)) -> m (m i j) old
-  | Range(fsa, None)       -> m (m 0 (end_state fsa)) old   (* A bit sloppy *)
+  | Range(_,   Some (i,j)) -> m (m (index_of i) (index_of j)) old
+  | Range(fsa, None)       -> let i = start_state fsa in
+                              let j  = end_state fsa in
+                              m (m (index_of i) (index_of j)) old
 
 module SituatedGraph =
   struct

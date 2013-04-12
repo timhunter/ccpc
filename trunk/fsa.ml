@@ -1,7 +1,8 @@
 open Util
 
 type fsa = Prefix of (string list) | Infix of (string list) | Sentence of (string list)
-type range = Range of fsa * ((int * int) option)
+type state = int
+type range = Range of fsa * ((state * state) option)
 
 exception RangesNotAdjacentException
 
@@ -10,7 +11,11 @@ let make_fsa_infix s = Infix s
 let make_fsa_exact s = Sentence s
 let is_exact = function Sentence _ -> true | _ -> false
 
+let string_of n = string_of_int n
+
 let get_consumed_span (Range(input,span)) = span
+
+let start_state fsa = 0
 
 let end_state fsa =
     match fsa with
@@ -71,9 +76,20 @@ let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     in
     Range(input, new_span)
 
+let symbol_on_arc fsa (i,j) =
+    if (i+1 != j) then
+        None
+    else Some (
+        match fsa with
+        | Infix ws    -> List.nth ws i
+        | Prefix ws   -> List.nth ws i
+        | Sentence ws -> List.nth ws i
+    )
+
 let description fsa =
     match fsa with
     | Infix ws    -> Printf.sprintf "infix: %s" (String.concat " " ws)
     | Prefix ws   -> Printf.sprintf "prefix: %s" (String.concat " " ws)
     | Sentence ws -> Printf.sprintf "exact string: %s" (String.concat " " ws)
 
+let index_of x = x
