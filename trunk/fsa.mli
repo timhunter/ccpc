@@ -6,4 +6,4 @@ val concat_ranges : range -> range -> range
 val get_consumed_span : range -> (int * int) option
 val goal_span : fsa -> (int * int) option
 val end_state : fsa -> int
-val find_arcs : fsa -> string -> (int * int) list
+val axiom_spans : fsa -> string -> ((int * int) option) list
