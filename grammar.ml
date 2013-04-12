@@ -156,10 +156,8 @@ module SituatedNode =
 
 (* apply the relation m to "old" and "current". Used to calculate subgraph widths in get_subgraph below *)
 let extremum m old current = match current with
-  | Range(_, Some (i,j)) -> m (m i j) old
-  | Range(Infix ws,    None) -> let n = List.length ws in m (m 1 (n-1)) old
-  | Range(Prefix ws,   None) -> let n = List.length ws in m (m 0 (n-1)) old
-  | Range(Sentence ws, None) -> let n = List.length ws in m (m 0 n) old
+  | Range(_,   Some (i,j)) -> m (m i j) old
+  | Range(fsa, None)       -> m (m 0 (end_state fsa)) old   (* A bit sloppy *)
 
 module SituatedGraph =
   struct

@@ -5,6 +5,11 @@ type range = Range of fsa * ((int * int) option)
 
 exception RangesNotAdjacentException
 
+let make_fsa_prefix s = Prefix s
+let make_fsa_infix s = Infix s
+let make_fsa_exact s = Sentence s
+let is_exact = function Sentence _ -> true | _ -> false
+
 let get_consumed_span (Range(input,span)) = span
 
 let end_state fsa =
@@ -66,4 +71,9 @@ let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     in
     Range(input, new_span)
 
+let description fsa =
+    match fsa with
+    | Infix ws    -> Printf.sprintf "infix: %s" (String.concat " " ws)
+    | Prefix ws   -> Printf.sprintf "prefix: %s" (String.concat " " ws)
+    | Sentence ws -> Printf.sprintf "exact string: %s" (String.concat " " ws)
 
