@@ -36,8 +36,9 @@ let make_fsa_from_file filename =
                         try (int_of_string state1_str, int_of_string state2_str, float_of_string weight_str)
                         with Failure _ -> failwith (Printf.sprintf "Bad line (0) in FSA file %s: %s" filename line)
                     in
-                        if (!start_state = None) then (start_state := Some state1) ;     (* state1 of first line is the start state *)
-                        Hashtbl.add tbl (state1,state2) (word_str,weight)
+                    let word = if word_str = "<epsilon>" then " " else word_str in
+                    if (!start_state = None) then (start_state := Some state1) ;     (* state1 of first line is the start state *)
+                    Hashtbl.add tbl (state1,state2) (word,weight)
                 | [state_str] ->
                     let state = try (int_of_string state_str)
                                 with Failure _ -> failwith (Printf.sprintf "Bad line (1) in FSA file %s: %s" filename line)
@@ -56,20 +57,41 @@ let string_of n = string_of_int n
 
 let get_consumed_span (Range(input,span)) = span
 
-let start_state fsa = 0
+let start_state fsa =
+    match fsa with
+    | StringBased _ -> 0
+    | FileBased(_,s,_,_) -> s
 
 let end_state fsa =
     match fsa with
     | StringBased(_,ws) -> List.length ws
-    | FileBased _       -> raise FileBasedNotYetImplementedException
+    | FileBased(_,_,s,_) -> s
 
-let goal_span fsa = Some(0, end_state fsa)
+let goal_span fsa = Some(start_state fsa, end_state fsa)
 
 let find_arcs fsa str =
     match fsa with
     | StringBased(_,ws) -> map_tr (fun i -> (i,i+1)) (find_in_list str ws)
-    | FileBased _       -> raise FileBasedNotYetImplementedException
+    | FileBased(_,_,_,tbl) ->
+        let f (s1,s2) (word,wt) acc = if (word = str) then ((s1,s2)::acc) else acc in
+        Hashtbl.fold f tbl []
 
+let symbol_on_arc fsa (i,j) str =
+    match fsa with
+    | StringBased(form,ws) -> (i+1 = j) && (List.nth ws i = str)
+    | FileBased(_,_,_,tbl) ->
+        let transitions = Hashtbl.find_all tbl (i,j) in
+        List.exists (fun (word,wt) -> word = str) transitions
+
+(* If we're file-based and we're looking at an epsilon-covering rule, then we produce two kinds of axioms:
+    (a) the kind with a None span, the same way we do for an epsilon-covering rule with prefixes 
+        longer than 0 and infixes longer than 1; and
+    (b) the kind with a particular (i,j) span, like the ones we create for anything else that matches 
+        a particular chunk of the seen input.
+   The first kind is probably all we actually need, logically. But we include the second kind to mimic the way things 
+   have already been set up: specifically, if we have a string-based prefix of length n, then ALL terminal rules get a 
+   (n,n)-covering axiom, even if they introduce the empty string.
+ *)
 let axiom_spans fsa str =
     let len = end_state fsa in
     let string_independent_results =    (* Axiom spans that we allow because of the structure of the FSA, not dependent at all on the string *)
@@ -77,7 +99,7 @@ let axiom_spans fsa str =
         | StringBased(Infix,_)  -> [Some (len,len); Some (0,0)]
         | StringBased(Prefix,_) -> [Some (len,len)]
         | StringBased(Exact,_)  -> []
-        | FileBased _           -> raise FileBasedNotYetImplementedException
+        | FileBased _           -> []
     in
     let string_dependent_results =
         match (str, fsa) with
@@ -85,7 +107,8 @@ let axiom_spans fsa str =
         | (" ", StringBased(Prefix,_)) -> if (len > 0) then [None] else []
         | (" ", StringBased(Exact,_))  -> [None]
         | (_,   StringBased _)         -> map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str)
-        | (_, FileBased _)             -> raise FileBasedNotYetImplementedException
+        | (_,   FileBased _)           -> (* See comment at the start of this function *)
+                                          (if str = " " then [None] else []) @ (map_tr (fun (i,j) -> Some (i,j)) (find_arcs fsa str))
     in
     string_dependent_results @ string_independent_results
 
@@ -106,7 +129,11 @@ let epsilon_transition_possible input i =
         | Prefix -> (i >= 0 && i <  len)       (* true for all states except the last one *)
         | Exact  -> (i >= 0 && i <= len)       (* true for all states *)
         end
-    | FileBased _ -> raise FileBasedNotYetImplementedException
+    | FileBased _ ->
+        (* Could have been just `true'. But this mimics the somewhat special treatment of epsilons that we already 
+         * had in place for string-based cases. Basically, this function is about deciding where `eps' transitions 
+         * are allowed, not `n-n' transitions where n is a start/end state where we have a loop. *)
+        not (symbol_on_arc input (i,i) " ")
 
 let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     assert (input1 = input2) ;
@@ -120,20 +147,11 @@ let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     in
     Range(input, new_span)
 
-let symbol_on_arc fsa (i,j) =
-    match fsa with
-    | StringBased(form,ws) ->
-        if (i+1 != j) then
-            None
-        else
-            Some (List.nth ws i)
-    | FileBased _ -> raise FileBasedNotYetImplementedException
-
 let description fsa =
     match fsa with
     | StringBased(Infix,ws)  -> Printf.sprintf "infix: %s" (String.concat " " ws)
     | StringBased(Prefix,ws) -> Printf.sprintf "prefix: %s" (String.concat " " ws)
     | StringBased(Exact,ws)  -> Printf.sprintf "exact string: %s" (String.concat " " ws)
-    | FileBased _ -> raise FileBasedNotYetImplementedException
+    | FileBased(file,_,_,_)  -> Printf.sprintf "FSA from file: %s" file
 
 let index_of x = x
