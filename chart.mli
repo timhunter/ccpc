@@ -7,7 +7,6 @@ val get_nonterm: item -> string
 val create_item: string -> Fsa.range list -> item
 val get_ranges: item -> Fsa.range list
 val get_routes : item -> chart -> route list
-val to_string: item -> string list -> string 
 val debug_str : item -> string
 val debug_str_long : item -> chart -> string
 
@@ -20,6 +19,6 @@ val length : chart -> int
 
 val goal_item : string -> Fsa.fsa -> item
 
-val goal_items : chart -> string -> int -> item list
+val goal_items : chart -> string -> Fsa.fsa -> item list
 val iter_items : chart -> (item -> unit) -> unit
 val map_items : chart -> (item -> 'a) -> 'a list

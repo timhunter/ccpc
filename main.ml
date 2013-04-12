@@ -80,7 +80,7 @@ let main () =
 		    (false,None,false,None) -> failwith "Please specify one of -intersect, -graph, -trees or -kbest"
 		  | (_,_,_,_) -> 
 		      let chart = Parser.deduce rules fsa in
-		      let goal_items = Chart.goal_items chart start_symbol (List.length input_list) in
+		      let goal_items = Chart.goal_items chart start_symbol fsa in
 		      begin
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
 			if options.intersect

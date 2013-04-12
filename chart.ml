@@ -19,34 +19,11 @@ let get_routes prop c =
   match c with
   | TableWithHistory tbl -> Hashtbl.find_all tbl prop
 
-let get_string sentence range_list =
-  let find_words (first, last) =
-    let rec find' index acc =
-      if index= last then acc
-      else
-        find' (index+1) ((List.nth sentence index)::acc) in
-    ["("]@(List.rev  (find' first []))@[")"] in
-  let rec get' lst acc =
-    match lst with 
-      [] -> acc
-    | h::t -> match (get_consumed_span h) with 
-                | Some(x,y) -> get' t ((find_words (x,y))::acc)
-                | None -> get' t acc
-    in
-  List.flatten (get' range_list [])
-
-  
-
-let to_string item sentence =
-  let ParseItem (nt, ranges) = item in
-  let words = get_string sentence ranges in
-  Printf.sprintf "'{%s, %s}'" nt (List.fold_left (fun x y -> x ^ (y ^ " ")) "" words) 
-
 let debug_str item =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match (get_consumed_span r) with
-		| Some (x,y) -> Printf.sprintf "%d:%d" x y
+		| Some (x,y) -> Printf.sprintf "%s:%s" (Fsa.string_of x) (Fsa.string_of y)
 		| None -> Printf.sprintf "eps"
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
@@ -55,7 +32,7 @@ let debug_str_long item chart =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match (get_consumed_span r) with
-		| Some (x,y) -> Printf.sprintf "%d:%d" x y
+		| Some (x,y) -> Printf.sprintf "%s:%s" (Fsa.string_of x) (Fsa.string_of y)
 		| None -> Printf.sprintf "eps"
 	in
 	let show_backpointer (items,r,wt) = show_weight wt ^^ (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in
@@ -80,9 +57,9 @@ let get_status c item route =
 (* This function is kind of a remnant from the bad old days when an item included a 
  * list of backpointers. Now that an item is just a ``proposition'', it makes more 
  * sense to just use the below function goal_item, and then call get_routes on the result. *)
-let goal_items c (start_symbol : string) (length : int) : (item list) =
+let goal_items c (start_symbol : string) fsa : (item list) =
   let check_item (i : item)  _ (acc : item list) : item list =
-    if (get_nonterm i = start_symbol) && (map_tr get_consumed_span (get_ranges i) = [Some(0,length)]) then
+    if (get_nonterm i = start_symbol) && (map_tr get_consumed_span (get_ranges i) = [Some(start_state fsa, end_state fsa)]) then
       i::acc
     else
       acc
