@@ -6,9 +6,9 @@ type range = Range of fsa * ((state * state) option)
 
 exception RangesNotAdjacentException
 
-let make_fsa_prefix s = Prefix s
-let make_fsa_infix s = Infix s
-let make_fsa_exact s = Sentence s
+let make_fsa_prefix s = Prefix   (Str.split (Str.regexp_string " ") s)
+let make_fsa_infix s  = Infix    (Str.split (Str.regexp_string " ") s)
+let make_fsa_exact s  = Sentence (Str.split (Str.regexp_string " ") s)
 let is_exact = function Sentence _ -> true | _ -> false
 
 let string_of n = string_of_int n

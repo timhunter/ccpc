@@ -64,7 +64,7 @@ let make_new_rule sit_nonterm rights func range_lists weight =
 (* This implements step (b) on p.293 of Albro's dissertation. *)
 (* Given a particular item that we have just pulled off the agenda, it returns a list of 
    new agenda items and a list of new grammar rules. *)
-let new_intersection_grammar_rules prefix chart item =
+let new_intersection_grammar_rules chart item =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   let routes = Chart.get_routes item chart in
   let make_rule_for_route ((items, rule, weight) : Chart.route) : (Rule.r * Chart.item list) =
@@ -109,22 +109,21 @@ let add_if_new mq x =
 (* grammar_so_far is the accumulating list of rules that will comprise the intersection grammar. *)
 (* The function new_intersection_grammar_rules implements the guts of the process, and returns the 
    new agenda items and the new grammar rules that are added to q and grammar_so_far in a single iteration. *)
-let rec build_intersection_grammar prefix chart q grammar_so_far =
+let rec build_intersection_grammar chart q grammar_so_far =
   if (is_empty_myqueue q) then
     grammar_so_far
   else
     let trigger = pop_myqueue q in
-    let (new_rules, new_agenda_items) = new_intersection_grammar_rules prefix chart trigger in
+    let (new_rules, new_agenda_items) = new_intersection_grammar_rules chart trigger in
     List.iter (fun item -> add_if_new q item) new_agenda_items ;             (* Add new agenda items to q *)
-    build_intersection_grammar prefix chart q (grammar_so_far @ new_rules)   (* Go round again, with new grammar rules added *)
+    build_intersection_grammar chart q (grammar_so_far @ new_rules)          (* Go round again, with new grammar rules added *)
 
 (* goal_items :   the items already in the chart that we're going to ``search backwards from'' *)
-(* symbols :      the prefix to intersect with *)
-let intersection_grammar chart goal_items start_symbol symbols = 
+let intersection_grammar chart goal_items start_symbol fsa = 
   let q = create_myqueue () in
   List.iter (fun item -> add_if_new q item) goal_items ;    (* initialise q to contain goal_items *)
-  let new_start_symbol = Printf.sprintf "%s_0%d" start_symbol (List.length symbols) in
-  let new_rules = build_intersection_grammar symbols chart q [] in
+  let new_start_symbol = Printf.sprintf "%s_%s%s" start_symbol (string_of (start_state fsa)) (string_of (end_state fsa)) in
+  let new_rules = build_intersection_grammar chart q [] in
   (new_rules, new_start_symbol)
 
 module SituatedNode =
