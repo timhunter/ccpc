@@ -33,6 +33,7 @@ let rec process_args args acc =
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
 	| ("-p" :: rest)     -> process_args rest {acc with input = Fsa.make_fsa_prefix}
         | ("-infix" :: rest) -> process_args rest {acc with input = Fsa.make_fsa_infix}
+        | ("-file" :: rest) -> process_args rest {acc with input = Fsa.make_fsa_from_file}
         | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
 	| (x::rest)          -> process_args rest {acc with sentence = Some (cleanup_input x)}
 

@@ -6,6 +6,7 @@ exception RangesNotAdjacentException
 val make_fsa_prefix : string -> fsa
 val make_fsa_infix : string -> fsa
 val make_fsa_exact : string -> fsa
+val make_fsa_from_file : string -> fsa
 val is_exact : fsa -> bool
 
 val string_of : state -> string
