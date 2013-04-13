@@ -111,6 +111,48 @@ type weight = (Num.num * Num.num) option
 let no_weight = None
 let make_weight n1 n2 = Some(n1,n2)
 
+(* Computes (n * 10^x) all in type num *)
+let scientific_num n x =
+    let zero = Num.num_of_int 0 in
+    let rec power_of_ten x =
+        assert (Num.ge_num x zero) ;
+        if (Num.eq_num x zero) then
+            (Num.num_of_int 1)
+        else
+            (Num.mult_num (Num.num_of_int 10) (power_of_ten (Num.pred_num x)))
+    in
+    let result_num =
+        if (Num.ge_num x zero) then
+            Num.mult_num n (power_of_ten x)
+        else
+            Num.div_num n (power_of_ten (Num.minus_num x))
+    in
+    result_num
+
+(* I'll go to hell for this, I'm sure. *)
+let num_from_decimal (str : string) : Num.num =
+    let regex = Str.regexp "^\\([-+]\\)?\\([0-9]+\\)\\(\\.\\([0-9]+\\)\\)?\\(e\\(-?[0-9]+\\)\\)?$" in
+    if (Str.string_match regex str 0) then (
+        let sign = try (Str.matched_group 1 str) with Not_found -> "+" in
+        let whole_part = try (Str.matched_group 2 str) with Not_found -> (failwith "You've got to be kidding") in
+        let decimal_part = try (Str.matched_group 4 str) with Not_found -> "0" in
+        let exponent_part = try (Str.matched_group 6 str) with Not_found -> "0" in
+        let numerator = Num.num_of_string decimal_part in
+        let denominator = Num.num_of_string ("1" ^ (Str.global_replace (Str.regexp ".") "0" decimal_part)) in
+        let sign_factor = match sign with "+" -> (Num.num_of_int 1) | _ -> (Num.num_of_int (-1)) in
+        let result = scientific_num (Num.mult_num sign_factor
+                                                  (Num.add_num (Num.num_of_string whole_part)
+                                                               (Num.div_num numerator denominator)))
+                                    (Num.num_of_int (int_of_string exponent_part))
+        in
+        result
+    ) else (
+        failwith (Printf.sprintf "num_from_decimal: can't interpret string '%s' as a decimal" str)
+    )
+
+let weight_from_decimal (str : string) : weight =
+    make_weight (num_from_decimal str) (Num.num_of_int 1)
+
 let weight_denominator w =
   match w with
   | Some (_,d) -> Some d

@@ -5,7 +5,7 @@ type state = int
 type string_construal = Infix | Prefix | Exact
 
 type fsa = StringBased of (string_construal * string list)
-         | FileBased of (string * state * state * ((state * state), (string * float)) Hashtbl.t)
+         | FileBased of (string * state * state * ((state * state), (string * weight)) Hashtbl.t)
 
 type range = Range of fsa * ((state * state) option)
 
@@ -31,12 +31,14 @@ let make_fsa_from_file filename =
                 let line = input_line channel in
                 let fields = Str.split (Str.regexp_string "\t") line in
                 match fields with
-                | [state1_str; state2_str; word_str; weight_str] ->
-                    let (state1, state2, weight) =
-                        try (int_of_string state1_str, int_of_string state2_str, float_of_string weight_str)
+                | [state1_str; state2_str; word_str; neglogweight_str] ->
+                    let (state1, state2, neglogweight_flt) =
+                        try (int_of_string state1_str, int_of_string state2_str, float_of_string neglogweight_str)
                         with Failure _ -> failwith (Printf.sprintf "Bad line (0) in FSA file %s: %s" filename line)
                     in
                     let word = if word_str = "<epsilon>" then " " else word_str in
+                    let weight_flt = exp (0.0 -. neglogweight_flt) in
+                    let weight = weight_from_decimal (Printf.sprintf "%g" weight_flt) in
                     if (!start_state = None) then (start_state := Some state1) ;     (* state1 of first line is the start state *)
                     Hashtbl.add tbl (state1,state2) (word,weight)
                 | [state_str] ->
@@ -135,8 +137,18 @@ let epsilon_transition_possible input i =
          * are allowed, not `n-n' transitions where n is a start/end state where we have a loop. *)
         not (symbol_on_arc input (i,i) " ")
 
+(* Not foolproof (this will sometimes say 'true' when two FSAs are not in fact equal) 
+ * but useful for sanity-checking. *)
+let equal_check fsa1 fsa2 =
+    match (fsa1, fsa2) with
+    | (StringBased(Infix,xs),  StringBased(Infix,ys))  -> xs = ys
+    | (StringBased(Prefix,xs), StringBased(Prefix,ys)) -> xs = ys
+    | (StringBased(Exact,xs),  StringBased(Exact,ys))  -> xs = ys
+    | (FileBased(file1,_,_,_), FileBased(file2,_,_,_)) -> file1 = file2
+    | _ -> false
+
 let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
-    assert (input1 = input2) ;
+    assert (equal_check input1 input2) ;
     let input = input1 in
     let new_span =
         match (span1,span2) with
