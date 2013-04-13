@@ -150,8 +150,8 @@ let num_from_decimal (str : string) : Num.num =
         failwith (Printf.sprintf "num_from_decimal: can't interpret string '%s' as a decimal" str)
     )
 
-let weight_from_decimal (str : string) : weight =
-    make_weight (num_from_decimal str) (Num.num_of_int 1)
+let weight_from_float f =
+    make_weight (num_from_decimal (Printf.sprintf "%g" f)) (Num.num_of_int 1)
 
 let weight_denominator w =
   match w with

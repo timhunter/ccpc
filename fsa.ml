@@ -38,7 +38,7 @@ let make_fsa_from_file filename =
                     in
                     let word = if word_str = "<epsilon>" then " " else word_str in
                     let weight_flt = exp (0.0 -. neglogweight_flt) in
-                    let weight = weight_from_decimal (Printf.sprintf "%g" weight_flt) in
+                    let weight = weight_from_float weight_flt in
                     if (!start_state = None) then (start_state := Some state1) ;     (* state1 of first line is the start state *)
                     Hashtbl.add tbl (state1,state2) (word,weight)
                 | [state_str] ->
