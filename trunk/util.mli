@@ -19,7 +19,7 @@ val show_list : ('a -> string) -> 'a list -> string
 type weight
 val no_weight : weight
 val make_weight : Num.num -> Num.num -> weight
-val weight_from_decimal : string -> weight
+val weight_from_float : float -> weight
 val show_weight : weight -> string
 val show_weight_float : weight -> string
 val mult_weights : weight -> weight -> weight
