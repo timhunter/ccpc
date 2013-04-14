@@ -18,7 +18,7 @@ val start_state : fsa -> state
 val end_state : fsa -> state
 val axiom_spans : fsa -> string -> ((state * state) option) list
 
-val symbol_on_arc : fsa -> (state * state) -> string -> bool
+val weight_of_arc : fsa -> (state * state) -> string -> Util.weight
 
 val description : fsa -> string
 
