@@ -23,6 +23,7 @@ val weight_from_float : float -> weight
 val show_weight : weight -> string
 val show_weight_float : weight -> string
 val mult_weights : weight -> weight -> weight
+val add_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
 (* These last two functions are used only by generate.ml. Might be nice 
  * to get rid of them when/if that becomes obsolete. *)

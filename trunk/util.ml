@@ -150,8 +150,22 @@ let num_from_decimal (str : string) : Num.num =
         failwith (Printf.sprintf "num_from_decimal: can't interpret string '%s' as a decimal" str)
     )
 
+(* Guaranteed to return a weight of the form Some(n,d) where n and d are both nums that correspond 
+ * to whole integers. We keep all our weights this way so that show_weight works correctly. *)
 let weight_from_float f =
-    make_weight (num_from_decimal (Printf.sprintf "%g" f)) (Num.num_of_int 1)
+    let n = num_from_decimal (Printf.sprintf "%g" f) in
+    if (Num.is_integer_num n) then
+        make_weight n (Num.num_of_int 1)
+    else
+        let s = Num.string_of_num n in     (* s is something like "234/5678" *)
+        let regex = Str.regexp "^\\([0-9]+\\)\\/\\([0-9]+\\)$" in
+        if (Str.string_match regex s 0) then (
+            let num = Str.matched_group 1 s in
+            let denom = Str.matched_group 2 s in
+            make_weight (Num.num_of_string num) (Num.num_of_string denom)
+        ) else (
+            failwith (Printf.sprintf "weight_from_float: I thought string_of_num was guaranteed to give me a string in fractional form, but it gave me '%s'" s)
+        )
 
 let weight_denominator w =
   match w with
@@ -178,6 +192,15 @@ let mult_weights w1 w2 =
   | (None, None) -> None
   | (Some (n1,d1), Some (n2,d2)) -> Some (Num.mult_num n1 n2, Num.mult_num d1 d2)
   | _ -> Printf.eprintf "WARNING: Multiplying a None weight with a non-None weight!" ; None
+
+let add_weights w1 w2 =
+  match (w1,w2) with
+  | (None, None) -> None
+  | (Some (n1,d1), Some (n2,d2)) ->
+        let new_numerator = Num.add_num (Num.mult_num n1 d2) (Num.mult_num n2 d1) in
+        let new_denominator = Num.mult_num d1 d2 in
+        Some (new_numerator, new_denominator)
+  | _ -> Printf.eprintf "WARNING: Adding a None weight with a non-None weight!" ; None
 
 let compare_weights w1 w2 =
   match (w1,w2) with

@@ -78,12 +78,17 @@ let find_arcs fsa str =
         let f (s1,s2) (word,wt) acc = if (word = str) then ((s1,s2)::acc) else acc in
         Hashtbl.fold f tbl []
 
-let symbol_on_arc fsa (i,j) str =
+let weight_of_arc fsa (i,j) str =
     match fsa with
-    | StringBased(form,ws) -> (i+1 = j) && (List.nth ws i = str)
+    | StringBased(form,ws) ->
+        if (i = j) || ((i+1 = j) && (List.nth ws i = str)) then
+            weight_from_float 1.0
+        else
+            weight_from_float 0.0
     | FileBased(_,_,_,tbl) ->
-        let transitions = Hashtbl.find_all tbl (i,j) in
-        List.exists (fun (word,wt) -> word = str) transitions
+        let filter_matching = List.filter (fun (word,wt) -> word = str) in
+        let sum_weights = List.fold_left (fun acc (word,wt) -> add_weights acc wt) (weight_from_float 0.0) in
+        sum_weights (filter_matching (Hashtbl.find_all tbl (i,j)))
 
 (* If we're file-based and we're looking at an epsilon-covering rule, then we produce two kinds of axioms:
     (a) the kind with a None span, the same way we do for an epsilon-covering rule with prefixes 
@@ -135,7 +140,7 @@ let epsilon_transition_possible input i =
         (* Could have been just `true'. But this mimics the somewhat special treatment of epsilons that we already 
          * had in place for string-based cases. Basically, this function is about deciding where `eps' transitions 
          * are allowed, not `n-n' transitions where n is a start/end state where we have a loop. *)
-        not (symbol_on_arc input (i,i) " ")
+        compare_weights (weight_of_arc input (i,i) " ") (weight_from_float 0.0) = 0
 
 (* Not foolproof (this will sometimes say 'true' when two FSAs are not in fact equal) 
  * but useful for sanity-checking. *)

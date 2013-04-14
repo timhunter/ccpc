@@ -70,15 +70,17 @@ let new_intersection_grammar_rules chart item =
   let make_rule_for_route ((items, rule, weight) : Chart.route) : (Rule.r * Chart.item list) =
     match (Rule.get_expansion rule) with
     | PublicTerminating str -> (
-        begin  (* This begin-end block is just a bunch of assertions. *)
+        let fsa_weight =
             assert (items = []) ;   (* If this route used a terminating rule, there can't be any antecedent items *)
             match (Chart.get_ranges item) with
-            | [Range(fsa,Some (i,j))] -> (* The range (i,j) that this item covers should contain the string that the rule introduces *)
-                                         if (i != j) then (assert (symbol_on_arc fsa (i,j) str)) ;
-            | [Range(_,None)] -> () ;
+            | [Range(fsa,Some (i,j))] -> let w = weight_of_arc fsa (i,j) str in
+                                         assert (compare_weights w (weight_from_float 0.0) <> 0) ;    (* w should be non-zero *)
+                                         w
+            | [Range(_,None)] -> assert (str = " ") ; weight_from_float 1.0     (* The FSA assigns ``no cost'' for cover-nothing transitions *)
             | _ -> assert false ; (* Since rule is a terminating rule, the item it derived should cover exactly one range *)
-        end ;
-        (Rule.create_terminating (sit_nonterm, str, Rule.get_weight rule), [])
+        in
+        let new_rule_weight = mult_weights fsa_weight (Rule.get_weight rule) in
+        (Rule.create_terminating (sit_nonterm, str, new_rule_weight), [])
       )
     | PublicNonTerminating (nts,func) -> (
         assert (Nelist.to_list nts = map_tr Chart.get_nonterm items) ;
