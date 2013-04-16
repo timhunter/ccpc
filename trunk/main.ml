@@ -50,9 +50,7 @@ let main () =
 	match List.tl (Array.to_list Sys.argv) with
 	| [] ->
 		Printf.eprintf "\n" ;
-		Printf.eprintf "Usage: %s grammar-file (-graph \"dot-output-file\") (-trees) (-intersect) (-kbest <k>) (-p) (-infix) \"sentence\"\n" Sys.argv.(0);
-		Printf.eprintf "\n" ;
-		Printf.eprintf "  Flags in parentheses are optional.\n" ;
+		Printf.eprintf "Usage: %s grammar-file (-graph \"dot-output-file\") (-trees) (-intersect) (-kbest <k>) (-file fsa-file) ((-p) (-infix) \"sentence\")\n" Sys.argv.(0);
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Only one of the following three flags will take effect.\n" ;
 		Printf.eprintf "  If more than one is given, -intersect trumps everything else, and -trees trumps -kbest.\n" ;
@@ -60,10 +58,11 @@ let main () =
 		Printf.eprintf "      -trees         Prints (all) derivation trees to stdout (not compatible with prefix or infix mode)\n" ;
 		Printf.eprintf "      -kbest <k>     Prints the best <k> derivation trees to stdout\n" ;
 		Printf.eprintf "\n" ;
-		Printf.eprintf "  Only one of the following two flags will take effect. If more than one is given, \n" ;
-		Printf.eprintf "  the last one overrides all others. If neither is given, the string is treated as 'exact'.\n" ;
+		Printf.eprintf "  Only one of the following three flags will take effect. If more than one is given, \n" ;
+		Printf.eprintf "  the last one overrides all others. If neither -p nor -infix is present, a given string will be treated as 'exact'.\n" ;
 		Printf.eprintf "      -p             Treat the string to be parsed as a prefix\n" ;
 		Printf.eprintf "      -infix         Treat the string to be parsed as an infix\n" ;
+		Printf.eprintf "      -file <fsa>    Rather than a string, parse/intersect with the FSA in this file\n" ;
 		Printf.eprintf "\n" ;
 		Printf.eprintf "  Others:\n" ;
 		Printf.eprintf "      -graph <filename>    Write a graph of the chart to this file in DOT format\n" ;
