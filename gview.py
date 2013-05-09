@@ -49,15 +49,15 @@ def showGrammar(filename, dict):
                 num, denom = int(m.group(2)), int(m.group(3))
                 weightString = "%6d / %6d" % (num, denom)
             else:
-                num, denom = None, None
                 weightString = ""
-            rule = showRule(m.group(4), dict)
-            if rule is not None:
-                result.insert(0, "%s          %s" % (weightString, rule))
+            rawRule = m.group(4)
+            displayedRule = showRule(rawRule, dict)
+            if displayedRule is None: displayedRule = ""
+            result.insert(0, "%s | %-80s | %s" % (weightString, displayedRule, rawRule))
         else:
             print >>sys.stderr, "WARNING: ill-formed grammar line '%s', ignoring it" % line.strip()
-    ruleWithoutWeight = lambda s : re.sub("^[\d /]*", "", s)      # " ".join(s.split()[3:])
-    result.sort(key=ruleWithoutWeight)
+    rawRule = lambda s : s.split("|")[2]
+    result.sort(key=rawRule)
     for x in result:
         print x
 
