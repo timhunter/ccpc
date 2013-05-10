@@ -326,9 +326,9 @@ let print_usage () =
 	Printf.eprintf "Exactly one of -kbest or -sample should be given. Random seed is ignored if -kbest is specified.\n" ;
 	Printf.eprintf "\n" ;
 	Printf.eprintf "The grammar file should\n" ;
-	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
+	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg\n" ;
 	Printf.eprintf "       OR (ii) contain a comment line identifying a weighted MCFG file from which it is derived\n" ;
-	Printf.eprintf "               by intersection, as path of the form $GRAMMARS/wmcfg/$NAME.wmcfg\n" ;
+	Printf.eprintf "               by intersection, as path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg\n" ;
 	Printf.eprintf "\n" ;
 	Printf.eprintf "In either case, the associated MG and dictionary files should be in the following locations:\n" ;
 	Printf.eprintf "   $GRAMMARS/mg/$NAME.pl\n" ;
@@ -336,7 +336,7 @@ let print_usage () =
 	Printf.eprintf "\n"
 
 (* Returns a pair of strings (grammars_dir, grammar_name), such that the relevant files are 
-   grammars_dir/{mg,mcfgs/wmcfg}/grammar_name.{pl,wmcfg,dict} *)
+   grammars_dir/{mg,mcfgs}/grammar_name.{pl,mcfg,dict} *)
 let identify_original_grammar grammar_file =
 
 	let orig_grammar =
@@ -345,15 +345,15 @@ let identify_original_grammar grammar_file =
 		| Some s -> s
 	in
 
-	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg/$NAME.wmcfg *)
-	let regex = Str.regexp "^\\([a-zA-Z0-9\\.\\/_-]+\\)\\/wmcfg\\/\\([a-zA-Z0-9\\._-]+\\)\\.wmcfg$" in
+	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg*/$NAME.wmcfg *)
+	let regex = Str.regexp "^\\([a-zA-Z0-9\\.\\/_-]+\\)\\/wmcfg[^\\/]*\\/\\([a-zA-Z0-9\\._-]+\\)\\.wmcfg$" in
 	if (Str.string_match regex orig_grammar 0) then
 		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
 	else
 		if (orig_grammar = grammar_file) then
-			failwith (Printf.sprintf "No original grammar identified in %s (and this file itself is not in a location of the form $GRAMMARS/wmcfg/$NAME.wmcfg)" orig_grammar)
+			failwith (Printf.sprintf "No original grammar identified in %s (and this file itself is not in a location of the form $GRAMMARS/wmcfg*/$NAME.wmcfg)" orig_grammar)
 		else
-			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg/$NAME.wmcfg" orig_grammar)
+			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg*/$NAME.wmcfg" orig_grammar)
 
 exception BadCommandLineArguments
 
