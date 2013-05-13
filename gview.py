@@ -43,6 +43,7 @@ def showGrammar(filename, dict):
     lines = open(filename).readlines()
     result = []
     for line in lines:
+        line = line.strip()
         m = re.match("^((\d+) \/ (\d+))? *(.*)$", line)
         if m:
             if m.group(2) is not None:
