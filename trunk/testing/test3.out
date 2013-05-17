@@ -45,7 +45,7 @@ Could not find entropy &  & \\
 \end{table}
 \section*{X-bar structures}
 \begin{enumerate}    % every tree will be an item in this enumeration
-\item 0.00221223442256 \\
+\item 0.002212234423 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(175,190)(0,-190)
 \put(34,-8){CP}
@@ -105,7 +105,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00221223442256 \\
+\item 0.002212234423 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(183,190)(0,-190)
 \put(36,-8){CP}
@@ -165,7 +165,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00144425250033 \\
+\item 0.0014442525 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(192,230)(0,-230)
 \put(33,-8){CP}
@@ -242,7 +242,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00129322546993 \\
+\item 0.00129322547 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(189,230)(0,-230)
 \put(33,-8){CP}
@@ -319,7 +319,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000788931200983 \\
+\item 0.000788931201 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(183,190)(0,-190)
 \put(36,-8){CP}
@@ -379,7 +379,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000788931200983 \\
+\item 0.000788931201 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(183,190)(0,-190)
 \put(36,-8){CP}
@@ -439,7 +439,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00066354948762 \\
+\item 0.000663549488 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(187,230)(0,-230)
 \put(33,-8){CP}
@@ -516,7 +516,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00066354948762 \\
+\item 0.000663549488 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(187,230)(0,-230)
 \put(33,-8){CP}
@@ -593,7 +593,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.00066354948762 \\
+\item 0.000663549488 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(189,230)(0,-230)
 \put(33,-8){CP}
@@ -670,7 +670,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000554465250431 \\
+\item 0.00055446525 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(132,190)(0,-190)
 \put(23,-8){CP}
@@ -730,7 +730,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000534551209654 \\
+\item 0.00053455121 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(194,230)(0,-230)
 \put(34,-8){CP}
@@ -807,7 +807,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000509989164219 \\
+\item 0.000509989164 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(194,230)(0,-230)
 \put(33,-8){CP}
@@ -884,7 +884,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000508566600302 \\
+\item 0.0005085666 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(194,230)(0,-230)
 \put(33,-8){CP}
@@ -961,7 +961,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000433590251678 \\
+\item 0.000433590252 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(155,190)(0,-190)
 \put(28,-8){CP}
@@ -1015,7 +1015,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000432280961277 \\
+\item 0.000432280961 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(187,230)(0,-230)
 \put(33,-8){CP}
@@ -1092,7 +1092,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000431075156643 \\
+\item 0.000431075157 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(192,230)(0,-230)
 \put(33,-8){CP}
@@ -1169,7 +1169,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000425721872651 \\
+\item 0.000425721873 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(233,250)(0,-250)
 \put(33,-8){CP}
@@ -1256,7 +1256,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.0003921332966 \\
+\item 0.000392133297 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(228,250)(0,-250)
 \put(33,-8){CP}
@@ -1343,7 +1343,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000381203680583 \\
+\item 0.000381203681 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(223,250)(0,-250)
 \put(33,-8){CP}
@@ -1430,7 +1430,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \hrule
 \vskip \baselineskip
-\item 0.000380712261913 \\
+\item 0.000380712262 \\
 \setlength{\unitlength}{0.3mm}
 \begin{picture}(216,210)(0,-210)
 \put(45,-8){CP}
