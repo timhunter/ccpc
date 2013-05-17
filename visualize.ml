@@ -211,7 +211,7 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
 	   (and deals properly with rule markers in amongst the ids). *)
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
-	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((string_of_float (float_of_num w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
+	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((Printf.sprintf "%.12f" (float_of_num w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
