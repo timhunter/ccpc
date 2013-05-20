@@ -256,7 +256,7 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 
         (* Unfortunate necessary hack: escape any underscores in the latex file produced by prolog *)
         let channel' =
-                let command = Printf.sprintf "sed -i 's/_/\\\\_/g' %s" filename in
+                let command = Printf.sprintf "sed -i '' 's/_/\\\\_/g' %s" filename in
                 try Unix.open_process_in command
                 with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
         in
