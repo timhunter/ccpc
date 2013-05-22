@@ -86,8 +86,9 @@ function compute_ERs () {
         '
 }
 
-tables_file=`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.combined.$$.tex
+tables_file=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.tables.$$.tex
 entropies_file=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.entropies.$$.tex
+combined_file=`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.combined.$$.tex
 
 renormalizer=./renormalize.csh
 
@@ -105,11 +106,23 @@ while read prefix ; do
         rm -f $id.chart $id.global.chart $id.tex `basename $id`.aux `basename $id`.log
 done
 
-cat $entropies_file | compute_ERs | tee -a $tables_file
+# Now construct the final combined tex file
+echo "\\documentclass{article}" >> $combined_file
+echo "\\usepackage{fullpage}"   >> $combined_file
+echo "\\begin{document}"        >> $combined_file
+echo ""                         >> $combined_file
+cat $tables_file >> $combined_file
+echo "\\begin{verbatim}" >> $combined_file
+cat $entropies_file | compute_ERs | tee -a $combined_file
+echo "\\end{verbatim}" >> $combined_file
+echo ""                         >> $combined_file
+echo "\\end{document}" >> $combined_file
+
+rm $tables_file
 rm $entropies_file
 
 echo "============================"
-echo "Summary info is collected in $tables_file"
+echo "Summary info is collected in $combined_file"
 echo "Exiting `basename $0`"
 echo "============================"
 
