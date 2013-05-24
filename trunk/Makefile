@@ -26,7 +26,7 @@ OCAMLOBJ_bc= util.cmo fsa.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lex
 OCAMLINT= util.cmi fsa.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi path.cmi
 OCAMLOBJ_nt= util.cmx fsa.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx path.cmx
 
-all: $(EXE)_nt train visualize cycles
+all: $(EXE)_nt train visualize cycles compare
 
 $(EXE)_bc: $(OCAMLINT) $(OCAMLOBJ_bc)  main.cmo
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma unix.cma graph.cma $(OCAMLOBJ_bc) main.cmo
@@ -42,6 +42,9 @@ visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
 
 cycles: $(OCAMLINT) $(OCAMLOBJ_nt) cycles.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) cycles.cmx
+
+compare: $(OCAMLINT) $(OCAMLOBJ_nt) compare.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) compare.cmx
 
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
