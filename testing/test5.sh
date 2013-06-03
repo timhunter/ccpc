@@ -1,3 +1,3 @@
 
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -kbest 20 -p ""
+./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -kbest 23 -p ""
 
