@@ -20,25 +20,25 @@ Probability & Remainder & Type\\
 0.004 & \textit{he matter -ed} & \\
 0.003 & \textit{David matter -ed} & \\
 0.002 & \textit{Sally matter -ed} & \\
-0.002 & \textit{I matter -ed} & \\
 0.002 & \textit{they matter -ed} & \\
+0.002 & \textit{I matter -ed} & \\
 0.001 & \textit{the treat be -s clever} & \\
-0.001 & \textit{the treat be -s poor} & \\
-0.001 & \textit{the treat be -s right} & \\
 0.001 & \textit{the treat be -s young} & \\
+0.001 & \textit{the treat be -s right} & \\
+0.001 & \textit{the treat be -s poor} & \\
 0.001 & \textit{the treat be -s strange} & \\
 0.001 & \textit{the treat be -s gentle} & \\
 0.001 & \textit{the treat be -s long} & \\
 0.001 & \textit{the treat be -s very clever} & \\
 0.001 & \textit{Dick matter -ed} & \\
-0.001 & \textit{Penny matter -ed} & \\
 0.001 & \textit{eggs matter -ed} & \\
+0.001 & \textit{Penny matter -ed} & \\
 0.001 & \textit{the story be -s clever} & \\
 0.001 & \textit{he doesnt matter} & \\
 0.001 & \textit{the house be -s clever} & \\
-0.001 & \textit{the treat be -s very poor} & \\
-0.001 & \textit{the treat be -s very right} & \\
 0.001 & \textit{the treat be -s very young} & \\
+0.001 & \textit{the treat be -s very right} & \\
+0.001 & \textit{the treat be -s very poor} & \\
 0.001 & \textit{the treat matter -ed} & \\
 \dots & \dots & \dots \\
 \hline
@@ -230,66 +230,6 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.002212234423 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(175,190)(0,-190)
-\put(34,-8){CP}
-\drawline(39,-10)(39,-20)
-\put(34,-28){C'}
-\drawline(39,-30)(5,-40)
-\put(3,-48){C}
-\drawline(5,-50)(5,-60)
-\drawline(39,-30)(74,-40)
-\put(68,-48){TP}
-\drawline(74,-50)(34,-60)
-\put(20,-68){DP(0)}
-\drawline(34,-70)(34,-80)
-\put(28,-88){D'}
-\drawline(34,-90)(34,-100)
-\put(31,-108){D}
-\drawline(34,-110)(34,-120)
-\put(31,-128){I}
-\drawline(74,-50)(114,-60)
-\put(108,-68){T'}
-\drawline(114,-70)(82,-80)
-\put(80,-88){T}
-\drawline(82,-90)(64,-100)
-\put(62,-108){v}
-\drawline(64,-110)(49,-120)
-\put(46,-128){V}
-\drawline(49,-130)(49,-140)
-\put(33,-148){matter}
-\drawline(64,-110)(80,-120)
-\put(77,-128){v}
-\drawline(80,-130)(80,-140)
-\drawline(82,-90)(100,-100)
-\put(98,-108){T}
-\drawline(100,-110)(100,-120)
-\put(92,-128){-ed}
-\drawline(114,-70)(145,-80)
-\put(140,-88){vP}
-\drawline(145,-90)(129,-100)
-\put(123,-108){DP}
-\drawline(129,-110)(129,-120)
-\put(118,-128){t(0)}
-\drawline(145,-90)(161,-100)
-\put(156,-108){v'}
-\drawline(161,-110)(152,-120)
-\put(149,-128){v}
-\drawline(152,-130)(152,-140)
-\put(149,-148){t}
-\drawline(161,-110)(170,-120)
-\put(164,-128){VP}
-\drawline(170,-130)(170,-140)
-\put(164,-148){V'}
-\drawline(170,-150)(170,-160)
-\put(167,-168){V}
-\drawline(170,-170)(170,-180)
-\put(167,-188){t}
-\end{picture}
-\vskip \baselineskip
-\hrule
-\vskip \baselineskip
-\item 0.002212234423 \\
-\setlength{\unitlength}{0.3mm}
 \begin{picture}(183,190)(0,-190)
 \put(36,-8){CP}
 \drawline(41,-10)(41,-20)
@@ -344,6 +284,66 @@ Could not find entropy &  & \\
 \put(175,-168){V}
 \drawline(178,-170)(178,-180)
 \put(175,-188){t}
+\end{picture}
+\vskip \baselineskip
+\hrule
+\vskip \baselineskip
+\item 0.002212234423 \\
+\setlength{\unitlength}{0.3mm}
+\begin{picture}(175,190)(0,-190)
+\put(34,-8){CP}
+\drawline(39,-10)(39,-20)
+\put(34,-28){C'}
+\drawline(39,-30)(5,-40)
+\put(3,-48){C}
+\drawline(5,-50)(5,-60)
+\drawline(39,-30)(74,-40)
+\put(68,-48){TP}
+\drawline(74,-50)(34,-60)
+\put(20,-68){DP(0)}
+\drawline(34,-70)(34,-80)
+\put(28,-88){D'}
+\drawline(34,-90)(34,-100)
+\put(31,-108){D}
+\drawline(34,-110)(34,-120)
+\put(31,-128){I}
+\drawline(74,-50)(114,-60)
+\put(108,-68){T'}
+\drawline(114,-70)(82,-80)
+\put(80,-88){T}
+\drawline(82,-90)(64,-100)
+\put(62,-108){v}
+\drawline(64,-110)(49,-120)
+\put(46,-128){V}
+\drawline(49,-130)(49,-140)
+\put(33,-148){matter}
+\drawline(64,-110)(80,-120)
+\put(77,-128){v}
+\drawline(80,-130)(80,-140)
+\drawline(82,-90)(100,-100)
+\put(98,-108){T}
+\drawline(100,-110)(100,-120)
+\put(92,-128){-ed}
+\drawline(114,-70)(145,-80)
+\put(140,-88){vP}
+\drawline(145,-90)(129,-100)
+\put(123,-108){DP}
+\drawline(129,-110)(129,-120)
+\put(118,-128){t(0)}
+\drawline(145,-90)(161,-100)
+\put(156,-108){v'}
+\drawline(161,-110)(152,-120)
+\put(149,-128){v}
+\drawline(152,-130)(152,-140)
+\put(149,-148){t}
+\drawline(161,-110)(170,-120)
+\put(164,-128){VP}
+\drawline(170,-130)(170,-140)
+\put(164,-148){V'}
+\drawline(170,-150)(170,-160)
+\put(167,-168){V}
+\drawline(170,-170)(170,-180)
+\put(167,-188){t}
 \end{picture}
 \vskip \baselineskip
 \hrule
@@ -427,7 +427,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.00129322547 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(187,230)(0,-230)
+\begin{picture}(189,230)(0,-230)
 \put(33,-8){CP}
 \drawline(38,-10)(38,-20)
 \put(33,-28){C'}
@@ -497,7 +497,7 @@ Could not find entropy &  & \\
 \drawline(176,-190)(176,-200)
 \put(173,-208){A}
 \drawline(176,-210)(176,-220)
-\put(166,-228){poor}
+\put(163,-228){young}
 \end{picture}
 \vskip \baselineskip
 \hrule
@@ -581,7 +581,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.00129322547 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(189,230)(0,-230)
+\begin{picture}(187,230)(0,-230)
 \put(33,-8){CP}
 \drawline(38,-10)(38,-20)
 \put(33,-28){C'}
@@ -651,7 +651,7 @@ Could not find entropy &  & \\
 \drawline(176,-190)(176,-200)
 \put(173,-208){A}
 \drawline(176,-210)(176,-220)
-\put(163,-228){young}
+\put(166,-228){poor}
 \end{picture}
 \vskip \baselineskip
 \hrule
@@ -1036,66 +1036,6 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.000788931201 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(185,190)(0,-190)
-\put(37,-8){CP}
-\drawline(42,-10)(42,-20)
-\put(37,-28){C'}
-\drawline(42,-30)(5,-40)
-\put(3,-48){C}
-\drawline(5,-50)(5,-60)
-\drawline(42,-30)(79,-40)
-\put(74,-48){TP}
-\drawline(79,-50)(34,-60)
-\put(20,-68){DP(0)}
-\drawline(34,-70)(34,-80)
-\put(28,-88){D'}
-\drawline(34,-90)(34,-100)
-\put(31,-108){D}
-\drawline(34,-110)(34,-120)
-\put(20,-128){Penny}
-\drawline(79,-50)(124,-60)
-\put(119,-68){T'}
-\drawline(124,-70)(93,-80)
-\put(90,-88){T}
-\drawline(93,-90)(75,-100)
-\put(72,-108){v}
-\drawline(75,-110)(59,-120)
-\put(57,-128){V}
-\drawline(59,-130)(59,-140)
-\put(44,-148){matter}
-\drawline(75,-110)(90,-120)
-\put(88,-128){v}
-\drawline(90,-130)(90,-140)
-\drawline(93,-90)(111,-100)
-\put(108,-108){T}
-\drawline(111,-110)(111,-120)
-\put(103,-128){-ed}
-\drawline(124,-70)(155,-80)
-\put(150,-88){vP}
-\drawline(155,-90)(139,-100)
-\put(134,-108){DP}
-\drawline(139,-110)(139,-120)
-\put(129,-128){t(0)}
-\drawline(155,-90)(171,-100)
-\put(166,-108){v'}
-\drawline(171,-110)(162,-120)
-\put(160,-128){v}
-\drawline(162,-130)(162,-140)
-\put(160,-148){t}
-\drawline(171,-110)(180,-120)
-\put(175,-128){VP}
-\drawline(180,-130)(180,-140)
-\put(175,-148){V'}
-\drawline(180,-150)(180,-160)
-\put(178,-168){V}
-\drawline(180,-170)(180,-180)
-\put(178,-188){t}
-\end{picture}
-\vskip \baselineskip
-\hrule
-\vskip \baselineskip
-\item 0.000788931201 \\
-\setlength{\unitlength}{0.3mm}
 \begin{picture}(183,190)(0,-190)
 \put(36,-8){CP}
 \drawline(41,-10)(41,-20)
@@ -1150,6 +1090,66 @@ Could not find entropy &  & \\
 \put(175,-168){V}
 \drawline(178,-170)(178,-180)
 \put(175,-188){t}
+\end{picture}
+\vskip \baselineskip
+\hrule
+\vskip \baselineskip
+\item 0.000788931201 \\
+\setlength{\unitlength}{0.3mm}
+\begin{picture}(185,190)(0,-190)
+\put(37,-8){CP}
+\drawline(42,-10)(42,-20)
+\put(37,-28){C'}
+\drawline(42,-30)(5,-40)
+\put(3,-48){C}
+\drawline(5,-50)(5,-60)
+\drawline(42,-30)(79,-40)
+\put(74,-48){TP}
+\drawline(79,-50)(34,-60)
+\put(20,-68){DP(0)}
+\drawline(34,-70)(34,-80)
+\put(28,-88){D'}
+\drawline(34,-90)(34,-100)
+\put(31,-108){D}
+\drawline(34,-110)(34,-120)
+\put(20,-128){Penny}
+\drawline(79,-50)(124,-60)
+\put(119,-68){T'}
+\drawline(124,-70)(93,-80)
+\put(90,-88){T}
+\drawline(93,-90)(75,-100)
+\put(72,-108){v}
+\drawline(75,-110)(59,-120)
+\put(57,-128){V}
+\drawline(59,-130)(59,-140)
+\put(44,-148){matter}
+\drawline(75,-110)(90,-120)
+\put(88,-128){v}
+\drawline(90,-130)(90,-140)
+\drawline(93,-90)(111,-100)
+\put(108,-108){T}
+\drawline(111,-110)(111,-120)
+\put(103,-128){-ed}
+\drawline(124,-70)(155,-80)
+\put(150,-88){vP}
+\drawline(155,-90)(139,-100)
+\put(134,-108){DP}
+\drawline(139,-110)(139,-120)
+\put(129,-128){t(0)}
+\drawline(155,-90)(171,-100)
+\put(166,-108){v'}
+\drawline(171,-110)(162,-120)
+\put(160,-128){v}
+\drawline(162,-130)(162,-140)
+\put(160,-148){t}
+\drawline(171,-110)(180,-120)
+\put(175,-128){VP}
+\drawline(180,-130)(180,-140)
+\put(175,-148){V'}
+\drawline(180,-150)(180,-160)
+\put(178,-168){V}
+\drawline(180,-170)(180,-180)
+\put(178,-188){t}
 \end{picture}
 \vskip \baselineskip
 \hrule
@@ -1364,7 +1364,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.000742947313 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(223,250)(0,-250)
+\begin{picture}(228,250)(0,-250)
 \put(33,-8){CP}
 \drawline(38,-10)(38,-20)
 \put(33,-28){C'}
@@ -1408,28 +1408,28 @@ Could not find entropy &  & \\
 \put(91,-108){T}
 \drawline(94,-110)(94,-120)
 \put(89,-128){-s}
-\drawline(109,-70)(134,-80)
+\drawline(109,-70)(135,-80)
 \put(127,-88){BeP}
-\drawline(134,-90)(134,-100)
+\drawline(135,-90)(135,-100)
 \put(127,-108){Be'}
-\drawline(134,-110)(115,-120)
+\drawline(135,-110)(115,-120)
 \put(109,-128){Be}
 \drawline(115,-130)(115,-140)
 \put(112,-148){t}
-\drawline(134,-110)(154,-120)
+\drawline(135,-110)(155,-120)
 \put(149,-128){aP}
-\drawline(154,-130)(132,-140)
+\drawline(155,-130)(132,-140)
 \put(127,-148){DP}
 \drawline(132,-150)(132,-160)
 \put(122,-168){t(0)}
-\drawline(154,-130)(176,-140)
-\put(171,-148){a'}
-\drawline(176,-150)(156,-160)
+\drawline(155,-130)(177,-140)
+\put(172,-148){a'}
+\drawline(177,-150)(156,-160)
 \put(153,-168){a}
 \drawline(156,-170)(156,-180)
-\drawline(176,-150)(197,-160)
-\put(192,-168){AP}
-\drawline(197,-170)(181,-180)
+\drawline(177,-150)(198,-160)
+\put(193,-168){AP}
+\drawline(198,-170)(181,-180)
 \put(171,-188){degP}
 \drawline(181,-190)(181,-200)
 \put(171,-208){deg'}
@@ -1437,14 +1437,14 @@ Could not find entropy &  & \\
 \put(173,-228){deg}
 \drawline(181,-230)(181,-240)
 \put(171,-248){very}
-\drawline(197,-170)(212,-180)
-\put(207,-188){AP}
-\drawline(212,-190)(212,-200)
-\put(207,-208){A'}
-\drawline(212,-210)(212,-220)
-\put(210,-228){A}
-\drawline(212,-230)(212,-240)
-\put(202,-248){poor}
+\drawline(198,-170)(215,-180)
+\put(210,-188){AP}
+\drawline(215,-190)(215,-200)
+\put(210,-208){A'}
+\drawline(215,-210)(215,-220)
+\put(212,-228){A}
+\drawline(215,-230)(215,-240)
+\put(202,-248){young}
 \end{picture}
 \vskip \baselineskip
 \hrule
@@ -1538,7 +1538,7 @@ Could not find entropy &  & \\
 \vskip \baselineskip
 \item 0.000742947313 \\
 \setlength{\unitlength}{0.3mm}
-\begin{picture}(228,250)(0,-250)
+\begin{picture}(223,250)(0,-250)
 \put(33,-8){CP}
 \drawline(38,-10)(38,-20)
 \put(33,-28){C'}
@@ -1582,28 +1582,28 @@ Could not find entropy &  & \\
 \put(91,-108){T}
 \drawline(94,-110)(94,-120)
 \put(89,-128){-s}
-\drawline(109,-70)(135,-80)
+\drawline(109,-70)(134,-80)
 \put(127,-88){BeP}
-\drawline(135,-90)(135,-100)
+\drawline(134,-90)(134,-100)
 \put(127,-108){Be'}
-\drawline(135,-110)(115,-120)
+\drawline(134,-110)(115,-120)
 \put(109,-128){Be}
 \drawline(115,-130)(115,-140)
 \put(112,-148){t}
-\drawline(135,-110)(155,-120)
+\drawline(134,-110)(154,-120)
 \put(149,-128){aP}
-\drawline(155,-130)(132,-140)
+\drawline(154,-130)(132,-140)
 \put(127,-148){DP}
 \drawline(132,-150)(132,-160)
 \put(122,-168){t(0)}
-\drawline(155,-130)(177,-140)
-\put(172,-148){a'}
-\drawline(177,-150)(156,-160)
+\drawline(154,-130)(176,-140)
+\put(171,-148){a'}
+\drawline(176,-150)(156,-160)
 \put(153,-168){a}
 \drawline(156,-170)(156,-180)
-\drawline(177,-150)(198,-160)
-\put(193,-168){AP}
-\drawline(198,-170)(181,-180)
+\drawline(176,-150)(197,-160)
+\put(192,-168){AP}
+\drawline(197,-170)(181,-180)
 \put(171,-188){degP}
 \drawline(181,-190)(181,-200)
 \put(171,-208){deg'}
@@ -1611,14 +1611,14 @@ Could not find entropy &  & \\
 \put(173,-228){deg}
 \drawline(181,-230)(181,-240)
 \put(171,-248){very}
-\drawline(198,-170)(215,-180)
-\put(210,-188){AP}
-\drawline(215,-190)(215,-200)
-\put(210,-208){A'}
-\drawline(215,-210)(215,-220)
-\put(212,-228){A}
-\drawline(215,-230)(215,-240)
-\put(202,-248){young}
+\drawline(197,-170)(212,-180)
+\put(207,-188){AP}
+\drawline(212,-190)(212,-200)
+\put(207,-208){A'}
+\drawline(212,-210)(212,-220)
+\put(210,-228){A}
+\drawline(212,-230)(212,-240)
+\put(202,-248){poor}
 \end{picture}
 \vskip \baselineskip
 \hrule

@@ -121,6 +121,7 @@ module type HYPERGRAPH =
                 val compare : v -> v -> int
                 val show : v -> string
                 val tails : g -> v -> (v list * Rule.r * Util.weight) list
+                val all_vertices : g -> v list
         end
 
 (* This implements the HYPERGRAPH signature, but we don't declare it as such here 
@@ -132,6 +133,7 @@ module ChartAsGraph =
                 let compare = Chart.compare_items
                 let show = Chart.debug_str
                 let tails c i = Chart.get_routes i c
+                let all_vertices c = Chart.map_items c (fun i -> i)    (* VERY SLOW, not for production, according to comment in chart.ml *)
         end
 module GrammarAsGraph =
         struct
@@ -146,191 +148,163 @@ module GrammarAsGraph =
                                              | Rule.PublicNonTerminating(xs,_) -> Nelist.to_list xs
                         in
                         map_tr (fun r -> (get_children r, r, Rule.get_weight r)) relevant_rules
+                let all_vertices rules = uniques (map_tr Rule.get_nonterm rules)
         end
 
 module KBestCalculation = functor (Graph : HYPERGRAPH) ->
 struct
 
-        (* Viterbi search for the single best derivation. This in effect performs what 
-         * Huang & Chiang call the ``initial parsing phase'' of their Algorithm 3, although 
-         * we do it along the way whenever we need to find a 1-best derivation rather than 
-         * in an initial separated phase. *)
-        (* Returns None if all derivations of item involve returning to items we have previously visited; 
-         * in other words, when there is no derivation of item that is part of the best derivation of all its parents. 
-         * Note this means that this function never returns None if visited is empty. *)
-        let rec get_best_derivation' chart visited item =
+    type dbp = (Graph.v list * Rule.r * Util.weight) * int list
+    type kbest_state = { g : Graph.g ;
+                         dhat : (Graph.v, dbp list) Hashtbl.t ;             (* dhat[v] is an ordered list of the best dbps for vertex v *)
+                         dhat_best_weight : (Graph.v, weight) Hashtbl.t ;   (* dhat_best_weight[v] is the weight of dhat[v][0]; just for get_one_best *)
+                         cand : (Graph.v, dbp list) Hashtbl.t ;             (* cand[v] is a heap of candidate dbps for vertex v *)
+                         cand_accum : (Graph.v, dbp list) Hashtbl.t ;       (* cand_accum[v] is a list of all candidates that have ever been added to cand[v] *)
+                       }
 
-                let get_best_by_route (antecedents,r,wt) =
-                        let new_visited = item::visited in
-                        if (List.exists (fun v -> List.mem v antecedents) new_visited) then (* No loops in the best derivation *)
-                                None
-                        else
-                                let children = map_tr (get_best_derivation' chart new_visited) antecedents in
-                                match (require_no_nones children) with
-                                | None -> None
-                                | Some xs -> Some (make_derivation_tree item xs r wt)
-                in
+    let show_dbp ((children, r, wt), ns) = Printf.sprintf "(%s, %s)" (Rule.to_string r) (show_list string_of_int ns)
 
-                let routes = Graph.tails chart item in
-                let candidates = optlistmap get_best_by_route routes in
-                let result =
-                        match (List.sort (compare_derivations Graph.compare) candidates) with
-                        | [] -> None
-                        | (x::_) -> Some x
-                in
-                result
+    let rec dbp_interpret state dbp interpret_terminal combine =
+        let helper v n =
+            if (Graph.tails state.g v = []) then (     (* If v is a terminal *)
+                if n = 1 then
+                    interpret_terminal v
+                else
+                    failwith (Printf.sprintf "dbp_interpret: terminal has only one derivation (not %d)!" n)
+            ) else (
+                let d = List.nth (Hashtbl.find state.dhat v) (n-1) in
+                dbp_interpret state d interpret_terminal combine
+            )
+        in
+        let ((children,rule,wt),ns) = dbp in
+        assert (List.length children = List.length ns) ;
+        let subresults = List.map2 helper children ns in
+        combine wt subresults
 
-        (* Wrapper for the above: assumes no history of visited nodes, and therefore 
-         * does not return an option type. *) 
-        let get_best_derivation mem chart item =
-                let result =
-                        try Hashtbl.find (!mem) (1,item)
-                        with Not_found ->
-                                let x = get_best_derivation' chart [] item in
-                                Hashtbl.add (!mem) (1,item) x ;
-                                x
-                in
-                match result with
-                        | Some d -> d
-                        | None   -> failwith (Printf.sprintf "Couldn't find a best derivation for %s, even with an empty list of visited items\n" (Graph.show item))
+    let dbp_weight state dbp =
+        dbp_interpret state dbp (fun x -> weight_from_float 1.0) (List.fold_left mult_weights)
 
-        module VisitHistory :
-                sig
-                        type t
-                        val empty : t
-                        val add : t -> Graph.v -> int -> t
-                        val ok_to_visit : t -> Graph.v -> int -> bool
-                end
-        =
-                struct
-                        type t = (Graph.v, int) Hashtbl.t
-                        let empty = Hashtbl.create 20
-                        let add hist item n =
-                                let result = Hashtbl.copy hist in
-                                begin
-                                try     let current = Hashtbl.find hist item in
-                                        if (n < current) then Hashtbl.replace result item n
-                                with Not_found -> Hashtbl.add result item n
-                                end ;
-                                result
-                        let ok_to_visit hist item n = (*not (List.exists (fun (it',i') -> (item = it') && (n >= i')) lst) *)
-                                try     let current = Hashtbl.find hist item in
-                                        n < current
-                                with Not_found -> true
-                end
+    let rec dtree_of_dbp state root_vertex dbp =    (* dbp is a derivation of root_vertex *)
+        let helper v n =
+            if (Graph.tails state.g v = []) then (
+                if n = 1 then
+                    failwith "Didn't think we'd get here"
+                else
+                    failwith (Printf.sprintf "dtree_of_dbp: terminal has only one derivation (not %d)!" n)
+            ) else (
+                let d = List.nth (Hashtbl.find state.dhat v) (n-1) in
+                dtree_of_dbp state v d
+            )
+        in
+        let ((children,rule,wt),ns) = dbp in
+        assert (List.length children = List.length ns) ;
+        if (children = []) then (
+            Leaf(root_vertex, rule, Rule.get_weight rule)
+        ) else (
+            let child_trees = List.map2 helper children ns in
+            let total_weight = List.fold_left mult_weights (Rule.get_weight rule) (List.map get_weight child_trees) in
+            NonLeaf(root_vertex, child_trees, rule, total_weight)
+        )
 
-        module type MYQUEUE =
-                sig
-                        type t
-                        type recipe = ((Graph.v * int) list) * (Graph.v derivation_tree list -> Graph.v derivation_tree)
-                        val empty : t
-                        val size : t -> int
-                        val add : t -> recipe -> t
-                        val add' : t -> (Graph.v derivation_tree * recipe) -> t
-                        val max_elt : t -> (int -> Graph.v -> Graph.v derivation_tree option) -> ((Graph.v derivation_tree * recipe) * t)
-                end
+    let extract_min state v =
+        let candidates = Hashtbl.find state.cand v in
+        let compare_by_weight dbp1 dbp2 = compare_weights (dbp_weight state dbp1) (dbp_weight state dbp2) in
+        match reverse_tr (List.sort compare_by_weight candidates) with
+        | (x::xs) -> Hashtbl.replace state.cand v xs ;
+                     x
+        | _ -> failwith "extract_min: no candidates for this vertex"
 
-        module CandidateVectorQueueFast : MYQUEUE =
-                struct
-                        type recipe = ((Graph.v * int) list) * (Graph.v derivation_tree list -> Graph.v derivation_tree)
-                        module EvaluatedCandidateQueue = Set.Make(
-                                struct
-                                        type t = Graph.v derivation_tree * recipe
-                                        let compare (d1,_) (d2,_) = compare_derivations Graph.compare d2 d1
-                                end
-                        )
-                        type t = (recipe list) * EvaluatedCandidateQueue.t
-                        let empty = ([], EvaluatedCandidateQueue.empty)
-                        let size (uneval,eval) = List.length uneval + EvaluatedCandidateQueue.cardinal eval
-                        let add (uneval,eval) recipe = (recipe::uneval, eval)
-                        let add' (uneval,eval) (d,recipe) = (uneval, EvaluatedCandidateQueue.add (d,recipe) eval)
-                        let try_eval get_nth recipe =
-                                let (ingredients,f) = recipe in
-                                let child_derivations = map_tr (fun (it,i) -> get_nth i it) ingredients in
-                                match (require_no_nones child_derivations) with
-                                | None -> None
-                                | Some cs -> Some (f cs)
-                        let update get_nth (uneval,eval) =
-                                let f (uneval',eval') recipe =
-                                        match (try_eval get_nth recipe) with
-                                        | None -> add (uneval',eval') recipe
-                                        | Some d -> add' (uneval',eval') (d,recipe) in
-                                List.fold_left f ([],eval) uneval
-                        let max_elt q get_nth =
-                                let (uneval,eval) = update get_nth q in
-                                let max = EvaluatedCandidateQueue.max_elt eval in
-                                (max, (uneval, EvaluatedCandidateQueue.remove max eval))
-                end
+    exception NoMoreCandidates
 
-        module CandidateVectorQueue = CandidateVectorQueueFast
-
-        (* The neighbours of a derivation are other derivations of the same item, that use 
-         * the same route in their final step. *)
-        let neighbours (ingredients,f) =
-                let rec add_one_at_position p lst =
-                        match (p,lst) with
-                        | (_,[]) -> []
-                        | (0,((it,i)::rest)) -> (it,i+1)::rest
-                        | (n,((it,i)::rest)) -> (it,i) :: (add_one_at_position (n-1) rest)
-                in
-                let neighbour_ingredients = map_tr (fun p -> add_one_at_position p ingredients) (range 0 (List.length ingredients)) in
-                map_tr (fun ing -> (ing,f)) neighbour_ingredients
-
-        (* Make sure we don't go back to an (int,item) pair that is the same as, or worse than, one 
-         * we've already visited. *)
-        let rec guarded_get_nth mem visited i chart it =
-                if not (VisitHistory.ok_to_visit visited it i) then (
-                        None
+    let rec lazy_kth_best state v k kp =          (* kp is k', the global k *)
+        assert (Graph.tails state.g v <> []) ;
+        try
+            while (List.length (Hashtbl.find state.dhat v) < k) do
+                if (Hashtbl.find state.dhat v <> []) then (
+                    let (e,j) = List.hd (reverse_tr (Hashtbl.find state.dhat v)) in
+                    lazy_next state v e j kp
+                ) ;
+                if (Hashtbl.find state.cand v <> []) then (
+                    let current_list = Hashtbl.find state.dhat v in
+                    Hashtbl.replace state.dhat v (current_list @ [extract_min state v])
                 ) else (
-                        get_nth_best_derivation' mem visited i chart it
+                    raise NoMoreCandidates
                 )
+            done
+        with NoMoreCandidates -> ()
 
-        and get_n_best_all_routes mem n chart item visited routes =
-                let result = ref [] in
-                let candidates = ref (CandidateVectorQueue.empty) in
-                let initialise (antecedents,r,wt) =
-                        if (antecedents = []) then
-                                (* Initialise result list with the one corresponding derivation. *)
-                                result := (make_derivation_tree item [] r wt)::(!result)
-                        else
-                                (* Initialise with the result of the ``initial parsing phase''. *)
-                                let best_children = map_tr (get_best_derivation mem chart) antecedents in
-                                let best = make_derivation_tree item best_children r wt in
-                                candidates := CandidateVectorQueue.add' (!candidates) (best, (map_tr (fun x -> (x,1)) antecedents, fun cs -> make_derivation_tree item cs r wt)) ;
-                in
-                List.iter initialise routes ;
-                begin try
-                        while (List.length !result < n) do
-                                let new_visited = VisitHistory.add visited item (List.length !result + 1) in
-                                let ((next,recipe),new_cand) = CandidateVectorQueue.max_elt (!candidates) (fun i it -> guarded_get_nth mem new_visited i chart it) in
-                                candidates := new_cand ;
-                                if (not (List.exists (fun d -> (compare_derivations Graph.compare d next = 0)) !result)) then
-                                        result := next::(!result) ;
-                                let add_candidate x = candidates := CandidateVectorQueue.add (!candidates) x in
-                                List.iter add_candidate (neighbours recipe)
-                        done
-                with Not_found -> () end ;
-                List.sort (compare_derivations Graph.compare) (!result)
+    and lazy_next state v e j kp =
+        let (children,rule,wt) = e in
+        for i=0 to (List.length children - 1) do
+            let child = List.nth children i in
+            if (Graph.tails state.g child <> []) then (
+                let jp = List.map2 (fun pos x -> if (pos=i) then (x+1) else x) (range 0 (List.length j)) j in
+                lazy_kth_best state child (List.nth jp i) kp ;
+                if (List.nth jp i <= List.length (Hashtbl.find state.dhat child)) && (not (List.mem (e,jp) (Hashtbl.find state.cand_accum v))) then (
+                    Hashtbl.replace state.cand v ((Hashtbl.find state.cand v) @ [(e,jp)]) ;
+                    Hashtbl.replace state.cand_accum v ((Hashtbl.find state.cand_accum v) @ [(e,jp)]) ;
+                )
+            )
+        done
 
-        (* Return type: derivation_tree option
-           Returns None if there are less than n derivations of item. 
-           This is basically Algorithm 3 from Huang & Chiang, ``Better k-best parsing'' *)
-        and get_nth_best_derivation' mem visited n chart item =
-                assert (n >= 1) ;
-                try Hashtbl.find (!mem) (n, item)
-                with Not_found ->
-                        let n_best_overall = get_n_best_all_routes mem n chart item visited (Graph.tails chart item) in
-                        let result = (try Some (List.nth n_best_overall (n-1)) with Failure _ -> None) in
-                        Hashtbl.add (!mem) (n, item) result ;   (* Turns out the memoisation need not be conditioned on visit history. Not immediately obvious, but true. *)
-                        result
+    let tails_equal (children1,rule1,wt1) (children2,rule2,wt2) =
+        let result = (children1 = children2) && (Rule.to_string rule1 = Rule.to_string rule2) && (compare_weights wt1 wt2 = 0) in
+        result
 
-        (* Wrapper function, to be used from outside this module/functor *)
-        let get_n_best n graph vertex =
-                assert (n >= 1) ;
-                let mem = ref (Hashtbl.create 1000) in   (* create a single memoising hashtable to be used in every call to get_nth_best_derivation' *)
-                let lst = map_tr (fun i -> get_nth_best_derivation' mem VisitHistory.empty i graph vertex) (range 1 (n+1)) in
-                let rec take_while_not_none = function ((Some x)::xs) -> x :: (take_while_not_none xs) | _ -> [] in
-                take_while_not_none lst
+    let rec get_one_best state v visited =
+        if Hashtbl.mem state.dhat v then
+            Some (Hashtbl.find state.dhat v, Hashtbl.find state.dhat_best_weight v, Hashtbl.find state.cand v)
+        else (
+            let tails = Graph.tails state.g v in
+            let new_visited = v::visited in
+            let non_looping_tail (children, rule, wt) = not (List.exists (fun x -> List.mem x new_visited) children) in
+            let best_weight_via_tail (children, rule, wt) : weight option =
+                let best_subderivations = List.map (fun x -> get_one_best state x new_visited)
+                                                   (List.filter (fun x -> Graph.tails state.g x <> []) children) in
+                if List.mem None best_subderivations then
+                    None
+                else
+                    let component_weights : Util.weight list = optlistmap (function None -> None | Some (_,w,_) -> Some w) best_subderivations in
+                    Some (List.fold_left mult_weights wt component_weights)
+            in
+            let tails_with_weights = List.map (fun t -> (t, best_weight_via_tail t)) (List.filter non_looping_tail tails) in
+            let tails_with_usable_weights = optlistmap (function (t,None) -> None | (t,Some w) -> Some (t,w)) tails_with_weights in
+            let compare_tails (t1,w1) (t2,w2) = compare_weights w1 w2 in
+            match reverse_tr (List.sort compare_tails tails_with_usable_weights) with
+            | [] ->
+                assert (visited <> []) ;
+                None
+            | (best::_) ->
+                let (best_tail, best_weight) = best in
+                let dbp_of_tail (children,rule,wt) = ((children,rule,wt), (List.map (fun _ -> 1) children)) in
+                let rest = List.filter (fun x -> not (tails_equal x best_tail)) tails in
+                let candidate_heap = map_tr dbp_of_tail rest in
+                let best_dbp = dbp_of_tail best_tail in
+                if (visited = []) then (
+                    Hashtbl.replace state.cand v candidate_heap ;
+                    Hashtbl.replace state.cand_accum v candidate_heap ;
+                    Hashtbl.replace state.dhat v [best_dbp] ;
+                    Hashtbl.replace state.dhat_best_weight v best_weight ;
+                ) ;
+                Some ([best_dbp], best_weight, candidate_heap)
+        )
+
+    let random_permutation xs =
+        Random.self_init () ;
+        let rand = 5 + Random.int 100 in
+        let key x =
+            let hash_value = (Hashtbl.hash (Graph.show x)) * (Hashtbl.hash (Graph.show x)) in
+            hash_value mod rand
+        in
+        List.sort (fun x y -> compare (key x) (key y)) xs
+
+    let get_n_best n graph vertex =
+        let state = {g = graph ; dhat = Hashtbl.create 20 ; dhat_best_weight = Hashtbl.create 20 ; cand = Hashtbl.create 20 ; cand_accum = Hashtbl.create 20} in
+        List.iter (fun v -> ignore (get_one_best state v [])) (random_permutation (Graph.all_vertices graph)) ;   (* Correctness should not depend on order *)
+        lazy_kth_best state vertex n n ;
+        let result = Hashtbl.find state.dhat vertex in
+        let result_dtrees = List.map (dtree_of_dbp state vertex) result in
+        result_dtrees
 
 end (* end of the KBestCalculation functor *)
 
