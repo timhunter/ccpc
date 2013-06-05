@@ -1,4 +1,4 @@
-TMP=`mktemp`
+TMP=`mktemp /tmp/tmp.XXXXXX`
 
 # write FSA file corresponding to the prefix "the boy who"
 cat <<EOF > $TMP

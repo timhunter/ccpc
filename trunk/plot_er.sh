@@ -4,7 +4,7 @@ function plot () {
 
     input=$1
     output=`basename $input .tex`.png
-    datfile=`mktemp`
+    datfile=`mktemp /tmp/tmp.XXXXXX`
 
     ### Data file needs to look like this
     ### # Word  Ent ER
