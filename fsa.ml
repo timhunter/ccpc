@@ -9,9 +9,16 @@ type fsa = StringBased of (string_construal * string list)
 
 type range = Range of fsa * ((state * state) option)
 
-exception RangesNotAdjacentException
+(* Provided for use by the specialised equality function for item-keyed hashtables in chart.ml. *)
+(* We do two things of note:
+ *    (1) Reverse the order of comparisons, i.e. compare spans before FSAs. This actually saves 
+ *        some time, because the FSAs should always, in practice, compare equal.
+ *    (2) Compare the FSAs on physical equality. This is fast, and there's never any good reason 
+ *        to have, say, two different 'Prefix of ["the";"cat"]' FSAs in memory.                  *)
+let ranges_equal = function Range(fsa1,span1) -> function Range(fsa2,span2) ->
+    (span1 = span2) && (fsa1 == fsa2)
 
-exception FileBasedNotYetImplementedException
+exception RangesNotAdjacentException
 
 let make_fsa_infix s  = StringBased(Infix,  (Str.split (Str.regexp_string " ") s))
 let make_fsa_prefix s = StringBased(Prefix, (Str.split (Str.regexp_string " ") s))
