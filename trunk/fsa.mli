@@ -12,6 +12,7 @@ val is_exact : fsa -> bool
 val string_of : state -> string
 
 val concat_ranges : range -> range -> range
+val ranges_equal : range -> range -> bool
 val get_consumed_span : range -> (state * state) option
 val goal_span : fsa -> (state * state) option
 val start_state : fsa -> state
