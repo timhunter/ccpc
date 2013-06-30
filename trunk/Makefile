@@ -47,7 +47,6 @@ compare: $(OCAMLINT) $(OCAMLOBJ_nt) compare.cmx
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
-	rm -f kbest/*.o kbest/*.cmo kbest/*.cmi kbest/*.cmx
 	rm -f mcfg_bc mcfg_nt train visualize cycles compare
 
 # For reasons I do not understand, make thinks that mcfg files are ``intermediate'' 
