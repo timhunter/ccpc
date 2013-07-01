@@ -49,10 +49,11 @@ clean:
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
 	rm -f mcfg_bc mcfg_nt train visualize cycles compare
 
-# For reasons I do not understand, make thinks that mcfg files are ``intermediate'' 
-# and should be deleted (even though they are mentioned explicitly).
-# Anyway, this line stops it from deleting intermediate files.
-.SECONDARY:
+# Stop make from deleting ``intermediate'' mcfg files.
+# NB: (1) PRECIOUS is a lot like SECONDARY, but SECONDARY doesn't allow wildcards.
+#     (2) The reason a file like, say, chart.cmx is not deleted is that it is not treated 
+#         as ``intermediate'' because it is referred to explicitly in this Makefile.
+.PRECIOUS: %.mcfg
 
 $(GRAMMARS)/mcfgs/%.mcfg: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -o $@
