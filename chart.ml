@@ -100,8 +100,7 @@ let all_items c =
       acc
     )
   in
-  (** reverse just for backwards compatibility with earlier debugging output *)
-  reverse_tr (ItemHashtbl.fold add_if_new tbl [])
+  ItemHashtbl.fold add_if_new tbl []
 
 let length c = List.length (all_items c)
 
