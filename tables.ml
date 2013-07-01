@@ -1,4 +1,3 @@
-open Parser
 open Rule
 
 type 'a map = Map of (string, 'a) Hashtbl.t
