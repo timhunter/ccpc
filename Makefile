@@ -53,7 +53,7 @@ clean:
 # NB: (1) PRECIOUS is a lot like SECONDARY, but SECONDARY doesn't allow wildcards.
 #     (2) The reason a file like, say, chart.cmx is not deleted is that it is not treated 
 #         as ``intermediate'' because it is referred to explicitly in this Makefile.
-.PRECIOUS: %.mcfg
+.PRECIOUS: $(GRAMMARS)/mcfgs/%.mcfg
 
 $(GRAMMARS)/mcfgs/%.mcfg: $(GRAMMARS)/mg/%.pl $(GUILLAUMIN)
 	$(GUILLAUMIN) -pl $< -o $@
