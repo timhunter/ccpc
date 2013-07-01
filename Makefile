@@ -16,10 +16,13 @@ GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 # Any definition of GRAMMARS given on the command line will override this.
 GRAMMARS=grammars
 
+# Directory for auto-generated documentation
+DOCDIR=doc
+
 FLAGS= -I mcfgread -I +ocamlgraph
 OCAMLOBJ_bc= util.cmo fsa.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo path.cmo
 
-OCAMLINT= util.cmi fsa.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi util.cmi grammar.cmi derivation.cmi generate.cmi path.cmi
+OCAMLINT= util.cmi fsa.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi mcfgread/lexer.cmi util.cmi grammar.cmi derivation.cmi generate.cmi path.cmi
 OCAMLOBJ_nt= util.cmx fsa.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx path.cmx
 
 .PHONY: all
@@ -45,6 +48,7 @@ compare: $(OCAMLINT) $(OCAMLOBJ_nt) compare.cmx
 
 .PHONY: clean
 clean:
+	rm -rf $(DOCDIR)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
 	rm -f mcfg_bc mcfg_nt train visualize cycles compare
@@ -87,6 +91,11 @@ $(GRAMMARS)/wmcfg/%.wmcfg: $(GRAMMARS)/mcfgs/%.mcfg train
 %.cmi: %.mli
 	$(COMPILER_BYTECODE) $(FLAGS) -c $*.mli
 
+# If the previous rule didn't apply (i.e. if there is no .mli file), 
+# then you can use this to produce a .cmi file.
+%.cmi: %.ml
+	$(COMPILER_BYTECODE) $(FLAGS) -c $*.ml
+
 %.ml: %.mll
 	$(LEX) $*.mll
 
@@ -95,3 +104,10 @@ $(GRAMMARS)/wmcfg/%.wmcfg: $(GRAMMARS)/mcfgs/%.mcfg train
 
 %.ml: %.mly
 	$(YACC) $*.mly
+
+# For generating documentation
+.PHONY: doc
+doc: *.ml *.mli $(OCAMLINT)
+	mkdir -p $(DOCDIR)
+	ocamldoc -html -d $(DOCDIR) $(FLAGS) *.ml *.mli
+
