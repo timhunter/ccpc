@@ -46,7 +46,7 @@ compare: $(OCAMLINT) $(OCAMLOBJ_nt) compare.cmx
 .PHONY: clean
 clean:
 	rm -f *.o *.cmo *.cmi *.cmx
-	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx
+	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
 	rm -f mcfg_bc mcfg_nt train visualize cycles compare
 
 # Stop make from deleting ``intermediate'' mcfg files.
