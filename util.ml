@@ -19,8 +19,6 @@ let concatmap_tr f lsts =
     | (xs::xss) -> concatmap' f xss ((f xs) @ acc)
   in concatmap' f lsts []
 
-exception EmptyListException
-
 let rec take n lst =
   if (n = 0) then
     []

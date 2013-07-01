@@ -80,10 +80,10 @@ open Num
     let create_nonterminating (nonterm, rights, recipes, weight) =
       let checked_rights =
         try Nelist.from_list rights
-        with EmptyListException -> failwith("Nonterminating rule must have nonterminals to expand to") in
+        with Nelist.EmptyListException -> failwith("Nonterminating rule must have nonterminals to expand to") in
       let checked_recipes =
         try Nelist.from_list (List.map Nelist.from_list recipes)
-        with EmptyListException -> failwith("Nonterminating rule must have a function for composing yields") in
+        with Nelist.EmptyListException -> failwith("Nonterminating rule must have a function for composing yields") in
       NonTerminating (nonterm, checked_rights, checked_recipes, weight)
 
     let create_rule (nonterm, rights, srecipes, weight) = create_nonterminating (nonterm, rights, List.map Nelist.to_list (Nelist.to_list srecipes), weight)

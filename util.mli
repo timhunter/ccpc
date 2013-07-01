@@ -1,9 +1,6 @@
 
 (** A collection of miscellaneous utility functions. *)
 
-(** Really belongs in NEList module. *)
-exception EmptyListException
-
 (** [take n xs] is the length-[n] prefix of [xs], or [xs] itself if its length is less than [n]. *)
 val take : int -> 'a list -> 'a list
 
