@@ -85,7 +85,7 @@ let main () =
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
 			if options.intersect
 			then print_grammar grammar_file fsa
-			         (intersection_grammar chart goal_items start_symbol fsa)
+			         (intersection_grammar chart start_symbol fsa)
 			else 
 			  (if options.trees then (
 			    if (Fsa.is_exact fsa) then
