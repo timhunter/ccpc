@@ -54,7 +54,8 @@ let rec compare_derivations compare_vertices t1 t2 =
                 )
         )
 
-let make_derivation_tree item children rule weight_factor =
+let make_derivation_tree item children rule =
+	let weight_factor = Rule.get_weight rule in
 	let product = List.fold_left (mult_weights) weight_factor (map_tr get_weight children) in
 	match children with
 	| [] -> Leaf (item, rule, product)
@@ -107,9 +108,9 @@ let rec get_derivations chart item =
         let routes = Chart.get_routes item chart in
         let children_lists antecedent_items = one_from_each (map_tr (get_derivations chart) antecedent_items) in
         let use_route (antecedents,rule,weight_factor) =
-                map_tr (fun children -> (children,rule,weight_factor)) (children_lists antecedents) in
+                map_tr (fun children -> (children,rule)) (children_lists antecedents) in
         let results_from_all_routes = List.concat (map_tr use_route routes) in
-        map_tr (fun (children,rule,weight_factor) -> make_derivation_tree item children rule weight_factor) results_from_all_routes
+        map_tr (fun (children,rule) -> make_derivation_tree item children rule) results_from_all_routes
 
 (**************************************************************************)
 (****** Stuff for computing k-best lists **********************************)
