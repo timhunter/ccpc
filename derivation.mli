@@ -16,12 +16,6 @@ val get_weight : 'a derivation_tree -> Util.weight
     result of [get_rule]. *)
 val get_rule : 'a derivation_tree -> Rule.r
 
-(** Calling [make_derivation_tree root children rule wt] will construct a derivation tree with the specified root 
-    node and child subtrees, where the last step (from [children] to [root]) is licensed by [rule] and constributes 
-    a weight of [wt]. *)
-(* FIXME: We can probably get rid of the weight argument! *)
-val make_derivation_tree : 'a -> ('a derivation_tree list) -> Rule.r -> Util.weight -> 'a derivation_tree
-
 (** Retrieves all derivations of the given item from the chart. *)
 val get_derivations : Chart.chart -> Chart.item -> (Chart.item derivation_tree) list
 
