@@ -20,31 +20,34 @@ GRAMMARS=grammars
 DOCDIR=doc
 
 FLAGS= -I mcfgread -I +ocamlgraph
-OCAMLOBJ_bc= util.cmo fsa.cmo nelist.cmo rule.cmo mcfgread/read.cmo mcfgread/lexer.cmo chart.cmo tables.cmo parser.cmo grammar.cmo derivation.cmo generate.cmo path.cmo
+LIBS= nums.cmxa str.cmxa unix.cmxa graph.cmxa
 
-OCAMLINT= util.cmi fsa.cmi nelist.cmi rule.cmi chart.cmi tables.cmi parser.cmi mcfgread/read.cmi mcfgread/lexer.cmi util.cmi grammar.cmi derivation.cmi generate.cmi path.cmi
-OCAMLOBJ_nt= util.cmx fsa.cmx nelist.cmx rule.cmx chart.cmx tables.cmx mcfgread/read.cmx mcfgread/lexer.cmx parser.cmx grammar.cmx derivation.cmx generate.cmx path.cmx
+# All source files that do not correspond to the "top" file of an executable.
+MODULES= util.ml fsa.ml nelist.ml rule.ml chart.ml tables.ml parser.ml mcfgread/read.ml mcfgread/lexer.ml grammar.ml derivation.ml generate.ml path.ml
+
+OCAMLINT= $(MODULES:.ml=.cmi)
+OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
 all: mcfg_nt train visualize cycles compare
 
-mcfg_bc: $(OCAMLINT) $(OCAMLOBJ_bc)  main.cmo
-	$(COMPILER_BYTECODE) $(FLAGS) -o $@ nums.cma str.cma unix.cma graph.cma $(OCAMLOBJ_bc) main.cmo
+mcfg_bc: $(OCAMLINT) $(OCAMLOBJ:.cmx=.cmo) main.cmo
+	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(LIBS:.cmxa=.cma) $(OCAMLOBJ:.cmx=.cmo) main.cmo
 
-mcfg_nt: $(OCAMLINT) $(OCAMLOBJ_nt) main.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa unix.cmxa graph.cmxa $(OCAMLOBJ_nt) main.cmx
+mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) main.cmx
 
-train: $(OCAMLINT) $(OCAMLOBJ_nt) train.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa str.cmxa unix.cmxa graph.cmxa $(OCAMLOBJ_nt) train.cmx
+train: $(OCAMLINT) $(OCAMLOBJ) train.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) train.cmx
 
-visualize: $(OCAMLINT) $(OCAMLOBJ_nt) visualize.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) visualize.cmx
+visualize: $(OCAMLINT) $(OCAMLOBJ) visualize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) visualize.cmx
 
-cycles: $(OCAMLINT) $(OCAMLOBJ_nt) cycles.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) cycles.cmx
+cycles: $(OCAMLINT) $(OCAMLOBJ) cycles.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) cycles.cmx
 
-compare: $(OCAMLINT) $(OCAMLOBJ_nt) compare.cmx
-	$(COMPILER_NATIVE) $(FLAGS) -o $@ nums.cmxa unix.cmxa str.cmxa graph.cmxa $(OCAMLOBJ_nt) compare.cmx
+compare: $(OCAMLINT) $(OCAMLOBJ) compare.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) compare.cmx
 
 .PHONY: clean
 clean:
