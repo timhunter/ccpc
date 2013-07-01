@@ -107,7 +107,7 @@ $(GRAMMARS)/wmcfg/%.wmcfg: $(GRAMMARS)/mcfgs/%.mcfg train
 
 # For generating documentation
 .PHONY: doc
-doc: *.ml *.mli $(OCAMLINT)
+doc: *.mli $(OCAMLINT)
 	mkdir -p $(DOCDIR)
-	ocamldoc -html -d $(DOCDIR) $(FLAGS) *.ml *.mli
+	ocamldoc -html -d $(DOCDIR) $(FLAGS) *.mli
 
