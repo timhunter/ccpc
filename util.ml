@@ -57,15 +57,6 @@ let (^^) s t =
   else
     s ^ " " ^ t
 
-(* Generate all the lists you can, of a given length, using the elements of a given list (maybe more than once) *)
-let rec all_lists lst length =
-  match (lst,length) with
-    (_,0) -> [[]]
-  | ([],_) -> []
-  | _ ->
-    let lists_starting_with x = map_tr (fun l -> x::l) (all_lists lst (length-1)) in
-    concatmap_tr lists_starting_with lst
-
 let uniques lst =
   let rec uniques' checked rest =
     match rest with
