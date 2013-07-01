@@ -1,4 +1,7 @@
 open Util
+
+exception EmptyListException
+
     type 'a t = NonEmptyList of ('a * ('a list))
 
     let cons x (NonEmptyList (y,ys)) = NonEmptyList (x, y::ys)

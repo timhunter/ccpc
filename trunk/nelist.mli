@@ -1,6 +1,8 @@
 (***************************)
 (*** Non-empty list type ***)
 
+exception EmptyListException
+
 		type 'a t
 		val cons : 'a -> 'a t -> 'a t
 		val length : 'a t -> int
