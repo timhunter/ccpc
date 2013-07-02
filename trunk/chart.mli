@@ -59,10 +59,6 @@ val compare_items : item -> item -> int
     span of [fsa]. *)
 val goal_item : string -> Fsa.fsa -> item
 
-(** [goal_items chart nt fsa] returns either (i) the singleton list containing the result of [goal_item nt fsa] if [chart] 
-    contains a derivation of this item, or (ii) the empty list. (The list result type is simply for backwards compatibility.) *)
-val goal_items : chart -> string -> Fsa.fsa -> item list
-
 (*******************************************************************************************)
 (** {2 Slow functions only for "high-level" use (i.e. not inside loops)} *)
 
