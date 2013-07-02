@@ -49,9 +49,9 @@ let process_sentence (rules : Rule.r list) start_symbol rule_uses nonterm_uses (
 	let split_sentence = List.tl (Util.split ' ' sentence) in
 	let fsa = Fsa.make_fsa_exact (String.concat " " split_sentence) in
 	let chart = Parser.deduce rules fsa in
-	let goal_items = Chart.goal_items chart start_symbol fsa in
-	let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-	if (goal_items = []) then
+	let goal_proposition = Chart.goal_item start_symbol fsa in
+	let goal_derivations = Derivation.get_derivations chart goal_proposition in
+	if (goal_derivations = []) then
 		Printf.eprintf "Warning: no parse found for sentence \"%s\"\n" sentence
 	else (
 		if (List.length goal_derivations <> 1) then Printf.eprintf "Warning: found %d different parses for sentence \"%s\"\n" (List.length goal_derivations) sentence ;
