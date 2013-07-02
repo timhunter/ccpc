@@ -80,7 +80,6 @@ let main () =
 		    (false,None,false,None) -> failwith "Please specify one of -intersect, -graph, -trees or -kbest"
 		  | (_,_,_,_) -> 
 		      let chart = Parser.deduce rules fsa in
-		      let goal_items = Chart.goal_items chart start_symbol fsa in
 		      begin
 			(* user should be able to get an intersection grammar after parsing full sentences OR prefixes *)
 			if options.intersect
@@ -89,7 +88,8 @@ let main () =
 			else 
 			  (if options.trees then (
 			    if (Fsa.is_exact fsa) then (
-			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
+			         let goal_proposition = Chart.goal_item start_symbol fsa in
+			         let goal_derivations = Derivation.get_derivations chart goal_proposition in
 			         if (goal_derivations = []) then
 			            Printf.eprintf "No derivations found\n"
    			         else
@@ -105,7 +105,7 @@ let main () =
 			  );
 			(* ditto for graphs *)
 			match options.graph with
-			    (Some graphname) -> Grammar.drawgraph chart goal_items input_list graphname
+			    (Some graphname) -> Grammar.drawgraph chart [Chart.goal_item start_symbol fsa] input_list graphname
 			  | None -> ()
 		      end
 

@@ -71,19 +71,6 @@ let get_status c item route =
   | [] -> NewItem
   | rs -> if (List.mem route rs) then OldItemOldRoute else OldItemNewRoute
 
-(* This function is kind of a remnant from the bad old days when an item included a 
- * list of backpointers. Now that an item is just a ``proposition'', it makes more 
- * sense to just use the below function goal_item, and then call get_routes on the result. *)
-let goal_items c (start_symbol : string) fsa : (item list) =
-  let check_item (i : item)  _ (acc : item list) : item list =
-    if (get_nonterm i = start_symbol) && (map_tr get_consumed_span (get_ranges i) = [Some(start_state fsa, end_state fsa)]) then
-      i::acc
-    else
-      acc
-  in
-  match c with
-  | TableWithHistory tbl -> ItemHashtbl.fold check_item tbl []
-
 let goal_item start_symbol fsa = ParseItem(start_symbol, [Range(fsa, goal_span fsa)])
 
 (*** WARNING: Functions below here are very slow. Not recommended outside of debugging contexts. ***)
