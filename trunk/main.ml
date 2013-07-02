@@ -88,10 +88,13 @@ let main () =
 			         (intersection_grammar chart start_symbol fsa)
 			else 
 			  (if options.trees then (
-			    if (Fsa.is_exact fsa) then
+			    if (Fsa.is_exact fsa) then (
 			         let goal_derivations = List.concat (map_tr (Derivation.get_derivations chart) goal_items) in
-   			         List.iter print_endline (map_tr (Derivation.print_tree_sexp Chart.get_nonterm) goal_derivations)
-   			    else
+			         if (goal_derivations = []) then
+			            Printf.eprintf "No derivations found\n"
+   			         else
+   			            List.iter print_endline (map_tr (Derivation.print_tree_sexp Chart.get_nonterm) goal_derivations)
+   			    ) else
    			         failwith "-trees option is incompatible with prefix/infix mode"
    			   )
 			   else 
