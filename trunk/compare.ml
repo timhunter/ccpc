@@ -1,38 +1,5 @@
 open Util
 
-(************************************************************************************************************)
-
-(* FIXME: Copied, then very minor changes, from visualize.ml! *)
-(* Reads from the dict file a returns a mapping from guillaumin-generated 
-   preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
-let get_guillaumin_dict filename =
-
-	let channel =
-		try open_in filename
-		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
-	in
-
-	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (\\(::? .*\\))$" in
-
-	let result = Hashtbl.create 100 in
-	begin
-		try
-			while true; do
-				let line = input_line channel in
-				if (Str.string_match regex line 0) then
-					let category   = Str.matched_group 1 line in
-					let features   = Str.matched_group 2 line in
-					Hashtbl.add result category features
-				else if (line <> "") then
-					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
-			done
-		with End_of_file ->
-			close_in channel
-	end ;
-	result
-
-(************************************************************************************************************)
-
 module type MULTISET = sig
     type t
     val empty : unit -> t
@@ -132,7 +99,7 @@ let main () =
         Printf.eprintf "Not enough derivations to compare, I'm outta here\n"
     ) else (
         let grammar = Grammar.get_input_grammar !grammar_file in
-        let dict = match (!dict_file) with "" -> None | s -> Some (get_guillaumin_dict s) in
+        let dict = match (!dict_file) with "" -> None | s -> Some (Grammar.get_guillaumin_dict s) in
         compare_derivations grammar dict (reverse_tr !ranks)
     )
 
