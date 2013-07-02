@@ -20,9 +20,9 @@ let ranges_equal = function Range(fsa1,span1) -> function Range(fsa2,span2) ->
 
 exception RangesNotAdjacentException
 
-let make_fsa_infix s  = StringBased(Infix,  (Str.split (Str.regexp_string " ") s))
-let make_fsa_prefix s = StringBased(Prefix, (Str.split (Str.regexp_string " ") s))
-let make_fsa_exact s  = StringBased(Exact,  (Str.split (Str.regexp_string " ") s))
+let make_fsa_infix s  = StringBased(Infix,  s)
+let make_fsa_prefix s = StringBased(Prefix, s)
+let make_fsa_exact s  = StringBased(Exact,  s)
 let is_exact = function StringBased(Exact,_) -> true | _ -> false
 
 let make_fsa_from_file filename =

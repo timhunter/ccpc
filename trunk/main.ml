@@ -16,7 +16,8 @@ let print_grammar grammar_file fsa (rules, start_symbol) =
 	List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) rules
 
 type options = { graph : string option ; kbest : int option ; trees : bool ; intersect : bool ; input : string -> Fsa.fsa ; sentence : string option }
-let default_options = { graph = None; kbest = None ; trees = false; intersect = false; input = Fsa.make_fsa_exact; sentence = None }
+let default_options = { graph = None; kbest = None ; trees = false; intersect = false; 
+                        input = (fun s -> Fsa.make_fsa_exact (Str.split (Str.regexp_string " ") s)) ; sentence = None }
 
 (* Removes spaces from the beginning and end of the string, 
  * and collapses adjacent spaces into a single space. *)
@@ -31,8 +32,8 @@ let rec process_args args acc =
 	| ("-graph" :: (filename :: rest))  -> process_args rest {acc with graph = Some filename}
 	| ("-trees" :: rest)               -> process_args rest {acc with trees = true}
 	| ("-intersect" :: rest)  -> process_args rest {acc with intersect = true}
-	| ("-p" :: rest)     -> process_args rest {acc with input = Fsa.make_fsa_prefix}
-        | ("-infix" :: rest) -> process_args rest {acc with input = Fsa.make_fsa_infix}
+	| ("-p" :: rest)     -> process_args rest {acc with input = fun s -> Fsa.make_fsa_prefix (Str.split (Str.regexp_string " ") s)}
+        | ("-infix" :: rest) -> process_args rest {acc with input = fun s -> Fsa.make_fsa_infix (Str.split (Str.regexp_string " ") s)}
         | ("-file" :: rest) -> process_args rest {acc with input = Fsa.make_fsa_from_file}
         | ("-kbest" :: (k :: rest)) -> process_args rest {acc with kbest = Some (int_of_string k)}
 	| (x::rest)          -> process_args rest {acc with sentence = Some (cleanup_input x)}
