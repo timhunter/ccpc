@@ -33,7 +33,6 @@ let get_input_grammar grammar_file =
 
 (******************************************************************************************)
 
-(* FIXME: Copied, then very minor changes, from visualize.ml! *)
 let get_guillaumin_dict filename =
 
 	let channel =
