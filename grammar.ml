@@ -120,11 +120,9 @@ let rec build_intersection_grammar chart q grammar_so_far =
     List.iter (fun item -> add_if_new q item) new_agenda_items ;             (* Add new agenda items to q *)
     build_intersection_grammar chart q (grammar_so_far @ new_rules)          (* Go round again, with new grammar rules added *)
 
-(* goal_items :   the items already in the chart that we're going to ``search backwards from'' *)
 let intersection_grammar chart start_symbol fsa = 
   let q = create_myqueue () in
-  let goal_items = Chart.goal_items chart start_symbol fsa in
-  List.iter (fun item -> add_if_new q item) goal_items ;    (* initialise q to contain goal_items *)
+  add_if_new q (Chart.goal_item start_symbol fsa) ;
   let new_start_symbol = Printf.sprintf "%s_%s%s" start_symbol (string_of (start_state fsa)) (string_of (end_state fsa)) in
   let new_rules = build_intersection_grammar chart q [] in
   (new_rules, new_start_symbol)
