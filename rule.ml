@@ -21,11 +21,14 @@ open Num
         match rule with
         | Terminating _ -> None
         | NonTerminating (left, rights, trecipe, _) ->
-            let is_adjunct =   (* See if this is an adjunction rule, i.e. of the form A -> B C where A and C map to the same feature sequence *)
+            (* See if this is an adjunction rule, i.e. of the form A -> B C where A and C map to the same feature sequence, 
+               modulo the distinction between ":" (non-lexical) and "::" (lexical) on C. *)
+            let is_adjunct =
                 try (
                     let left_features = Hashtbl.find dict left in
                     let right1_features = Hashtbl.find dict (Nelist.nth rights 1) in
-                    (Nelist.length rights = 2) && (left_features = right1_features)
+                    let ignore_lexical fs = Str.replace_first (Str.regexp "^:: ") ": " fs in
+                    (Nelist.length rights = 2) && (left_features = ignore_lexical right1_features)
                 ) with _ -> false
             in
             if is_adjunct then (

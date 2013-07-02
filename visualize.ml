@@ -81,42 +81,9 @@ let get_comment_data grammar_file filter_command =
 
 (************************************************************************************************)
 
-(* Reads from the dict file a returns a mapping from guillaumin-generated 
-   preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
-let get_guillaumin_dict filename =
-
-	let channel =
-		try open_in filename
-		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
-	in
-
-	(* This regex matches lines describing both lexical ("::") and non-lexical (":") categories. 
-	   We record both in the dictionary, without recording the distinction anywhere. Therefore 
-	   some feature-sequences appear twice in the range of this mapping, 
-	   eg. if t123 represents ":: D" and t234 represents ": D", both will simply be mapped to "D" here. *)
-	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (::? \\(.*\\))$" in
-
-	let result = Hashtbl.create 100 in
-	begin
-		try
-			while true; do
-				let line = input_line channel in
-				if (Str.string_match regex line 0) then
-					let category   = Str.matched_group 1 line in
-					let features   = Str.matched_group 2 line in
-					Hashtbl.add result category features
-				else if (line <> "") then
-					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
-			done
-		with End_of_file ->
-			close_in channel
-	end ;
-	result
-
-(************************************************************************************************)
-
 (* Calls Stabler's prolog to get the IDs of each MG lexical item.
-   Returns a mapping from (lexical-string, feature-sequence) to ID. *)
+   Returns a mapping from (lexical-string, feature-sequence) to ID.
+   Note that since we are dealing only with lexical items, feature-sequence always begins with ":: " (never ": "). *)
 let get_stabler_index grammar_files prolog_file =
 	let channel =
 		if not (Sys.file_exists prolog_file) then
@@ -138,7 +105,7 @@ let get_stabler_index grammar_files prolog_file =
 				if (Str.string_match regex line 0) then
 					let id = int_of_string (Str.matched_group 1 line) in
 					let str = Str.matched_group 2 line in
-					let features = remove_commas (Str.matched_group 3 line) in
+					let features = "::" ^^ remove_commas (Str.matched_group 3 line) in
 					Hashtbl.add result (str,features) id
 				else if (line <> "") then
 					Printf.eprintf "WARNING: Ignoring unexpected line in prolog output: %s\n" line
@@ -190,6 +157,8 @@ let get_derivation_string tree dict index =
 	let yield_with_features = dlist_map (fun (preterm,term) -> (preterm_to_features preterm, term)) yield in
 
 	let lookup_id features term =
+		(* First make sure that the feature-sequence we're asking about is lexical, i.e. starts with "::". *)
+		assert (Str.string_match (Str.regexp "^:: ") features 0) ;
 		try Hashtbl.find index (term,features)
 		with Not_found -> failwith (Printf.sprintf "Couldn't find an ID for lexical item (%s,%s)" term features)
 	in
@@ -285,7 +254,7 @@ let rec convert_tree (dtree : string Derivation.derivation_tree) : (string Gener
 
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
-	let dict = get_guillaumin_dict grammar_files.dict_file in
+	let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
 	let index = get_stabler_index grammar_files prolog_file in
 
         let (trees,mode_note) =
