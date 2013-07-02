@@ -7,6 +7,9 @@ COMPILER_NATIVE=ocamlopt
 LEX=ocamllex
 YACC=ocamlyacc
 
+# Makefile fragment containing auto-generated dependencies
+DEPENDENCIES_FILE=Makefile.dependencies
+
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
 # NB: Guillaumin's code should be patched like this and then recompiled:
 #     patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
@@ -49,9 +52,15 @@ cycles: $(OCAMLINT) $(OCAMLOBJ) cycles.cmx
 compare: $(OCAMLINT) $(OCAMLOBJ) compare.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) compare.cmx
 
+# Dependencies
+-include $(DEPENDENCIES_FILE)
+$(DEPENDENCIES_FILE): *.mli *.ml mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
+	ocamldep $(FLAGS) $^ > $@
+
 .PHONY: clean
 clean:
 	rm -rf $(DOCDIR)
+	rm -f $(DEPENDENCIES_FILE)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
 	rm -f mcfg_bc mcfg_nt train visualize cycles compare
