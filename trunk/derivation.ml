@@ -107,7 +107,7 @@ let print_tree f tree =
 let rec get_derivations chart item =
         let routes = Chart.get_routes item chart in
         let children_lists antecedent_items = one_from_each (map_tr (get_derivations chart) antecedent_items) in
-        let use_route (antecedents,rule,weight_factor) =
+        let use_route (antecedents,rule) =
                 map_tr (fun children -> (children,rule)) (children_lists antecedents) in
         let results_from_all_routes = List.concat (map_tr use_route routes) in
         map_tr (fun (children,rule) -> make_derivation_tree item children rule) results_from_all_routes
@@ -121,7 +121,7 @@ module type HYPERGRAPH =
                 type g
                 val compare : v -> v -> int
                 val show : v -> string
-                val tails : g -> v -> (v list * Rule.r * Util.weight) list
+                val tails : g -> v -> (v list * Rule.r) list
                 val all_vertices : g -> v list
         end
 
@@ -148,14 +148,14 @@ module GrammarAsGraph =
                                              | Rule.PublicTerminating _ -> []
                                              | Rule.PublicNonTerminating(xs,_) -> Nelist.to_list xs
                         in
-                        map_tr (fun r -> (get_children r, r, Rule.get_weight r)) relevant_rules
+                        map_tr (fun r -> (get_children r, r)) relevant_rules
                 let all_vertices rules = uniques (map_tr Rule.get_nonterm rules)
         end
 
 module KBestCalculation = functor (Graph : HYPERGRAPH) ->
 struct
 
-    type dbp = (Graph.v list * Rule.r * Util.weight) * int list
+    type dbp = (Graph.v list * Rule.r) * int list
     type kbest_state = { g : Graph.g ;
                          dhat : (Graph.v, dbp list) Hashtbl.t ;             (* dhat[v] is an ordered list of the best dbps for vertex v *)
                          dhat_best_weight : (Graph.v, weight) Hashtbl.t ;   (* dhat_best_weight[v] is the weight of dhat[v][0]; just for get_one_best *)
@@ -177,10 +177,10 @@ struct
                 dbp_interpret state d interpret_terminal combine
             )
         in
-        let ((children,rule,wt),ns) = dbp in
+        let ((children,rule),ns) = dbp in
         assert (List.length children = List.length ns) ;
         let subresults = List.map2 helper children ns in
-        combine wt subresults
+        combine (Rule.get_weight rule) subresults
 
     let dbp_weight state dbp =
         dbp_interpret state dbp (fun x -> weight_from_float 1.0) (List.fold_left mult_weights)
@@ -197,7 +197,7 @@ struct
                 dtree_of_dbp state v d
             )
         in
-        let ((children,rule,wt),ns) = dbp in
+        let ((children,rule),ns) = dbp in
         assert (List.length children = List.length ns) ;
         if (children = []) then (
             Leaf(root_vertex, rule, Rule.get_weight rule)
@@ -235,7 +235,7 @@ struct
         with NoMoreCandidates -> ()
 
     and lazy_next state v e j kp =
-        let (children,rule,wt) = e in
+        let (children,rule) = e in
         for i=0 to (List.length children - 1) do
             let child = List.nth children i in
             if (Graph.tails state.g child <> []) then (
@@ -248,8 +248,8 @@ struct
             )
         done
 
-    let tails_equal (children1,rule1,wt1) (children2,rule2,wt2) =
-        let result = (children1 = children2) && (Rule.to_string rule1 = Rule.to_string rule2) && (compare_weights wt1 wt2 = 0) in
+    let tails_equal (children1,rule1) (children2,rule2) =
+        let result = (children1 = children2) && (Rule.to_string rule1 = Rule.to_string rule2) in
         result
 
     let rec get_one_best state v visited =
@@ -258,15 +258,15 @@ struct
         else (
             let tails = Graph.tails state.g v in
             let new_visited = v::visited in
-            let non_looping_tail (children, rule, wt) = not (List.exists (fun x -> List.mem x new_visited) children) in
-            let best_weight_via_tail (children, rule, wt) : weight option =
+            let non_looping_tail (children, rule) = not (List.exists (fun x -> List.mem x new_visited) children) in
+            let best_weight_via_tail (children, rule) : weight option =
                 let best_subderivations = List.map (fun x -> get_one_best state x new_visited)
                                                    (List.filter (fun x -> Graph.tails state.g x <> []) children) in
                 if List.mem None best_subderivations then
                     None
                 else
                     let component_weights : Util.weight list = optlistmap (function None -> None | Some (_,w,_) -> Some w) best_subderivations in
-                    Some (List.fold_left mult_weights wt component_weights)
+                    Some (List.fold_left mult_weights (Rule.get_weight rule) component_weights)
             in
             let tails_with_weights = List.map (fun t -> (t, best_weight_via_tail t)) (List.filter non_looping_tail tails) in
             let tails_with_usable_weights = optlistmap (function (t,None) -> None | (t,Some w) -> Some (t,w)) tails_with_weights in
@@ -277,7 +277,7 @@ struct
                 None
             | (best::_) ->
                 let (best_tail, best_weight) = best in
-                let dbp_of_tail (children,rule,wt) = ((children,rule,wt), (List.map (fun _ -> 1) children)) in
+                let dbp_of_tail (children,rule) = ((children,rule), (List.map (fun _ -> 1) children)) in
                 let rest = List.filter (fun x -> not (tails_equal x best_tail)) tails in
                 let candidate_heap = map_tr dbp_of_tail rest in
                 let best_dbp = dbp_of_tail best_tail in

@@ -36,8 +36,8 @@ let rec process_tree weight sentence chart rule_uses nonterm_uses tree =
 	let children = Derivation.get_children tree in
 	let nt = Chart.get_nonterm item in
 	let r =
-		match (List.filter (fun(is,rule,w) -> is = map_tr Derivation.get_root_item children) (Chart.get_routes item chart)) with
-		| (is,rule,w)::[] -> rule
+		match (List.filter (fun(is,rule) -> is = map_tr Derivation.get_root_item children) (Chart.get_routes item chart)) with
+		| (is,rule)::[] -> rule
 		| _ -> failwith "That's weird: there should be exactly one route from these particular antecedents"
 	in
 	increment rule_uses r weight;
