@@ -13,7 +13,7 @@ type item
 
 (** A valid deductive step: a list of existing items and a rule that can deduce a new 
     item from those items. *)
-type route = (item list) * Rule.r * Util.weight  (* FIXME: We should be able to get rid of the weight, I think. *)
+type route = (item list) * Rule.r
 
 (** If we've just discovered that item [i] can be derived by route [r], a value of type 
     [item_route_status] is an answer to the question "What does this discovery add to what 

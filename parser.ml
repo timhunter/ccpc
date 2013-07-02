@@ -12,8 +12,7 @@ open Fsa
         match Rule.get_expansion rule with
         | PublicTerminating str ->
           map_tr (let nt = Rule.get_nonterm rule in
-                  let wt = Rule.get_weight rule in
-                  fun span -> (create_item nt [Range(fsa,span)], rule, wt))
+                  fun span -> (create_item nt [Range(fsa,span)], rule))
                  (axiom_spans fsa str)
         | PublicNonTerminating _ -> []
       in
@@ -36,8 +35,8 @@ open Fsa
             if item_nonterms = Nelist.to_list nts then
                 try
                     match items with 
-                     | [h] ->   Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h], rule, Rule.get_weight rule))
-                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h;t], rule, Rule.get_weight rule))
+                     | [h] ->   Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h], rule))
+                     | [h;t] -> Some (create_item left (Rule.apply f item_ranges concat_ranges), ([h;t], rule))
                      | _ -> failwith "List can only have one or two items"
                with
                     RangesNotAdjacentException -> None
@@ -113,18 +112,18 @@ open Fsa
       let left_map = build_rule_map (Array.get arity_map 2) 0 in 
       let right_map = build_rule_map (Array.get arity_map 2) 1 in
       let single_map = build_rule_map (Array.get arity_map 1) 0 in
-      let axioms_list : ((item * Rule.r * weight) list) = get_axioms prims input in   
+      let axioms_list : ((item * Rule.r) list) = get_axioms prims input in   
       let axioms =
         let tbl = Chart.create 100 in 
         let rec add lst  =
           match lst with 
             | [] -> tbl
-            | (item,rule,weight)::t -> Chart.add tbl item ([],rule,weight) ; add t in 
+            | (item,rule)::t -> Chart.add tbl item ([],rule) ; add t in 
         add axioms_list in
-      let item_map = build_item_map (map_tr (fun (x,_,_) -> x) axioms_list) in 
+      let item_map = build_item_map (map_tr (fun (x,_) -> x) axioms_list) in 
       let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
       let queue = Queue.create () in 
-      List.iter (fun (item,_,_) -> Queue.add item queue) axioms_list ;
+      List.iter (fun (item,_) -> Queue.add item queue) axioms_list ;
       let chart = consequences prims axioms queue tables in
       chart
 

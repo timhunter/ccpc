@@ -20,7 +20,7 @@ module ItemHashtbl = Hashtbl.Make(
     end
 )
 
-type route = (item list) * Rule.r * weight
+type route = (item list) * Rule.r
 
 type chart = TableWithHistory of route ItemHashtbl.t
 
@@ -52,7 +52,7 @@ let debug_str_long item chart =
 		| Some (x,y) -> Printf.sprintf "%s:%s" (Fsa.string_of x) (Fsa.string_of y)
 		| None -> Printf.sprintf "eps"
 	in
-	let show_backpointer (items,r,wt) = show_weight wt ^^ (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in
+	let show_backpointer (items,r) = (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in
 	let backpointers_str = List.fold_left (^^) "" (map_tr show_backpointer (get_routes item chart)) in
 	("[" ^^ (string_of_int (Hashtbl.hash item)) ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ backpointers_str ^^ "]")
 

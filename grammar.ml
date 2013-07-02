@@ -67,7 +67,7 @@ let make_new_rule sit_nonterm rights func range_lists weight =
 let new_intersection_grammar_rules chart item =
   let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
   let routes = Chart.get_routes item chart in
-  let make_rule_for_route ((items, rule, weight) : Chart.route) : (Rule.r * Chart.item list) =
+  let make_rule_for_route ((items, rule) : Chart.route) : (Rule.r * Chart.item list) =
     match (Rule.get_expansion rule) with
     | PublicTerminating str -> (
         let fsa_weight =
@@ -188,7 +188,7 @@ let update_graph graph chart item =
   let routes = Chart.get_routes item chart in
   let parentnode = SituatedNode.create item in
   
-  let do_route ((items, rule, weight):Chart.route) =
+  let do_route ((items, rule) : Chart.route) =
     match (Rule.get_expansion rule) with
 	PublicTerminating str -> let leaf = match str with
 	    " "  -> ({ SituatedNode.name="EMPTY" ; SituatedNode.spans=[] }  : SituatedNode.t) 
