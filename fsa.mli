@@ -15,14 +15,14 @@ exception RangesNotAdjacentException
 
 (** {2 Constructing FSAs} *)
 
-(** Constructs an FSA that accepts all and only strings with the given prefix. *)
-val make_fsa_prefix : string -> fsa
+(** Constructs an FSA that accepts all and only sentences that have the given list of symbols (words) as a prefix. *)
+val make_fsa_prefix : string list -> fsa
 
-(** Constructs an FSA that accepts all and only strings with the given infix. *)
-val make_fsa_infix : string -> fsa
+(** Constructs an FSA that accepts all and only sentences that have the given list of symbols (words) as an infix. *)
+val make_fsa_infix : string list -> fsa
 
-(** Constructs an FSA that accepts precisely the given string. *)
-val make_fsa_exact : string -> fsa
+(** Constructs an FSA that accepts only the sentence that comprises precisely the given list of symbols (words). *)
+val make_fsa_exact : string list -> fsa
 
 (** Constructs an FSA as specified by the given file. *)
 val make_fsa_from_file : string -> fsa
