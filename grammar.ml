@@ -33,6 +33,35 @@ let get_input_grammar grammar_file =
 
 (******************************************************************************************)
 
+(* FIXME: Copied, then very minor changes, from visualize.ml! *)
+let get_guillaumin_dict filename =
+
+	let channel =
+		try open_in filename
+		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
+	in
+
+	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (\\(::? .*\\))$" in
+
+	let result = Hashtbl.create 100 in
+	begin
+		try
+			while true; do
+				let line = input_line channel in
+				if (Str.string_match regex line 0) then
+					let category   = Str.matched_group 1 line in
+					let features   = Str.matched_group 2 line in
+					Hashtbl.add result category features
+				else if (line <> "") then
+					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
+			done
+		with End_of_file ->
+			close_in channel
+	end ;
+	result
+
+(************************************************************************************************************)
+
 (* This function is the ``inverse'' (sort of) of build_symbol below.
    Must be kept in sync if that changes. *)
 let desituate nonterm =

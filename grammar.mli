@@ -21,4 +21,9 @@ val desituate_rule : Rule.r -> Rule.r
 
 (** Reads a (weighted or unweighted) MCFG from a file with the specified name. *)
 val get_input_grammar : string -> (Rule.r list * string)
+
+(** Reads from the specified dict file and returns a mapping from guillaumin-generated 
+    preterminals (e.g. ["t123"]) to feature sequences (e.g. [":: =N D -f"]). *)
+val get_guillaumin_dict : string -> (string, string) Hashtbl.t
+
 val drawgraph : Chart.chart -> Chart.item list -> string list -> string -> unit

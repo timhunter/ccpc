@@ -14,37 +14,6 @@ let latex_end = ["\\end{document}"]
 
 (***********************************************************************************)
 
-(* FIXME: Copied, then very minor changes, from visualize.ml! *)
-(* Reads from the dict file a returns a mapping from guillaumin-generated 
-   preterminals (eg. "t123") to feature sequences (eg. ":: =N D -f") *)
-let get_guillaumin_dict filename =
-
-	let channel =
-		try open_in filename
-		with Sys_error _ -> failwith (Printf.sprintf "Couldn't open dict file %s" filename)
-	in
-
-	let regex = Str.regexp "^\\([a-z]+[0-9]+\\) : (\\(::? .*\\))$" in
-
-	let result = Hashtbl.create 100 in
-	begin
-		try
-			while true; do
-				let line = input_line channel in
-				if (Str.string_match regex line 0) then
-					let category   = Str.matched_group 1 line in
-					let features   = Str.matched_group 2 line in
-					Hashtbl.add result category features
-				else if (line <> "") then
-					Printf.eprintf "WARNING: Ignoring unexpected line in dictionary file: %s\n" line
-			done
-		with End_of_file ->
-			close_in channel
-	end ;
-	result
-
-(***********************************************************************************)
-
 (* returns: string list list *)
 let get_child_lists rules nt =
         let relevant_rules = List.filter (fun r -> Rule.get_nonterm r = nt) rules in
@@ -146,7 +115,7 @@ let main () =
                         None
         in
         let (rules, start_symbol) = Grammar.get_input_grammar grammar_file in
-        let dict = match dict_file with None -> None | Some f -> Some (get_guillaumin_dict f) in
+        let dict = match dict_file with None -> None | Some f -> Some (Grammar.get_guillaumin_dict f) in
         let broken_paths = find_cycles rules start_symbol in    (* a broken path is a pair of histories, the first of which is a cycle *)
         let sort xs = Util.reverse_tr (List.sort (fun (c1,_) (c2,_) -> compare_by_weight c1 c2) xs) in
         let cycles = sort (group broken_paths) in
