@@ -64,52 +64,12 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 
    let n_of num denom = div_num (num_of_int num) (num_of_int denom)
 
-   exception Unweighted of string
-
-   let numerator_of_rule r =
-     match Util.weight_numerator (Rule.get_weight r) with
-       | Some n -> n
-       | None -> raise (Unweighted (Rule.to_string r))
-
-   let denominator_of_rule r =
-     match Util.weight_denominator (Rule.get_weight r) with
-       | Some d -> d
-       | None -> raise (Unweighted (Rule.to_string r))
-
-   (*sorting a list of rules with same lfs symbol in a decending order on its weight*)
-   let sort_rules rules = 
-     let rulecompare r1 r2 =
-       try compare_num (numerator_of_rule r1) (numerator_of_rule r2) (* we're assuming here that all the denominators are equal *)
-       with (Unweighted _) -> 0
-     in
-       List.sort rulecompare rules
-
-   let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n)
-
-  (* weighted random sampling
-     assumes the first denominator is the denominator shared by all the rule
-     we're using the 64-bit random number generator because these denominators are so freakin large
-   *)
-  let weighted_random rules = match rules with
-      [] -> failwith "weighted_random: no rules"
-    | r::[] -> r
-    | _ -> let sorted_rules = sort_rules rules in
-	   let one = Num.num_of_int 1 in
-	   let die_roll = Random.int64 (i64_of_num ((denominator_of_rule (List.hd sorted_rules)) +/ one)) in
-	   let rec select stillleft = function
-	        [] -> failwith "select: no rules"
-	     | r::[] -> r
-	     | r::rs -> let diff = Int64.sub stillleft (i64_of_num (numerator_of_rule r)) in
-	       if diff < Int64.zero then r else select diff rs
-	   in
-	   select die_roll sorted_rules
-
 (* generate a random tree and its weight*)
 let rec generate_all g items w = 
     let nonterm = List.map Rule.get_nonterm g in
 	if List.mem (List.hd items) nonterm then
 	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
-	  let rule_selected = weighted_random productions in
+	  let rule_selected = Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions) in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    let rule_weight = Rule.get_weight rule_selected in
