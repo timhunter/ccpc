@@ -244,12 +244,7 @@ let rec convert_tree (dtree : string Derivation.derivation_tree) : (string Gener
                         NonLeaf (root, [Leaf str], Derivation.get_rule dtree)
                 | _ -> NonLeaf (root, map_tr fst (map_tr convert_tree children), Derivation.get_rule dtree)
         in
-        let weight_as_num =
-                let w = Derivation.get_weight dtree in
-                match (weight_numerator w, weight_denominator w) with
-                | (Some n, Some d) -> Num.div_num n d
-                | otherwise -> failwith "convert_tree: This tree is unweighted"
-        in
+        let weight_as_num = num_of_weight (Derivation.get_weight dtree) in
         (new_tree, weight_as_num)
 
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =

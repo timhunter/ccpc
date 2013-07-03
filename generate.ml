@@ -73,9 +73,7 @@ let rec generate_all g items w =
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    let rule_weight = Rule.get_weight rule_selected in
-	    match (Util.weight_numerator rule_weight, Util.weight_denominator rule_weight) with
-	      | (Some num, Some denom) -> mult_num (div_num num denom) w
-	      | _ -> w in
+	    Util.mult_weights rule_weight w in
 	    if List.length rule_selected_rhs = 1 then 
 	      let child = generate_all g rule_selected_rhs current_w in
 	      (NonLeaf (List.hd items, [fst child], rule_selected), snd child)
@@ -87,7 +85,7 @@ let rec generate_all g items w =
 
    (*sorting a list of trees in a decending order on their weights*)
    let sort_trees treelist = 
-     let treecompare t1 t2 = -(Num.compare_num (snd t1) (snd t2)) in
+     let treecompare t1 t2 = -(Util.compare_weights (snd t1) (snd t2)) in
        List.sort treecompare treelist
 
 (* remove the duplicate trees in a tree list*)
@@ -111,5 +109,7 @@ let generate grammar_file =
     if n < 1 then []
     else (generate_all g items w)::(add_n g items w (n-1))
   in
-  let ntrees = add_n g items (n_of 1 1) 300 in (* magic number: 300 samples *)
-    sort_trees (remove_duplicate ntrees)
+  let weight_one = Util.make_weight (n_of 1 1) (n_of 1 1) in
+  let ntrees = add_n g items weight_one 300 in (* magic number: 300 samples *)
+    Util.map_tr (fun (t,w) -> (t, Util.num_of_weight w)) (sort_trees (remove_duplicate ntrees))
+
