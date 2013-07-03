@@ -88,7 +88,7 @@ let to_list lst = MyList.contents lst
 
 let weight_product lst =
         let weights = Util.map_tr (fun (_,_,x) -> x) (MyList.labels lst) in
-        let one = Util.make_weight (Num.num_of_int 1) (Num.num_of_int 1) in
+        let one = Util.make_weight 1 1 in
         List.fold_left Util.mult_weights one weights
 
 let latex_history_tikz f hist =

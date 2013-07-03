@@ -1,5 +1,4 @@
 open Util
-open Num
 
     type component = Component of int * int | Epsilon
     type stringrecipe = component Nelist.t
