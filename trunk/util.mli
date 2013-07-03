@@ -44,7 +44,7 @@ val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
     or the distinguished value [no_weight] (for use with unweighted grammars). *)
 type weight
 val no_weight : weight
-val make_weight : Num.num -> Num.num -> weight
+val make_weight : int -> int -> weight
 val weight_from_float : float -> weight
 val show_weight : weight -> string
 val show_weight_float : weight -> string

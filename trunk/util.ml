@@ -98,7 +98,7 @@ let show_list f lst =
 type weight = (Num.num * Num.num) option
 
 let no_weight = None
-let make_weight n1 n2 = Some(n1,n2)
+let make_weight n1 n2 = Some(Num.num_of_int n1, Num.num_of_int n2)
 
 (* Computes (n * 10^x) all in type num *)
 let scientific_num n x =
@@ -144,14 +144,14 @@ let num_from_decimal (str : string) : Num.num =
 let weight_from_float f =
     let n = num_from_decimal (Printf.sprintf "%g" f) in
     if (Num.is_integer_num n) then
-        make_weight n (Num.num_of_int 1)
+        Some (n, (Num.num_of_int 1))
     else
         let s = Num.string_of_num n in     (* s is something like "234/5678" *)
         let regex = Str.regexp "^\\([0-9]+\\)\\/\\([0-9]+\\)$" in
         if (Str.string_match regex s 0) then (
             let num = Str.matched_group 1 s in
             let denom = Str.matched_group 2 s in
-            make_weight (Num.num_of_string num) (Num.num_of_string denom)
+            Some (Num.num_of_string num, Num.num_of_string denom)
         ) else (
             failwith (Printf.sprintf "weight_from_float: I thought string_of_num was guaranteed to give me a string in fractional form, but it gave me '%s'" s)
         )
