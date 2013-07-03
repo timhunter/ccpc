@@ -197,3 +197,29 @@ let compare_weights w1 w2 =
   | (Some (n1,d1), Some (n2,d2)) -> Num.compare_num (Num.div_num n1 d1) (Num.div_num n2 d2)
   | (None, Some (n,d)) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.num_of_int 0) (Num.div_num n d)
   | (Some (n,d), None) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.div_num n d) (Num.num_of_int 0)
+
+
+(* weighted random sampling
+ assumes that all the weights have the same denominator (and also, I think, that the weights sum to one)
+ we're using the 64-bit random number generator because these denominators are so freakin large
+*)
+let weighted_random xs_with_weights =
+    match xs_with_weights with
+    [] -> failwith "weighted_random: nothing to choose from"
+    | (r,wt)::[] -> r
+    | _ ->
+        let sorted_xs_with_weights = List.sort (fun (_,wt1) (_,wt2) -> compare_weights wt1 wt2) xs_with_weights in
+        let denominators = List.map (fun (x,wt) -> weight_denominator wt) sorted_xs_with_weights in
+        let common_denominator = match (uniques denominators) with [Some d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
+        let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n) in
+        let one = Num.num_of_int 1 in
+        let die_roll = Random.int64 (i64_of_num (Num.add_num common_denominator one)) in
+        let rec select stillleft = function
+                [] -> failwith "select: nothing to choose from"
+             | (x,wt)::[] -> x
+             | (x,wt)::rest -> let numerator = match (weight_numerator wt) with Some n -> n | _ -> failwith "weighted_random: No numerator!" in
+                               let diff = Int64.sub stillleft (i64_of_num numerator) in
+                               if diff < Int64.zero then x else select diff rest
+        in
+        select die_roll sorted_xs_with_weights
+
