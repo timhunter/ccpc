@@ -52,7 +52,4 @@ val mult_weights : weight -> weight -> weight
 val add_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
 val weighted_random : ('a * weight) list -> 'a
-(* These last two functions are used only by generate.ml. Might be nice 
- * to get rid of them when/if that becomes obsolete. *)
-val weight_numerator : weight -> Num.num option
-val weight_denominator : weight -> Num.num option
+val num_of_weight : weight -> Num.num

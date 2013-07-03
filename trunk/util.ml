@@ -156,16 +156,6 @@ let weight_from_float f =
             failwith (Printf.sprintf "weight_from_float: I thought string_of_num was guaranteed to give me a string in fractional form, but it gave me '%s'" s)
         )
 
-let weight_denominator w =
-  match w with
-  | Some (_,d) -> Some d
-  | None -> None
-
-let weight_numerator w =
-  match w with
-  | Some (n,_) -> Some n
-  | None -> None
-
 let show_weight w =
   match w with
   | Some (x,y) -> Printf.sprintf "%s / %s" (Num.string_of_num x) (Num.string_of_num y)
@@ -198,6 +188,10 @@ let compare_weights w1 w2 =
   | (None, Some (n,d)) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.num_of_int 0) (Num.div_num n d)
   | (Some (n,d), None) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!" ; Num.compare_num (Num.div_num n d) (Num.num_of_int 0)
 
+let num_of_weight w =
+    match w with
+    | None -> failwith "num_of_weight: None weight!"
+    | Some(n,d) -> Num.div_num n d
 
 (* weighted random sampling
  assumes that all the weights have the same denominator (and also, I think, that the weights sum to one)
@@ -209,17 +203,20 @@ let weighted_random xs_with_weights =
     | (r,wt)::[] -> r
     | _ ->
         let sorted_xs_with_weights = List.sort (fun (_,wt1) (_,wt2) -> compare_weights wt1 wt2) xs_with_weights in
-        let denominators = List.map (fun (x,wt) -> weight_denominator wt) sorted_xs_with_weights in
-        let common_denominator = match (uniques denominators) with [Some d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
+        let ratios = match (require_no_nones (map_tr snd sorted_xs_with_weights)) with 
+                     Some rs -> rs | _ -> failwith "weighted_random: Got a none weight!" in
+        let sorted_xs_with_ratios = List.map2 (fun (x,wt) ratio -> (x,ratio)) sorted_xs_with_weights ratios in
+        let denominators = List.map snd ratios in
+        let common_denominator = match (uniques denominators) with [d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
         let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n) in
         let one = Num.num_of_int 1 in
         let die_roll = Random.int64 (i64_of_num (Num.add_num common_denominator one)) in
         let rec select stillleft = function
                 [] -> failwith "select: nothing to choose from"
              | (x,wt)::[] -> x
-             | (x,wt)::rest -> let numerator = match (weight_numerator wt) with Some n -> n | _ -> failwith "weighted_random: No numerator!" in
+             | (x,wt)::rest -> let (numerator,_) = wt in
                                let diff = Int64.sub stillleft (i64_of_num numerator) in
                                if diff < Int64.zero then x else select diff rest
         in
-        select die_roll sorted_xs_with_weights
+        select die_roll sorted_xs_with_ratios
 
