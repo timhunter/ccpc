@@ -109,7 +109,6 @@ let generate grammar_file =
     if n < 1 then []
     else (generate_all g items w)::(add_n g items w (n-1))
   in
-  let weight_one = Util.make_weight 1 1 in
-  let ntrees = add_n g items weight_one 300 in (* magic number: 300 samples *)
+  let ntrees = add_n g items Util.weight_one 300 in (* magic number: 300 samples *)
     Util.map_tr (fun (t,w) -> (t, Util.num_of_weight w)) (sort_trees (remove_duplicate ntrees))
 

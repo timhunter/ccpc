@@ -25,7 +25,7 @@ rule:
 weight:
    {no_weight}
 |  DIGITS SLASH DIGITS { try
-			   make_weight (int_of_string $1) (int_of_string $3)
+			   make_weight (Big_int.big_int_of_string $1) (Big_int.big_int_of_string $3)
                           with
 			  _ -> failwith ("could not read the weight: "^$1^" / "^$3^"\n")
                   }

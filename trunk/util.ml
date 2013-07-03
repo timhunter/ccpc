@@ -98,7 +98,8 @@ let show_list f lst =
 type weight = (Num.num * Num.num) option
 
 let no_weight = None
-let make_weight n1 n2 = Some(Num.num_of_int n1, Num.num_of_int n2)
+let weight_one = Some(Num.num_of_int 1, Num.num_of_int 1)
+let make_weight n1 n2 = Some(Num.num_of_big_int n1, Num.num_of_big_int n2)
 
 (* Computes (n * 10^x) all in type num *)
 let scientific_num n x =
