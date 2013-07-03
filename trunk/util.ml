@@ -194,6 +194,8 @@ let num_of_weight w =
     | None -> failwith "num_of_weight: None weight!"
     | Some(n,d) -> Num.div_num n d
 
+let float_of_weight w = Num.float_of_num (num_of_weight w)
+
 (* weighted random sampling
  assumes that all the weights have the same denominator (and also, I think, that the weights sum to one)
  we're using the 64-bit random number generator because these denominators are so freakin large

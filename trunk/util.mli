@@ -47,10 +47,10 @@ val no_weight : weight
 val weight_one : weight
 val make_weight : Big_int.big_int -> Big_int.big_int -> weight
 val weight_from_float : float -> weight
+val float_of_weight : weight -> float
 val show_weight : weight -> string
 val show_weight_float : weight -> string
 val mult_weights : weight -> weight -> weight
 val add_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
 val weighted_random : ('a * weight) list -> 'a
-val num_of_weight : weight -> Num.num

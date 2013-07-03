@@ -1,4 +1,3 @@
-open Num
 open Util
 open Generate
 
@@ -172,15 +171,15 @@ let get_timestamp () =
 	Printf.sprintf "%04d-%02d-%02d %02d:%02d:%02d" (tm.Unix.tm_year + 1900) (tm.Unix.tm_mon + 1) tm.Unix.tm_mday tm.Unix.tm_hour tm.Unix.tm_min tm.Unix.tm_sec;;
 
 (* We report the number of parses that have probability greater than this threshold *)
-let const_THRESHOLD = div_num (num_of_int 1) (num_of_int 1000)
+let const_THRESHOLD = 0.001
 
 (* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
-let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist * num) list) filename =
+let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist * Util.weight) list) filename =
 
 	(* The function derivation_as_string turns a pair like (0.234, [12,23,34]) in a string (readable as a prolog list) like "[0.234,12,23,34]" 
 	   (and deals properly with rule markers in amongst the ids). *)
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
-	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((Printf.sprintf "%.12f" (float_of_num w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
+	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((Printf.sprintf "%.12f" (float_of_weight w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
@@ -202,8 +201,8 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			                   | None -> "Could not find entropy"
 			                   | Some s -> try Printf.sprintf "Entropy = %.3f, with %d parses above %.3f"
 			                                                  (float_of_string s)
-			                                                  (List.length (take_while (fun (_,w) -> w >/ const_THRESHOLD) derivations))
-			                                                  (float_of_num const_THRESHOLD)
+			                                                  (List.length (take_while (fun (_,w) -> (float_of_weight w > const_THRESHOLD)) derivations))
+			                                                  const_THRESHOLD
 			                               with _ -> "Could not find entropy"
 			in
 			let prefix_note = match (get_comment_data grammar_files.wmcfg_file
@@ -232,9 +231,9 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
         check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
 (* Converts a tree of type:  string Derivation.derivation_tree
- * into a pair of type:     (string Generate.tree * Num.num)
+ * into a pair of type:     (string Generate.tree * Util.weight)
  * FIXME: This is fairly ugly. We should eliminate one or the other tree type altogether. *)
-let rec convert_tree (dtree : string Derivation.derivation_tree) : (string Generate.tree * Num.num) =
+let rec convert_tree (dtree : string Derivation.derivation_tree) =
         let (children, root) = (Derivation.get_children dtree, Derivation.get_root_item dtree) in
         let new_tree =
                 match children with
@@ -244,8 +243,7 @@ let rec convert_tree (dtree : string Derivation.derivation_tree) : (string Gener
                         NonLeaf (root, [Leaf str], Derivation.get_rule dtree)
                 | _ -> NonLeaf (root, map_tr fst (map_tr convert_tree children), Derivation.get_rule dtree)
         in
-        let weight_as_num = num_of_weight (Derivation.get_weight dtree) in
-        (new_tree, weight_as_num)
+        (new_tree, Derivation.get_weight dtree)
 
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
@@ -274,7 +272,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
 
 	let process_tree (tree,weight) =
                 let sentence = Generate.get_sentence tree in 
-                Printf.printf "%.6g\t%s\n" (float_of_num weight) (String.concat " " sentence) ;
+                Printf.printf "%.6g\t%s\n" (float_of_weight weight) (String.concat " " sentence) ;
 	in
 	List.iter process_tree trees ;
 

@@ -15,8 +15,6 @@ and draw it in a .dot file:
 write_tree random_korean_tree "random_korean_tree";;
 *)
 
-open Num
-
    (* trees are a typical kind of value for parsers to return *)
 type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list should never be empty in the NonLeaf case *)
 
@@ -61,8 +59,6 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 	 close_out oc
        end
 
-
-   let n_of num denom = div_num (num_of_int num) (num_of_int denom)
 
 (* generate a random tree and its weight*)
 let rec generate_all g items w = 
@@ -110,5 +106,5 @@ let generate grammar_file =
     else (generate_all g items w)::(add_n g items w (n-1))
   in
   let ntrees = add_n g items Util.weight_one 300 in (* magic number: 300 samples *)
-    Util.map_tr (fun (t,w) -> (t, Util.num_of_weight w)) (sort_trees (remove_duplicate ntrees))
+    sort_trees (remove_duplicate ntrees)
 
