@@ -1,7 +1,6 @@
 %{
 open Rule
 open Util
-open Num
 %}
 %token ARROW NEWLINE EOF LBRAC RBRAC COMMA DIGITS CONCAT EPSILON SLASH TERM_EMPTY
 %token <string> CAT TERM DIGITS
