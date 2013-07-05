@@ -211,6 +211,8 @@ let weighted_random xs_with_weights =
         let sorted_xs_with_ratios = List.map2 (fun (x,wt) ratio -> (x,ratio)) sorted_xs_with_weights ratios in
         let denominators = List.map snd ratios in
         let common_denominator = match (uniques denominators) with [d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
+        let sum_of_numerators = List.fold_left Num.add_num (Num.num_of_int 0) (List.map fst ratios) in
+        if (sum_of_numerators <> common_denominator) then failwith "weighted_random: Weights do not sum to one!" ;
         let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n) in
         let one = Num.num_of_int 1 in
         let die_roll = Random.int64 (i64_of_num (Num.add_num common_denominator one)) in

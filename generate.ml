@@ -65,7 +65,13 @@ let rec generate_all g items w =
     let nonterm = List.map Rule.get_nonterm g in
 	if List.mem (List.hd items) nonterm then
 	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
-	  let rule_selected = Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions) in
+	  let rule_selected =
+	    try
+            Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions)
+        with
+            Failure str -> Printf.eprintf "generate_all: Call to weighted_random failed for expansions of nonterminal %s\n" (List.hd items) ;
+            failwith str
+      in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    let rule_weight = Rule.get_weight rule_selected in
