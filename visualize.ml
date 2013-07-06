@@ -247,9 +247,6 @@ let rec convert_tree (dtree : string Derivation.derivation_tree) =
 
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
-	let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
-	let index = get_stabler_index grammar_files prolog_file in
-
         let (trees,mode_note) =
                 match mode with
                 | KBest ->
@@ -276,8 +273,14 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
 	in
 	List.iter process_tree trees ;
 
-	let derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) trees in
-	save_to_file mode_note grammar_files prolog_file derivations output_filename
+    try
+        let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
+        let index = get_stabler_index grammar_files prolog_file in
+        let derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) trees in
+        save_to_file mode_note grammar_files prolog_file derivations output_filename
+    with Failure str ->
+        Printf.eprintf "%s\n" str ;
+        Printf.eprintf "Couldn't write derivations to latex file\n"
 
 (************************************************************************************************)
 
