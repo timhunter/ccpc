@@ -61,29 +61,29 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 
 
 (* generate a random tree and its weight*)
-let rec generate_all g items w = 
-    let nonterm = List.map Rule.get_nonterm g in
-	if List.mem (List.hd items) nonterm then
-	  let productions = List.filter (fun x -> Rule.get_nonterm x = (List.hd items)) g in
+let rec generate_all g nonterm w = 
+	if List.mem nonterm (List.map Rule.get_nonterm g) then
+	  let productions = List.filter (fun x -> Rule.get_nonterm x = nonterm) g in
 	  let rule_selected =
 	    try
             Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions)
         with
-            Failure str -> Printf.eprintf "generate_all: Call to weighted_random failed for expansions of nonterminal %s\n" (List.hd items) ;
+            Failure str -> Printf.eprintf "generate_all: Call to weighted_random failed for expansions of nonterminal %s\n" nonterm ;
             failwith str
       in
 	  let rule_selected_rhs = Rule.get_rhs rule_selected in
 	  let current_w = 
 	    let rule_weight = Rule.get_weight rule_selected in
-	    Util.mult_weights rule_weight w in
+	    Util.mult_weights rule_weight w
+	  in
 	    if List.length rule_selected_rhs = 1 then 
-	      let child = generate_all g rule_selected_rhs current_w in
-	      (NonLeaf (List.hd items, [fst child], rule_selected), snd child)
+	      let child = generate_all g (List.hd rule_selected_rhs) current_w in
+	      (NonLeaf (nonterm, [fst child], rule_selected), snd child)
 	    else 
-	      let left_child = generate_all g [List.hd rule_selected_rhs] current_w in
-	      let right_child = generate_all g (List.tl rule_selected_rhs) (snd left_child) in
-	      (NonLeaf (List.hd items, [fst left_child; fst right_child], rule_selected), snd right_child)
-	else (Leaf (List.hd items), w)
+	      let left_child = generate_all g (List.hd rule_selected_rhs) current_w in
+	      let right_child = generate_all g (List.nth rule_selected_rhs 1) (snd left_child) in
+	      (NonLeaf (nonterm, [fst left_child; fst right_child], rule_selected), snd right_child)
+	else (Leaf nonterm, w)
 
    (*sorting a list of trees in a decending order on their weights*)
    let sort_trees treelist = 
@@ -106,11 +106,10 @@ let remove_duplicate list =
 
 let generate grammar_file = 
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
-  let items = [start_symbol] in
-  let rec add_n g items w n =
+  let rec add_n g n =
     if n < 1 then []
-    else (generate_all g items w)::(add_n g items w (n-1))
+    else (generate_all g start_symbol Util.weight_one)::(add_n g (n-1))
   in
-  let ntrees = add_n g items Util.weight_one 300 in (* magic number: 300 samples *)
+  let ntrees = add_n g 300 in (* magic number: 300 samples *)
     sort_trees (remove_duplicate ntrees)
 
