@@ -111,11 +111,6 @@ open Util
       | Terminating (nt, _, _) -> nt
       | NonTerminating (nt, _, _, _) -> nt
 
-   let get_rhs rule =
-      match rule with
-      | Terminating (_,rhs, _) -> rhs :: []
-      | NonTerminating (_,rhs, _, _) -> Nelist.to_list rhs
-
     let get_weight rule =
       match rule with 
         Terminating (_,_,w) -> w

@@ -17,7 +17,6 @@
 		val max_arity: r list -> int
 		val nonterm_degree : r -> int
 		val get_nonterm : r -> string
-		val get_rhs : r -> string list
 		val get_weight : r -> Util.weight
                 val get_recipe : r -> tuplerecipe
                 val get_indices : component -> int * int 

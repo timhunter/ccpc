@@ -1,7 +1,6 @@
 (* Zhong Chen, Sep 20, 2011,
 a radom tree generator based on WMCFG format (currently ignoring string_yield info) 
 Tree type and drawing were borrowed from LIN4424 course material by John Hale
-added function get_rhs in rule.ml and updated rule.mli
 *)
 
 (*
@@ -62,28 +61,29 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 
 (* generate a random tree and its weight*)
 let rec generate_all g nonterm w = 
-	if List.mem nonterm (List.map Rule.get_nonterm g) then
-	  let productions = List.filter (fun x -> Rule.get_nonterm x = nonterm) g in
-	  let rule_selected =
-	    try
+    let productions = List.filter (fun x -> Rule.get_nonterm x = nonterm) g in
+    assert (productions <> []) ;
+    let rule_selected =
+        try
             Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions)
         with
             Failure str -> Printf.eprintf "generate_all: Call to weighted_random failed for expansions of nonterminal %s\n" nonterm ;
             failwith str
-      in
-	  let rule_selected_rhs = Rule.get_rhs rule_selected in
-	  let current_w = 
-	    let rule_weight = Rule.get_weight rule_selected in
-	    Util.mult_weights rule_weight w
-	  in
-	    if List.length rule_selected_rhs = 1 then 
-	      let child = generate_all g (List.hd rule_selected_rhs) current_w in
-	      (NonLeaf (nonterm, [fst child], rule_selected), snd child)
-	    else 
-	      let left_child = generate_all g (List.hd rule_selected_rhs) current_w in
-	      let right_child = generate_all g (List.nth rule_selected_rhs 1) (snd left_child) in
-	      (NonLeaf (nonterm, [fst left_child; fst right_child], rule_selected), snd right_child)
-	else (Leaf nonterm, w)
+    in
+    let current_w = Util.mult_weights (Rule.get_weight rule_selected) w in
+    match Rule.get_expansion rule_selected with
+    | Rule.PublicTerminating str -> (NonLeaf (nonterm, [Leaf str], rule_selected), current_w)
+    | Rule.PublicNonTerminating (nts, recipe) -> (
+        match (Nelist.to_list nts) with
+        | [x] ->
+            let child = generate_all g x current_w in
+            (NonLeaf (nonterm, [fst child], rule_selected), snd child)
+        | [x;y] ->
+            let left_child = generate_all g x current_w in
+            let right_child = generate_all g y (snd left_child) in
+            (NonLeaf (nonterm, [fst left_child; fst right_child], rule_selected), snd right_child)
+        | _ -> failwith "generate_all: right-hand-side has neither one nor two nonterminals"
+    )
 
    (*sorting a list of trees in a decending order on their weights*)
    let sort_trees treelist = 
