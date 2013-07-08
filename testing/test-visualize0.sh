@@ -346,7 +346,7 @@ cat <<EOF > $GRAMMAR
 1 / 1     t18_tmp1_0-0 --> "  "
 EOF
 
-./visualize -kbest $GRAMMAR 30 $OUTPUT
+./visualize -kbest $GRAMMAR 30 $OUTPUT | `dirname $0`/canonicalize.sh
 
 echo "======================================"
 
