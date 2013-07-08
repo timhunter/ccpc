@@ -23,8 +23,8 @@ Probability & Remainder & Type\\
 0.001 & \textit{the treat be -s young} & \\
 0.001 & \textit{Dick matter -ed} & \\
 0.001 & \textit{eggs matter -ed} & \\
-0.001 & \textit{the ticket be -s poor} & \\
 0.001 & \textit{the answer be -s poor} & \\
+0.001 & \textit{the ticket be -s poor} & \\
 0.001 & \textit{the town be -s young} & \\
 0.001 & \textit{he matter -s} & \\
 0.001 & \textit{the treat be -ed young} & \\
@@ -472,7 +472,7 @@ Could not find entropy &  & \\
 \drawline(59,-170)(59,-180)
 \put(57,-188){N}
 \drawline(59,-190)(59,-200)
-\put(44,-208){ticket}
+\put(44,-208){answer}
 \drawline(71,-50)(108,-60)
 \put(103,-68){T'}
 \drawline(108,-70)(84,-80)
@@ -549,7 +549,7 @@ Could not find entropy &  & \\
 \drawline(59,-170)(59,-180)
 \put(57,-188){N}
 \drawline(59,-190)(59,-200)
-\put(44,-208){answer}
+\put(44,-208){ticket}
 \drawline(71,-50)(108,-60)
 \put(103,-68){T'}
 \drawline(108,-70)(84,-80)

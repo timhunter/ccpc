@@ -60,7 +60,7 @@ type 'a tree = Leaf of 'a | NonLeaf of ('a * 'a tree list * Rule.r)   (* list sh
 
 
 (* generate a random tree and its weight*)
-let rec generate_all g nonterm w = 
+let rec generate_all g nonterm = 
     let productions = List.filter (fun x -> Rule.get_nonterm x = nonterm) g in
     assert (productions <> []) ;
     let rule_selected =
@@ -70,33 +70,20 @@ let rec generate_all g nonterm w =
             Failure str -> Printf.eprintf "generate_all: Call to weighted_random failed for expansions of nonterminal %s\n" nonterm ;
             failwith str
     in
-    let current_w = Util.mult_weights (Rule.get_weight rule_selected) w in
     match Rule.get_expansion rule_selected with
-    | Rule.PublicTerminating str -> (NonLeaf (nonterm, [Leaf str], rule_selected), current_w)
-    | Rule.PublicNonTerminating (nts, recipe) -> (
-        match (Nelist.to_list nts) with
-        | [x] ->
-            let child = generate_all g x current_w in
-            (NonLeaf (nonterm, [fst child], rule_selected), snd child)
-        | [x;y] ->
-            let left_child = generate_all g x current_w in
-            let right_child = generate_all g y (snd left_child) in
-            (NonLeaf (nonterm, [fst left_child; fst right_child], rule_selected), snd right_child)
-        | _ -> failwith "generate_all: right-hand-side has neither one nor two nonterminals"
-    )
-
-   (*sorting a list of trees in a decending order on their weights*)
-   let sort_trees treelist = 
-     let treecompare t1 t2 = -(Util.compare_weights (snd t1) (snd t2)) in
-       List.sort treecompare treelist
+    | Rule.PublicTerminating str -> Derivation.make_derivation_tree nonterm [] rule_selected
+    | Rule.PublicNonTerminating (nts, recipe) ->
+        let child_trees = List.map (generate_all g) (Nelist.to_list nts) in
+        Derivation.make_derivation_tree nonterm child_trees rule_selected
 
 let generate grammar_file = 
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
   let rec add_n g n =
     if n < 1 then []
-    else (generate_all g start_symbol Util.weight_one)::(add_n g (n-1))
+    else (generate_all g start_symbol)::(add_n g (n-1))
   in
   let ntrees = add_n g 300 in (* magic number: 300 samples *)
-  let eq (t1,w1) (t2,w2) = (t1 = t2) && (Util.compare_weights w1 w2 = 0) in
-  sort_trees (Util.uniques ~eq:eq ntrees)
+  let eq t1 t2 = (Derivation.compare_derivations compare t1 t2 = 0) in
+  let sort_trees = List.sort (Derivation.compare_derivations compare) in
+  List.map (fun t -> (t, Derivation.get_weight t)) (sort_trees (Util.uniques ~eq:eq ntrees))
 
