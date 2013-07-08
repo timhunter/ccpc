@@ -55,11 +55,12 @@ let (^^) s t =
   else
     s ^ " " ^ t
 
-let uniques lst =
+let uniques ?(eq = (=)) lst =
+  let mem x xs = List.exists (eq x) xs in
   let rec uniques' checked rest =
     match rest with
       [] -> checked
-    | (x::xs) -> if (List.mem x checked) then (uniques' checked xs) else (uniques' (x::checked) xs)
+    | (x::xs) -> if (mem x checked) then (uniques' checked xs) else (uniques' (x::checked) xs)
   in
   reverse_tr (uniques' [] lst)
 

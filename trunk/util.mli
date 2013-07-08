@@ -25,8 +25,8 @@ val find_in_list : 'a -> 'a list -> int list
 (** [split c str] splits the string [str] at the delimiter character [c]. *)
 val split : char -> string -> string list
 
-(** Removes duplicates from a list. *)
-val uniques : 'a list -> 'a list
+(** Removes duplicates from a list. The optional argument [eq] is an equality function (if not present, [=] is used. *)
+val uniques : ?eq:('a -> 'a -> bool) -> 'a list -> 'a list
 
 (** [show_list f xs] constructs a string representation of the list [xs], using [f] to generate a string representation for each element. 
     For example, [show_list string_of_int \[3;4;5\]] returns the string ["\[3;4;5\]"]. *)
