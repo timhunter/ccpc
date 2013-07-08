@@ -11,6 +11,10 @@ val get_root_item : 'a derivation_tree -> 'a
 val get_children : 'a derivation_tree -> 'a derivation_tree list
 val get_weight : 'a derivation_tree -> Util.weight
 
+(** [make_derivation_tree root children r] constructs a new derivation of [root] by combining the derivation trees 
+    [children] according to the rule [r]. *)
+val make_derivation_tree : 'a -> ('a derivation_tree) list -> Rule.r -> 'a derivation_tree
+
 (** The rule that licenses the "last"/"root" step of the derivation tree. Notice that while the [get_weight] function 
     returns the weight of the entire derivation, the weight introduced by this last step can be retrieved from the 
     result of [get_rule]. *)
