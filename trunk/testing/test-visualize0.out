@@ -1,33 +1,33 @@
-0.00345499	he matter -ed
-0.00272161	David matter -ed
-0.00254388	they matter -ed
-0.00254388	I matter -ed
-0.00181441	Sally matter -ed
-0.0016808	the girl be -s clever
-0.00152271	the man be -s clever
-0.00150504	the girl be -s right
-0.00150504	the girl be -s young
-0.00150504	the girl be -s poor
-0.00136348	the man be -s poor
-0.00136348	the man be -s young
-0.00136348	the man be -s right
-0.00115351	the girl be -s strange
-0.00104902	the treat be -s clever
-0.00104902	the sweet be -s clever
-0.00104502	the man be -s strange
-0.000977749	the girl be -s long
-0.000977749	the girl be -s gentle
-0.000966541	the girl be -s very clever
-0.000940052	the boy be -s clever
-0.000939322	the treat be -s right
-0.000939322	the sweet be -s right
-0.000939322	the sweet be -s young
-0.000939322	the sweet be -s poor
-0.000939322	the treat be -s poor
-0.000939322	the treat be -s young
-0.000907205	eggs matter -ed
-0.000907205	Dick matter -ed
-0.000907205	Penny matter -ed
+1 0.00345499	he matter -ed
+2 0.00272161	David matter -ed
+3 0.00254388	I matter -ed
+3 0.00254388	they matter -ed
+5 0.00181441	Sally matter -ed
+6 0.0016808	the girl be -s clever
+7 0.00152271	the man be -s clever
+8 0.00150504	the girl be -s poor
+8 0.00150504	the girl be -s right
+8 0.00150504	the girl be -s young
+11 0.00136348	the man be -s poor
+11 0.00136348	the man be -s right
+11 0.00136348	the man be -s young
+14 0.00115351	the girl be -s strange
+15 0.00104902	the sweet be -s clever
+15 0.00104902	the treat be -s clever
+17 0.00104502	the man be -s strange
+18 0.000977749	the girl be -s gentle
+18 0.000977749	the girl be -s long
+20 0.000966541	the girl be -s very clever
+21 0.000940052	the boy be -s clever
+22 0.000939322	the sweet be -s poor
+22 0.000939322	the sweet be -s right
+22 0.000939322	the sweet be -s young
+22 0.000939322	the treat be -s poor
+22 0.000939322	the treat be -s right
+22 0.000939322	the treat be -s young
+28 0.000907205	Dick matter -ed
+28 0.000907205	Penny matter -ed
+28 0.000907205	eggs matter -ed
 ======================================
 \documentclass{article}
 \usepackage{epic,eepicemu}

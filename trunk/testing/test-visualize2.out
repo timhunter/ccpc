@@ -1,26 +1,26 @@
-0.0593262	the stick hit the dog
-0.0593262	the stick hit the stick
-0.0593262	the dog hit the stick
-0.0593262	the dog hit the dog
-0.0527344	the dog hit Jon
-0.0527344	the stick hit Jon
-0.0527344	Jon hit the stick
-0.0527344	Jon hit the dog
-0.046875	Jon hit Jon
-0.00417137	the dog with the dog hit the stick
-0.00417137	the dog hit the stick with the dog
-0.00417137	the stick with the dog hit the stick
-0.00417137	the stick hit the stick with the stick
-0.00417137	the stick hit the dog with the stick
-0.00417137	the dog hit the dog with the stick
-0.00417137	the stick hit the stick with the dog
-0.00417137	the dog with the stick hit the stick
-0.00417137	the stick hit the stick with the stick
-0.00417137	the stick with the stick hit the stick
-0.00417137	the stick hit the stick with the dog
-0.00417137	the dog hit the stick with the stick
-0.00417137	the dog hit the stick with the dog
-0.00417137	the stick with the stick hit the dog
-0.00417137	the stick with the dog hit the dog
-0.00417137	the dog hit the dog with the dog
+1 0.0593262	the dog hit the dog
+1 0.0593262	the dog hit the stick
+1 0.0593262	the stick hit the dog
+1 0.0593262	the stick hit the stick
+5 0.0527344	Jon hit the dog
+5 0.0527344	Jon hit the stick
+5 0.0527344	the dog hit Jon
+5 0.0527344	the stick hit Jon
+9 0.046875	Jon hit Jon
+10 0.00417137	the dog hit the dog with the dog
+10 0.00417137	the dog hit the dog with the stick
+10 0.00417137	the dog hit the stick with the dog
+10 0.00417137	the dog hit the stick with the dog
+10 0.00417137	the dog hit the stick with the stick
+10 0.00417137	the dog with the dog hit the stick
+10 0.00417137	the dog with the stick hit the stick
+10 0.00417137	the stick hit the dog with the stick
+10 0.00417137	the stick hit the stick with the dog
+10 0.00417137	the stick hit the stick with the dog
+10 0.00417137	the stick hit the stick with the stick
+10 0.00417137	the stick hit the stick with the stick
+10 0.00417137	the stick with the dog hit the dog
+10 0.00417137	the stick with the dog hit the stick
+10 0.00417137	the stick with the stick hit the dog
+10 0.00417137	the stick with the stick hit the stick
 ======================================
