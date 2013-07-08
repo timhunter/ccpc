@@ -90,20 +90,6 @@ let rec generate_all g nonterm w =
      let treecompare t1 t2 = -(Util.compare_weights (snd t1) (snd t2)) in
        List.sort treecompare treelist
 
-(* remove the duplicate trees in a tree list*)
-let remove_duplicate list = 
-  let rec fstlist l = 
-     match l with
-       |[] -> []
-       |h::t -> (fst h)::fstlist t in
-  let add_elem elem l =
-    if List.mem (fst elem) (fstlist l) then l 
-    else elem :: l
-  in
-    List.fold_right add_elem list []
-
-
-
 let generate grammar_file = 
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
   let rec add_n g n =
@@ -111,5 +97,6 @@ let generate grammar_file =
     else (generate_all g start_symbol Util.weight_one)::(add_n g (n-1))
   in
   let ntrees = add_n g 300 in (* magic number: 300 samples *)
-    sort_trees (remove_duplicate ntrees)
+  let eq (t1,w1) (t2,w2) = (t1 = t2) && (Util.compare_weights w1 w2 = 0) in
+  sort_trees (Util.uniques ~eq:eq ntrees)
 
