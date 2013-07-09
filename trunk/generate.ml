@@ -85,5 +85,5 @@ let generate grammar_file =
   let ntrees = add_n g 300 in (* magic number: 300 samples *)
   let eq t1 t2 = (Derivation.compare_derivations compare t1 t2 = 0) in
   let sort_trees = List.sort (Derivation.compare_derivations compare) in
-  List.map (fun t -> (t, Derivation.get_weight t)) (sort_trees (Util.uniques ~eq:eq ntrees))
+  sort_trees (Util.uniques ~eq:eq ntrees)
 
