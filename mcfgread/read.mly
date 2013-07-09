@@ -16,7 +16,7 @@ mcfgrule:
 ;
 
 rule:
-   weight CAT ARROW children stringyield NEWLINE {Rule.create_rule ($2, $4, $5, $1)}
+   weight CAT ARROW children stringyield NEWLINE {Rule.create_nonterminating ($2, $4, $5, $1)}
 |  weight CAT ARROW TERM NEWLINE {Rule.create_terminating ($2, $4, $1)}
 |  weight CAT ARROW TERM_EMPTY NEWLINE {Rule.create_terminating ($2, " ", $1)}
 ;
