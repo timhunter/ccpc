@@ -43,4 +43,4 @@ component:
 |  tuple CONCAT component { $1 :: $3 }
 
 tuple:
-   DIGITS COMMA DIGITS { Rule.Component((int_of_string $1),(int_of_string $3)) };
+   DIGITS COMMA DIGITS { Rule.create_component (int_of_string $1) (int_of_string $3) };
