@@ -127,6 +127,41 @@ let rec get_derivations chart item =
         map_tr (fun (children,rule) -> make_derivation_tree item children rule) results_from_all_routes
 
 (**************************************************************************)
+(****** Stuff for random generation ***************************************)
+
+(* NB: This code could be moved inside the hypergraph functor we use for exact 
+   k-best lists, to allow random generation from either a grammar or a chart. 
+   It would probably be very easy, but I'm not going to bother right now. *)
+
+let rec generate_one g nonterm = 
+    let productions = List.filter (fun x -> Rule.get_nonterm x = nonterm) g in
+    assert (productions <> []) ;
+    let rule_selected =
+        try
+            Util.weighted_random (Util.map_tr (fun r -> (r, Rule.get_weight r)) productions)
+        with
+            Failure str -> Printf.eprintf "generate_one: Call to weighted_random failed for expansions of nonterminal %s\n" nonterm ;
+            failwith str
+    in
+    match Rule.get_expansion rule_selected with
+    | Rule.PublicTerminating str -> make_derivation_tree nonterm [] rule_selected
+    | Rule.PublicNonTerminating (nts, recipe) ->
+        let child_trees = List.map (generate_one g) (Nelist.to_list nts) in
+        make_derivation_tree nonterm child_trees rule_selected
+
+let generate num_trees grammar_file = 
+  let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
+  let sample = map_tr (fun _ -> generate_one g start_symbol) (Util.range 0 300) in   (* magic number: 300 samples *)
+  let eq t1 t2 = (compare_derivations compare t1 t2 = 0) in
+  let sort_trees = List.sort (compare_derivations compare) in
+  let rec uniques_sorted =  (* eliminates duplicates, assuming that duplicates are together (e.g. that the list is sorted) *)
+    function [] -> []
+           | [x] -> [x]
+           | x::y::rest -> if (eq x y) then uniques_sorted (y::rest) else x::(uniques_sorted (y::rest))
+  in
+  Util.take num_trees (uniques_sorted (sort_trees sample))
+
+(**************************************************************************)
 (****** Stuff for computing k-best lists **********************************)
 
 module type HYPERGRAPH =

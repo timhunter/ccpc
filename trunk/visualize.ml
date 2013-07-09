@@ -1,5 +1,4 @@
 open Util
-open Generate
 
 type grammar_files = {mg_file : string ; wmcfg_file : string ; dict_file : string}
 
@@ -249,7 +248,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                         in
                         Printf.eprintf "Using random seed %d\n" random_seed ;
                         Random.init random_seed ;
-                        let derivation_trees = generate num_trees grammar_files.wmcfg_file in
+                        let derivation_trees = Derivation.generate num_trees grammar_files.wmcfg_file in
                         (derivation_trees, Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
                         end
         in
