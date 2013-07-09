@@ -6,7 +6,6 @@ let skip = [' ''\t']|'(''*'[^'\n']*'*'')' (* eat whitespace and ignore comments 
 let letter = ['_''#''$''%''&''\'''*''+'',''-''.''/'':'';''\\''^''<''>''A'-'Z''a'-'z''0'-'9']
 
 rule token = parse
-   |  "Epsilon"                                          { EPSILON }
    |  ['A'-'Z'] ['_''-''0'-'9']* ('_' letter*)?          { CAT (Lexing.lexeme lexbuf) }
    |  ['a'-'z'] letter*                                  { CAT (Lexing.lexeme lexbuf) }
    |  '"' skip* (letter+ as term) skip* '"'              { TERM term }

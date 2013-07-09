@@ -2,7 +2,7 @@
 open Rule
 open Util
 %}
-%token ARROW NEWLINE EOF LBRAC RBRAC COMMA DIGITS CONCAT EPSILON SLASH TERM_EMPTY
+%token ARROW NEWLINE EOF LBRAC RBRAC COMMA DIGITS CONCAT SLASH TERM_EMPTY
 %token <string> CAT TERM DIGITS
 %start mcfgrule
 %type <Rule.r list> mcfgrule
@@ -40,9 +40,7 @@ stringyield:
 
 component:
    tuple { [$1] }
-|  EPSILON { [Rule.Epsilon] }
 |  tuple CONCAT component { $1 :: $3 }
-|  EPSILON CONCAT component { Rule.Epsilon :: $3};
 
 tuple:
    DIGITS COMMA DIGITS { Rule.Component((int_of_string $1),(int_of_string $3)) };
