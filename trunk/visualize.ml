@@ -253,7 +253,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                         if (optional_seed <> None) then Printf.eprintf "*** WARNING: using kbest mode, so ignoring random seed\n" ;
                         let (rules, start_symbol) = Grammar.get_input_grammar grammar_files.wmcfg_file in
                         let derivation_trees = Derivation.get_n_best_from_grammar num_trees rules start_symbol in  (* of the type declared in derivation.ml *)
-                        (map_tr convert_tree derivation_trees, "exact k-best enumeration of most likely derivations")
+                        (derivation_trees, "exact k-best enumeration of most likely derivations")
                 | Sample ->
                         begin
                         let random_seed =
@@ -264,20 +264,20 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                         Printf.eprintf "Using random seed %d\n" random_seed ;
                         Random.init random_seed ;
                         let derivation_trees = generate grammar_files.wmcfg_file in
-                        (take num_trees (map_tr convert_tree derivation_trees), Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
+                        (take num_trees derivation_trees, Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
                         end
         in
 
-	let process_tree (tree,weight) =
-                let sentence = Generate.get_sentence tree in 
-                Printf.printf "%.6g\t%s\n" (float_of_weight weight) (String.concat " " sentence) ;
-	in
-	List.iter process_tree trees ;
+    let process_tree tree =
+        let sentence = Derivation.derived_string tree in 
+        Printf.printf "%.6g\t%s\n" (float_of_weight (Derivation.get_weight tree)) sentence ;
+    in
+    List.iter process_tree trees ;
 
     try
         let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
         let index = get_stabler_index grammar_files prolog_file in
-        let derivations = List.map (fun (t,w) -> (get_derivation_string t dict index,w)) trees in
+        let derivations = List.map (fun d -> let (t,w) = convert_tree d in (get_derivation_string t dict index,w)) trees in
         save_to_file mode_note grammar_files prolog_file derivations output_filename
     with Failure str ->
         Printf.eprintf "%s\n" str ;
