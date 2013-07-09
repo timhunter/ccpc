@@ -68,6 +68,8 @@ open Util
     let create_tuplerecipe lst =
       Nelist.from_list [(Nelist.from_list lst)]
 
+    let create_component i j = Component (i,j)
+
     let add_to_recipe lst recipe =
       let component = Nelist.from_list lst in 
       Nelist.from_list (component::(Nelist.to_list recipe))
