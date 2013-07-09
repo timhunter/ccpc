@@ -8,14 +8,8 @@ open Util
 
     (**********************************************************)
 
-    (* Certain MCFG rules correspond to special ``marked'' MG rules; MG rules that aren't the normal 
-       merge and move rules. These rules need to be indicated in the ``derivation string'' that we 
-       construct in visualise.ml to pass to Stabler's prolog code. *)
     type marked_mg_rule = LeftAdjunction | RightAdjunction
 
-    (* Given an MCFG rule, gives back the corresponding marked MG rule if there is one.
-       NB: May not give the right results if you pass it a situated grammar rule! If you need to check a 
-       situated rule, use Grammar.desituate_rule first. *)
     let get_marked_mg_rule dict rule =
         match rule with
         | Terminating _ -> None
