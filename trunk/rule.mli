@@ -9,7 +9,7 @@ type tuplerecipe
 
 (** A right hand side of a rule. We restrict ourselves to rules that either (a) introduce a single string 
     and no nonterminals (i.e. [PublicTerminating]), or (b) introduce a non-empty list of nonterminals and a 
-    recipe for combining their yields. *)
+    recipe for combining their yields (i.e. [PublicNonTerminating]). *)
 type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)
 
 (** A piece of a [tuplerecipe]. *)
@@ -17,12 +17,8 @@ type component
 
 val to_string : r -> string
 val rule_arity : r -> int
-val max_arity: r list -> int
-val nonterm_degree : r -> int
 val get_nonterm : r -> string
 val get_weight : r -> Util.weight
-val get_recipe : r -> tuplerecipe
-val get_indices : component -> int * int 
 val get_expansion : r -> expansion
 val map_nonterms : (string -> string) -> r -> r
 val apply :  tuplerecipe ->

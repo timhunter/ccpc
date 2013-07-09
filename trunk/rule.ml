@@ -99,14 +99,6 @@ open Util
       | Terminating _ -> 0
       | NonTerminating (left, rights, _, _) -> Nelist.length rights
 
-    let max_arity rules = List.fold_left max 0 (map_tr rule_arity rules)
-
-    (* How many components does the tuple produced by this rule have? *)
-    let nonterm_degree rule =
-      match rule with
-      | Terminating _ -> 1
-      | NonTerminating (left, rights, recipes, weight) -> Nelist.length recipes
-
     let get_nonterm rule =
       match rule with
       | Terminating (nt, _, _) -> nt
@@ -121,15 +113,6 @@ open Util
       match rule with
       | Terminating (_, str, weight) -> PublicTerminating str
       | NonTerminating (_, rights, recipes, weight) -> PublicNonTerminating (rights, recipes)
-
-    let get_recipe rule =
-      match rule with 
-          Terminating _ -> failwith ("Terminating rule, no recipe")
-        | NonTerminating (_,_,rcp,_) -> rcp
-      
-    let get_indices comp = 
-      match comp with
-          Component (a,b) -> (a,b)
 
     (**********************************************************)
 
