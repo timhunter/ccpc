@@ -1,6 +1,6 @@
 open Util
 
-    type component = Component of int * int | Epsilon
+    type component = Component of int * int
     type stringrecipe = component Nelist.t
     type tuplerecipe = stringrecipe Nelist.t
     type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)    
@@ -52,7 +52,6 @@ open Util
         | Component (i,j) ->
               let relevant_yield = List.nth yields i in
              (List.nth relevant_yield j)
-        | Epsilon -> failwith "Don't know what this case is meant to be; not used as far as I can tell (TH, 12-Aug-2011)"
 
     let makestr list_of_pairs yields concat =
       let pieces_to_concatenate = Nelist.map (getstr yields) list_of_pairs in
@@ -131,7 +130,6 @@ open Util
     let get_indices comp = 
       match comp with
           Component (a,b) -> (a,b)
-        | Epsilon -> failwith "This case should never be encountered"
 
     (**********************************************************)
 
@@ -146,7 +144,6 @@ open Util
     let component_to_string comp =
       match comp with
         | Component (a,b) -> Printf.sprintf "%d,%d" a b
-        | Epsilon         -> "eps"
 
     let stringrecipe_to_string lst =
       let component_strings = List.map component_to_string (Nelist.to_list lst) in
