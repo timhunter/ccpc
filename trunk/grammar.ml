@@ -87,7 +87,7 @@ let rec build_symbol sym ranges =
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
   let new_agenda_items = List.map2 Chart.create_item rights range_lists in
-  (Rule.create_rule (sit_nonterm, new_rights, func, weight), new_agenda_items)
+  (Rule.create_nonterminating (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
 (* This implements step (b) on p.293 of Albro's dissertation. *)
 (* Given a particular item that we have just pulled off the agenda, it returns a list of 

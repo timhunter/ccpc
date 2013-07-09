@@ -31,8 +31,7 @@ val apply :  tuplerecipe ->
 (** {2 Creating rules} *)
 
 val create_terminating : string * string * Util.weight -> r
-val create_nonterminating : string * (string list) * (component list list) * Util.weight -> r
-val create_rule : string * (string list) * tuplerecipe * Util.weight -> r
+val create_nonterminating : string * (string list) * tuplerecipe * Util.weight -> r
 val create_tuplerecipe : component list -> tuplerecipe
 val create_component : int -> int -> component
 val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
