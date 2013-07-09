@@ -32,7 +32,13 @@ val get_derivations : Chart.chart -> Chart.item -> (Chart.item derivation_tree) 
     consistent (i.e. the function does define a total ordering on derivations, which respects the ordering by weight). *)
 val compare_derivations: ('a -> 'a -> int) -> ('a derivation_tree) -> ('a derivation_tree) -> int
 
-(** {2 n-best lists} *)
+(** {2 n-best lists via random sampling} *)
+
+(** [generate n grammar_file] randomly samples a hard-coded number of derivations from the grammar read from [grammar_file], 
+    and returns to best [n] by weight, sorted in decreasing order by weight. *)
+val generate : int -> string -> (string derivation_tree) list
+
+(** {2 Exact n-best lists} *)
 
 (** [get_n_best_from_chart n chart item] will produce the [n] best derivations (by weight) of [item] constructible from [chart] 
     (or all such derivations, if there are less than [n]). 
