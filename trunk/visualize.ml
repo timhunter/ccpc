@@ -133,16 +133,17 @@ let clean_preterminal preterminal leaf =
 (* Returns the yield of a tree, as a list of (preterminal,leaf) pairs, possibly interspersed with "rule markers" *)
 (* eg. [DerivLeaf ("t123","John"); RuleMarker LeftAdjoin; DerivLeaf ("t234","saw"), DerivLeaf ("t345","Mary")] *)
 let rec get_yield dict tree =
-	match tree with
-	| Leaf label -> failwith (Printf.sprintf "Malformed tree: Got to leaf %s without going via a unary preterminal" label)
-	| NonLeaf (label, [], _) -> failwith (Printf.sprintf "Malformed tree: NonLeaf node (label %s) with no children" label)
-	| NonLeaf (preterm, [Leaf term], _) -> (match (clean_preterminal preterm term) with None -> [] | Some x -> [DerivLeaf x])
-	| NonLeaf (_, children, rule) ->
-		(* Rule.get_marked_mg_rule unfortunately only works on unsituated rules. Unfortunately it can't desituate 
-		   a rule it is passed itself, because that would create a circular dependency between Grammar and Rule modules. :-( *)
-		match (Rule.get_marked_mg_rule dict (Grammar.desituate_rule rule)) with
-		| None -> List.concat (List.map (get_yield dict) children)
-		| Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map (get_yield dict) children))
+    let rule = Derivation.get_rule tree in
+    let root = Derivation.get_root_item tree in
+    match (Derivation.get_children tree, Rule.get_expansion rule) with
+    | ([], Rule.PublicTerminating term) -> (match (clean_preterminal root term) with None -> [] | Some x -> [DerivLeaf x])
+    | ([], Rule.PublicNonTerminating _) -> failwith ("Malformed derivation tree: node with no children has a non-terminating rule")
+    | (children, _) ->
+        (* Rule.get_marked_mg_rule unfortunately only works on unsituated rules. Unfortunately it can't desituate 
+           a rule it is passed itself, because that would create a circular dependency between Grammar and Rule modules. :-( *)
+        match (Rule.get_marked_mg_rule dict (Grammar.desituate_rule rule)) with
+        | None -> List.concat (List.map (get_yield dict) children)
+        | Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map (get_yield dict) children))
 
 (* Returns a list of lexical-item-IDs, given a derivation tree *)
 let get_derivation_string tree dict index =
@@ -230,21 +231,6 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
         in
         check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
-(* Converts a tree of type:  string Derivation.derivation_tree
- * into a pair of type:     (string Generate.tree * Util.weight)
- * FIXME: This is fairly ugly. We should eliminate one or the other tree type altogether. *)
-let rec convert_tree (dtree : string Derivation.derivation_tree) =
-        let (children, root) = (Derivation.get_children dtree, Derivation.get_root_item dtree) in
-        let new_tree =
-                match children with
-                | [] -> let str = match (Rule.get_expansion (Derivation.get_rule dtree)) with
-                                  | Rule.PublicTerminating s -> s
-                                  | _ -> failwith "convert_tree: Node has no children but not a terminating rule" in
-                        NonLeaf (root, [Leaf str], Derivation.get_rule dtree)
-                | _ -> NonLeaf (root, map_tr fst (map_tr convert_tree children), Derivation.get_rule dtree)
-        in
-        (new_tree, Derivation.get_weight dtree)
-
 let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
 
         let (trees,mode_note) =
@@ -277,7 +263,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
     try
         let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
         let index = get_stabler_index grammar_files prolog_file in
-        let derivations = List.map (fun d -> let (t,w) = convert_tree d in (get_derivation_string t dict index,w)) trees in
+        let derivations = map_tr (fun d -> get_derivation_string d dict index, Derivation.get_weight d) trees in
         save_to_file mode_note grammar_files prolog_file derivations output_filename
     with Failure str ->
         Printf.eprintf "%s\n" str ;
