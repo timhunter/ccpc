@@ -263,7 +263,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                         in
                         Printf.eprintf "Using random seed %d\n" random_seed ;
                         Random.init random_seed ;
-                        let derivation_trees = map_tr fst (generate grammar_files.wmcfg_file) in
+                        let derivation_trees = generate grammar_files.wmcfg_file in
                         (take num_trees (map_tr convert_tree derivation_trees), Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
                         end
         in
