@@ -85,5 +85,10 @@ let generate grammar_file =
   let ntrees = add_n g 300 in (* magic number: 300 samples *)
   let eq t1 t2 = (Derivation.compare_derivations compare t1 t2 = 0) in
   let sort_trees = List.sort (Derivation.compare_derivations compare) in
-  sort_trees (Util.uniques ~eq:eq ntrees)
+  let rec uniques_sorted =  (* eliminates duplicates, assuming that duplicates are together (e.g. that the list is sorted) *)
+    function [] -> []
+           | [x] -> [x]
+           | x::y::rest -> if (eq x y) then uniques_sorted (y::rest) else x::(uniques_sorted (y::rest))
+  in
+  uniques_sorted (sort_trees ntrees)
 
