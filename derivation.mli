@@ -34,9 +34,10 @@ val compare_derivations: ('a -> 'a -> int) -> ('a derivation_tree) -> ('a deriva
 
 (** {2 n-best lists via random sampling} *)
 
-(** [generate n grammar_file] randomly samples a hard-coded number of derivations from the grammar read from [grammar_file], 
-    and returns to best [n] by weight, sorted in decreasing order by weight. *)
-val generate : int -> string -> (string derivation_tree) list
+(** [generate num_samples n grammar_file] randomly samples [num_samples] derivations from the grammar read from [grammar_file], 
+    and returns the best [n] by weight, sorted in decreasing order by weight. [num_samples] defaults to 300, so for values of [n] 
+    that are not significantly smaller than this, a larger value of [num_samples] should be passed by the caller. *)
+val generate : ?num_samples:int -> int -> string -> (string derivation_tree) list
 
 (** {2 Exact n-best lists} *)
 

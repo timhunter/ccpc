@@ -149,9 +149,10 @@ let rec generate_one g nonterm =
         let child_trees = List.map (generate_one g) (Nelist.to_list nts) in
         make_derivation_tree nonterm child_trees rule_selected
 
-let generate num_trees grammar_file = 
+(* NB: If the default value of num_samples changes, remember to adjust the ocamldoc comment in derivation.mli! *)
+let generate ?(num_samples = 300) num_trees grammar_file = 
   let (g,start_symbol) = Grammar.get_input_grammar grammar_file in
-  let sample = map_tr (fun _ -> generate_one g start_symbol) (Util.range 0 300) in   (* magic number: 300 samples *)
+  let sample = map_tr (fun _ -> generate_one g start_symbol) (Util.range 0 num_samples) in
   let eq t1 t2 = (compare_derivations compare t1 t2 = 0) in
   let sort_trees = List.sort (compare_derivations compare) in
   let rec uniques_sorted =  (* eliminates duplicates, assuming that duplicates are together (e.g. that the list is sorted) *)
