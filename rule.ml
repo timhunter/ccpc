@@ -9,12 +9,12 @@ open Util
 (**********************************************************************************)
 
 let rec situate nonterm ranges =
-  match ranges with
-  | [] -> nonterm
-  | (r::rs) -> (match Fsa.get_consumed_span r with
-                | Some (p,q) -> situate (nonterm ^ (Printf.sprintf "_%d-%d" (Fsa.index_of p) (Fsa.index_of q))) rs
-                | None       -> situate (nonterm ^ (Printf.sprintf "_eps")) rs
-               )
+  let helper range =
+    match Fsa.get_consumed_span range with
+    | Some (p,q) -> Printf.sprintf "_%d-%d" (Fsa.index_of p) (Fsa.index_of q)
+    | None       -> Printf.sprintf "_eps"
+  in
+  List.fold_left (^) nonterm (map_tr helper ranges)
 
 (* This function is the ``inverse'' (sort of) of situate above.
    Must be kept in sync if that changes. *)
