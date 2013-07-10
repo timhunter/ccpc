@@ -8,15 +8,15 @@ open Util
 
 (**********************************************************************************)
 
-let rec build_symbol sym ranges =
+let rec situate nonterm ranges =
   match ranges with
-  | [] -> sym
+  | [] -> nonterm
   | (r::rs) -> (match Fsa.get_consumed_span r with
-                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%s-%s" (Fsa.string_of p) (Fsa.string_of q))) rs
-                | None       -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
+                | Some (p,q) -> situate (nonterm ^ (Printf.sprintf "_%d-%d" (Fsa.index_of p) (Fsa.index_of q))) rs
+                | None       -> situate (nonterm ^ (Printf.sprintf "_eps")) rs
                )
 
-(* This function is the ``inverse'' (sort of) of build_symbol above.
+(* This function is the ``inverse'' (sort of) of situate above.
    Must be kept in sync if that changes. *)
 let desituate nonterm =
 	let regex = Str.regexp "\\(_[0-9]+-[0-9]+\\|_eps\\)*$" in
