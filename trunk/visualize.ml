@@ -121,7 +121,7 @@ let get_stabler_index grammar_files prolog_file =
      (2) converts preterminals like "t123_tmp1" to "t123"             *)
 let clean_preterminal preterminal leaf =
 	let new_leaf = (if leaf = " " then "" else leaf) in
-	let new_preterminal = Grammar.desituate preterminal in
+	let new_preterminal = Rule.desituate preterminal in
 	if ((new_preterminal = "E") && (new_leaf = "")) then
 		None
 	else if (Str.string_match (Str.regexp "\\([a-z]+[0-9]+\\)_tmp[0-9]+") new_preterminal 0) then
@@ -138,9 +138,7 @@ let rec get_yield dict tree =
     | ([], Rule.PublicTerminating term) -> (match (clean_preterminal root term) with None -> [] | Some x -> [DerivLeaf x])
     | ([], Rule.PublicNonTerminating _) -> failwith ("Malformed derivation tree: node with no children has a non-terminating rule")
     | (children, _) ->
-        (* Rule.get_marked_mg_rule unfortunately only works on unsituated rules. Unfortunately it can't desituate 
-           a rule it is passed itself, because that would create a circular dependency between Grammar and Rule modules. :-( *)
-        match (Rule.get_marked_mg_rule dict (Grammar.desituate_rule rule)) with
+        match (Rule.get_marked_mg_rule dict rule) with
         | None -> List.concat (List.map (get_yield dict) children)
         | Some mg_rule -> (RuleMarker mg_rule) :: (List.concat (List.map (get_yield dict) children))
 

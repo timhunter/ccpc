@@ -27,10 +27,6 @@ val get_weight : r -> Util.weight
 (** The right hand side of this rule; see description of [expansion] type above. *)
 val get_expansion : r -> expansion
 
-(** [map_nonterms f r] produces a new rule which is like [r], except that each nonterminal [nt] mentioned 
-    in [r] is replaced by [f nt]. *)
-val map_nonterms : (string -> string) -> r -> r
-
 (** [apply recipe tuple_list concat] produces the result of applying [recipe] to the list-of-tuples [tuple_list], 
     where [concat] is a function for concatenating the elements of the tuples. (Typically, ['a] is [string], and 
     [concat] performs simple string concatenation. *)
@@ -50,13 +46,15 @@ val create_terminating : string * string * Util.weight -> r
     the nonterminals [children] whose yields are to be combined as specified by [recipe], with weight [wt]. *)
 val create_nonterminating : string * (string list) * tuplerecipe * Util.weight -> r
 
-(** The following type and functions are exposed as part of the public interface to this module only because they are 
-    used by the lex/yacc parser that reads (W)MCFG files. *)
+(** {2 Rules in intersection grammars} *)
 
-type component
-val create_tuplerecipe : component list -> tuplerecipe
-val create_component : int -> int -> component
-val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
+(** [build_symbol nt ranges] creates a situated variant of the nonterminal [nt], corresponding to coverage of [ranges]. Useful for 
+    constructing the nonterminals of an intersection grammar. *)
+val build_symbol : string -> Fsa.range list -> string
+
+(** Maps a situated nonterminal (produced by [build_symbol]) back to the corresponding "unsituated" nonterminal. Useful for 
+    retrieving, from a nonterminal in an intersection grammar, the corresponding nonterminal in the "pre-intersection" grammar. *)
+val desituate : string -> string
 
 (** {2 Interpreting MCFG rules as MG rules} *)
 
@@ -70,4 +68,14 @@ type marked_mg_rule = LeftAdjunction | RightAdjunction
     (NB: May not give the right results if you pass it a situated grammar rule! If you need to check a 
     situated rule, use [Grammar.desituate_rule] first.) *)
 val get_marked_mg_rule : (string, string) Hashtbl.t -> r -> marked_mg_rule option
+
+(** {2 Stuff for lex and yacc} *)
+
+(** The following type and functions are exposed as part of the public interface to this module only because they are 
+    used by the lex/yacc parser that reads (W)MCFG files. *)
+
+type component
+val create_tuplerecipe : component list -> tuplerecipe
+val create_component : int -> int -> component
+val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
 

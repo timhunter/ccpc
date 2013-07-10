@@ -46,7 +46,7 @@ let pretty_print_rule dict r =
         let process_nonterm nt =
             match dict with
             | None -> nt
-            | Some tbl -> try Printf.sprintf "(%s)" (Hashtbl.find tbl (Grammar.desituate nt))
+            | Some tbl -> try Printf.sprintf "(%s)" (Hashtbl.find tbl (Rule.desituate nt))
                           with Not_found -> nt
         in
         let lhs = process_nonterm (Rule.get_nonterm r) in
