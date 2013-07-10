@@ -6,12 +6,34 @@ open Util
     type expansion = PublicTerminating of string | PublicNonTerminating of (string Nelist.t * tuplerecipe)    
     type r = Terminating of (string * string * weight) | NonTerminating of (string * string Nelist.t * tuplerecipe * weight)
 
-    (**********************************************************)
+(**********************************************************************************)
+
+let rec build_symbol sym ranges =
+  match ranges with
+  | [] -> sym
+  | (r::rs) -> (match Fsa.get_consumed_span r with
+                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%s-%s" (Fsa.string_of p) (Fsa.string_of q))) rs
+                | None       -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
+               )
+
+(* This function is the ``inverse'' (sort of) of build_symbol above.
+   Must be kept in sync if that changes. *)
+let desituate nonterm =
+	let regex = Str.regexp "\\(_[0-9]+-[0-9]+\\|_eps\\)*$" in
+	let idx = Str.search_forward regex nonterm 0 in
+	Str.string_before nonterm idx
+
+let desituate_rule rule =
+    match rule with
+    | Terminating (nonterm, str, weight) -> Terminating (desituate nonterm, str, weight)
+    | NonTerminating (left, rights, recipes, weight) -> NonTerminating (desituate left, Nelist.map desituate rights, recipes, weight)
+
+(**********************************************************************************)
 
     type marked_mg_rule = LeftAdjunction | RightAdjunction
 
     let get_marked_mg_rule dict rule =
-        match rule with
+        match (desituate_rule rule) with
         | Terminating _ -> None
         | NonTerminating (left, rights, trecipe, _) ->
             (* See if this is an adjunction rule, i.e. of the form A -> B C where A and C map to the same feature sequence, 
@@ -106,14 +128,6 @@ open Util
 
     (**********************************************************)
 
-    (* transforms a rule by modifying every nonterminal mentioned in the rule (and nothing else) *)
-    let map_nonterms f rule =
-      match rule with
-      | Terminating (nonterm, str, weight) -> Terminating (f nonterm, str, weight)
-      | NonTerminating (left, rights, recipes, weight) -> NonTerminating (f left, Nelist.map f rights, recipes, weight)
-
-    (**********************************************************)
-
     let component_to_string comp =
       match comp with
         | Component (a,b) -> Printf.sprintf "%d,%d" a b
@@ -135,3 +149,4 @@ open Util
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
       Printf.sprintf "%s      %s --> %s %s" (show_weight (get_weight rule)) left rhs_output recipe
+

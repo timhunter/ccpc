@@ -63,7 +63,7 @@ let verbatim s =
 let latex_tree_node dict nt =
         match dict with
         | None -> Printf.sprintf "{%s}" (verbatim nt)
-        | Some tbl -> try let features = Hashtbl.find tbl (Grammar.desituate nt) in
+        | Some tbl -> try let features = Hashtbl.find tbl (Rule.desituate nt) in
                           let features_cleaned = Str.global_replace (Str.regexp ": ") ":~" features in
                           let components = Str.split (Str.regexp ";") features_cleaned in
                           let combined = "(" ^ (String.concat ", " components) ^ ")" in

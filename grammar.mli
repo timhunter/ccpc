@@ -13,12 +13,6 @@
     is the FSA with which the original grammar was intersected/parsed to construct the chart. *)
 val intersection_grammar : Chart.chart -> string -> Fsa.fsa -> (Rule.r list * string)
 
-(** Maps a nonterminal from an intersection grammar back to the corresponding nonterminal in the "pre-intersection" grammar. *)
-val desituate : string -> string
-
-(** Maps a rule from an intersection grammar back to the corresponding rule in the "pre-intersection" grammar. *)
-val desituate_rule : Rule.r -> Rule.r
-
 (** Reads a (weighted or unweighted) MCFG from a file with the specified name. *)
 val get_input_grammar : string -> (Rule.r list * string)
 

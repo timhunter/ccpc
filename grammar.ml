@@ -61,28 +61,8 @@ let get_guillaumin_dict filename =
 
 (************************************************************************************************************)
 
-(* This function is the ``inverse'' (sort of) of build_symbol below.
-   Must be kept in sync if that changes. *)
-let desituate nonterm =
-	let regex = Str.regexp "\\(_[0-9]+-[0-9]+\\|_eps\\)*$" in
-	let idx = Str.search_forward regex nonterm 0 in
-	Str.string_before nonterm idx
-
-let desituate_rule r =
-	Rule.map_nonterms desituate r
-
-(******************************************************************************************)
-
 (* Extract the intersection grammar *)
 (* See Albro's dissertation, appendix C section C.4 *)
-
-let rec build_symbol sym ranges =
-  match ranges with
-  | [] -> sym
-  | (r::rs) -> (match get_consumed_span r with
-                | Some (p,q) -> build_symbol (sym ^ (Printf.sprintf "_%s-%s" (string_of p) (string_of q))) rs
-                | None       -> build_symbol (sym ^ (Printf.sprintf "_eps")) rs
-               )
 
 let make_new_rule sit_nonterm rights func range_lists weight =
   let new_rights = List.map2 build_symbol rights range_lists in
