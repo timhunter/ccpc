@@ -85,18 +85,6 @@ let find_arcs fsa str =
         let f (s1,s2) (word,wt) acc = if (word = str) then ((s1,s2)::acc) else acc in
         Hashtbl.fold f tbl []
 
-let weight_of_arc fsa (i,j) str =
-    match fsa with
-    | StringBased(form,ws) ->
-        if (i = j) || ((i+1 = j) && (List.nth ws i = str)) then
-            weight_from_float 1.0
-        else
-            weight_from_float 0.0
-    | FileBased(_,_,_,tbl) ->
-        let filter_matching = List.filter (fun (word,wt) -> word = str) in
-        let sum_weights = List.fold_left (fun acc (word,wt) -> add_weights acc wt) (weight_from_float 0.0) in
-        sum_weights (filter_matching (Hashtbl.find_all tbl (i,j)))
-
 (* If we're file-based and we're looking at an epsilon-covering rule, then we produce two kinds of axioms:
     (a) the kind with a None span, the same way we do for an epsilon-covering rule with prefixes 
         longer than 0 and infixes longer than 1; and
@@ -133,7 +121,7 @@ let axiom_spans fsa str =
    span, this is taken care of by the general fact that anything can cover the n-to-n span 
    when we're parsing a prefix of length n. *)
 (* In other words: is the transition from i to i one that can ONLY emit an epsilon? *)
-let epsilon_transition_possible input i =
+let implicit_epsilon_transition_possible input i =
     match input with
     | StringBased(form,ws) ->
         begin
@@ -143,11 +131,21 @@ let epsilon_transition_possible input i =
         | Prefix -> (i >= 0 && i <  len)       (* true for all states except the last one *)
         | Exact  -> (i >= 0 && i <= len)       (* true for all states *)
         end
-    | FileBased _ ->
-        (* Could have been just `true'. But this mimics the somewhat special treatment of epsilons that we already 
-         * had in place for string-based cases. Basically, this function is about deciding where `eps' transitions 
-         * are allowed, not `n-n' transitions where n is a start/end state where we have a loop. *)
-        compare_weights (weight_of_arc input (i,i) " ") (weight_from_float 0.0) = 0
+    | FileBased(_,_,_,tbl) ->
+        let is_epsilon_transition (word,wt) = (word = " ") in
+        not (List.exists is_epsilon_transition (Hashtbl.find_all tbl (i,i)))
+
+let weight_of_arc fsa (i,j) str =
+    match fsa with
+    | StringBased(form,ws) ->
+        if (List.mem (Some (i,j)) (axiom_spans fsa str)) then
+            weight_one
+        else
+            weight_from_float 0.0
+    | FileBased(_,_,_,tbl) ->
+        let filter_matching = List.filter (fun (word,wt) -> word = str) in
+        let sum_weights = List.fold_left (fun acc (word,wt) -> add_weights acc wt) (weight_from_float 0.0) in
+        sum_weights (filter_matching (Hashtbl.find_all tbl (i,j)))
 
 (* Not foolproof (this will sometimes say 'true' when two FSAs are not in fact equal) 
  * but useful for sanity-checking. *)
@@ -165,8 +163,8 @@ let concat_ranges (Range(input1,span1)) (Range(input2,span2)) =
     let new_span =
         match (span1,span2) with
         | (Some(i,j), Some(k,l)) -> if (j = k) then Some(i,l) else (raise RangesNotAdjacentException)
-        | (Some(i,j), None)      -> if (epsilon_transition_possible input j) then Some(i,j) else (raise RangesNotAdjacentException)
-        | (None, Some(i,j))      -> if (epsilon_transition_possible input i) then Some(i,j) else (raise RangesNotAdjacentException)
+        | (Some(i,j), None)      -> if (implicit_epsilon_transition_possible input j) then Some(i,j) else (raise RangesNotAdjacentException)
+        | (None, Some(i,j))      -> if (implicit_epsilon_transition_possible input i) then Some(i,j) else (raise RangesNotAdjacentException)
         | (None, None)           -> None
     in
     Range(input, new_span)
