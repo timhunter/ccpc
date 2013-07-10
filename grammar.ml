@@ -65,7 +65,7 @@ let get_guillaumin_dict filename =
 (* See Albro's dissertation, appendix C section C.4 *)
 
 let make_new_rule sit_nonterm rights func range_lists weight =
-  let new_rights = List.map2 build_symbol rights range_lists in
+  let new_rights = List.map2 situate rights range_lists in
   let new_agenda_items = List.map2 Chart.create_item rights range_lists in
   (Rule.create_nonterminating (sit_nonterm, new_rights, func, weight), new_agenda_items)
 
@@ -73,7 +73,7 @@ let make_new_rule sit_nonterm rights func range_lists weight =
 (* Given a particular item that we have just pulled off the agenda, it returns a list of 
    new agenda items and a list of new grammar rules. *)
 let new_intersection_grammar_rules chart item =
-  let sit_nonterm = build_symbol (Chart.get_nonterm item) (Chart.get_ranges item) in
+  let sit_nonterm = situate (Chart.get_nonterm item) (Chart.get_ranges item) in
   let routes = Chart.get_routes item chart in
   let make_rule_for_route ((items, rule) : Chart.route) : (Rule.r * Chart.item list) =
     match (Rule.get_expansion rule) with
@@ -131,7 +131,7 @@ let rec build_intersection_grammar chart q grammar_so_far =
 let intersection_grammar chart start_symbol fsa = 
   let q = create_myqueue () in
   add_if_new q (Chart.goal_item start_symbol fsa) ;
-  let new_start_symbol = Printf.sprintf "%s_%s%s" start_symbol (string_of (start_state fsa)) (string_of (end_state fsa)) in
+  let new_start_symbol = Rule.situate start_symbol [Range(fsa, goal_span fsa)] in
   let new_rules = build_intersection_grammar chart q [] in
   (new_rules, new_start_symbol)
 
@@ -175,7 +175,7 @@ module SituatedGraph =
   let default_edge_attributes _ = []
   let edge_attributes _ = []
 
-  let vertex_name x = ("\""^(build_symbol x.SituatedNode.name x.SituatedNode.spans)^"\"")
+  let vertex_name x = ("\""^(situate x.SituatedNode.name x.SituatedNode.spans)^"\"")
 
   let default_vertex_attributes _ = [ `Shape (`Plaintext) ]
   let vertex_attributes v = [] (* if v.SituatedSymbol.highlight then [ `Fontcolor (0xdc143c) ] else [] *)

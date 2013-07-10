@@ -43,8 +43,6 @@ val description : fsa -> string
 
 (** {2 States} *)
 
-val string_of : state -> string
-
 (** An arbitrary identifier that is unique for each state of a single FSA. *)
 (* Included because the graph-drawing code needs an int for each state. *)
 val index_of : state -> int

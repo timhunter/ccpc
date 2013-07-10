@@ -40,7 +40,7 @@ let debug_str item =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match (get_consumed_span r) with
-		| Some (x,y) -> Printf.sprintf "%s:%s" (Fsa.string_of x) (Fsa.string_of y)
+		| Some (x,y) -> Printf.sprintf "%d:%d" (Fsa.index_of x) (Fsa.index_of y)
 		| None -> Printf.sprintf "eps"
 	in
 	("[" ^^ nt ^^ (List.fold_left (^^) "" (map_tr show_range ranges)) ^^ "]")
@@ -49,7 +49,7 @@ let debug_str_long item chart =
 	let ParseItem (nt, ranges) = item in
 	let show_range r =
 		match (get_consumed_span r) with
-		| Some (x,y) -> Printf.sprintf "%s:%s" (Fsa.string_of x) (Fsa.string_of y)
+		| Some (x,y) -> Printf.sprintf "%d:%d" (Fsa.index_of x) (Fsa.index_of y)
 		| None -> Printf.sprintf "eps"
 	in
 	let show_backpointer (items,r) = (show_weight (Rule.get_weight r)) ^^ ("(" ^ (String.concat "," (map_tr (fun i -> string_of_int (Hashtbl.hash i)) items)) ^ ")") in

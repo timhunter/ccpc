@@ -48,11 +48,11 @@ val create_nonterminating : string * (string list) * tuplerecipe * Util.weight -
 
 (** {2 Rules in intersection grammars} *)
 
-(** [build_symbol nt ranges] creates a situated variant of the nonterminal [nt], corresponding to coverage of [ranges]. Useful for 
+(** [situate nt ranges] creates a situated variant of the nonterminal [nt], corresponding to coverage of [ranges]. Useful for 
     constructing the nonterminals of an intersection grammar. *)
-val build_symbol : string -> Fsa.range list -> string
+val situate : string -> Fsa.range list -> string
 
-(** Maps a situated nonterminal (produced by [build_symbol]) back to the corresponding "unsituated" nonterminal. Useful for 
+(** Maps a situated nonterminal (produced by [situate]) back to the corresponding "unsituated" nonterminal. Useful for 
     retrieving, from a nonterminal in an intersection grammar, the corresponding nonterminal in the "pre-intersection" grammar. *)
 val desituate : string -> string
 
