@@ -125,24 +125,16 @@ end
           List.iter process all_new_items ;
           consequences chart q tables
 
-    (* Produces a length-three array of rule lists; nullary, unary and binary rules *)
-    let build_arity_map rules =
-     let arr = Array.make 3 [] in 
-     let rec build' lst =
-       match lst with
-        | [] -> arr
-        | h::t -> match Rule.rule_arity h with
-                    | 0 -> Array.set arr 0 (h::(Array.get arr 0)); build' t
-                    | 1 -> Array.set arr 1 (h::(Array.get arr 1)); build' t
-                    | 2 -> Array.set arr 2 (h::(Array.get arr 2)); build' t 
-                    | _ -> build' t in 
-     build' rules
-
     let deduce rules input =
-      let arity_map = build_arity_map rules in 
-      let left_map = Tables.build_rule_map (Array.get arity_map 2) 0 in 
-      let right_map = Tables.build_rule_map (Array.get arity_map 2) 1 in
-      let single_map = Tables.build_rule_map (Array.get arity_map 1) 0 in
+      let pick_out_rules (acc_unary_rules, acc_binary_rules) r =
+        match (Rule.rule_arity r) with 1 -> (r::acc_unary_rules, acc_binary_rules)
+                                     | 2 -> (acc_unary_rules, r::acc_binary_rules)
+                                     | _ -> (acc_unary_rules, acc_binary_rules)
+      in
+      let (unary_rules, binary_rules) = List.fold_left pick_out_rules ([],[]) rules in
+      let left_map = Tables.build_rule_map binary_rules 0 in 
+      let right_map = Tables.build_rule_map binary_rules 1 in
+      let single_map = Tables.build_rule_map unary_rules 0 in
       let axioms_list : ((item * Rule.r) list) = get_axioms rules input in   
       let axioms =
         let tbl = Chart.create 100 in 
