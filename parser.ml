@@ -1,8 +1,56 @@
 open Util
 open Rule
-open Tables
 open Chart
 open Fsa
+
+module Tables : sig
+    type 'a map
+    val build_rule_map : Rule.r list -> int -> Rule.r map
+    val build_item_map : Chart.item list -> Chart.item map
+    val add : 'a map -> string -> 'a -> unit
+    val find : 'a map -> string -> 'a list
+end = struct
+
+    type 'a map = Map of (string, 'a) Hashtbl.t
+
+    let add map key value =
+      let (Map tbl) = map in
+      Hashtbl.add tbl key value
+
+    (*Builds a map with the symbol in the daughter position as the key, based upon the provided grammar. *)
+    (* daughter is an index into the right-hand side of a rule. *)
+    (* The returned object maps a nonterminal NT to a list of rules which have NT in the daughter'th position in their right-hand side. *)
+    let build_rule_map grammar daughter =
+      let load_map map rule =
+        if (Rule.rule_arity rule)-1 >= daughter then  
+        match Rule.get_expansion rule with 
+          | PublicTerminating str -> () 
+          | PublicNonTerminating (rights, recipes) -> 
+              let key = Nelist.nth rights daughter in
+
+              add map key rule
+        else () in
+      let map = Map (Hashtbl.create 100) in 
+      List.iter (load_map map) grammar;
+      map
+
+    (*builds a map out the provided items, using the nonterminal as the key*)
+    let build_item_map items =
+      let load_map map item =
+        let key = Chart.get_nonterm item in
+        add map key item
+      in
+      let map = Map (Hashtbl.create 100) in 
+      List.iter (load_map map) items;
+      map
+
+    let find map nt =
+      match map with
+        Map tbl -> Hashtbl.find_all tbl nt
+
+end
+
+(******************************************************************************)
 
     type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
 
@@ -109,9 +157,9 @@ open Fsa
 
     let deduce prims input =
       let arity_map = build_arity_map prims in 
-      let left_map = build_rule_map (Array.get arity_map 2) 0 in 
-      let right_map = build_rule_map (Array.get arity_map 2) 1 in
-      let single_map = build_rule_map (Array.get arity_map 1) 0 in
+      let left_map = Tables.build_rule_map (Array.get arity_map 2) 0 in 
+      let right_map = Tables.build_rule_map (Array.get arity_map 2) 1 in
+      let single_map = Tables.build_rule_map (Array.get arity_map 1) 0 in
       let axioms_list : ((item * Rule.r) list) = get_axioms prims input in   
       let axioms =
         let tbl = Chart.create 100 in 
@@ -120,7 +168,7 @@ open Fsa
             | [] -> tbl
             | (item,rule)::t -> Chart.add tbl item ([],rule) ; add t in 
         add axioms_list in
-      let item_map = build_item_map (map_tr (fun (x,_) -> x) axioms_list) in 
+      let item_map = Tables.build_item_map (map_tr (fun (x,_) -> x) axioms_list) in 
       let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
       let queue = Queue.create () in 
       List.iter (fun (item,_) -> Queue.add item queue) axioms_list ;
