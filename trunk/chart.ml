@@ -22,7 +22,10 @@ module ItemHashtbl = Hashtbl.Make(
 
 type route = (item list) * Rule.r
 
-type chart = TableWithHistory of route ItemHashtbl.t
+(* A chart is a pair of hashtables. 
+ * The first maps an item to its list of routes. 
+ * The second maps a nonterminal to its list of items. *)
+type chart = Chart of (route ItemHashtbl.t * (string,item) Hashtbl.t)
 
 type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 
@@ -34,7 +37,7 @@ let get_ranges = function ParseItem(_,rs) -> rs
 
 let get_routes prop c =
   match c with
-  | TableWithHistory tbl -> ItemHashtbl.find_all tbl prop
+  | Chart (tbl,_) -> ItemHashtbl.find_all tbl prop
 
 let debug_str item =
 	let ParseItem (nt, ranges) = item in
@@ -59,12 +62,23 @@ let debug_str_long item chart =
 let compare_items i1 i2 =
         compare (debug_str i1) (debug_str i2)
 
-let create i = TableWithHistory (ItemHashtbl.create i)
+let create i = Chart (ItemHashtbl.create i, Hashtbl.create i)
 
-let add c item route =
+let add ?(is_new_item = None) c item route =
   match c with
-  | TableWithHistory tbl ->
-    ItemHashtbl.add tbl item route
+  | Chart (tbl1,tbl2) ->
+      let actually_is_new_item =
+        match is_new_item with
+          | Some b -> b
+          | None -> (not (ItemHashtbl.mem tbl1 item))
+      in
+      if actually_is_new_item then Hashtbl.add tbl2 (get_nonterm item) item ;
+      ItemHashtbl.add tbl1 item route
+
+let get_items c nt =
+  match c with
+  | Chart (_,tbl) ->
+    Hashtbl.find_all tbl nt
 
 let get_status c item route =
   match (get_routes item c) with
@@ -76,7 +90,7 @@ let goal_item start_symbol fsa = ParseItem(start_symbol, [Range(fsa, goal_span f
 (*** WARNING: Functions below here are very slow. Not recommended outside of debugging contexts. ***)
 
 let all_items c =
-  let (TableWithHistory tbl) = c in
+  let Chart (tbl,_) = c in
   let t = ItemHashtbl.create 10000 in
   let add_if_new x _ acc =
     let is_new = not (ItemHashtbl.mem t x) in

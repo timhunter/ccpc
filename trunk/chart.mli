@@ -26,9 +26,24 @@ type item_route_status = NewItem | OldItemOldRoute | OldItemNewRoute
 (*******************************************************************************************)
 (** {2 Basic chart functions} *)
 
+(** Creates a new chart, with the specified initial size. 
+    (See the documentation on the [create] function of OCaml's Hashtbl type; hint, hint ...) *)
 val create : int -> chart
-val add : chart -> item -> route -> unit
+
+(** Records in the chart the fact that this [item] can be reached by this [route]. The optional argument [is_new_item] 
+    defaults to [None]; it can be set to [true] if the caller knows that the chart does not yet have any record of this 
+    item (i.e. if this is the first route found to this item), or to [false] if the caller knows that the chart already 
+    has a record of this item (i.e. if this is not the first route found to this item). Omitting [is_new_item] or setting 
+    it to [None] will always produce the correct behaviour, but setting it one way or another allows the implementation to 
+    take some shortcuts which save speed. *)
+val add : ?is_new_item:(bool option) -> chart -> item -> route -> unit
+
+(** Number of items in the chart. *)
 val length : chart -> int
+
+(** [get_items c nt] returns a list of all items [i] (in the chart [c]) such that [get_nonterm i] is [nt], i.e. all items 
+    that encode derivations of the nonterminal [nt]. *)
+val get_items : chart -> string -> item list
 
 (** See description of [item_route_status] type. *)
 val get_status : chart -> item -> route -> item_route_status

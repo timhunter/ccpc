@@ -6,7 +6,6 @@ open Fsa
 module Tables : sig
     type 'a map
     val build_rule_map : Rule.r list -> int -> Rule.r map
-    val build_item_map : Chart.item list -> Chart.item map
     val add : 'a map -> string -> 'a -> unit
     val find : 'a map -> string -> 'a list
 end = struct
@@ -33,16 +32,6 @@ end = struct
       List.iter (load_map map) grammar;
       map
 
-    (*builds a map out the provided items, using the nonterminal as the key*)
-    let build_item_map items =
-      let load_map map item =
-        let key = Chart.get_nonterm item in
-        add map key item
-      in
-      let map = Map (Hashtbl.create 100) in 
-      List.iter (load_map map) items;
-      map
-
     let find map nt =
       match map with
         Map tbl -> Hashtbl.find_all tbl nt
@@ -51,7 +40,7 @@ end
 
 (******************************************************************************)
 
-    type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map ; item_map: Chart.item Tables.map}
+    type tables = {sRule_map: Rule.r Tables.map ; lRule_map: Rule.r Tables.map ; rRule_map: Rule.r Tables.map}
 
     (* return type is Chart.item * Rule.r * Rational.rat option *)
     let get_axioms grammar fsa =
@@ -92,8 +81,8 @@ end
 
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
-    let filter_chart item_map left_rules right_rules =
-      let get_items nonterms = concatmap_tr (fun nt -> Tables.find item_map nt) nonterms in
+    let filter_chart chart left_rules right_rules =
+      let get_items nonterms = concatmap_tr (fun nt -> Chart.get_items chart nt) nonterms in
       let get_nts daughter rule =        (*For a given rule, get the nonterminal corresponding to the daughter, either right or left*)
         match Rule.get_expansion rule with
           | PublicNonTerminating (nts, recipes) -> List.nth (Nelist.to_list nts) daughter
@@ -112,14 +101,13 @@ end
           let right_rules = Tables.find tables.rRule_map trigger_nt in
           let single_rules = Tables.find tables.sRule_map trigger_nt in
           let possible_rules = single_rules @ left_rules @ right_rules in
-          let possible_items = filter_chart tables.item_map left_rules right_rules in    (* Limits the chart to other items the trigger might combine with *)
+          let possible_items = filter_chart chart left_rules right_rules in    (* other items the trigger might combine with *)
           let all_new_items = ( build_items possible_rules trigger possible_items : ((item * route) list) ) in 
           let process (item,route) =
             match (Chart.get_status chart item route) with
-            | NewItem -> Tables.add tables.item_map (get_nonterm item) item ;
-                         Queue.add item q ;
-                         Chart.add chart item route
-            | OldItemNewRoute -> Chart.add chart item route
+            | NewItem -> Queue.add item q ;
+                         Chart.add ~is_new_item:(Some true) chart item route
+            | OldItemNewRoute -> Chart.add ~is_new_item:(Some false) chart item route
             | OldItemOldRoute -> ()
           in
           List.iter process all_new_items ;
@@ -136,15 +124,14 @@ end
       let right_map = Tables.build_rule_map binary_rules 1 in
       let single_map = Tables.build_rule_map unary_rules 0 in
       let axioms_list : ((item * Rule.r) list) = get_axioms rules input in   
-      let axioms =
-        let tbl = Chart.create 100 in 
-        List.iter (fun (item,rule) -> Chart.add tbl item ([],rule)) axioms_list ;
-        tbl
+      let initial_chart =
+        let c = Chart.create 100 in
+        List.iter (fun (item,rule) -> Chart.add c item ([],rule)) axioms_list ;
+        c
       in
-      let item_map = Tables.build_item_map (map_tr (fun (x,_) -> x) axioms_list) in 
-      let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map; item_map = item_map} in 
+      let tables = {sRule_map = single_map; lRule_map = left_map; rRule_map = right_map} in 
       let queue = Queue.create () in 
       List.iter (fun (item,_) -> Queue.add item queue) axioms_list ;
-      let chart = consequences axioms queue tables in
+      let chart = consequences initial_chart queue tables in
       chart
 
