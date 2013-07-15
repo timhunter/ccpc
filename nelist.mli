@@ -22,3 +22,5 @@ val fold_l : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
 (** Analogous to [List.fold_left] but with no "initialiser", since we know that the first argument is non-empty. *)
 val fold : ('a -> 'a -> 'a) -> 'a t -> 'a
 
+(** Analogous to [List.for_all]. *)
+val for_all : ('a -> bool) -> 'a t -> bool

@@ -13,6 +13,8 @@ exception EmptyListException
   
     let fold_l f a (NonEmptyList (x,xs)) = List.fold_left f a (x::xs)
 
+    let for_all p (NonEmptyList (x,xs)) = (p x) && (List.for_all p xs)
+
     let from_list lst =
       match lst with
       | [] -> raise EmptyListException
