@@ -26,7 +26,8 @@ let get_input_grammar grammar_file =
     let channel = open_in grammar_file in 
     let lexbuf = Lexing.from_channel channel in 
     Read.mcfgrule Lexer.token lexbuf
-  with _ -> failwith ("Can't parse input mcfg file "^grammar_file^"\n")
+  with Failure str -> Printf.eprintf "%s\n" str ;
+                      failwith ("Can't parse input mcfg file "^grammar_file)
   in
   let start_symbol = choose_start_symbol (List.map Rule.get_nonterm rules) in
   (rules, start_symbol)

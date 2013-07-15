@@ -91,20 +91,6 @@ let desituate_rule rule =
     
     (**********************************************************)
 
-    (* Input to these creation functions should be aggressively verified *)
-
-    let create_terminating (nonterm, term, weight) = Terminating (nonterm, term, weight)
-
-    (* TODO: Still need to make sure the ``rights'' and the ``recipes'' are compatible *)
-    let create_nonterminating (nonterm, rights, recipes, weight) =
-        let checked_rights =
-            try Nelist.from_list rights
-            with Nelist.EmptyListException -> failwith("Nonterminating rule must have nonterminals to expand to")
-        in
-        NonTerminating (nonterm, checked_rights, recipes, weight)
-
-    (**********************************************************)
-
     (* How many nonterminals does this rule put together? *)
     let rule_arity rule =
       match rule with
@@ -149,4 +135,29 @@ let desituate_rule rule =
           | PublicNonTerminating (_,recs) -> List.map stringrecipe_to_string (Nelist.to_list recs) in
       let recipe = String.concat "" recipe in 
       Printf.sprintf "%s      %s --> %s %s" (show_weight (get_weight rule)) left rhs_output recipe
+
+    (**********************************************************)
+
+    let create_terminating (nonterm, term, weight) = Terminating (nonterm, term, weight)
+
+    (* TODO: When we get a rule that has a component (i,j) in its recipe, i.e. referring to the j-th 
+       element of the tuple that is the yield of the i-th nonterminal on the RHS, we do proper 
+       validation on i, but not yet on j. Validating i is easy because it only depends on the number of 
+       nonterminals on the RHS of this particular rule. Validating j requires more work because it depends 
+       on the rank of the relevant nonterminal; at the moment, nothing even enforces that a nonterminal 
+       has a unique consistent rank across all rules. *)
+    let create_nonterminating (nonterm, rights, recipes, weight) =
+        let nonempty_rights =
+            try Nelist.from_list rights
+            with Nelist.EmptyListException -> failwith("Nonterminating rule must have nonterminals to expand to")
+        in
+        let component_is_valid (Component(i,_)) = (0 <= i) && (i < List.length rights) in
+        let stringrecipe_is_valid = Nelist.for_all component_is_valid in
+        if (Nelist.for_all stringrecipe_is_valid recipes) then
+            NonTerminating (nonterm, nonempty_rights, recipes, weight)
+        else
+            let rule_str = Printf.sprintf "%s --> %s" nonterm (String.concat " " rights) in
+            let recipe_str = String.concat "" (List.map stringrecipe_to_string (Nelist.to_list recipes)) in
+            failwith (Printf.sprintf "Rule does not have enough nonterminals on the right-hand side for this recipe:   %s   %s" rule_str recipe_str)
+
 
