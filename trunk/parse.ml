@@ -33,7 +33,8 @@ let main () =
         if (goal_derivations = []) then
             Printf.eprintf "No derivations found\n"
         else
-            List.iter print_endline (map_tr (Derivation.print_tree_sexp Chart.get_nonterm) goal_derivations)
+            let show_derivation d = Printf.sprintf "%s\t%s" (show_weight_float (Derivation.get_weight d)) (Derivation.print_tree_sexp Chart.get_nonterm d) in
+            List.iter print_endline (map_tr show_derivation goal_derivations)
     )
 
 let _ = if (!Sys.interactive) then () else main ()
