@@ -17,7 +17,7 @@ END {
         nonterm = fields[1]
         weight = "1 / " counters[nonterm] "    "
         gsub(/ *\(\*.*\*\)/, "", line)   # remove ocaml-style comments in grammar rule
-        gsub(/\"\"/, "\" \"", line)      # mimicking output format from train and mcfg_nt
+        gsub(/\"\"/, "\" \"", line)      # mimicking output format from train and intersect
         print weight, line
     }
 }
