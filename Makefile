@@ -32,13 +32,16 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: mcfg_nt train visualize cycles compare
+all: mcfg_nt parse train visualize cycles compare
 
 mcfg_bc: $(OCAMLINT) $(OCAMLOBJ:.cmx=.cmo) main.cmo
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(LIBS:.cmxa=.cma) $(OCAMLOBJ:.cmx=.cmo) main.cmo
 
 mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) main.cmx
+
+parse: $(OCAMLINT) $(OCAMLOBJ) parse.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) parse.cmx
 
 train: $(OCAMLINT) $(OCAMLOBJ) train.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) train.cmx
@@ -63,7 +66,7 @@ clean:
 	rm -f $(DEPENDENCIES_FILE)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
-	rm -f mcfg_bc mcfg_nt train visualize cycles compare
+	rm -f mcfg_bc mcfg_nt parse train visualize cycles compare
 
 # Stop make from deleting ``intermediate'' mcfg files.
 # NB: (1) PRECIOUS is a lot like SECONDARY, but SECONDARY doesn't allow wildcards.
