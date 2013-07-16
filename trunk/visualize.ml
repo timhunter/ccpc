@@ -257,14 +257,17 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
     in
     List.iter process_tree trees ;
 
-    try
-        let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
-        let index = get_stabler_index grammar_files prolog_file in
-        let derivations = map_tr (fun d -> get_derivation_string d dict index, Derivation.get_weight d) trees in
-        save_to_file mode_note grammar_files prolog_file derivations output_filename
-    with Failure str ->
-        Printf.eprintf "%s\n" str ;
-        Printf.eprintf "Couldn't write derivations to latex file\n"
+    match output_filename with
+    | None -> ()
+    | Some f ->
+        try
+            let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
+            let index = get_stabler_index grammar_files prolog_file in
+            let derivations = map_tr (fun d -> get_derivation_string d dict index, Derivation.get_weight d) trees in
+            save_to_file mode_note grammar_files prolog_file derivations f
+        with Failure str ->
+            Printf.eprintf "%s\n" str ;
+            Printf.eprintf "Couldn't write derivations to latex file\n"
 
 (************************************************************************************************)
 
@@ -308,12 +311,12 @@ exception BadCommandLineArguments
 
 let main () =
         try
-                if not ((Array.length Sys.argv = 5) || (Array.length Sys.argv = 6)) then raise BadCommandLineArguments ;
                 let mode = match Sys.argv.(1) with "-kbest" -> KBest | "-sample" -> Sample | _ -> raise BadCommandLineArguments in
                 let grammar_file = Sys.argv.(2) in
                 let num_trees = try int_of_string Sys.argv.(3)
                                 with _ -> raise BadCommandLineArguments in
-                let output_filename = Sys.argv.(4) in
+                let output_filename = try Some (Sys.argv.(4))
+                                      with _ -> None in
                 let random_seed = try if (Array.length Sys.argv = 6) then (Some (int_of_string Sys.argv.(5))) else None
                                   with _ -> raise BadCommandLineArguments in
                 let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
