@@ -1,3 +1,3 @@
 
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -intersect -infix "the house"
+./intersect -g grammars/wmcfg/larsonian1.wmcfg -infix "the house"
 

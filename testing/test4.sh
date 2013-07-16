@@ -1,3 +1,2 @@
 
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -intersect -p "the boy who"
-
+./intersect -g grammars/wmcfg/larsonian1.wmcfg -prefix "the boy who"
