@@ -15,6 +15,6 @@ cat <<EOF > $TMP
 EOF
 
 # grep command omits the comment line, because the name of the file changes each run
-./mcfg_nt grammars/wmcfg/strauss.wmcfg -intersect -file $TMP | grep -v $TMP
+./intersect -g grammars/wmcfg/strauss.wmcfg -file $TMP | grep -v $TMP
 
 rm $TMP

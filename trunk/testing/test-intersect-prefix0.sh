@@ -1,3 +1,3 @@
 
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -intersect -p "foo bar"
+./intersect -g grammars/wmcfg/larsonian1.wmcfg -prefix "foo bar"
 
