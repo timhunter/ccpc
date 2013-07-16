@@ -1,2 +1,2 @@
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -trees "the house"
-./mcfg_nt grammars/wmcfg/larsonian1.wmcfg -trees "foo bar"
+./parse -g grammars/wmcfg/larsonian1.wmcfg -i "the house"
+./parse -g grammars/wmcfg/larsonian1.wmcfg -i "foo bar"
