@@ -295,36 +295,40 @@ let run_visualization wmcfg_file num_trees output_filename mode optional_seed =
 
 (************************************************************************************************)
 
-let print_usage () =
-	Printf.eprintf "\n" ;
-	Printf.eprintf "Usage: %s (-kbest|-sample) <grammar file> <number of trees> <output latex file> (<random seed>)\n" Sys.argv.(0) ;
-	Printf.eprintf "\n" ;
-	Printf.eprintf "Exactly one of -kbest or -sample should be given. Random seed is ignored if -kbest is specified.\n" ;
-	Printf.eprintf "\n" ;
-	Printf.eprintf "The grammar file should\n" ;
-	Printf.eprintf "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg\n" ;
-	Printf.eprintf "       OR (ii) contain a comment line identifying a weighted MCFG file from which it is derived\n" ;
-	Printf.eprintf "               by intersection, as path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg\n" ;
-	Printf.eprintf "\n" ;
-	Printf.eprintf "In either case, the associated MG and dictionary files should be in the following locations:\n" ;
-	Printf.eprintf "   $GRAMMARS/mg/$NAME.pl\n" ;
-	Printf.eprintf "   $GRAMMARS/mcfgs/$NAME.dict\n" ;
-	Printf.eprintf "\n"
-
-exception BadCommandLineArguments
-
 let main () =
-        try
-                let mode = match Sys.argv.(1) with "-kbest" -> KBest | "-sample" -> Sample | _ -> raise BadCommandLineArguments in
-                let grammar_file = Sys.argv.(2) in
-                let num_trees = try int_of_string Sys.argv.(3)
-                                with _ -> raise BadCommandLineArguments in
-                let output_filename = try Some (Sys.argv.(4))
-                                      with _ -> None in
-                let random_seed = try if (Array.length Sys.argv = 6) then (Some (int_of_string Sys.argv.(5))) else None
-                                  with _ -> raise BadCommandLineArguments in
-                run_visualization grammar_file num_trees output_filename mode random_seed
-        with BadCommandLineArguments ->
-                print_usage ()
-
+    let mode = ref KBest in
+    let grammar_file = ref "" in
+    let num_trees = ref 10 in
+    let output_file = ref None in
+    let random_seed = ref None in
+    let speclist = Arg.align([ ("-kbest",  Arg.Unit(fun () -> mode := KBest),           " use exact k-best enumeration of derivations (default)") ;
+                               ("-sample", Arg.Unit(fun () -> mode := Sample),          " use random sampling instead of exact k-best enumeration") ;
+                               ("-g",      Arg.Set_string(grammar_file),                " (W)MCFG grammar file (obligatory)") ;
+                               ("-n",      Arg.Set_int(num_trees),                      " number of derivations to report (optional, default is 10)") ;
+                               ("-o",      Arg.String(fun s -> output_file := Some s),  " location for output latex file (optional; only compatible with MG-derived grammars)") ;
+                               ("-seed",   Arg.Int(fun n -> random_seed := Some n),     " random seed (optional; ignored if -sample is not used)") ;
+                             ]) in
+    let usage_msg = String.concat "\n" [Printf.sprintf "Simplest usage example: %s -g <grammar file>" Sys.argv.(0) ;
+                                        "" ;
+                                        "========================================================================================================" ;
+                                        "In order for latex output to be possible, the grammar file should" ;
+                                        "   EITHER (i)  be given as a path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg" ;
+                                        "       OR (ii) contain a comment line identifying a weighted MCFG file from which it is derived" ;
+                                        "               by intersection, as path of the form $GRAMMARS/wmcfg*/$NAME.wmcfg" ;
+                                        "" ;
+                                        "In either case, the associated MG and dictionary files should be in the following locations:" ;
+                                        "   $GRAMMARS/mg/$NAME.pl" ;
+                                        "   $GRAMMARS/mcfgs/$NAME.dict" ;
+                                        "========================================================================================================" ;
+                                        "" ;
+                                       ] in
+    let superfluous_arg s = raise (Arg.Bad (Printf.sprintf "Bad extra argument: %s" s)) in
+    Arg.parse speclist superfluous_arg usage_msg ;
+    if (!grammar_file = "") then (
+        Printf.eprintf "Must provide a grammar file\n" ;
+        Arg.usage speclist usage_msg
+    ) else (
+        run_visualization (!grammar_file) (!num_trees) (!output_file) (!mode) (!random_seed)
+    )
 let _ = if (!Sys.interactive) then () else main ()
+
