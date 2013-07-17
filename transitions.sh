@@ -99,7 +99,7 @@ while read prefix ; do
         echo "Renormalizing using $renormalizer"
         $renormalizer $id.chart > $id.global.chart
         echo -e "`egrep -o "entropy = [-+]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?" $id.global.chart | cut -d ' ' -f 3` \t $prefix" >> $entropies_file
-        ./visualize $mode $id.global.chart $num_trees $id.tex $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
+        ./visualize $mode -g $id.global.chart -n $num_trees -o $id.tex -seed $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         cat $id.tex | get_tables >> $tables_file

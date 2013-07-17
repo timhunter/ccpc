@@ -1,5 +1,5 @@
 
 TMP=`mktemp /tmp/foo.XXXX`
-./visualize -sample grammars/wmcfg/larsonian1.wmcfg 20 $TMP 0 >/dev/null
+./visualize -sample -g grammars/wmcfg/larsonian1.wmcfg -n 20 -o $TMP -seed 0 >/dev/null
 cat $TMP | egrep -v '\\item timestamp: ' | egrep -v '^%'
 rm $TMP
