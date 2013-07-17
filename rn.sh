@@ -8,7 +8,7 @@ i=0
 
 echo "garbage" |     # this pipe seems to be crucial
 while [ $i -lt 1 ] ; do
-   ./renormalize.csh $1 | sed -f unquote.sed | sed -e 's/\\"/\"/g'|  sed -f twospaces.sed | perl -pe 's/\\n/\n/g'
+   ./renormalize.csh $1 
    (( i++ ))
 done
 
