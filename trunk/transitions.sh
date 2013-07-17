@@ -96,10 +96,14 @@ echo "$sentence" | get_prefixes |\
 while read prefix ; do
         id=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$prefix"`.$$
         ./mcfg_nt $grammar -intersect -p "$prefix" > $id.chart
-        echo "Renormalizing using $renormalizer"
         $renormalizer $id.chart > $id.global.chart
         echo -e "`egrep -o "entropy = [-+]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?" $id.global.chart | cut -d ' ' -f 3` \t $prefix" >> $entropies_file
-        ./visualize $mode -g $id.global.chart -n $num_trees -o $id.tex -seed $$ >/dev/null  # use $$, which also appears in output filenames, as random seed
+        if [ "$mode" == "-sample" ] ; then
+            seed_arg="-seed $$"  # use $$, which also appears in output filenames, as random seed
+        else
+            seed_arg=""
+        fi
+        ./visualize $mode -g $id.global.chart -n $num_trees -o $id.tex $seed_arg >/dev/null
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         cat $id.tex | get_tables >> $tables_file
