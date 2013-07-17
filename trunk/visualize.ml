@@ -228,13 +228,31 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
         in
         check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
 
-let run_visualization grammar_files prolog_file num_trees output_filename mode optional_seed =
+(* Returns a pair of strings (grammars_dir, grammar_name), such that the relevant files are 
+   grammars_dir/{mg,mcfgs}/grammar_name.{pl,mcfg,dict} *)
+let identify_original_grammar grammar_file =
+	let orig_grammar =
+		match (get_comment_data grammar_file "awk ' /^\\(\\* original grammar: [a-zA-Z0-9\\/\\._-]* \\*\\)/ {print $4} '") with
+		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
+		| Some s -> s
+	in
+	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg*/$NAME.wmcfg *)
+	let regex = Str.regexp "^\\([a-zA-Z0-9\\.\\/_-]+\\)\\/wmcfg[^\\/]*\\/\\([a-zA-Z0-9\\._-]+\\)\\.wmcfg$" in
+	if (Str.string_match regex orig_grammar 0) then
+		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
+	else
+		if (orig_grammar = grammar_file) then
+			failwith (Printf.sprintf "No original grammar identified in %s (and this file itself is not in a location of the form $GRAMMARS/wmcfg*/$NAME.wmcfg)" orig_grammar)
+		else
+			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg*/$NAME.wmcfg" orig_grammar)
+
+let run_visualization wmcfg_file num_trees output_filename mode optional_seed =
 
         let (trees,mode_note) =
                 match mode with
                 | KBest ->
                         if (optional_seed <> None) then Printf.eprintf "*** WARNING: using kbest mode, so ignoring random seed\n" ;
-                        let (rules, start_symbol) = Grammar.get_input_grammar grammar_files.wmcfg_file in
+                        let (rules, start_symbol) = Grammar.get_input_grammar wmcfg_file in
                         let derivation_trees = Derivation.get_n_best_from_grammar num_trees rules start_symbol in  (* of the type declared in derivation.ml *)
                         (derivation_trees, "exact k-best enumeration of most likely derivations")
                 | Sample ->
@@ -246,7 +264,7 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
                         in
                         Printf.eprintf "Using random seed %d\n" random_seed ;
                         Random.init random_seed ;
-                        let derivation_trees = Derivation.generate num_trees grammar_files.wmcfg_file in
+                        let derivation_trees = Derivation.generate num_trees wmcfg_file in
                         (derivation_trees, Printf.sprintf "randomly sampled derivations with random seed %d" random_seed)
                         end
         in
@@ -261,6 +279,12 @@ let run_visualization grammar_files prolog_file num_trees output_filename mode o
     | None -> ()
     | Some f ->
         try
+            let prolog_file  = (Filename.dirname Sys.executable_name) ^ "/mgcky-swi/setup.pl" in
+            let (grammars_dir, grammar_name) = identify_original_grammar wmcfg_file in
+            let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
+                                  wmcfg_file = wmcfg_file ;
+                                  dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
+                                } in
             let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
             let index = get_stabler_index grammar_files prolog_file in
             let derivations = map_tr (fun d -> get_derivation_string d dict index, Derivation.get_weight d) trees in
@@ -287,26 +311,6 @@ let print_usage () =
 	Printf.eprintf "   $GRAMMARS/mcfgs/$NAME.dict\n" ;
 	Printf.eprintf "\n"
 
-(* Returns a pair of strings (grammars_dir, grammar_name), such that the relevant files are 
-   grammars_dir/{mg,mcfgs}/grammar_name.{pl,mcfg,dict} *)
-let identify_original_grammar grammar_file =
-
-	let orig_grammar =
-		match (get_comment_data grammar_file "awk ' /^\\(\\* original grammar: [a-zA-Z0-9\\/\\._-]* \\*\\)/ {print $4} '") with
-		| None -> grammar_file          (* No matching comments; try to use the grammar file itself *)
-		| Some s -> s
-	in
-
-	(* Now we've got a guess at the original grammar file, let's try to parse it according to the pattern $GRAMMARS/wmcfg*/$NAME.wmcfg *)
-	let regex = Str.regexp "^\\([a-zA-Z0-9\\.\\/_-]+\\)\\/wmcfg[^\\/]*\\/\\([a-zA-Z0-9\\._-]+\\)\\.wmcfg$" in
-	if (Str.string_match regex orig_grammar 0) then
-		(Str.matched_group 1 orig_grammar, Str.matched_group 2 orig_grammar)
-	else
-		if (orig_grammar = grammar_file) then
-			failwith (Printf.sprintf "No original grammar identified in %s (and this file itself is not in a location of the form $GRAMMARS/wmcfg*/$NAME.wmcfg)" orig_grammar)
-		else
-			failwith (Printf.sprintf "Original grammar file identified as %s, but this is not of the form $GRAMMARS/wmcfg*/$NAME.wmcfg" orig_grammar)
-
 exception BadCommandLineArguments
 
 let main () =
@@ -319,13 +323,7 @@ let main () =
                                       with _ -> None in
                 let random_seed = try if (Array.length Sys.argv = 6) then (Some (int_of_string Sys.argv.(5))) else None
                                   with _ -> raise BadCommandLineArguments in
-                let (grammars_dir, grammar_name) = identify_original_grammar grammar_file in
-                let prolog_file  = (Filename.dirname Sys.executable_name) ^ "/mgcky-swi/setup.pl" in
-                let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
-                                      wmcfg_file = grammar_file ;
-                                      dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
-                                    } in
-                run_visualization grammar_files prolog_file num_trees output_filename mode random_seed
+                run_visualization grammar_file num_trees output_filename mode random_seed
         with BadCommandLineArguments ->
                 print_usage ()
 
