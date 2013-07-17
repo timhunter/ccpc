@@ -285,7 +285,10 @@ let run_visualization wmcfg_file num_trees output_filename mode optional_seed =
                                   wmcfg_file = wmcfg_file ;
                                   dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
                                 } in
-            let dict = Grammar.get_guillaumin_dict grammar_files.dict_file in
+            let dict =
+                try Grammar.get_guillaumin_dict grammar_files.dict_file
+                with Failure str -> failwith (Printf.sprintf "%s (Perhaps there is no MG file from which %s was derived?)" str wmcfg_file) ;
+            in
             let index = get_stabler_index grammar_files prolog_file in
             let derivations = map_tr (fun d -> get_derivation_string d dict index, Derivation.get_weight d) trees in
             save_to_file mode_note grammar_files prolog_file derivations f
