@@ -11,8 +11,6 @@ YACC=ocamlyacc
 DEPENDENCIES_FILE=Makefile.dependencies
 
 # Mattieu Guillaumin's Minimalist Grammar to Multiple Context-free Grammar translator
-# NB: Guillaumin's code should be patched like this and then recompiled:
-#     patch ../guillaumin/hmg2mcfg/hmgtransform.ml hmgtransform-fixity.patch
 GUILLAUMIN=../guillaumin/hmg2mcfg/hmg2mcfg
 
 # Default to the grammars directory inside this directory.
