@@ -37,6 +37,7 @@ val show_list : ('a -> string) -> 'a list -> string
 val reverse_tr : 'a list -> 'a list
 val map_tr : ('a -> 'b) -> 'a list -> 'b list
 val concatmap_tr: ('a -> 'b list) -> 'a list -> 'b list
+val append_tr : 'a list -> 'a list -> 'a list
 
 (** {2 Weights} *)
 
