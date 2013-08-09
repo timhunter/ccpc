@@ -77,7 +77,7 @@ end
       let trigger_item = concatmap_tr (fun item -> (build' rules [trigger;item])) items in 
       let item_trigger =  concatmap_tr (fun item -> (build' rules [item;trigger])) items in
       let trigger_only = (build' rules) [trigger] in 
-      trigger_item @ item_trigger @ trigger_only 
+      append_tr (append_tr trigger_item item_trigger) trigger_only 
 
     (*produce a chart which contains only relevant items based on the given rules*)
     (*left_rules are rules where the trigger is the leftmost nonterminal, right_rules are the opposite*)
@@ -89,7 +89,7 @@ end
           | _ -> failwith "Error filtering chart" in
       let left_nts = List.map (get_nts 1) left_rules in   (*For right_rules, collect all the left daughters, opposite for left_rules*)
       let right_nts = List.map (get_nts 0) right_rules in 
-      get_items (left_nts @ right_nts)
+      get_items (append_tr left_nts right_nts)
 
     let rec consequences chart q tables =
       if (Queue.is_empty q)
@@ -100,7 +100,7 @@ end
           let left_rules = Tables.find tables.lRule_map trigger_nt in
           let right_rules = Tables.find tables.rRule_map trigger_nt in
           let single_rules = Tables.find tables.sRule_map trigger_nt in
-          let possible_rules = single_rules @ left_rules @ right_rules in
+          let possible_rules = append_tr (append_tr single_rules left_rules) right_rules in
           let possible_items = filter_chart chart left_rules right_rules in    (* other items the trigger might combine with *)
           let all_new_items = ( build_items possible_rules trigger possible_items : ((item * route) list) ) in 
           let process (item,route) =
