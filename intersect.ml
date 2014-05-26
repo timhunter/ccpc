@@ -13,6 +13,11 @@ let set_prefix fsa str =
     let input_list = Str.split (Str.regexp_string " ") (cleanup_input str) in
     fsa := Some (Fsa.make_fsa_prefix input_list)
 
+let set_exact fsa str =
+    if (!fsa != None) then raise (Arg.Bad (Printf.sprintf "Multiple intersections not allowed")) ;
+    let input_list = Str.split (Str.regexp_string " ") (cleanup_input str) in
+    fsa := Some (Fsa.make_fsa_exact input_list)
+
 let set_infix fsa str =
     if (!fsa != None) then raise (Arg.Bad (Printf.sprintf "Multiple intersections not allowed")) ;
     let input_list = Str.split (Str.regexp_string " ") (cleanup_input str) in
@@ -33,6 +38,7 @@ let main () =
     let speclist = Arg.align( [("-g", Arg.Set_string(grammar_file),             " (W)MCFG grammar file (obligatory)") ;
                                ("-prefix", Arg.String(set_prefix input_fsa),    " string to be interpreted as a prefix") ;
                                ("-infix", Arg.String(set_infix input_fsa),      " string to be interpreted as an infix") ;
+                               ("-exact", Arg.String(set_exact input_fsa),      " string to be interpreted as exact") ;
                                ("-file", Arg.String(set_file input_fsa),        " FSA file") ;
                               ] ) in
     let usage_msg = (Printf.sprintf "Usage: %s -g <grammar file> (-prefix <string>) (-infix <string>) (-file <fsa file>)\n" Sys.argv.(0)) ^
