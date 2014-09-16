@@ -95,7 +95,7 @@ renormalizer=./renormalize.csh
 echo "$sentence" | get_prefixes |\
 while read prefix ; do
         id=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$prefix"`.$$
-        ./mcfg_nt $grammar -intersect -p "$prefix" > $id.chart
+        ./intersect -g $grammar -prefix "$prefix" > $id.chart
         $renormalizer $id.chart > $id.global.chart
         echo -e "`egrep -o "entropy = [-+]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?" $id.global.chart | cut -d ' ' -f 3` \t $prefix" >> $entropies_file
         if [ "$mode" == "-sample" ] ; then
