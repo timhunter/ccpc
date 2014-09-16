@@ -26,7 +26,7 @@ simple things like:
 
 To view the ``predictions'' of a normalized intersection grammar, use the 
 transitions.sh script, which requires four command-line arguments: a choice of 
-``mode'', which is either `-kbest' or `-sample'; the basename of the 
+``mode'', which is either `-kbest' or `-sample'; the 
 (pre-intersection) grammar file inside the grammars/wmcfg directory; the 
 initial fragment of the sentence you're interested in; and the number of 
 derivations to show. For example:
