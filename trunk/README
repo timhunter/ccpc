@@ -9,7 +9,7 @@ To try things out with the grammars that are included in the SVN
 repository, all you should need to do is the following:
 
 (1) Run 'make' in the root directory of your working copy. This should 
-    produce an executable called mcfg_nt.
+    produce executables called parse, intersect, and visualize.
 
 (2) Set the first line of renormalize.m to point to your installation 
     of Mathematica.
@@ -18,11 +18,11 @@ You should now be able to use the parser itself in isolation do some
 simple things like:
 
   - Parse and display derivation trees to stdout:
-      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -trees "Jon hit the dog with the stick"
+      ./parse -g grammars/wmcfg/strauss.wmcfg -i "Jon hit the dog with the stick"
 
   - Generate an intersection grammar (without renormalizing) from an existing 
     grammar and a prefix:
-      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -intersect -p "Jon hit"
+      ./intersect -g grammars/wmcfg/strauss.wmcfg -prefix "Jon hit"
 
 To view the ``predictions'' of a normalized intersection grammar, use the 
 transitions.sh script, which requires four command-line arguments: a choice of 
@@ -111,18 +111,19 @@ advanced.
 ==== Adding (M)CFGs not derived from Minimalist Grammars ====
 =============================================================
 
-Since the parser at the core of the system (the mcfg_nt executable) actually 
+Since the core of the system (the functionality encapsulated in the parse and 
+intersect executables) actually 
 works with MCFGs, you can also provide MCFGs of your own that are not 
 derived from Minimalist Grammars. The grammar used in these examples from 
 above, for example, is actually a (W)MCFG that was not derived from any MG.
 
-      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -trees "Jon hit the dog with the stick"
-      ./mcfg_nt grammars/wmcfg/strauss.wmcfg -intersect -p "Jon hit"
+      ./parse -g grammars/wmcfg/strauss.wmcfg -i "Jon hit the dog with the stick"
+      ./intersect -g grammars/wmcfg/strauss.wmcfg -prefix "Jon hit"
 
 Notice that there are no associated files grammars/{mcfg,mg}/strauss.* of 
 the sort that connect strauss.wmcfg back to a Minimalist Grammar. This does 
-not cause a problem for anything you want to do using mcfg_nt, which only 
-uses the wmcfg file you provide on the command line itself.
+not cause a problem for anything you want to do using parse or intersect, which only 
+use the wmcfg file you provide on the command line itself.
 
 But transitions.sh (and the underlying executable visualize, which does the 
 heavy lifting there) assumes that the MCFG it is given is the translation 
