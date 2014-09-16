@@ -46,20 +46,19 @@ to do the following:
 (1) Get Mathieu Guillaumin's MG-to-MCFG translator from
       https://bitbucket.org/mguillau/mg2mcfg
 
-   Download it as a ZIP archive or use the git source code control system
+    Download it as a ZIP archive or use the git source code control system
        git clone https://bitbucket.org/mguillau/mg2mcfg.git guillaumin
 
     Place this directory so that "guillaumin" and your working copy are 
     sister directories. For instance if your download was called 0a470e1368b9.zip 
-	unzip 0a470e1368b9.zip '*hmg2mcfg/*' -d guillaumin
+        unzip 0a470e1368b9.zip '*hmg2mcfg/*' -d guillaumin
 
-   then extract the relevant directory for the single program we require:
-	 mv mguillau-mg2mcfg-0a470e1368b9/hmg2mcfg hmg2mcfg
-	 rmdir  mguillau-mg2mcfg-0a470e1368b9
+    then extract the relevant directory for the single program we require:
+        mv mguillau-mg2mcfg-0a470e1368b9/hmg2mcfg hmg2mcfg
+        rmdir mguillau-mg2mcfg-0a470e1368b9
 
 (2) In the guillaumin/hmg2mcfg directory, run 'make clean' and 'make' to 
-    compile the newly-patched Guillaumin translator. This should produce an 
-    executable called hmg2mcfg.
+    compile the translator. This should produce an executable called hmg2mcfg.
 
 Now, to set up a new additional Minimalist Grammar for the parser to work 
 with, you need to provide one file yourself and then use make to generate 
