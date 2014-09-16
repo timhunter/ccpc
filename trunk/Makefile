@@ -30,13 +30,23 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: mcfg_nt parse intersect train visualize cycles compare
+all: parse intersect train visualize cycles compare
+
+###########################################################################################
+### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
+### them here for a little bit so that they can still be built if necessary, but I'm 
+### removing them from the list of executables that are made as part of the 'all' target. 
+### One day soonish we should (a) delete this section of the Makefile, and (b) delete the 
+### main.ml file.
+### TH 2014-09-16
 
 mcfg_bc: $(OCAMLINT) $(OCAMLOBJ:.cmx=.cmo) main.cmo
 	$(COMPILER_BYTECODE) $(FLAGS) -o $@ $(LIBS:.cmxa=.cma) $(OCAMLOBJ:.cmx=.cmo) main.cmo
 
 mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) main.cmx
+
+###########################################################################################
 
 parse: $(OCAMLINT) $(OCAMLOBJ) parse.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) parse.cmx
