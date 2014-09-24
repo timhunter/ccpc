@@ -37,6 +37,17 @@ sentence up to this point (i.e. one for each of the three prefixes "", "the"
 and "the story"), each showing the 30 best parses that are possible from that 
 position.
 
+===================================
+==== About ocamlgraph versions ====
+===================================
+
+Version 1.8.4 of ocamlgraph made a backwards-incompatible change. Out of the box, 
+our code is written for the older versions. If you get an error saying "Some record 
+fields are undefined: sg_parent" when you compile, then you are probably using 
+version 1.8.4 or later. To fix this error, there is one line in grammar.ml that 
+you need to uncomment. Search for 'sg_parent' in that file and see the intructions 
+there to make this change, then recompile.
+
 =================================================
 ==== Adding or modifying Minimalist Grammars ====
 =================================================
