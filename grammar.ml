@@ -183,25 +183,9 @@ module SituatedGraph =
 
   let graph_attributes _ = []
 
-  let get_subgraph v =
-    let leftmost = List.fold_left (extremum min) min_int v.SituatedNode.spans in
-    let rightmost = List.fold_left (extremum max) max_int v.SituatedNode.spans in
+  let get_subgraph _ = None
 
-    let width = abs (rightmost - leftmost) in
-      Some ({
-        Graph.Graphviz.DotAttributes.sg_name = (string_of_int width);
-        Graph.Graphviz.DotAttributes.sg_attributes=[];
-        (*****************************************************************************)
-        (***** Recent versions of ocamlgraph (version 1.8.4 or later) will produce   *)
-        (***** the following error:                                                  *)
-        (*****      "Error: Some record fields are undefined: sg_parent"             *)
-        (***** The way to fix this error is to uncomment the following line of code: *)
-        (* Graph.Graphviz.DotAttributes.sg_parent = None *)
-        (***** See comment about the sg_parent field under version 1.8.4 here:       *)
-        (*****      http://ocamlgraph.lri.fr/download/CHANGES                        *)
-        (*****************************************************************************)
-      })
-  end
+end
 
 (* analogous to new_intersection_grammar_rules above *)
 let update_graph graph chart item =
