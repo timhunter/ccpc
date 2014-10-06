@@ -1,6 +1,6 @@
-#!/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
-# on garvin /usr/local/bin/MathematicaScript -script
-#  on john's laptop /Applications/Mathematica.app/Contents/MacOS/MathematicaScript
+#!/usr/local/bin/MathematicaScript -script
+# on linux /usr/local/bin/MathematicaScript -script
+# on Mac OS X  /Applications/Mathematica.app/Contents/MacOS/MathematicaScript
 
 Off[FindRoot::precw,FindRoot::bddir,General::compat];
 
@@ -332,4 +332,5 @@ AppendTo[metadata, {"(*", ("entropy = " <> ToString[CForm[entropyOfGrammar[tilte
 lose = tilted;  (* SetPrecision[tilted,9]; *) (* try keeping it all *)
 
 Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
-Scan[Print,showrule /@ lose[[4]]]
+Scan[Print,showrule /@ lose[[4]]];
+Exit[]
