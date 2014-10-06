@@ -90,13 +90,14 @@ tables_file=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.tables.
 entropies_file=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.entropies.$$.tex
 combined_file=`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.combined.$$.tex
 
+# wrapper script no longer needed. thank you Matthew Green!
 renormalizer=./renormalize.m
 
 echo "$sentence" | get_prefixes |\
 while read prefix ; do
         id=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$prefix"`.$$
         ./intersect -g $grammar -prefix "$prefix" > $id.chart
-        $renormalizer $id.chart | sed -f twospaces.sed > $id.global.chart # sed call used to be in wrapper, which we no longer use
+        $renormalizer $id.chart | sed -f onespace.sed > $id.global.chart # put in the sed call here rather than in wrapper script JTH
         echo -e "`egrep -o "entropy = [-+]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?" $id.global.chart | cut -d ' ' -f 3` \t $prefix" >> $entropies_file
         if [ "$mode" == "-sample" ] ; then
             seed_arg="-seed $$"  # use $$, which also appears in output filenames, as random seed
