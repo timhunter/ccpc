@@ -1,4 +1,4 @@
-#!/usr/local/bin/MathematicaScript -script
+#!/Applications/Mathematica.app/Contents/MacOS/MathematicaScript -script
 # on linux /usr/local/bin/MathematicaScript -script
 # on Mac OS X  /Applications/Mathematica.app/Contents/MacOS/MathematicaScript
 
@@ -7,7 +7,7 @@ Off[FindRoot::precw,FindRoot::bddir,General::compat];
 Needs["Combinatorica`"]
 
 
-MCFGFromTable[tbl_,startsymbolregexp_ :"S.*"] := Module[{nonterminals,terminals},
+MCFGFromTable[tbl_,startsymbolregexp_ :"S_([0-9]+|-)*$"] := Module[{nonterminals,terminals},
 LhsRhsSymbol[line_] :=Switch[Length[line],
 6, {Part[line,4],Part[line,6]},   (* terminal line *)
 7,{Part[line,4],Part[line,6]},    (* unary with string rewriting recipe *)
@@ -312,8 +312,23 @@ ExtractComment[tbl_] := Module[{comments = {}, rules = {}},
   	   Return[{comments, rules}]
   ];
 
+
+unquoteterminal[line_List] := Switch[Length[line],
+  6, Join[line[[1 ;; 5]], {StringReplace[Part[line, 6],RegularExpression["\"([^\"]+)\""] -> "$1"]}],
+  _, line
+  ]
+
+makeWeightsNumbers[line_List] := 
+ Module[{numerator = ToExpression[line[[1]]], denominator = ToExpression[line[[3]]]},
+	ReplacePart[line, {1 -> numerator, 3 -> denominator}]
+  ]
+
 (* actually do it *)
-{metadata,tbl} = ExtractComment[Import[$ScriptCommandLine[[2]],"Table"]];
+
+(* old way *)
+(* {metadata,tbl} = ExtractComment[Import[$ScriptCommandLine[[2]],"Table"]];*)
+{metadata,pretbl} = ExtractComment[StringSplit[#, Whitespace] & /@ StringSplit[Import[$ScriptCommandLine[[2]], "Text"], "\n"]];
+tbl = Composition[makeWeightsNumbers, unquoteterminal] /@ pretbl;
 grammar = MCFGFromTable[tbl];
 graph = GraphProjection[grammar];
 SCCs = getSCCs[graph];
@@ -326,10 +341,10 @@ AppendTo[metadata, {"(*", ("probability = " <> ToString[CForm[z[[startsymbolinde
 
 tilted = TiltGrammar[grammar,z];
 
-(* add some useful metadata *)
+(*  add some useful metadata  *)
 AppendTo[metadata, {"(*", ("entropy = " <> ToString[CForm[entropyOfGrammar[tilted]]]), "*)"}]
 
-lose = tilted;  (* SetPrecision[tilted,9]; *) (* try keeping it all *)
+lose = tilted;  (* SetPrecision[tilted,9]; *\) (\* try keeping it all *)
 
 Print[ExportString[metadata,"Table","FieldSeparators" -> " "]];
 Scan[Print,showrule /@ lose[[4]]];
