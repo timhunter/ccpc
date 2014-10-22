@@ -28,7 +28,7 @@ end = struct
               let key = Nelist.nth rights daughter in
               add map key rule
         else () in
-      let map = Map (Hashtbl.create 100) in 
+      let map = Map (Hashtbl.create ((List.length grammar)/2)) in  (* was 100 *)
       List.iter (load_map map) grammar;
       map
 
@@ -125,7 +125,7 @@ end
       let single_map = Tables.build_rule_map unary_rules 0 in
       let axioms_list : ((item * Rule.r) list) = get_axioms rules input in   
       let initial_chart =
-        let c = Chart.create 100 in
+        let c = Chart.create 500 in
         List.iter (fun (item,rule) -> Chart.add c item ([],rule)) axioms_list ;
         c
       in
