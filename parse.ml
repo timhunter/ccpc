@@ -28,6 +28,7 @@ let main () =
         let input_list = Str.split (Str.regexp_string " ") (cleanup_input (!input)) in
         let input_fsa = Fsa.make_fsa_exact input_list in
         let chart = Parser.deduce rules input_fsa in
+	let _ = Printf.printf "chart size: %d \n" (Chart.length chart) in
         let goal_proposition = Chart.goal_item start_symbol input_fsa in
         let goal_derivations = Derivation.get_derivations chart goal_proposition in
         if (goal_derivations = []) then

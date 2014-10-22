@@ -66,6 +66,10 @@ cycles: $(OCAMLINT) $(OCAMLOBJ) cycles.cmx
 compare: $(OCAMLINT) $(OCAMLOBJ) compare.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) compare.cmx
 
+prefilter: $(OCAMLINT) $(OCAMLOBJ) prefilter.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) prefilter.cmx
+
+
 # Dependencies
 -include $(DEPENDENCIES_FILE)
 $(DEPENDENCIES_FILE): *.mli *.ml mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
