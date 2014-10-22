@@ -18,10 +18,12 @@ let cleanup_input s =
         collapsed
 
 
-let oneminus w = 
-  let negative_one = Util.weight_from_float (-1.0) in
-  let negative_w = Util.mult_weights negative_one w in
-  Util.add_weights Util.weight_one negative_w
+(* this is occasionally returning 0 beware *)
+let oneminus w = match w with
+    weight_one -> weight_one
+  | _ ->   let negative_one = Util.weight_from_float (-1.0) in
+	   let negative_w = Util.mult_weights negative_one w in
+	   Util.add_weights Util.weight_one negative_w
 
 (*
 for each rule 
