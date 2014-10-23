@@ -126,7 +126,7 @@ let desituate_rule rule =
       let left = get_nonterm rule in
       let rhs_output = 
         match (get_expansion rule) with
-        | PublicTerminating s -> Printf.sprintf "%S" s
+        | PublicTerminating s -> "\""^s^"\"" (* Printf.sprintf "%S" s preserve French accented chars *)
         | PublicNonTerminating (rights, _) -> List.fold_left (^^) "" (Nelist.to_list rights)
      in
       let recipe =
