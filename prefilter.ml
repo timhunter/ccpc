@@ -87,7 +87,7 @@ let main () =
         Arg.usage speclist usage_msg
     ) else (
         (* Everything's OK, let's do our thing ... *)
-      let input_set = StringSet.of_list (Str.split (Str.regexp_string " ") (cleanup_input (!input))) in
+      let input_set = List.fold_left (fun old this -> StringSet.add this old) StringSet.empty (Str.split (Str.regexp_string " ") (cleanup_input (!input))) in
       let rule_list = readin !grammar_file in
       let filtered = List.fold_left filt (StringSet.empty,input_set,[]) rule_list in
       List.iter (function r -> print_endline (Rule.to_string r)) (project_and_rev filtered)
