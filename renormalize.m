@@ -7,7 +7,7 @@ Off[FindRoot::precw,FindRoot::bddir,General::compat];
 Needs["Combinatorica`"]
 
 
-MCFGFromTable[tbl_,startsymbolregexp_ :"S_([0-9]+|-)*$"] := Module[{nonterminals,terminals},
+MCFGFromTable[tbl_,startsymbolregexp_ :"S(_)?([0-9]+|-)*$"] := Module[{nonterminals,terminals},
 LhsRhsSymbol[line_] :=Switch[Length[line],
 6, {Part[line,4],Part[line,6]},   (* terminal line *)
 7,{Part[line,4],Part[line,6]},    (* unary with string rewriting recipe *)
