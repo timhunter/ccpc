@@ -30,7 +30,7 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: parse intersect train visualize cycles compare
+all: parse intersect train visualize cycles compare renormalize
 
 ###########################################################################################
 ### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
@@ -68,6 +68,9 @@ compare: $(OCAMLINT) $(OCAMLOBJ) compare.cmx
 
 prefilter: $(OCAMLINT) $(OCAMLOBJ) prefilter.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) prefilter.cmx
+
+renormalize: $(OCAMLINT) $(OCAMLOBJ) renormalize.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) renormalize.cmx
 
 
 # Dependencies
