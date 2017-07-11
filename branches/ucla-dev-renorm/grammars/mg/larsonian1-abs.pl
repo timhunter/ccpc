@@ -1,0 +1,65 @@
+[]::[='D',+case,'Pto',-dat].
+[tell]::[='D',+case,'V'].
+['John']::['D',-case].
+[for]::[='D',+case,'Pfor'].
+['-s']::['N'==>,'Num'].
+[]::[='T','C'].
+[be]::[=ving,'Be'].
+['-en']::[=>'V',='D',ven].
+ ['V']<<[p_for].
+ []::[=>'Be',+case,'T'].
+ []::[=>v,+case,'T'].
+  []::[=>'Pwith',p_with].
+[that]::[='T','Ce'].
+[which]::[='Num',+f,'D',-case,-wh].
+ ['V']<<[p_with].
+[on]::[='D',+case,'Pon'].
+[with]::[='D',+case,'Pwith'].
+[story]::['N'].
+['-s']::[=>'Have',+case,'T'].
+[deg]>>['A'].
+[]::[=>'V',+dat,='D',v].
+ ['V']<<[p_on].
+[have]::[='Been','Have'].
+['-s']::[=>'Be',+case,'T'].
+[will]::[='Be','Modal'].
+ []::[=>'Have',+case,'T'].
+[the]::[='Rel','D',-case].
+[fact]::[='Ce','N'].
+[young]::['A'].
+ []::[=>'Pin',p_in].
+['V']<<[tmp].
+['-ing']::[=>'V',='D',ving].
+ []::[=>'Pfor',p_for].
+[have]::[=ven,'Have'].
+[]::[='T',+wh,'Rel'].
+[]::[='N','Num'].
+['s']::[='Num',='Num','N'].
+[pay]::[=p_for,'V'].
+[]::[=>'V',='D',v].
+[so]::[deg].
+[]::[='A',='D',a].
+[been]::[=ving,'Been'].
+['-s']::[v==>,+case,'T'].
+['-s']::[=>'Modal',+case,'T'].
+[will]::[='Have','Modal'].
+['A']>>['N'].
+[]::[=>'Pto',p_to].
+[come]::[='A','V'].
+[will]::[='V','Modal'].
+[story]::['N',-f].
+[be]::[=a,'Be'].
+[know]::[='Ce','V'].
+[]::[=>'Pon',p_on].
+[in]::[='D',+case,'Pin'].
+[]::[='D',+case,='D',a].
+[]::[=>'Modal',+case,'T'].
+[to]::[='D',+case,'Pto'].
+[the]::[='Num','D',-case].
+[matter]::['V'].
+[tell]::[=p_to,='D',+case,'V'].
+['doesnt']::[=v,+case,'T'].
+['-ed']::[=>v,+case,'T'].
+[yesterday]::[tmp].
+['V']<<[p_in].
+startCategory('C').

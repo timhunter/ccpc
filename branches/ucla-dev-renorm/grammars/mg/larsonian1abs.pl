@@ -1,0 +1,69 @@
+[]::[='D',+case,'Pto',-dat].
+[=CeV]::[='Ce','V'].
+[=>Have+caseT]::[=>'Have',+case,'T'].
+[deg]>>['A'].
+['A']>>['N'].
+[]::[='T','C'].
+  ['N']<<['RA'].
+ []::[=>'Be',+case,'T'].
+  []::[=>'Pwith',p_with].
+[=CeN]::[='Ce','N'].
+[=>V=Dving]::[=>'V',='D',ving].
+ ['V']<<[p_with].
+[=D+casePin]::[='D',+case,'Pin'].
+ []::[=>v,+case,'T'].
+[=BeModal]::[='Be','Modal'].
+[rdeg]::[rdeg].
+  ['RA']<<[rdeg].
+[=vingBeen]::[=ving,'Been'].
+[=venHave]::[=ven,'Have'].
+[tmp]::[tmp].
+[=Num+fD-case-wh]::[='Num',+f,'D',-case,-wh].
+[]::[=>'V',+dat,='D',v].
+[=v+caseT]::[=v,+case,'T'].
+[=>Be+caseT]::[=>'Be',+case,'T'].
+[=NumD-case]::[='Num','D',-case].
+[=p_forV]::[=p_for,'V'].
+[v==>+caseT]::[v==>,+case,'T'].
+[D-case]::['D',-case].
+[]::[='N','Num'].
+[]::[=>'V',='D',v].
+ []::[=>'Pin',p_in].
+[=D+caseV]::[='D',+case,'V'].
+[=aBe]::[=a,'Be'].
+startCategory('C').
+[=HaveModal]::[='Have','Modal'].
+ []::[=>'Pfor',p_for].
+[=Num=NumN]::[='Num',='Num','N'].
+ []::[=>'Have',+case,'T'].
+[]::[='D',+case,='D',a].
+[]::[='T',+wh,'Rel'].
+[RA]::['RA'].
+[N-f]::['N',-f].
+[=>V=Dven]::[=>'V',='D',ven].
+ ['V']<<[p_on].
+[=D+casePon]::[='D',+case,'Pon'].
+[=BeenHave]::[='Been','Have'].
+[=>v+caseT]::[=>v,+case,'T'].
+[=TCe]::[='T','Ce'].
+[A]::['A'].
+[=D+casePfor]::[='D',+case,'Pfor'].
+[=vingBe]::[=ving,'Be'].
+[]::[=>'Pto',p_to].
+[=p_to=D+caseV]::[=p_to,='D',+case,'V'].
+[]::[=>'Pon',p_on].
+[=AV]::[='A','V'].
+[=RelD-case]::[='Rel','D',-case].
+[N==>Num]::['N'==>,'Num'].
+[]::[=>'Modal',+case,'T'].
+ ['V']<<[p_for].
+[=D+casePwith]::[='D',+case,'Pwith'].
+[=D+casePto]::[='D',+case,'Pto'].
+[deg]::[deg].
+['V']<<[p_in].
+[=>Modal+caseT]::[=>'Modal',+case,'T'].
+[=VModal]::[='V','Modal'].
+[N]::['N'].
+['V']<<[tmp].
+[V]::['V'].
+[]::[='A',='D',a].
