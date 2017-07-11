@@ -30,7 +30,7 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: parse intersect train visualize cycles compare renormalize
+all: parse intersect train visualize cycles compare renormalize findentropy
 
 ###########################################################################################
 ### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
@@ -71,6 +71,9 @@ prefilter: $(OCAMLINT) $(OCAMLOBJ) prefilter.cmx
 
 renormalize: $(OCAMLINT) $(OCAMLOBJ) renormalize.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) renormalize.cmx
+
+findentropy: $(OCAMLINT) $(OCAMLOBJ) findentropy.cmx
+	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) findentropy.cmx
 
 
 # Dependencies
