@@ -87,7 +87,7 @@ clean:
 	rm -f $(DEPENDENCIES_FILE)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
-	rm -f mcfg_bc mcfg_nt parse intersect train visualize cycles compare
+	rm -f mcfg_bc mcfg_nt parse intersect train visualize cycles compare renormalize findentropy
 
 # Stop make from deleting ``intermediate'' mcfg files.
 # NB: (1) PRECIOUS is a lot like SECONDARY, but SECONDARY doesn't allow wildcards.
