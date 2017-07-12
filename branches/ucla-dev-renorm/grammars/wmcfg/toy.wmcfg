@@ -1,0 +1,11 @@
+1 / 1       S --> NP VP     [0,0;1,0]
+1 / 2       NP --> Det NBAR    [0,0;1,0]
+1 / 2       NP --> "John"
+3 / 4       Det --> "the"
+1 / 4       Det --> "a"
+1 / 8       NBAR --> Adj N      [0,0;1,0]
+7 / 8       NBAR --> N          [0,0]
+1 / 1       Adj --> "big"
+1 / 1       N --> "cat"
+7 / 8       VP --> "ran"
+1 / 8       VP --> "walked"
