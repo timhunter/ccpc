@@ -6,6 +6,8 @@ open Util
  * The return value is the entropy of the start symbol in that grammar.
  *)
 let find_entropy rules start_symbol =
+    let m = Matrix.create_square_matrix 3 (fun r -> fun c -> 0.0) in
+    let m' = Matrix.invert m in
     0.0
 
 let main () =
