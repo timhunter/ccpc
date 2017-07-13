@@ -13,7 +13,7 @@ if ( $? == 0 ) then
 endif
 
 # See if we're at UCLA, and if so set MATHSCRIPT accordingly
-hostname | grep -q '.aws.cdh.ucla.edu$'
+hostname | grep -q '.cdh.ucla.edu$'
 if ( $? == 0 ) then
     set MATHSCRIPT="/usr/local/bin/MathematicaScript -script"
 endif
