@@ -12,7 +12,7 @@ repository, all you should need to do is the following:
     produce executables called parse, intersect, and visualize.
 
 (2) Set the first line of renormalize.m to point to your installation 
-    of Mathematica.
+    of Mathematica. (Unless MATHSCRIPT will be set appropriately in renormalize.csh.)
 
 You should now be able to use the parser itself in isolation do some 
 simple things like:
