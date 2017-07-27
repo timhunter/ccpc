@@ -3,7 +3,7 @@ open Util
 open Rule
 
 (* All the work will go here. *)
-(* The arguments are an existing grammar (list of rules) to be normalized and that grammar's start symbol. 
+(* The arguments are an existing grammar (list of rules) and that grammar's start symbol. 
  * The return value is the entropy of the start symbol in that grammar.
  *)
 let find_entropy rules start_symbol =
