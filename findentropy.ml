@@ -14,7 +14,9 @@ let find_entropy rules start_symbol =
         match (get_expansion r) with
         | PublicTerminating str -> Printf.printf "   and the right-hand side is the terminal '%s'\n" str
         | PublicNonTerminating (nts,_) -> Printf.printf "   and the right-hand side has nonterminals %s\n" (show_list (fun x -> x) (Nelist.to_list nts))
-                                                                                                            (* show_list is another util.ml function *)
+
+(* show_list is another util.ml function *)
+
     ) rules ;
     (*** end dummy code ***)
     let m = Matrix.create_square_matrix 3 (fun r -> fun c -> 0.0) in
