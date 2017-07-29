@@ -1,0 +1,134 @@
+Readme for Simplex.
+
+Overview
+
+  In order to compile the program, simply "make" with the accompanying Makefile.
+  This should create a simplex executable. To use the main part of
+  our program (ie, solving maximization/minimization problems), you can simply
+  run the command:
+  
+    ./simplex solve PATH_T0_FILE
+
+  where PATH_TO_FILE is the relative path (from the execution of the program) to 
+  the location of the text file containing the Simplex system in the correct
+  input format. To see what a simplex text file for our program should look like,
+  take a look at ./tests/simplex/test0.txt.
+
+  It might be necessary to run "make clean" before "make"
+
+Testing
+
+  Inside the ./tests/simplex/ folder you will also find test0.txt, test1.txt...,
+  test20.txt. These are the 21 example problems with which we have tested our 
+  system. They were crafted so as to hit every major branch of the Simplex 
+  Algorithm. You can run each of them as follows:
+    
+    ./simplex solve "tests/simplex/test0.txt"
+    ./simplex solve "tests/simplex/test1.txt"
+    ...
+    ./simplex solve "tests/simplex/test20.txt"
+
+  Or, alternatively, you can run the following:
+
+    ./simplex run_tests TIMES
+
+  where TIMES is the number of times you'd like to reat each test. This command
+  will run all of our modules' "run_tests TIMES" commands. Basically, this is 
+  shorthand for the following:
+
+    Matrix.EltMatrix.run_tests TIMES
+    Elts.Elts.run_tests TIMES
+    SimplexI.Simplex.run_tests TIMES
+
+  You can input these commands directly into our custom toplevel (more 
+  information below )
+
+  In order to see all of the tests run by these commands, take a look inside 
+  their respective modules. The tests are extensive. More information about each 
+  of them can be gathered from the comments and from the Official Report. Here, 
+  we will only discuss the specifics of the Simplex.run_tests TIMES command
+
+What SimplexI.Simplex.run_tests TIMES does and how do I use it?
+
+  This is one of our most complex testing function. At the top of SimplexI.ml, 
+  you will find something like the following:
+
+    let num_testfiles = 22
+    let naming_scheme = "tests/simplex/test"
+    let file_ending = ".txt"
+    let results_file = "tests/simplex/results.txt"
+
+  This is to provide you, the tester, with more flexibility. As you can see, the
+  program is set up to run on 21 test files (as specified by num_testfiles) 
+  which have the naming_scheme of "tests/simplex/test". This means the files are
+  inside the simplex folder which is inside the tests folder and are named with
+  the following pattern:
+
+    test0.txt
+    test1.txt
+    test2.txt
+    ...
+    test20.txt
+
+  Finally, there is a file containing the expected results at the location 
+  specified by results_file. This results file is formatted as follows:
+
+    None                      # corresponds to test0.txt
+    Unbounded                 # corresponds to test1.txt
+    28,(0, 1/6, 2/3)          # corresponds to test2.txt  
+    ...
+    33,(3,12)                 # corresponds to test3.txt
+
+  (* Everything after the # was added for clarification and should NOT be in the
+   * actual results.txt file *)
+
+  The possible results are None (for a system which is unfeasable. ie, has no
+  solutions because the constraints make no sense), Unbounded (for a system 
+  for which the min/max can be made arbitraly small/large), or OPTIMAL_VALUE,
+  POINT, where OPTIMAL_VALUE is the achieved optimal value of the objective
+  function and POINT is ***one*** possible solution. It might be the only 
+  possible solution, but for systems which have an infinite number of solutions,
+  POINT will be just one of them.
+
+  If you would like to add more tests, simply add another test{num}.txt file 
+  into the directory, add its corresponding expected result into the results.txt
+  file, and then run_tests again. If there are no Failures, then the test went
+  well.
+
+Alternative Testing: The Custom Toplevel
+
+  Accompanying our program, you will also find a maketop file. This is a shell
+  script that we have written in order to make the use of our Matrix Library 
+  (* and the testing of Simplex *), simpler. You simply run the following:
+
+    ./maketop                      # You might need to modify the permissions
+
+  The result will be an executable called simplextop. This is a custom OCaml
+  top level that has all of our code alread loaded into it. To run it, type:
+
+    ./simplextop
+
+  This will take you into what looks like a normal OCaml toplevel. You can use 
+  it as normal. You can access functions with the dot notation
+
+    Example: Matrix.EltMatrix.add or SimplexI.Simplex.solve
+
+  or you can just open each module. 
+
+  The Matrix Module is called EltMatrix and is found inside of Matrix.ml. 
+    The signature is found in MatrixI.ml.
+  The Elts modules is called Elts and is found inside Elts.ml.
+    The signature is found in EltsI.ml.
+  The Simplex module is called Simplex and is found inside SimplexI.ml.
+    The signature is found in SimplexI.ml.
+
+  For sample matrix files (to use with EltMatrix.load), take a look at the
+  files found inside of "tests/matrix"
+
+
+  
+Best Wishes,
+  Fantastic Four Team
+
+
+If you have any questions, email us at luisperez@college.harvard.edu

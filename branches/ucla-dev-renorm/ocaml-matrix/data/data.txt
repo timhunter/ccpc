@@ -1,0 +1,9 @@
+All of our data is instead found inside of ../code/tests.
+
+Forgive us, but this was necessary. Otherwise the TF would have had to go into
+SimplexI.ml and have changed the first line to the absolute path to "data" on 
+their machine.
+
+Best,
+
+Fantastic Four
