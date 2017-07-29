@@ -20,17 +20,33 @@ GRAMMARS=grammars
 # Directory for auto-generated documentation
 DOCDIR=doc
 
-FLAGS= -I mcfgread -I +ocamlgraph
+FLAGS= -I mcfgread -I ocaml-matrix -I +ocamlgraph
 LIBS= nums.cmxa str.cmxa unix.cmxa graph.cmxa
 
 # All source files that do not correspond to the "top" file of an executable.
 MODULES= util.ml fsa.ml nelist.ml rule.ml chart.ml parser.ml mcfgread/read.ml mcfgread/lexer.ml grammar.ml derivation.ml path.ml matrix.ml
 
 OCAMLINT= $(MODULES:.ml=.cmi)
-OCAMLOBJ= $(MODULES:.ml=.cmx)
+OCAMLOBJ= ocaml-matrix/OCamlMatrix.cmx $(MODULES:.ml=.cmx)
 
 .PHONY: all
 all: parse intersect train visualize cycles compare renormalize findentropy
+
+######################################################################################
+#### This section looks after the code in the ocaml-matrix directory 
+#### which was copied wholesale from https://github.com/Fantastic-Four/ocaml-matrix
+#### The end result is to produce ocaml-matrix/OCamlMatrix.cmx
+###############################################################
+## These are all the cmx files that we need
+OCAML_MATRIX_CMX_FILES= ocaml-matrix/Helpers.cmx ocaml-matrix/EltsI.cmx ocaml-matrix/Elts.cmx \
+                            ocaml-matrix/Matrix.cmx ocaml-matrix/Order.cmx ocaml-matrix/MatrixI.cmx
+## This is a single rule with all these cmx files as targets. The recipe will replace 'cmx' with 'ml' for each one.
+$(OCAML_MATRIX_CMX_FILES):
+	$(COMPILER_NATIVE) -I ocaml-matrix -for-pack OCamlMatrix -c $(@:.cmx=.ml)
+## This rule packs together all of the cmx files into a single cmx file
+ocaml-matrix/OCamlMatrix.cmx : $(OCAML_MATRIX_CMX_FILES)
+	$(COMPILER_NATIVE) -pack -o ocaml-matrix/OCamlMatrix.cmx $^
+######################################################################################
 
 ###########################################################################################
 ### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
@@ -78,7 +94,7 @@ findentropy: $(OCAMLINT) $(OCAMLOBJ) findentropy.cmx
 
 # Dependencies
 -include $(DEPENDENCIES_FILE)
-$(DEPENDENCIES_FILE): *.mli *.ml mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
+$(DEPENDENCIES_FILE): *.mli *.ml mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli ocaml-matrix/*.ml
 	ocamldep $(FLAGS) $^ > $@
 
 .PHONY: clean
@@ -87,6 +103,7 @@ clean:
 	rm -f $(DEPENDENCIES_FILE)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
+	rm -f ocaml-matrix/*.o ocaml-matrix/*.cmi ocaml-matrix/*.cmx
 	rm -f mcfg_bc mcfg_nt parse intersect train visualize cycles compare renormalize findentropy
 
 # Stop make from deleting ``intermediate'' mcfg files.
