@@ -7,6 +7,7 @@ open Rule
  * The return value is the entropy of the start symbol in that grammar.
  *)
 let find_entropy rules start_symbol =
+
     (*** dummy code showing manipulation of rules ***)
     List.iter (fun r ->
         (* get_nonterm and get_weight are from rule.ml; float_of_weight is from util.ml, see also other weight functions there *)
@@ -19,8 +20,21 @@ let find_entropy rules start_symbol =
 
     ) rules ;
     (*** end dummy code ***)
-    let m = Matrix.create_square_matrix 3 (fun r -> fun c -> 0.0) in
-    let m' = Matrix.invert m in
+
+    (*** dummy code showing manipulation of matrices ***)
+    let m = Matrix.create_square_matrix 2 (fun r -> fun c -> match (r,c) with (0,0) -> 4.0
+                                                                            | (0,1) -> 7.0
+                                                                            | (1,0) -> 2.0
+                                                                            | (1,1) -> 6.0) in
+    Printf.printf "Starting with this matrix:\n" ;
+    Matrix.print m ;
+    let mi = Matrix.invert m in
+    Printf.printf "Here's its inverse:\n" ;
+    Matrix.print mi ;
+    Printf.printf "And here's their product:\n" ;
+    Matrix.print (Matrix.multiply m mi) ;
+    (*** end dummy code ***)
+
     0.0
 
 let main () =

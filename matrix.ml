@@ -11,3 +11,6 @@ let create_square_matrix n f =
 
 let invert = OCamlMatrix.Matrix.EltMatrix.inverse
 
+let multiply = OCamlMatrix.Matrix.EltMatrix.mult
+
+let print = OCamlMatrix.Matrix.EltMatrix.print
