@@ -21,6 +21,14 @@ let invert = OCamlMatrix.Matrix.EltMatrix.inverse
 
 let multiply = OCamlMatrix.Matrix.EltMatrix.mult
 
+let mult_vec_by xs m =
+    let row_vector = OCamlMatrix.Matrix.EltMatrix.from_list [map_tr elt_of_float xs] in
+    multiply row_vector m
+
+let mult_by_vec m xs =
+    let col_vector = OCamlMatrix.Matrix.EltMatrix.from_list (map_tr (fun x -> [elt_of_float x]) xs) in
+    multiply m col_vector
+
 let print m =
     let (num_rows, num_cols) = OCamlMatrix.Matrix.EltMatrix.get_dimensions m in
     let go r c elt =
