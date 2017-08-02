@@ -11,11 +11,20 @@ val create_square_matrix : int -> (int -> int -> float) -> matrix
     the second argument is the zero-indexed column number. *)
 val get_element : matrix -> int -> int -> float
 
+(** Returns the identity matrix of the specified dimension. *)
+val identity_matrix : int -> matrix
+
 (** Inverts a matrix. *)
 val invert : matrix -> matrix
 
 (** Multiplies two matrices. *)
 val multiply : matrix -> matrix -> matrix
+
+(** Pointwise addition. *)
+val add : matrix -> matrix -> matrix
+
+(** Pointwise subtraction. *)
+val subtract : matrix -> matrix -> matrix
 
 (** Multiplies a column vector, given in the form of a list, by a matrix. 
     The result is another column vector. *)

@@ -20,9 +20,16 @@ let create_square_matrix n f =
 let get_element m r c =
     float_of_elt (OCamlMatrix.Matrix.EltMatrix.get_elt m (r,c))
 
+let identity_matrix n =
+    create_square_matrix n (fun r c -> if r = c then 1.0 else 0.0)
+
 let invert = OCamlMatrix.Matrix.EltMatrix.inverse
 
 let multiply = OCamlMatrix.Matrix.EltMatrix.mult
+
+let add = OCamlMatrix.Matrix.EltMatrix.add
+
+let subtract m1 m2 = add m1 (OCamlMatrix.Matrix.EltMatrix.scale m2 (elt_of_float (-1.0)))
 
 let mult_vec_by xs m =
     let indices = map_tr (fun x -> x + 1) (range 0 (List.length xs)) in
