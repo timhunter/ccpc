@@ -26,12 +26,12 @@ val add : matrix -> matrix -> matrix
 (** Pointwise subtraction. *)
 val subtract : matrix -> matrix -> matrix
 
-(** Multiplies a column vector, given in the form of a list, by a matrix. 
-    The result is another column vector. *)
+(** Multiplies a row vector, given in the form of a list, by a matrix. 
+    The result is another row vector. *)
 val mult_vec_by : float list -> matrix -> float list
 
-(** Multiplies a matrix by a row vector, given in the form of a list.
-    The result is another row vector. *)
+(** Multiplies a matrix by a column vector, given in the form of a list.
+    The result is another column vector. *)
 val mult_by_vec : matrix -> float list -> float list
 
 (** Prints out a matrix. Used for debugging. *)
