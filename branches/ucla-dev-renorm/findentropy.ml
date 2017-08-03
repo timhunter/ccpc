@@ -33,6 +33,10 @@ let find_entropy rules start_symbol =
     Matrix.print mi ;
     Printf.printf "And here's their product:\n" ;
     Matrix.print (Matrix.multiply m mi) ;
+    Printf.printf "Multiplying original matrix by [3,4]:\n" ;
+    Printf.printf "%s\n" (show_list string_of_float (Matrix.mult_vec_by [3.0;4.0] m)) ;
+    Printf.printf "Multiplying [3,4] by original matrix:\n" ;
+    Printf.printf "%s\n" (show_list string_of_float (Matrix.mult_by_vec m [3.0;4.0])) ;
     (*** end dummy code ***)
 
     0.0
