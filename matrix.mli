@@ -1,18 +1,28 @@
 
-(** A square matrix of floating point numbers. *)
+(** A square matrix of floating point numbers, with a collection of strings acting as the labels 
+    of both the rows and the columns; in other words, it's approximately a two-dimensional lookup 
+    table indexed by strings. *)
 type matrix
 
+(** An exception indicating that we've tried to use a string as an index that does not 
+    appear in the relevant matrix's list of indices. *)
+exception IndexingError of (string * string list)
+
 (** Creates a square matrix with elements given by the provided function. 
-    Specifically [create_square_matrix n f] produces an [n]-by-[n] matrix 
-    which has the value [f i j] at position [i,j]. *)
-val create_square_matrix : int -> (int -> int -> float) -> matrix
+    Specifically [create_square_matrix strs f] produces square matrix with both 
+    rows and columns indexed by the list [strs], which has the value [f x y] at 
+    the [x]-row in the [y]-column. *)
+val create_square_matrix : string list -> (string -> string -> float) -> matrix
 
-(** Returns the element at the specified position. The first argument is the zero-indexed row number, 
-    the second argument is the zero-indexed column number. *)
-val get_element : matrix -> int -> int -> float
+(** Returns the element at the specified position. The first [string] argument picks out the row, 
+    and the second picks out the column. *)
+val get_element : matrix -> string -> string -> float
 
-(** Returns the identity matrix of the specified dimension. *)
-val identity_matrix : int -> matrix
+(** Returns the strings that are valid indices for this matrix. *)
+val get_indices : matrix -> string list
+
+(** Returns the identity matrix with rows and columns indexed by the provided list of strings. *)
+val identity_matrix : string list -> matrix
 
 (** Inverts a matrix. *)
 val invert : matrix -> matrix
