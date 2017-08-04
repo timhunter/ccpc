@@ -22,10 +22,11 @@ let find_entropy rules start_symbol =
     (*** end dummy code ***)
 
     (*** dummy code showing manipulation of matrices ***)
-    let m = Matrix.create_square_matrix 2 (fun r -> fun c -> match (r,c) with (0,0) -> 4.0
-                                                                            | (0,1) -> 7.0
-                                                                            | (1,0) -> 2.0
-                                                                            | (1,1) -> 6.0) in
+    let m = Matrix.create_square_matrix ["NP";"VP"] (fun r -> fun c -> match (r,c) with
+                                                                        | ("NP","NP") -> 4.0
+                                                                        | ("NP","VP") -> 7.0
+                                                                        | ("VP","NP") -> 2.0
+                                                                        | ("VP","VP") -> 6.0) in
     Printf.printf "Starting with this matrix:\n" ;
     Matrix.print m ;
     let mi = Matrix.invert m in
