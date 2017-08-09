@@ -2,6 +2,7 @@
 open Util
 open Rule
 
+exception Failure of string
 (* All the work will go here. *)
 (* The arguments are an existing grammar (list of rules) to be normalized and that grammar's start symbol. 
  * The return value is a pair; the first member is the total probability mass associated with the start 
@@ -19,6 +20,114 @@ let renormalize_grammar rules start_symbol =
     ) rules ;
     (*** end dummy code ***)
     (0.0, rules)
+
+
+(****************************************************************************************)
+(***Junyi's implementation of findMututallyRecursiveSets***)
+
+(* remove dupilcated from the rules *)
+let removeDup xs x = 
+    if List.mem x xs then xs else x:: xs;;
+
+let remove_from_left xs = List.rev (List.fold_left removeDup [] xs);;
+
+(* get all the nonterminals in the rules *)
+let getAllNonterm rules = 
+    remove_from_left (List.map (fun r -> get_nonterm r) rules);;
+
+(* helper function for reachable
+ * merge two list in a way that no item is duplicated
+ *)
+let mergeList l1 l2 = 
+    remove_from_left (List.append l1 l2);;
+
+(* helper function for reachable
+ * take a nonterminal, a rule and a list as arguments. 
+ * If 1. the nonterminal matches 2.  the righthand side is nonterminating 3.the righthand side has not appeared in the list
+ * push the right handside to the list (to be analyzed later)
+ *)
+let reachableHelper nonterm rule acc =
+    if (nonterm = get_nonterm rule) then
+        match (get_expansion rule) with
+          | PublicTerminating str -> acc
+          | PublicNonTerminating (nts,_) -> mergeList acc (Nelist.to_list nts)
+    else acc;; 
+
+(* go through the rules and collect all the right hand side in a no duplicated way*)
+let reachableHelper2 nonterm rules acc =
+    List.fold_left mergeList [] (List.map (fun r -> reachableHelper nonterm r acc) rules);;
+
+(* find certain element from the list and return its index *)
+let rec find x lst = 
+     match lst with
+      | [] -> raise (Failure "Not Found")
+      | h :: t -> if x = h then 0 else 1 + find x t;;
+
+(* print out a list of nonterminals that this symbol can reach 
+   acc is used to store all the reachable nonterminals and avoid loop, the default acc for a nonterm is itself
+*)
+let rec reachable nonterm rules acc =  
+     match acc with
+      | [] -> raise (Failure "acc could not be empty")
+      | h::t -> let temp = reachableHelper2 nonterm rules acc in
+                  let index = find nonterm temp in
+                   if (List.length temp = index + 1) then temp
+                   else reachable (List.nth temp (index + 1)) rules temp;; 
+
+(* test whether two nonterminals are mututally reachable *)
+let mutallyReachable nonTermList reachableList nonTerm1 nonTerm2 = 
+    let index2 = find nonTerm2 nonTermList in
+      List.mem nonTerm1 (List.nth reachableList index2);;
+(* remove all nonterminals that A can reach to but could not reach A *)
+let mutallyReachable2 nonTermList reachableList nonTerm1 =
+    let index1 = find nonTerm1 nonTermList in
+    let workingCopy = List.nth reachableList index1 in
+      List.filter (fun ele -> mutallyReachable nonTermList reachableList nonTerm1 ele) workingCopy;;
+
+(* if return true, the two lists are equivalent. If return false, then the lists are not equivalent*)
+let equalStringList l1 l2 = 
+    if (List.length l1 = List.length l2) then not (List.mem false (List.map (fun ele -> List.mem ele l2) l1))
+    else false;;
+
+(* similar to List.mem, check whether this element appeared later *)
+let rec existEquivalent l ll =
+    match ll with
+      | [] -> false
+      | h::t -> if (equalStringList l h ) then true else existEquivalent l t;;
+
+(* to remove lists that share the same element, for example [A;B] and [B;A]*)
+let removeDupList x xs = 
+    if (existEquivalent x xs) then xs else x::xs ;;
+
+let removeDupListFromLeft xs = List.fold_right removeDupList xs [];;
+
+let getMutuallyRecursiveSets rules =
+    let nonTermList = getAllNonterm rules in
+      let reachableList = List.map (fun nonterm -> reachable nonterm rules [nonterm]) nonTermList in
+        removeDupListFromLeft (List.rev (List.map (fun ele -> mutallyReachable2 nonTermList reachableList ele) nonTermList));;  
+
+(* test function used to print out*)
+let rec print_list_string myList = 
+  match myList with
+    | [] -> print_endline "]"
+    | head::body -> 
+          begin
+          Printf.printf "\"%s\"; " head;
+          print_list_string body
+          end;;
+
+(* test function*)
+let rec print_string_list myList = 
+  match myList with
+    | [] -> print_endline "]"
+    | head::body ->
+        begin
+          Printf.printf "[";
+          print_list_string head;
+          print_string_list body
+        end;;
+
+
 
 
 (****************************************************************************************)
@@ -300,6 +409,10 @@ let main () =
 
         Printf.printf "(* \"probability = %f\" *)\n" prob ;
         List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
+        (* for testing recursive sets *)
+ (*        List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules;
+        Printf.printf "[";
+        print_string_list (getMutuallyRecursiveSets rules); *)
     )
 
 let _ = if (!Sys.interactive) then () else main ()
