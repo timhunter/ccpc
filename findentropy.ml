@@ -6,6 +6,29 @@ open Rule
 (* The arguments are an existing grammar (list of rules) and that grammar's start symbol. 
  * The return value is the entropy of the start symbol in that grammar.
  *)
+
+let get_nonterminals rules start_symbol =
+  let nonterms =
+    (List.fold_left
+       (fun acc rule ->
+	 let n_t = get_nonterm rule in
+	 if (List.mem n_t acc || n_t = start_symbol) then acc else n_t::acc)
+       []
+       rules
+    ) in
+  start_symbol::nonterms
+
+       
+let get_i_rules rules i =
+   List.filter (fun r -> (get_nonterm r) = i) rules
+
+let helper rule j =
+  match (get_expansion rule) with
+  | PublicTerminating _ -> 0
+  | PublicNonTerminating (rights, recipes) ->
+     Nelist.fold_l (fun acc e -> if e = j then acc + 1 else acc) 0 rights 
+
+
 let find_entropy rules start_symbol =
 
     (*** dummy code showing manipulation of rules ***)
@@ -55,8 +78,29 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let entropy = find_entropy rules start_symbol in
+
+	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (get_nonterminals rules start_symbol)); 
+
+	Printf.printf "\nget_irules\n\n";
+	List.iter (fun r ->
+        	Printf.printf "This rule expands %s with weight %f\n"
+                	(get_nonterm r)
+               		(float_of_weight (get_weight r)) ;
+
+	match (get_expansion r) with
+        | PublicTerminating str -> Printf.printf "   and the right-hand side is the terminal '%s'\n" str
+        | PublicNonTerminating (nts,_) -> Printf.printf "   and the right-hand side has nonterminals %s\n" (show_list (fun x -> x) (Nelist.to_list nts))
+
+    )	(get_i_rules rules "NBAR"); 
+
+	match rules with
+	| h::t -> Printf.printf "\nhelper\n(%s) NPs in right of first rule:   " (string_of_int (helper h "NP"))
+	| _ -> Printf.printf "shut up compiler";
+
         Printf.printf "(* \"entropy = %f\" *)\n" entropy
     )
+
+
 
 let _ = if (!Sys.interactive) then () else main ()
 
