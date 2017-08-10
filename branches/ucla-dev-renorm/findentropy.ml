@@ -7,17 +7,6 @@ open Rule
  * The return value is the entropy of the start symbol in that grammar.
  *)
 
-let get_nonterminals rules start_symbol =
-  let nonterms =
-    (List.fold_left
-       (fun acc rule ->
-	 let n_t = get_nonterm rule in
-	 if (List.mem n_t acc || n_t = start_symbol) then acc else n_t::acc)
-       []
-       rules
-    ) in
-  start_symbol::nonterms
-
        
 let get_i_rules rules i =
    List.filter (fun r -> (get_nonterm r) = i) rules
@@ -79,7 +68,7 @@ let main () =
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let entropy = find_entropy rules start_symbol in
 
-	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (get_nonterminals rules start_symbol)); 
+	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (Grammar.get_nonterminals rules start_symbol)); 
 
 	Printf.printf "\nget_irules\n\n";
 	List.iter (fun r ->

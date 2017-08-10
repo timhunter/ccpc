@@ -36,6 +36,21 @@ let get_input_grammar grammar_file =
 
 (******************************************************************************************)
 
+let get_nonterminals rules start_symbol =
+  let nonterms =
+    (List.fold_left
+       (fun acc rule ->
+	 let n_t = get_nonterm rule in
+	 if (List.mem n_t acc || n_t = start_symbol) then acc else n_t::acc)
+       []
+       rules
+    ) in
+  start_symbol::nonterms
+
+(******************************************************************************************)
+
+
+
 let get_guillaumin_dict filename =
 
 	let channel =
