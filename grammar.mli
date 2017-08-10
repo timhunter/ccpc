@@ -21,3 +21,5 @@ val get_input_grammar : string -> (Rule.r list * string)
 val get_guillaumin_dict : string -> (string, string) Hashtbl.t
 
 val drawgraph : Chart.chart -> Chart.item list -> string list -> string -> unit
+
+val get_nonterminals : Rule.r list -> string -> string list
