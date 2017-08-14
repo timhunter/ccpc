@@ -4,6 +4,8 @@ open Rule
 
 exception Failure of string
 
+type mode = Naive | Newton
+
 (****************************************************************************************)
 (***Junyi's implementation of findMututallyRecursiveSets***)
 
@@ -287,7 +289,7 @@ let rec naiveMethod (mutuallyRecursiveSets: string list list) (initialTable: ind
 
 (****************************************************************************************)
 (***Total of Yi and Junyi's implementations***)
-let naiveMethodTotal (rules: Rule.r list) (r: float)
+let naiveMethodTotal mode (rules: Rule.r list) (r: float)
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
 = naiveMethod (getMutuallyRecursiveSets rules) initialTable rules r ;;
 (* (Settled true) (Grammar.choose_start_symbol(getAllNonterm rules));; *)
@@ -298,7 +300,7 @@ let naiveMethodTotal (rules: Rule.r list) (r: float)
  * The return value is a pair; the first member is the total probability mass associated with the start 
  * symbol in the argument grammar, and the second member is the list of rules with reweighted probabilities. 
  *)
-let renormalize_grammar rules start_symbol =
+let renormalize_grammar mode rules start_symbol =
     (*** dummy code showing manipulation of rules ***)
     List.iter (fun r ->
         (* get_nonterm and get_weight are from rule.ml; float_of_weight is from util.ml, see also other weight functions there *)
@@ -308,13 +310,17 @@ let renormalize_grammar rules start_symbol =
         | PublicNonTerminating (nts,_) -> Printf.printf "   and the right-hand side has nonterminals %s\n" (show_list (fun x -> x) (Nelist.to_list nts))
                                                                                                             (* show_list is another util.ml function *)
     ) rules ;
+    Printf.printf "Mode is %s\n" (match mode with Naive -> "naive" | Newton -> "Newton's") ;
     (*** end dummy code ***)
-    (naiveMethodTotal rules 0.0000001 (Settled true) start_symbol, rules)
-
+    (naiveMethodTotal mode rules 0.0000001 (Settled true) start_symbol, rules)
 
 let main () =
+    let mode = ref Naive in
     let grammar_file = ref "" in
-    let speclist = Arg.align( [("-g", Arg.Set_string(grammar_file), " WMCFG grammar file (obligatory)") ] ) in
+    let speclist = Arg.align([  ("-g",      Arg.Set_string(grammar_file),           " WMCFG grammar file (obligatory)") ;
+                                ("-naive",  Arg.Unit(fun () -> mode := Naive),      " use naive method") ;
+                                ("-newton", Arg.Unit(fun () -> mode := Newton),     " use Newton's method") ;
+                            ]) in
     let usage_msg = Printf.sprintf "Usage: %s -g <grammar file>" Sys.argv.(0) in
     let superfluous_arg s = raise (Arg.Bad (Printf.sprintf "Bad extra argument: %s" s)) in
     Arg.parse speclist superfluous_arg usage_msg ;
@@ -324,7 +330,7 @@ let main () =
     ) else (
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
-        let (prob, new_rules) = renormalize_grammar rules start_symbol in
+        let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
 (*         let f=naiveMethodTotal rules 0.00001 (Settled true) "S" in
         Printf.printf "this result is %f" f; *)
 
