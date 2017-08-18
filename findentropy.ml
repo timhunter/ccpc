@@ -7,33 +7,30 @@ open Rule
  * The return value is the entropy of the start symbol in that grammar.
  *)
 
+let get_nonterminals rules start_symbol =
+  let nonterms =
+    (List.fold_left
+       (fun acc rule ->
+	 let n_t = get_nonterm rule in
+	 if (List.mem n_t acc || n_t = start_symbol) then acc else n_t::acc)
+       []
+       rules
+    ) in
+  start_symbol::nonterms
+
        
 let get_i_rules rules i =
    List.filter (fun r -> (get_nonterm r) = i) rules
 
-               
-let helper j rule =
+let helper rule j =
   match (get_expansion rule) with
-  | PublicTerminating _ -> 0.
+  | PublicTerminating _ -> 0
   | PublicNonTerminating (rights, recipes) ->
-     let n_j_emissions =
-       Nelist.fold_l (fun acc e -> if e = j then acc +. 1. else acc) 0. rights in
-     (Util.float_of_weight (Rule.get_weight rule)) *. n_j_emissions
-
-
-let get_fertility_matrix rules start_symbol =
-  let nonterms = get_nonterminals rules start_symbol in
-  let func =
-    fun i j ->
-    let i_rules = get_i_rules rules i in
-    let sum l = List.fold_left (+.) 0. l in
-    sum (List.map (helper j) i_rules)
-        in
-  Matrix.create_square_matrix nonterms func
+     Nelist.fold_l (fun acc e -> if e = j then acc + 1 else acc) 0 rights 
 
 
 let find_entropy rules start_symbol =
-  
+
     (*** dummy code showing manipulation of rules ***)
     List.iter (fun r ->
         (* get_nonterm and get_weight are from rule.ml; float_of_weight is from util.ml, see also other weight functions there *)
@@ -97,7 +94,7 @@ let main () =
     )	(get_i_rules rules "NBAR"); 
 
 	match rules with
-	| h::t -> Printf.printf "\nhelper\n(%s) NPs in right of first rule:   " (string_of_float (helper "NP" h))
+	| h::t -> Printf.printf "\nhelper\n(%s) NPs in right of first rule:   " (string_of_int (helper h "NP"))
 	| _ -> Printf.printf "shut up compiler";
 
         Printf.printf "(* \"entropy = %f\" *)\n" entropy
@@ -106,3 +103,4 @@ let main () =
 
 
 let _ = if (!Sys.interactive) then () else main ()
+

@@ -41,7 +41,7 @@ let reachableHelper nonterm rule acc =
 let reachableHelper2 nonterm rules acc =
     List.fold_left mergeList [] (List.map (fun r -> reachableHelper nonterm r acc) rules);;
 
-(* find certain element from the list and return its index *)
+(* find the first element from the list and return its index *)
 let rec find x lst = 
      match lst with
       | [] -> raise (Failure "Not Found")
@@ -89,6 +89,94 @@ let getMutuallyRecursiveSets rules =
     let nonTermList = getAllNonterm rules in
       let reachableList = List.map (fun nonterm -> reachable nonterm rules [nonterm]) nonTermList in
         removeDupListFromLeft (List.rev (List.map (fun ele -> mutallyReachable2 nonTermList reachableList ele) nonTermList));;  
+
+(* Now we need to put these recursive sets into orders *)
+
+(* helper function for left2num. for an element, find out which set includes it. Counter has default value 0*)
+let rec findFromListofList ele ll counter= 
+      match ll with
+       | [] -> raise (Failure "Not Found")
+       | h::t -> if (List.mem ele h) then counter else findFromListofList ele t (counter + 1);;
+
+(* Assign every rules' left hand side nonterminal a number*)
+let left2num mutuallyRecursiveSets rules= 
+    let lhs = List.map (fun r -> get_nonterm r) rules in
+      List.map (fun ele -> findFromListofList ele mutuallyRecursiveSets 0) lhs;;
+
+(* If the right hand side is terminating, then return empty list. Otherwise, convert the right hand side symbols into numbers*)
+(* Also remove the number that is on the lhs*)
+let right2numHelper lhsNum mutuallyRecursiveSets rule=
+    match (get_expansion rule) with
+          | PublicTerminating str -> []
+          | PublicNonTerminating (nts,_) -> let rightHandSide = Nelist.to_list nts in 
+                                              List.filter (fun x -> x <> lhsNum) (List.map (fun ele -> findFromListofList ele mutuallyRecursiveSets 0) rightHandSide);;
+
+(* Convert the right hand side of the rules into int list list*)
+let right2num lhsList mutuallyRecursiveSets rules=
+    List.map (fun r -> right2numHelper (List.nth lhsList (find r rules)) mutuallyRecursiveSets r) rules;;
+
+(* find an element from lst1 that does not exist in lst2*)
+let rec findUnique lst1 lst2=
+    match lst1 with
+      | [] -> raise (Failure "Not Found") (*This condition shall not appear*)
+      | h::t -> if (List.mem h lst2) then findUnique t lst2 else h;;
+
+(* same as zip function in python, combine two list together*)
+let rec zip lst1 lst2=
+    match (lst1,lst2) with
+      | ([],[]) -> []
+      | (x::xs, y::ys) -> (x,y) :: (zip xs ys)
+      | _ -> raise (Failure "unmatched left and right hand side");;
+
+(* the default value of lst1 and lst2 are []*)
+let rec unzip zippedList lst1 lst2= 
+    match zippedList with
+      | [] -> (List.rev lst1, List.rev lst2)
+      | h::t -> unzip t ((fst h)::lst1) ((snd h)::lst2);;
+
+(* convert the rules to number tuples, with the first element as lhs and second element as rhs*)
+let convert2tuple mutuallyRecursiveSets rules=
+    let lhsList = left2num mutuallyRecursiveSets rules in
+      let rhsList = right2num lhsList mutuallyRecursiveSets rules in
+        zip lhsList rhsList;;
+
+let findRemoveNum zippedList = 
+    let (lst1, lst2) = unzip zippedList [] [] in 
+        findUnique lst1 (List.flatten lst2);;
+        
+(* If the first element of the tuple equal to removeNum, then remove it from the list*)
+let tupleReduction removeNum zippedList=
+    List.filter (fun tup -> (fst tup) <> removeNum) zippedList;;
+
+(* acc has a default value of []*)
+let rec getOrder rules acc zippedList= 
+(*     let mutuallyRecursiveSets = getMutuallyRecursiveSets rules in
+      let zippedList = convert2tuple mutuallyRecursiveSets rules in  *)
+        match zippedList with 
+          | [] -> acc
+          | _ -> let removeNum = findRemoveNum zippedList in
+                    getOrder rules (removeNum::acc) (tupleReduction removeNum zippedList);;
+
+(* acc has a default value of []*)
+(* This function is used to tease out nonterminals that are not depended by any other
+nonterminals. By doing this we can avoid the problem of order*)
+let rec outputInOrder mutuallyRecursiveSets order acc= 
+    match order with
+      | [] -> acc
+      | h::t -> outputInOrder mutuallyRecursiveSets t ((List.nth mutuallyRecursiveSets h) :: acc)
+
+
+let getOrderedMutuallyRecursiveSets rules = 
+    let mutuallyRecursiveSets = getMutuallyRecursiveSets rules in 
+      let zippedList = convert2tuple mutuallyRecursiveSets rules in
+        let order = getOrder rules [] zippedList in 
+          List.rev (outputInOrder mutuallyRecursiveSets order []);;
+
+
+
+
+
+
 
 (* test function used to print out*)
 let rec print_list_string myList = 
@@ -291,7 +379,7 @@ let rec naiveMethod (mutuallyRecursiveSets: string list list) (initialTable: ind
 (***Total of Yi and Junyi's implementations***)
 let naiveMethodTotal mode (rules: Rule.r list) (r: float)
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
-= naiveMethod (getMutuallyRecursiveSets rules) initialTable rules r ;;
+= naiveMethod (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
 (* (Settled true) (Grammar.choose_start_symbol(getAllNonterm rules));; *)
 
 
@@ -427,11 +515,11 @@ let main () =
 
 
         Printf.printf "(* \"probability = %f\" *)\n" prob ;
-        List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
+(*         List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules; *)
         (* for testing recursive sets *)
- (*        List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules;
+        (* List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules;
         Printf.printf "[";
-        print_string_list (getMutuallyRecursiveSets rules); *)
+        print_string_list (getOrderedMutuallyRecursiveSets rules); *)
     )
 
 let _ = if (!Sys.interactive) then () else main ()
