@@ -22,7 +22,7 @@ let helper j rule =
 
 
 let get_fertility_matrix rules start_symbol =
-  let nonterms = get_nonterminals rules start_symbol in
+  let nonterms = Grammar.get_nonterminals rules start_symbol in
   let func =
     fun i j ->
     let i_rules = get_i_rules rules i in
@@ -82,7 +82,7 @@ let main () =
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let entropy = find_entropy rules start_symbol in
 
-	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (get_nonterminals rules start_symbol)); 
+	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (Grammar.get_nonterminals rules start_symbol)); 
 
 	Printf.printf "\nget_irules\n\n";
 	List.iter (fun r ->
