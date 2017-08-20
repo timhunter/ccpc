@@ -7,7 +7,7 @@ exception Failure of string
 type mode = Naive | Newton
 
 (****************************************************************************************)
-(***Junyi's implementation of findMututallyRecursiveSets***)
+(***implementation of getOrderedMutuallyRecursiveSets***)
 
 (* remove dupilcated from the rules *)
 let removeDup xs x = 
@@ -201,12 +201,8 @@ let rec print_string_list myList =
 
 
 
-
 (****************************************************************************************)
-(***Yi's naiveMethod implementation needing Junyi's findMutuallyRecursiveSets function***)
-(* (major function===naiveMethod) *)
-(*the naiveMethod takes in a ordered mutuallyRecursiveSets, an initialTable, rule list and threshold and
-returns a newTable which can tell you what Z value each non-terminal has within the threshold*)
+(*implementation of naive method and Newton's method*)
 
 
 (* the type used in the table function storing the in-progress Z value for all terminals at depth k
@@ -246,7 +242,7 @@ match stringList with
 |_->false;;
 
 
-(* helper function of oneNonTeminalOneRuleAtLevelK
+(* helper function
 return true if the two strings are in the same set
 return false otherwise *)
 let rec sameSet (nonterminal:string) (comparedString: string) (mutuallyRecursiveSets: string list list)=
@@ -257,31 +253,38 @@ match mutuallyRecursiveSets with
         else (sameSet nonterminal comparedString t)
 |_->false
 
-
+(****************************************************************************************)
+(*naive special function*)
 (*this function returns a float representing the probability of one expansion of one nonterminal at depth k based on
 either probability of other sameSet nonterminals at depth (k-1)
 or probability of other non-sameSet nonterminals's settled approximate
 *)
-let rec oneNonTeminalOneRuleAtLevelK (k:int)(nonterminal:string)(onePair:(string list*float))
+let rec naiveOneNonTeminalOneRuleAtLevelK (k:int)(nonterminal:string)(onePair:(string list*float))
 (someMiddleTable: indicator->string->float)(mutuallyRecursiveSets: string list list)=
 (*0.0;*)
 match onePair with
-|(h::t,f)-> (* (Printf.printf "I am here, the h is %s and the two floats are %f and %f \n" h (someMiddleTable Settled h)(oneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets));*)
+|(h::t,f)-> (* (Printf.printf "I am here, the h is %s and the two floats are %f and %f \n" h (someMiddleTable Settled h)(naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets));*)
         if (sameSet nonterminal h mutuallyRecursiveSets) then (someMiddleTable (Depth (k-1)) h)*. 
-        (oneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets)
-    else (someMiddleTable Settled h)*. (oneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets)
+        (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets)
+    else (someMiddleTable Settled h)*. (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets)
 
 |(_,f)-> f;;
+(****************************************************************************************)
 
 
-let rec oneNonTeminalAtLevelK (k:int)(nonterminal:string)(alllist:(string list*float) list)
+(*this is where naive Method and Newton Method take apart*)
+let rec oneNonTeminalAtLevelK mode (k:int)(nonterminal:string)(alllist:(string list*float) list)
 (someMiddleTable: indicator->string->float)(mutuallyRecursiveSets: string list list)
-=match alllist with
-|(a,b)::t-> (* (Printf.printf "the head is %f and the float is %f \n" b 
-(oneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets)); *)
-(oneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets) +. 
-(oneNonTeminalAtLevelK k nonterminal t someMiddleTable mutuallyRecursiveSets)
-|_-> 0.0
+=match mode with
+  |Naive -> (match alllist with
+                |(a,b)::t-> (* (Printf.printf "the head is %f and the float is %f \n" b 
+                  (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets)); *)
+                  (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets) +. 
+                  (oneNonTeminalAtLevelK mode k nonterminal t someMiddleTable mutuallyRecursiveSets)
+                | _ -> 0.0)
+  (*Newton's Method needs to be implemented here*)
+  |Newton -> 0.0
+  
 
 
 (* get a string as nontermal and a rule lits, return a list of tuples consisting of 
@@ -300,26 +303,28 @@ let rec findRule (nonterminal:string) (rules: Rule.r list)(* =[(["nonterminal1";
 | _-> [];;
 
 
-(* the naiveOneSet is the helper function for naiveMethod *)
-let rec naiveOneSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float) 
+(* the settleOneSet is the helper function for fillInTableBySets *)
+let rec oneSetAtLevelK mode (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float) 
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
 =
 (* fun (k':indicator) (s':string) -> 5.0;; *)
 match oneSet with
 | h::t -> 
-(* Printf.printf "I am adding the value %.20f for %s at level %i \n" (oneNonTeminalAtLevelK k h (findRule h rules) someMiddleTable mutuallyRecursiveSets) h k; *)
+(* Printf.printf "I am adding the value %.20f for %s at level %i \n" (oneNonTeminalAtLevelK mode k h (findRule h rules) someMiddleTable mutuallyRecursiveSets) h k; *)
 let newTable = (add someMiddleTable (Depth k) h 
-    (oneNonTeminalAtLevelK k h (findRule h rules) someMiddleTable mutuallyRecursiveSets))  in
-(naiveOneSetAtLevelK k t newTable rules mutuallyRecursiveSets)
+    (oneNonTeminalAtLevelK mode k h (findRule h rules) someMiddleTable mutuallyRecursiveSets))  in
+(oneSetAtLevelK mode k t newTable rules mutuallyRecursiveSets)
 | _ -> someMiddleTable;;
 
 
+(*helper of oneSetWithInRangeAtLevelK, check whether one non-terminal has change below shreshold at depth k*)
 let oneNonTerminalWithInRangeAtLevelK (r:float) (someMiddleTable: indicator->string->float) 
 (k:int) (nonterminal:string)=
 (*false*)
 abs_float((someMiddleTable (Depth k) nonterminal)-.(someMiddleTable (Depth (k-1)) nonterminal))<=r 
 
 
+(*whether every element in a given set has change below shreshold at depth k*)
 let rec oneSetWithInRangeAtLevelK (r:float) (someMiddleTable: indicator->string->float) 
 (k:int) (oneSet:string list)=
 (* false;; *)
@@ -332,6 +337,7 @@ match oneSet with
 | _ -> true;;
 
 
+(*settle down the Z value for the set*)
 let rec settleTableForSet (oneSet: string list) (k: int) (someMiddleTable: indicator->string->float)
 =match oneSet with
 | h::t-> 
@@ -341,51 +347,45 @@ let updateTable= add someMiddleTable Settled h (someMiddleTable (Depth k) h) in
 | _-> someMiddleTable;;
 
 
-let rec naiveOneSetCheckAtLevelKAndIncrement (k:int) (r:float)(oneSet: string list)(someMiddleTable: indicator->string->float)
+let rec oneSetCheckAtLevelKAndIncrement mode (k:int)(r:float)(oneSet: string list)(someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)=
 if (oneSetWithInRangeAtLevelK r someMiddleTable k oneSet) 
 then (settleTableForSet oneSet k someMiddleTable)
-else (naiveOneSetCheckAtLevelKAndIncrement
+else (oneSetCheckAtLevelKAndIncrement mode
 (k+1) r oneSet 
-(naiveOneSetAtLevelK (k+1) oneSet someMiddleTable rules mutuallyRecursiveSets)
+(oneSetAtLevelK mode (k+1) oneSet someMiddleTable rules mutuallyRecursiveSets)
 rules mutuallyRecursiveSets
 );;
 
  
-(* the naiveOneSet is the helper function for naiveMethod 
+(* the settleOneSet is the helper function for fillInTableBySets 
 This one calculates the Z value from depth 0 to depth k needed for a set of nonterminals and settle down their values
 *)
-let rec naiveOneSet (oneSet: string list) (someMiddleTable: indicator->string->float) (rules: Rule.r list) 
+let rec settleOneSet mode (oneSet: string list) (someMiddleTable: indicator->string->float) (rules: Rule.r list) 
 (r: float)(mutuallyRecursiveSets: string list list)=
 (* fun (k':indicator) (s':string) -> 5.0;; *)
-(naiveOneSetCheckAtLevelKAndIncrement
+(oneSetCheckAtLevelKAndIncrement mode
 1 r oneSet 
-(naiveOneSetAtLevelK 1 oneSet someMiddleTable rules mutuallyRecursiveSets)
+(oneSetAtLevelK mode 1 oneSet someMiddleTable rules mutuallyRecursiveSets)
 rules mutuallyRecursiveSets
 );;
 
 
-(*the naiveMethod takes in a ordered mutuallyRecursiveSets, an initialTable, rule list and threshold and
+(*the fillInTableBySets takes in a ordered mutuallyRecursiveSets, an initialTable, rule list and threshold and
 returns a newTable which can tell you what Z value each non-terminal has within the threshold*)
-let rec naiveMethod (mutuallyRecursiveSets: string list list) (initialTable: indicator->string->float)
-(rules: Rule.r list) (r: float)
+let rec fillInTableBySets mode (mutuallyRecursiveSets: string list list) (initialTable: indicator->string->float)
+(rules: Rule.r list) (r: float) 
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
 =match mutuallyRecursiveSets with
-|h::t-> let updateTable= (naiveOneSet h initialTable rules r mutuallyRecursiveSets) in
-(naiveMethod t updateTable rules r)
+|h::t-> let updateTable= (settleOneSet mode h initialTable rules r mutuallyRecursiveSets) in
+(fillInTableBySets mode t updateTable rules r)
 |_-> initialTable;;
 
 
-(***Yi's naiveMethod implementation needing Junyi's findMutuallyRecursiveSets function***)
-(****************************************************************************************)
-
-
-(****************************************************************************************)
-(***Total of Yi and Junyi's implementations***)
-let naiveMethodTotal mode (rules: Rule.r list) (r: float)
+let getTable mode (rules: Rule.r list) (r: float)
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
-= naiveMethod (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
-(* Settled (Grammar.choose_start_symbol(getAllNonterm rules));; *)
+= fillInTableBySets mode (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
+
 
 
 (* All the work will go here. *)
@@ -405,7 +405,7 @@ let renormalize_grammar mode rules start_symbol =
     ) rules ;
     Printf.printf "Mode is %s\n" (match mode with Naive -> "naive" | Newton -> "Newton's") ;
     (*** end dummy code ***)
-    (naiveMethodTotal mode rules 0.0000001 Settled start_symbol, rules)
+    (getTable mode rules 0.0000001 Settled start_symbol, rules)
 
 let main () =
     let mode = ref Naive in
@@ -428,12 +428,12 @@ let main () =
 
 
 (*************************************************************************************************)
-(***Test for Yi's naiveMethod implementation needing Junyi's findMutuallyRecursiveSets function***)
+(*tests for functions*)
 
-(* test for naiveMethod #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg *)
+(* test for fillInTableBySets #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg *)
      (* let mutuallyRecursiveSets4= [["C"];["A";"B"];["S"]] in
         let range=0.00001 in
-        let finalTable=naiveMethod mutuallyRecursiveSets4 initialTable rules range in
+        let finalTable=fillInTableBySets mutuallyRecursiveSets4 initialTable rules range in
         List.iter(fun x-> 
             Printf.printf "this is %s and the probability of it within the range %f is %f \n"
             x range (finalTable Settled x) 
@@ -455,24 +455,24 @@ let main () =
 
 
 
-(*test for oneNonTeminalOneRuleAtLevelK #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg*)
+(*test for naiveOneNonTeminalOneRuleAtLevelK #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg*)
       (*let mutuallyRecursiveSets3= [["C"];["A";"B"]] in 
         let someMiddleTable = add (add (add initialTable (Depth 1) "C" 0.5) (Depth 2) "C" 2.0) Settled "C" 1.0 in
-        let prob_A_level1= (oneNonTeminalAtLevelK 1 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for oneNonTeminalAtLevelK for A at depth 1 the answer should be 0 \n";
+        let prob_A_level1= (oneNonTeminalAtLevelK mode 1 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
+        Printf.printf "test for oneNonTeminalAtLevelK mode for A at depth 1 the answer should be 0 \n";
         Printf.printf "the answer is actually %f \n" prob_A_level1;
 
-        let prob_B_level1= (oneNonTeminalAtLevelK 1 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for oneNonTeminalAtLevelK for B at depth 1 the answer should be 0.75 \n";
+        let prob_B_level1= (oneNonTeminalAtLevelK mode 1 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
+        Printf.printf "test for oneNonTeminalAtLevelK mode for B at depth 1 the answer should be 0.75 \n";
         Printf.printf "the answer is actually %f \n" prob_B_level1; *)        
       (*let mutuallyRecursiveSets3= [["C"];["A";"B"]] in 
         let someMiddleTable = add (add (add (add (add initialTable (Depth 1) "C" 0.5) (Depth 2) "C" 2.0) Settled "C" 1.0) (Depth 1) "A" 0.0) (Depth 1) "B" 0.75in
-        let prob_A_level2= (oneNonTeminalAtLevelK 2 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for oneNonTeminalAtLevelK for A at depth 2 the answer should be 0.375 \n";
+        let prob_A_level2= (oneNonTeminalAtLevelK mode 2 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
+        Printf.printf "test for oneNonTeminalAtLevelK mode for A at depth 2 the answer should be 0.375 \n";
         Printf.printf "the answer is actually %f \n" prob_A_level2;
 
-        let prob_B_level2= (oneNonTeminalAtLevelK 2 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for oneNonTeminalAtLevelK for B at depth 2 the answer should be 0.75 \n";
+        let prob_B_level2= (oneNonTeminalAtLevelK mode 2 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
+        Printf.printf "test for oneNonTeminalAtLevelK mode for B at depth 2 the answer should be 0.75 \n";
         Printf.printf "the answer is actually %f \n" prob_B_level2; *)
 
 
@@ -512,17 +512,7 @@ let main () =
             modifiedlist; *)
 
 
-
-(****************************************************************************************)
-(***Test for Yi's naiveMethod implementation needing Junyi's findMutuallyRecursiveSets function***)
-
-
         Printf.printf "(* \"probability = %f\" *)\n" prob ;
-(*         List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules; *)
-        (* for testing recursive sets *)
-        (* List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules;
-        Printf.printf "[";
-        print_string_list (getOrderedMutuallyRecursiveSets rules); *)
     )
 
 let _ = if (!Sys.interactive) then () else main ()
