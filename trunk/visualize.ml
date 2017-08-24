@@ -44,22 +44,23 @@ let dlist_to_strings (f : 'a -> string) (lst : 'a dlist) : string list =
 
 (************************************************************************************************)
 
-let check_exit_code code name =
+let check_exit_code code command description =
 	match code with
 	| Unix.WEXITED 0 -> ()
-	| Unix.WEXITED n -> Printf.eprintf "WARNING: %s exited with code %d\n" name n
-	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: %s was killed by signal number %d\n" name n
-	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: %s was stopped by signal number %d\n" name n
+	| Unix.WEXITED n -> Printf.eprintf "WARNING: %s exited with code %d\n" description n ;
+	                    Printf.eprintf "         The command was: %s\n" command ;
+	| Unix.WSIGNALED n -> Printf.eprintf "WARNING: %s was killed by signal number %d\n" description n
+	| Unix.WSTOPPED n -> Printf.eprintf "WARNING: %s was stopped by signal number %d\n" description n
 
 (************************************************************************************************)
 
 (* Assumes that the result is meant to be unique, and returns None if there is not exactly one line produced. *)
 let get_comment_data grammar_file filter_command =
+        let command = Printf.sprintf "cat %s | %s" grammar_file filter_command in
         let channel =
                 if not (Sys.file_exists grammar_file) then
                         failwith (Printf.sprintf "Specified grammar file does not exist: %s" grammar_file)
                 else
-                        let command = Printf.sprintf "cat %s | %s" grammar_file filter_command in
                         try Unix.open_process_in command
                         with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
         in
@@ -72,7 +73,7 @@ let get_comment_data grammar_file filter_command =
                         !acc
                 with End_of_file -> !acc
         in
-        check_exit_code (Unix.close_process_in channel) "Shell command reading grammar file" ;
+        check_exit_code (Unix.close_process_in channel) command "Shell command reading grammar file" ;
         match results with
         | (x::[]) -> Some x
         | _ -> None
@@ -83,13 +84,13 @@ let get_comment_data grammar_file filter_command =
    Returns a mapping from (lexical-string, feature-sequence) to ID.
    Note that since we are dealing only with lexical items, feature-sequence always begins with ":: " (never ": "). *)
 let get_stabler_index grammar_files prolog_file =
+	let command = Printf.sprintf "swipl -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
 	let channel =
 		if not (Sys.file_exists prolog_file) then
 			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
 		else if not (Sys.file_exists grammar_files.mg_file) then
 			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
 		else
-			let command = Printf.sprintf "swipl -s %s -q -t \"['%s'], showLexicon\" 2>/dev/null" prolog_file grammar_files.mg_file in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
@@ -109,7 +110,7 @@ let get_stabler_index grammar_files prolog_file =
 					Printf.eprintf "WARNING: Ignoring unexpected line in prolog output: %s\n" line
 			done
 		with End_of_file ->
-			check_exit_code (Unix.close_process_in channel) "Prolog shell command for getting dictionary"
+			check_exit_code (Unix.close_process_in channel) command "Prolog shell command for getting dictionary"
 	end ;
 	result
 
@@ -179,37 +180,37 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 	(* The prolog code knows to treat the heads of these lists as a "note" to be printed out as is, and treat the tails as derivations *)
 	let derivation_as_string (dlist,w) = "[" ^ (String.concat "," ((Printf.sprintf "%.12f" (float_of_weight w))::(dlist_to_strings string_of_int dlist))) ^ "]" in
 	let derivations_as_string = "[" ^ (String.concat "," (List.map derivation_as_string derivations)) ^ "]" in
+	if not (Sys.file_exists prolog_file) then
+		failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
+	else if not (Sys.file_exists grammar_files.mg_file) then
+		failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
+	else
+		let intro_lines = [ "Here are some lines of latex code that go at the top of the file."; 
+		                    "Other useful info can be added here.";
+		                    "\\\\\\\\begin{itemize}" ;
+		                    Printf.sprintf "\\\\\\\\item %s" mode_note ;
+		                    Printf.sprintf "\\\\\\\\item WMCFG grammar file: %s" grammar_files.wmcfg_file ;
+		                    Printf.sprintf "\\\\\\\\item md5sum for this grammar file: %s" (Digest.to_hex (Digest.file grammar_files.wmcfg_file)) ;
+		                    Printf.sprintf "\\\\\\\\item timestamp: %s" (get_timestamp ()) ;
+		                    "\\\\\\\\end{itemize}" ;
+		                  ] in
+		let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
+		let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\\(\\* entropy = [0-9\\.]* \\*\\)/ {print $4}'") with
+		                   | None -> "Could not find entropy"
+		                   | Some s -> try Printf.sprintf "Entropy = %.3f, with %d parses above %.3f"
+		                                                  (float_of_string s)
+		                                                  (List.length (take_while (fun (_,w) -> (float_of_weight w > const_THRESHOLD)) derivations))
+		                                                  const_THRESHOLD
+		                               with _ -> "Could not find entropy"
+		in
+		let prefix_note = match (get_comment_data grammar_files.wmcfg_file
+		                    "awk ' /^\\(\\* intersected with prefix: .* \\*\\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
+		                  | None -> "Could not find intersection prefix"
+		                  | Some s -> Printf.sprintf "Prefix: %s" s
+		in
+		let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s','%s',%s,'%s').\" 2>/dev/null" in
+		let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string prefix_note entropy_note derivations_as_string filename in
 	let channel =
-		if not (Sys.file_exists prolog_file) then
-			failwith (Printf.sprintf "Required prolog file does not exist: %s" prolog_file)
-		else if not (Sys.file_exists grammar_files.mg_file) then
-			failwith (Printf.sprintf "Required MG file does not exist: %s" grammar_files.mg_file)
-		else
-			let intro_lines = [ "Here are some lines of latex code that go at the top of the file."; 
-			                    "Other useful info can be added here.";
-			                    "\\\\\\\\begin{itemize}" ;
-			                    Printf.sprintf "\\\\\\\\item %s" mode_note ;
-			                    Printf.sprintf "\\\\\\\\item WMCFG grammar file: %s" grammar_files.wmcfg_file ;
-			                    Printf.sprintf "\\\\\\\\item md5sum for this grammar file: %s" (Digest.to_hex (Digest.file grammar_files.wmcfg_file)) ;
-			                    Printf.sprintf "\\\\\\\\item timestamp: %s" (get_timestamp ()) ;
-			                    "\\\\\\\\end{itemize}" ;
-			                  ] in
-			let intro_lines_as_string = "[" ^ (String.concat "," (List.map (Printf.sprintf "'%s'") intro_lines)) ^ "]" in
-			let entropy_note = match (get_comment_data grammar_files.wmcfg_file "sed 's/\\\"//g' | awk '/^\\(\\* entropy = [0-9\\.]* \\*\\)/ {print $4}'") with
-			                   | None -> "Could not find entropy"
-			                   | Some s -> try Printf.sprintf "Entropy = %.3f, with %d parses above %.3f"
-			                                                  (float_of_string s)
-			                                                  (List.length (take_while (fun (_,w) -> (float_of_weight w > const_THRESHOLD)) derivations))
-			                                                  const_THRESHOLD
-			                               with _ -> "Could not find entropy"
-			in
-			let prefix_note = match (get_comment_data grammar_files.wmcfg_file
-			                    "awk ' /^\\(\\* intersected with prefix: .* \\*\\)/ {$1=$2=$3=$4=\"\"; $NF=\"\"; print $0}'") with
-			                  | None -> "Could not find intersection prefix"
-			                  | Some s -> Printf.sprintf "Prefix: %s" s
-			in
-			let fmt = format_of_string "swipl -s %s -q -t \"['%s'], parse_and_display(%s,'%s','%s',%s,'%s').\" 2>/dev/null" in
-			let command = Printf.sprintf fmt prolog_file grammar_files.mg_file intro_lines_as_string prefix_note entropy_note derivations_as_string filename in
 			try Unix.open_process_in command
 			with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
 	in
@@ -218,15 +219,15 @@ let save_to_file mode_note grammar_files prolog_file (derivations : (int dlist *
 			Printf.eprintf "*** Output from Prolog tree-drawing: %s\n" (input_line channel)
 		done
 	with End_of_file ->
-		check_exit_code (Unix.close_process_in channel) "Prolog shell command for saving trees to file" ;
+		check_exit_code (Unix.close_process_in channel) command "Prolog shell command for saving trees to file" ;
 
         (* Unfortunate necessary hack: escape any underscores in the latex file produced by prolog *)
+        let command' = Printf.sprintf "sed -i'' -e 's/_/\\\\_/g' %s" filename in
         let channel' =
-                let command = Printf.sprintf "sed -i'' -e 's/_/\\\\_/g' %s" filename in
-                try Unix.open_process_in command
-                with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command)
+                try Unix.open_process_in command'
+                with _ -> failwith (Printf.sprintf "Error attempting to run shell command: %s" command')
         in
-        check_exit_code (Unix.close_process_in channel') "sed shell command for escaping underscores in latex"
+        check_exit_code (Unix.close_process_in channel') command' "sed shell command for escaping underscores in latex"
 
 (* Returns a pair of strings (grammars_dir, grammar_name), such that the relevant files are 
    grammars_dir/{mg,mcfgs}/grammar_name.{pl,mcfg,dict} *)
