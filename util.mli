@@ -1,6 +1,12 @@
 
 (** A collection of miscellaneous utility functions. *)
 
+(** [log2 n] returns base 2 log of n *)
+val log2 : float -> float
+
+(** [sum l] returns the sum of a list of floats*)                      
+val sum : float list -> float                                       
+
 (** [take n xs] is the length-[n] prefix of [xs], or [xs] itself if its length is less than [n]. *)
 val take : int -> 'a list -> 'a list
 

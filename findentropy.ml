@@ -26,11 +26,20 @@ let get_fertility_matrix rules start_symbol =
   let func =
     fun i j ->
     let i_rules = get_i_rules rules i in
-    let sum l = List.fold_left (+.) 0. l in
-    sum (List.map (helper j) i_rules)
+    Util.sum (List.map (helper j) i_rules)
         in
   Matrix.create_square_matrix nonterms func
 
+let get_entropy_vector rules start_symbol =
+  let nonterms = Grammar.get_nonterminals rules start_symbol in 
+  let h_xi = fun i ->
+    let i_rules = get_i_rules rules i in
+    Util.sum ( List.map (fun r ->
+        let weight = Util.float_of_weight (Rule.get_weight r) in
+        weight *. (Util.log2 weight)) i_rules )
+  in
+  List.map h_xi nonterms
+           
 
 let find_entropy rules start_symbol =
   

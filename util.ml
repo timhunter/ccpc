@@ -27,6 +27,10 @@ let append_tr lst1 lst2 =
   in
   helper (reverse_tr lst1) lst2
 
+let log2 = fun x -> (log x) /. (log 2.)
+
+let sum l = List.fold_left (+.) 0. l
+                                 
 let rec take n lst =
   if (n = 0) then
     []
