@@ -91,13 +91,15 @@ entropies_file=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.entr
 combined_file=`basename $grammar .wmcfg`.$tag.`no_spaces "$sentence"`.combined.$$.tex
 
 # wrapper script no longer needed. thank you Matthew Green!
-renormalizer=./renormalize.m
+renormalizer=./renormalize.csh
 
 echo "$sentence" | get_prefixes |\
 while read prefix ; do
         id=/tmp/`basename $grammar .wmcfg`.$tag.`no_spaces "$prefix"`.$$
         ./intersect -g $grammar -prefix "$prefix" > $id.chart
-        $renormalizer $id.chart | sed -f onespace.sed > $id.global.chart # put in the sed call here rather than in wrapper script JTH
+        if [[ ${PIPESTATUS[0]} -ne 0 ]] ; then echo "*** Hit an error, quitting!" ; break ; fi
+        $renormalizer $id.chart > $id.global.chart
+        if [[ ${PIPESTATUS[0]} -ne 0 ]] ; then echo "*** Hit an error, quitting!" ; break ; fi
         echo -e "`egrep -o "entropy = [-+]?[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?" $id.global.chart | cut -d ' ' -f 3` \t $prefix" >> $entropies_file
         if [ "$mode" == "-sample" ] ; then
             seed_arg="-seed $$"  # use $$, which also appears in output filenames, as random seed
@@ -105,6 +107,7 @@ while read prefix ; do
             seed_arg=""
         fi
         ./visualize $mode -g $id.global.chart -n $num_trees -o $id.tex $seed_arg >/dev/null
+        if [[ ${PIPESTATUS[0]} -ne 0 ]] ; then echo "*** Hit an error, quitting!" ; break ; fi
         pdflatex $id.tex >/dev/null
         echo "*** Created pdf file: `basename $id`.pdf"
         cat $id.tex | get_tables >> $tables_file
