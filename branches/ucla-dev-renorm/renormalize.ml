@@ -287,7 +287,6 @@ match onePair with
 |(_,f)-> f;;
 
 
-(*this is where naive Method and Newton Method take apart*)
 let rec naiveOneNonTeminalAtLevelK (k:int)(nonterminal:string)(alllist:(string list*float) list)
 (someMiddleTable: indicator->string->float)(mutuallyRecursiveSets: string list list)
 =match alllist with
