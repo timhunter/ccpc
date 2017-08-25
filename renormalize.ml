@@ -300,7 +300,15 @@ let rec naiveOneNonTeminalAtLevelK (k:int)(nonterminal:string)(alllist:(string l
 (*Newton's Method's special functions*)
 
 (*Yi*)
-let getf (nonterminalList: string list) (k:int)=0.0
+let rec getf (nonterminal: string)(nonterminalList: string list) (k:int)(someMiddleTable: indicator->string->float)
+(mutuallyRecursiveSets: string list list)
+(* =0.0 *)
+=match nonterminalList with 
+		|[]->1.0
+		|(h::t)-> 
+				let rest=getf nonterminal t k someMiddleTable mutuallyRecursiveSets in
+				if (sameSet nonterminal h mutuallyRecursiveSets) then (someMiddleTable (Depth k) h)*.rest
+				else (someMiddleTable Settled h)*.rest;;
 
 
 let getFForVector (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
