@@ -327,14 +327,37 @@ let rec getFForVector (k: int)(oneSet: string list) (someMiddleTable: indicator-
 
 (****************************************************************************************)
 (*Junyi*)
-(*can use the getf function*)
-let jFMatrixFunction (nonterminal1: string)(nonterminal2: string)=0.0;;
+let calculateDelta (i: string) (j: string)=
+  if (i = j) then 1.0 else 0.0;;
+
+(*can use the getf function. return float*)
+let rec getDFAlphaJ (alpha: string list)(i: string) (j: string) (k:int) (someMiddleTable: indicator -> string -> float)
+(mutuallyRecursiveSets: string list list)=
+  match (alpha, j) with
+    |([], j) -> 0.0 (*Equation No.29*)
+    |(h::t, j) ->
+        let rest = getDFAlphaJ t i j k someMiddleTable mutuallyRecursiveSets in 
+          if (sameSet i h mutuallyRecursiveSets) 
+            then (someMiddleTable (Depth k) h)*. rest +. (calculateDelta i j) *. (getf i t k someMiddleTable mutuallyRecursiveSets) (* Equation No.32 *)
+            else (someMiddleTable Settled h) *. rest;; (* Equation No. 31*)
+
+let rec getDFijHelper (i: string) (j: string) (k:int) (someMiddleTable: indicator->string->float) (allList:(string list*float) list)
+(mutuallyRecursiveSets: string list list) (rules: Rule.r list)=
+  match allList with
+    |(a,b)::t ->  (* (Printf.printf "the current rule is %f \n" ((getDFAlphaJ a i j k someMiddleTable mutuallyRecursiveSets) *. b)); *)
+                  ((getDFAlphaJ a i j k someMiddleTable mutuallyRecursiveSets) *. b) +. 
+                  (getDFijHelper i j k someMiddleTable t mutuallyRecursiveSets rules)
+    |[] -> 0.0 -. (calculateDelta i j);; (* (Printf.printf "the delta is %f \n" (0.0 -. (calculateDelta i j)));; *)
+
+let getDFij k someMiddleTable mutuallyRecursiveSets rules i j  = 
+    getDFijHelper i j k someMiddleTable (findRule i rules) mutuallyRecursiveSets rules;;
 
 
 (****************************************************************************************)
 let getJFMatrix (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-=Matrix.create_square_matrix oneSet jFMatrixFunction;;
+= Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules);;
+
 
 (*with two float lists of the same length, substract the second float list from the first one to get a new float list*)
 let rec floatListSubstraction (list1: float list) (list2: float list)
@@ -381,7 +404,7 @@ match mode with
               | _ -> someMiddleTable)
   |Newton->fillTableForSetAtDepthKNewton (k+1) oneSet someMiddleTable 
   	(getNewFloatListForSetAtLevelK k oneSet someMiddleTable rules mutuallyRecursiveSets);;
-
+   
 
 (*helper of oneSetWithInRangeAtLevelK, check whether one non-terminal has change below shreshold at depth k*)
 let oneNonTerminalWithInRangeAtLevelK (r:float) (someMiddleTable: indicator->string->float) 
