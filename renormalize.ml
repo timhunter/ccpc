@@ -310,10 +310,20 @@ let rec getf (nonterminal: string)(nonterminalList: string list) (k:int)(someMid
 				if (sameSet nonterminal h mutuallyRecursiveSets) then (someMiddleTable (Depth k) h)*.rest
 				else (someMiddleTable Settled h)*.rest;;
 
+let rec getFForOneX (k: int) (nonterminal: string) (someMiddleTable: indicator->string->float)
+(expansion: (string list * float) list) (mutuallyRecursiveSets: string list list)
+=match expansion with
+	|((a,b)::t)-> (b *.(getf nonterminal a k someMiddleTable mutuallyRecursiveSets))+.(getFForOneX k nonterminal someMiddleTable t mutuallyRecursiveSets)
+	|([]) -> 0.0 -. (someMiddleTable (Depth k) nonterminal);;
 
-let getFForVector (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
+
+let rec getFForVector (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-=[0.0;0.0;0.0];;
+(* =[0.0;0.0;0.0];; *)
+=match oneSet with
+	|[] -> []
+	|(h::t) -> Util.append_tr [getFForOneX k h someMiddleTable (findRule h rules) mutuallyRecursiveSets] 
+				(getFForVector k t someMiddleTable rules mutuallyRecursiveSets)
 
 (****************************************************************************************)
 (*Junyi*)
@@ -327,18 +337,24 @@ let getJFMatrix (k: int)(oneSet: string list) (someMiddleTable: indicator->strin
 =Matrix.create_square_matrix oneSet jFMatrixFunction;;
 
 (*with two float lists of the same length, substract the second float list from the first one to get a new float list*)
-let floatListSubstraction (list1: float list) (list2: float list)
-(*TODO*)
-=[0.0;0.0;0.0];;
+let rec floatListSubstraction (list1: float list) (list2: float list)
+=match (list1,list2) with
+	| (h1::t1,h2::t2) -> Util.append_tr [h1 -. h2] (floatListSubstraction t1 t2)
+	| ([],[])-> []
+	| _ -> raise (Failure "cannot substract two float lists with different length");;
 
-let fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
+let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (floatlist: float list)
-(*TODO*)
-=someMiddleTable
+=match (oneSet,floatlist) with 
+	| (h1::t1,h2::t2) -> fillTableForSetAtDepthKNewton k t1 (add someMiddleTable (Depth k) h1 h2) t2
+	| ([],[])->someMiddleTable
+	| _->raise (Failure "string list and float lost don't match in length");;
 
-let getFloatListForSetAtLevelKFromTable (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
+let rec getFloatListForSetAtLevelKFromTable (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (*TODO*)
-=[0.0;0.0;0.0];;
+=match oneSet with 
+	|(h::t)-> Util.append_tr [someMiddleTable (Depth k) h] (getFloatListForSetAtLevelKFromTable k t someMiddleTable)
+	| [] -> [];;
 
 let getNewFloatListForSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
