@@ -379,7 +379,7 @@ match mode with
                   (naiveOneNonTeminalAtLevelK k h (findRule h rules) someMiddleTable mutuallyRecursiveSets))  in
               (oneSetAtLevelK mode k t newTable rules mutuallyRecursiveSets)
               | _ -> someMiddleTable)
-  |Newton->fillTableForSetAtDepthKNewton k oneSet someMiddleTable 
+  |Newton->fillTableForSetAtDepthKNewton (k+1) oneSet someMiddleTable 
   	(getNewFloatListForSetAtLevelK k oneSet someMiddleTable rules mutuallyRecursiveSets);;
 
 
