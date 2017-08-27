@@ -356,7 +356,10 @@ let getDFij k someMiddleTable mutuallyRecursiveSets rules i j  =
 (****************************************************************************************)
 let getJFMatrix (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-= Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules);;
+= let m=Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules) in
+if(k<10) then Matrix.print m;
+m
+;;
 
 
 (*with two float lists of the same length, substract the second float list from the first one to get a new float list*)
@@ -369,7 +372,9 @@ let rec floatListSubstraction (list1: float list) (list2: float list)
 let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (floatlist: float list)
 =match (oneSet,floatlist) with 
-	| (h1::t1,h2::t2) -> fillTableForSetAtDepthKNewton k t1 (add someMiddleTable (Depth k) h1 h2) t2
+	| (h1::t1,h2::t2) -> 
+		if(k<10) then Printf.printf "at level %i for %s put in value %f \n" k h1 h2;
+	fillTableForSetAtDepthKNewton k t1 (add someMiddleTable (Depth k) h1 h2) t2
 	| ([],[])->someMiddleTable
 	| _->raise (Failure "string list and float lost don't match in length");;
 
@@ -402,8 +407,8 @@ match mode with
                   (naiveOneNonTeminalAtLevelK k h (findRule h rules) someMiddleTable mutuallyRecursiveSets))  in
               (oneSetAtLevelK mode k t newTable rules mutuallyRecursiveSets)
               | _ -> someMiddleTable)
-  |Newton->fillTableForSetAtDepthKNewton (k+1) oneSet someMiddleTable 
-  	(getNewFloatListForSetAtLevelK k oneSet someMiddleTable rules mutuallyRecursiveSets);;
+  |Newton->fillTableForSetAtDepthKNewton k oneSet someMiddleTable 
+  	(getNewFloatListForSetAtLevelK (k-1) oneSet someMiddleTable rules mutuallyRecursiveSets);;
    
 
 (*helper of oneSetWithInRangeAtLevelK, check whether one non-terminal has change below shreshold at depth k*)
