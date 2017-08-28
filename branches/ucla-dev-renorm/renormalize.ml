@@ -331,6 +331,9 @@ let calculateDelta (i: string) (j: string)=
   if (i = j) then 1.0 else 0.0;;
 
 (*can use the getf function. return float*)
+(* Notice that the equation No.32 in the original paper might be confusing. The index i for the delat(i,j) in equation 32 no longer
+   stands for the nontermial, instead, it stands for the head of alpha(or in the equation, B).
+*)
 let rec getDFAlphaJ (alpha: string list)(i: string) (j: string) (k:int) (someMiddleTable: indicator -> string -> float)
 (mutuallyRecursiveSets: string list list)=
   match (alpha, j) with
@@ -338,7 +341,7 @@ let rec getDFAlphaJ (alpha: string list)(i: string) (j: string) (k:int) (someMid
     |(h::t, j) ->
         let rest = getDFAlphaJ t i j k someMiddleTable mutuallyRecursiveSets in 
           if (sameSet i h mutuallyRecursiveSets) 
-            then (someMiddleTable (Depth k) h)*. rest +. (calculateDelta i j) *. (getf i t k someMiddleTable mutuallyRecursiveSets) (* Equation No.32 *)
+            then ((someMiddleTable (Depth k) h)*. rest) +. ((calculateDelta h j) *. (getf i t k someMiddleTable mutuallyRecursiveSets)) (* Equation No.32 *)
             else (someMiddleTable Settled h) *. rest;; (* Equation No. 31*)
 
 let rec getDFijHelper (i: string) (j: string) (k:int) (someMiddleTable: indicator->string->float) (allList:(string list*float) list)
@@ -384,9 +387,16 @@ let rec getFloatListForSetAtLevelKFromTable (k: int)(oneSet: string list) (someM
 	|(h::t)-> Util.append_tr [someMiddleTable (Depth k) h] (getFloatListForSetAtLevelKFromTable k t someMiddleTable)
 	| [] -> [];;
 
+(* Testing floatlist *)
+let rec printList l=
+  match l with
+  | (h::t) -> Printf.printf "%f !!!" h;
+              printList t
+  | [] -> Printf.printf "\n\n\n";;
+
 let getNewFloatListForSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-=floatListSubstraction (getFloatListForSetAtLevelKFromTable k oneSet someMiddleTable) (Matrix.mult_by_vec 
+= floatListSubstraction (getFloatListForSetAtLevelKFromTable k oneSet someMiddleTable) (Matrix.mult_by_vec 
 	(Matrix.invert (getJFMatrix k oneSet someMiddleTable rules mutuallyRecursiveSets))
 	(getFForVector k oneSet someMiddleTable rules mutuallyRecursiveSets)
 	)
