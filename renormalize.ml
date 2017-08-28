@@ -359,9 +359,10 @@ let getDFij k someMiddleTable mutuallyRecursiveSets rules i j  =
 (****************************************************************************************)
 let getJFMatrix (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-= let m=Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules) in
+= (* let m=Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules) in
 if(k<10) then Matrix.print m;
-m
+m *)
+Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules)
 ;;
 
 
@@ -376,7 +377,7 @@ let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleT
 (floatlist: float list)
 =match (oneSet,floatlist) with 
 	| (h1::t1,h2::t2) -> 
-		if(k<10) then Printf.printf "at level %i for %s put in value %f \n" k h1 h2;
+		(* if(k<10) then Printf.printf "at level %i for %s put in value %f \n" k h1 h2; (* testing function to see the value*) *)
 	fillTableForSetAtDepthKNewton k t1 (add someMiddleTable (Depth k) h1 h2) t2
 	| ([],[])->someMiddleTable
 	| _->raise (Failure "string list and float lost don't match in length");;
