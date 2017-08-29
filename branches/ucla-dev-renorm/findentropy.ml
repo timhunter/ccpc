@@ -2,16 +2,11 @@
 open Util
 open Rule
 
-(* All the work will go here. *)
-(* The arguments are an existing grammar (list of rules) and that grammar's start symbol. 
- * The return value is the entropy of the start symbol in that grammar.
- *)
-
-       
+(* Given a set of rules and a nonterminal, return all rules that have the nonterminal on the lefthand side. *)
 let get_i_rules rules i =
    List.filter (fun r -> (get_nonterm r) = i) rules
 
-               
+(* Given a category and a rule, calculate the number of occurrences of the category in the righthand side of the rule and multiply it by the probability of the rule *)               
 let helper j rule =
   match (get_expansion rule) with
   | PublicTerminating _ -> 0.
@@ -20,7 +15,7 @@ let helper j rule =
        Nelist.fold_l (fun acc e -> if e = j then acc +. 1. else acc) 0. rights in
      (Util.float_of_weight (Rule.get_weight rule)) *. n_j_emissions
 
-
+(* Given a set of rules and the start symbol, return a matrix whose (i,j)th component gives the expected number of nonterminals of type j resulting from nonterminals of type i.*)
 let get_fertility_matrix rules start_symbol =
   let nonterms = Grammar.get_nonterminals rules start_symbol in
   let func =
@@ -30,6 +25,7 @@ let get_fertility_matrix rules start_symbol =
         in
   Matrix.create_square_matrix nonterms func
 
+(* Given a set of rules and the start symbol, return a vector whose ith component gives the entropy of the ith rule *)
 let get_entropy_vector rules start_symbol =
   let nonterms = Grammar.get_nonterminals rules start_symbol in 
   let h_xi = fun i ->
@@ -40,7 +36,9 @@ let get_entropy_vector rules start_symbol =
   in
   List.map h_xi nonterms
            
-
+(* The arguments are an existing grammar (list of rules) and that grammar's start symbol. 
+ * The return value is the entropy of the start symbol in that grammar.
+ *)
 let find_entropy rules start_symbol =
   
     (*** dummy code showing manipulation of rules ***)
