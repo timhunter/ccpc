@@ -30,7 +30,7 @@ let get_entropy_vector rules start_symbol =
   let nonterms = Grammar.get_nonterminals rules start_symbol in 
   let h_xi = fun i ->
     let i_rules = get_i_rules rules i in
-    Util.sum ( List.map (fun r ->
+    -1. *. Util.sum ( List.map (fun r ->
         let weight = Util.float_of_weight (Rule.get_weight r) in
         weight *. (Util.log2 weight)) i_rules )
   in
@@ -40,9 +40,8 @@ let get_entropy_vector rules start_symbol =
  * The return value is the entropy of the start symbol in that grammar.
  *)
 let find_entropy rules start_symbol =
-  
     (*** dummy code showing manipulation of rules ***)
-    List.iter (fun r ->
+    (* List.iter (fun r ->
         (* get_nonterm and get_weight are from rule.ml; float_of_weight is from util.ml, see also other weight functions there *)
         Printf.printf "This rule expands %s with weight %f\n" (get_nonterm r) (float_of_weight (get_weight r)) ;
         match (get_expansion r) with
@@ -51,11 +50,11 @@ let find_entropy rules start_symbol =
 
 (* show_list is another util.ml function *)
 
-    ) rules ;
+    ) rules ; *)
     (*** end dummy code ***)
 
     (*** dummy code showing manipulation of matrices ***)
-    let m = Matrix.create_square_matrix ["NP";"VP"] (fun r -> fun c -> match (r,c) with
+    (* let m = Matrix.create_square_matrix ["NP";"VP"] (fun r -> fun c -> match (r,c) with
                                                                         | ("NP","NP") -> 4.0
                                                                         | ("NP","VP") -> 7.0
                                                                         | ("VP","NP") -> 2.0
@@ -70,10 +69,13 @@ let find_entropy rules start_symbol =
     Printf.printf "Multiplying original matrix by [3,4]:\n" ;
     Printf.printf "%s\n" (show_list string_of_float (Matrix.mult_vec_by [3.0;4.0] m)) ;
     Printf.printf "Multiplying [3,4] by original matrix:\n" ;
-    Printf.printf "%s\n" (show_list string_of_float (Matrix.mult_by_vec m [3.0;4.0])) ;
+    Printf.printf "%s\n" (show_list string_of_float (Matrix.mult_by_vec m [3.0;4.0])) ; *)
     (*** end dummy code ***)
-
-    0.0
+    let nonterms = Grammar.get_nonterminals rules start_symbol in
+	let i = Matrix.identity_matrix nonterms in
+	let a = get_fertility_matrix rules start_symbol in
+	let h = get_entropy_vector rules start_symbol in
+		List.hd (Matrix.mult_by_vec (Matrix.invert (Matrix.subtract i a)) h)
 
 let main () =
     let grammar_file = ref "" in
@@ -88,8 +90,9 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let entropy = find_entropy rules start_symbol in
+        	Printf.printf "(* entropy = %f *)\n" entropy;
 
-	Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (Grammar.get_nonterminals rules start_symbol)); 
+	(* Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (Grammar.get_nonterminals rules start_symbol)); 
 
 	Printf.printf "\nget_irules\n\n";
 	List.iter (fun r ->
@@ -105,11 +108,7 @@ let main () =
 
 	match rules with
 	| h::t -> Printf.printf "\nhelper\n(%s) NPs in right of first rule:   " (string_of_float (helper "NP" h))
-	| _ -> Printf.printf "shut up compiler";
-
-        Printf.printf "(* \"entropy = %f\" *)\n" entropy
+	| _ -> Printf.printf "shut up compiler"; *)     
     )
-
-
 
 let _ = if (!Sys.interactive) then () else main ()
