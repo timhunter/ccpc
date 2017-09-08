@@ -90,11 +90,12 @@ combined_yield([X|Rest], Result) :-
 	combined_yield(Rest, ResultRest),
 	append_with_space(ResultStart, ResultRest, Result).
 
+% We explicitly work with lists of char codes, even in swipl-v7 where double-quoted text is no longer interpreted this way
 append_with_space(X,[],X).
 append_with_space([],X,X).
 append_with_space(X,Y,Result) :-
-	append(X, " ", X1),
-	append(X1, Y, Result).
+	char_code(' ', Space),
+	append(X, [Space|Y], Result).
 
 end_tree(Stream) :-
 	format(Stream, "\\end{picture}~n", []),

@@ -55,7 +55,11 @@ let rec reachable nonterm rules acc =
       | [] -> raise (Failure "acc could not be empty")
       | h::t -> let temp = reachableHelper2 nonterm rules acc in
                   let index = find nonterm temp in
-                   if (List.length temp = index + 1) then temp
+                   if (List.length temp = index + 1) then
+                        begin
+                        Printf.eprintf "%s turned out to be the last element of the list %s, so returning this list\n%!" nonterm (show_list (fun x -> x) temp) ;
+                        temp
+                        end
                    else reachable (List.nth temp (index + 1)) rules temp;; 
 
 (* test whether two nonterminals are mututally reachable *)
@@ -87,7 +91,11 @@ let removeDupListFromLeft xs = List.fold_right removeDupList xs [];;
 
 let getMutuallyRecursiveSets rules =
     let nonTermList = getAllNonterm rules in
+      Printf.eprintf "got nonTermList!\n%!" ;
       let reachableList = List.map (fun nonterm -> reachable nonterm rules [nonterm]) nonTermList in
+      List.iter2 (fun nt reachables -> 
+        Printf.eprintf "For %s, the reachables are %s\n%!" nt (show_list (fun x -> x) reachables)
+      ) nonTermList reachableList ;
         removeDupListFromLeft (List.rev (List.map (fun ele -> mutallyReachable2 nonTermList reachableList ele) nonTermList));;  
 
 (* Now we need to put these recursive sets into orders *)
@@ -168,8 +176,11 @@ let rec outputInOrder mutuallyRecursiveSets order acc=
 
 let getOrderedMutuallyRecursiveSets rules = 
     let mutuallyRecursiveSets = getMutuallyRecursiveSets rules in 
+    Printf.eprintf "got mutually recursive sets!\n%!" ;
       let zippedList = convert2tuple mutuallyRecursiveSets rules in
+      Printf.eprintf "got zippedList!\n%!" ;
         let order = getOrder rules [] zippedList in 
+        Printf.eprintf "got order!\n%!" ;
           List.rev (outputInOrder mutuallyRecursiveSets order []);;
 
 
@@ -446,7 +457,7 @@ match oneSet with
 let rec settleTableForSet (oneSet: string list) (k: int) (someMiddleTable: indicator->string->float)
 =match oneSet with
 | h::t-> 
-(* Printf.printf "I am settling the value for %s at level %i: %f \n" h k (someMiddleTable (Depth k) h); *)
+Printf.printf "I am settling the value for %s at level %i: %f \n" h k (someMiddleTable (Depth k) h);
 let updateTable= add someMiddleTable Settled h (someMiddleTable (Depth k) h) in
 (settleTableForSet t k updateTable)
 | _-> someMiddleTable;;
@@ -487,9 +498,12 @@ let rec fillInTableBySets mode (mutuallyRecursiveSets: string list list) (initia
 |_-> initialTable;;
 
 
-let getTable mode (rules: Rule.r list) (r: float)
+let getTable mode (rules: Rule.r list) (r: float) =
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
-= fillInTableBySets mode (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
+    let sets = getOrderedMutuallyRecursiveSets rules in
+    let str = show_list (show_list (fun x -> x)) sets in
+    Printf.eprintf "Got mutually recursive sets: %s\n%!" str ;
+    fillInTableBySets mode sets initialTable rules r ;;
 
 
 
