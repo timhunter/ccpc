@@ -1,0 +1,13 @@
+This is the structure demonstration for renormalize.ml file.
+
+Currently, this file achieves calculating Z value for every non-terminal. Two methods are implemented, the fixed-point-method and the Newton's method. For each method, a threshold value must be provided so that the program knows when to terminate the calculation.
+
+Shared part:
+
+Both methods the concept of Mutually Recursive Sets mentioned at the end of Section3 of the paper. It is considered an optimization for Fixed-point method and a necessarity for Newton's method. This part is shared by both methods. Both methods solve the sets of non-terminals in order. If set N < N bar, we will not touch set N bar until set N is solved. (part2 in the renormalize.ml file, the function getOrderedMutuallyRecursiveSets takes in rules and return a set of string sets. Both methods will solve the problem by solving the sets returned by this function in order.)
+
+Both methods use a table to store the values. The part of implementing the table is shared by both method. Both methods calculate the approximate Z value by incrementing k. Therefore, the table is filled by layers until the threshold has been reached.
+
+The storage table is implemented as a function taking two arguments and returning a float as the result. The two arguments are the indicator and a string. The string is the string of that non-terminal you are interested in. The indicator a type of "Depth of int | Settled." "Depth of int" is for when you are acquiring the Z value for certain non-terminal before it reaches the threshold. "Settled" is for you to acquire settle Z value for certain non-terminal which belongs to the set that has already been determined.
+
+Example: if all the non-terminals are dividied into three sets A, B, C. C<A and C<B. The getOrderedMutuallyRecursiveSets can return [C,A,B] or [C,B,A]. They are both legal orders. Let's say getOrderedMutuallyRecursiveSets actually return [C,A,B]. Then first the table is initialized as the initialTable which always return 0. Then the non-terminals in set C will be filled by layers as depth k increments until the difference of the all values in consecutive depth for all non-terminals in set C goes below the threshold provided. When all the non-terminals in set C reach the threshold, their values in the deepest depth explored will be put into "Settled." When set C is settled, then we will do the same thing for set A and then set B. After set B is settled, all the non-terminals are settled. The calculation finishes, you can extract the Z value for any non-terminal a from the table by calling the table and put a and "Settled" as arguments.
