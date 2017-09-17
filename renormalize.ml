@@ -7,7 +7,45 @@ exception Failure of string
 type mode = Naive | Newton
 
 (****************************************************************************************)
+(*part1*)
 (* Helper functions*)
+
+(* helper function of sameSet 
+return true if the string element is within the string list 
+otherwise return false
+*)
+let rec contains (element: string)(stringList: string list)=
+(*false;;*)
+match stringList with
+|h::t->if h=element then true else (contains element t)
+|_->false;;
+
+(* helper function
+return true if the two strings are in the same set
+return false otherwise *)
+let rec sameSet (nonterminal:string) (comparedString: string) (mutuallyRecursiveSets: string list list)=
+(*false;*)
+match mutuallyRecursiveSets with 
+|h::t-> if (contains nonterminal h) then 
+            if (contains comparedString h) then true else false
+        else (sameSet nonterminal comparedString t)
+|_->false
+
+(* get a string as nonterminal and a rule list, return a list of tuples consisting of 
+nonterminal list and a probability
+for example, if in the rules there are VP -> V NP (0.4); VP -> V CP(0.6)
+calling (findRule "VP" rules) will return [(["V";"NP"],0.4); (["V";"CP"],0.6)]
+*)
+let rec findRule (nonterminal:string) (rules: Rule.r list)(* =[(["nonterminal1";"nonterminal12"],0.05)] *)
+= match rules with
+|h::t -> if (get_nonterm h) = nonterminal then 
+        match (get_expansion h) with
+        |PublicTerminating str -> ([],(float_of_weight (get_weight h)))::(findRule nonterminal t)
+        |PublicNonTerminating (nts,_) ->  ((Nelist.to_list nts),(float_of_weight (get_weight h)))::
+        (findRule nonterminal t)
+    else (findRule nonterminal t)
+| _-> [];;
+
 (* remove dupilcated from the rules *)
 let removeDup xs x = 
     if List.mem x xs then xs else x:: xs;;
@@ -104,6 +142,7 @@ let rec printList l=
   | [] -> Printf.printf "\n\n\n";;
 
 (****************************************************************************************)
+(*part2*)
 (***implementation of getOrderedMutuallyRecursiveSets***)
 (*
   The concept of Mutually Recursive Sets is mentioned at the end of Section 3 of the paper.
@@ -225,9 +264,9 @@ let getOrderedMutuallyRecursiveSets rules =
 
 
 (****************************************************************************************)
-(*implementation of Naive method and Newton's method*)
+(*part 3: implementation of Naive method and Newton's method*)
 
-
+(*part3.1 storage table set up*) 
 (* the type used in the table function storing the in-progress Z value for all terminals at depth k
  and the settled Z value for all terminals*)
 type indicator= Depth of int | Settled;;
@@ -253,47 +292,8 @@ let add (getZ:indicator->string->float) (k:indicator) (s:string)(v:float)=
 fun k' s'->
     if k'=k && s'=s then v else getZ k' s';;
 
-
-(* helper function of sameSet 
-return true if the string element is within the string list 
-otherwise return false
-*)
-let rec contains (element: string)(stringList: string list)=
-(*false;;*)
-match stringList with
-|h::t->if h=element then true else (contains element t)
-|_->false;;
-
-
-(* helper function
-return true if the two strings are in the same set
-return false otherwise *)
-let rec sameSet (nonterminal:string) (comparedString: string) (mutuallyRecursiveSets: string list list)=
-(*false;*)
-match mutuallyRecursiveSets with 
-|h::t-> if (contains nonterminal h) then 
-            if (contains comparedString h) then true else false
-        else (sameSet nonterminal comparedString t)
-|_->false
-
-
-(* get a string as nonterminal and a rule list, return a list of tuples consisting of 
-nonterminal list and a probability
-for example, if in the rules there are VP -> V NP (0.4); VP -> V CP(0.6)
-calling (findRule "VP" rules) will return [(["V";"NP"],0.4); (["V";"CP"],0.6)]
-*)
-let rec findRule (nonterminal:string) (rules: Rule.r list)(* =[(["nonterminal1";"nonterminal12"],0.05)] *)
-= match rules with
-|h::t -> if (get_nonterm h) = nonterminal then 
-        match (get_expansion h) with
-        |PublicTerminating str -> ([],(float_of_weight (get_weight h)))::(findRule nonterminal t)
-        |PublicNonTerminating (nts,_) ->  ((Nelist.to_list nts),(float_of_weight (get_weight h)))::
-        (findRule nonterminal t)
-    else (findRule nonterminal t)
-| _-> [];;
-
-
 (****************************************************************************************)
+(*part3.2*)
 (*naive special function*)
 
 (*
@@ -326,9 +326,8 @@ let rec naiveOneNonTeminalAtLevelK (k:int)(nonterminal:string)(alllist:(string l
                 | _ -> 0.0
 
 (****************************************************************************************)
-(*Newton's Method's special functions*)
-
-(*Yi*)
+(*part3.3 Newton's Method's special functions*)
+(*part3.3.1*)
 (* This section devotes to implement Equation 21 - 25 of the original paper *)
 
 (* This function implements Equation 22 - 25*)
@@ -361,7 +360,7 @@ let rec getFForVector (k: int)(oneSet: string list) (someMiddleTable: indicator-
 				(getFForVector k t someMiddleTable rules mutuallyRecursiveSets)
 
 (****************************************************************************************)
-(*Junyi*)
+(*part3.3.2*)
 (* This section devotes to implement Equation 27 - 32 of the original paper *)
 
 (* This function implements Equation 27 *)
@@ -402,6 +401,10 @@ let getJFMatrix (k: int)(oneSet: string list) (someMiddleTable: indicator->strin
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
 = Matrix.create_square_matrix oneSet (getDFij k someMiddleTable mutuallyRecursiveSets rules);;
 
+(****************************************************************************************)
+(*part3.3.3 this section devotes to fill in the table for Newton's method*) 
+
+(*this table fills one set of non-terminals at depth k in the storage table*)
 let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (floatlist: float list)
 =match (oneSet,floatlist) with 
@@ -411,12 +414,15 @@ let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleT
 	| ([],[])->someMiddleTable
 	| _->raise (Failure "string list and float lost don't match in length");;
 
+(*helper function for getNewFloatListForSetAtLevelK. This functions get the values of non-terminals in one set at depth k into a float list.
+It will be used when next depth (k+1) of the same set of non-terminals is calculated*)
 let rec getFloatListForSetAtLevelKFromTable (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 =match oneSet with 
 	|(h::t)-> Util.append_tr [someMiddleTable (Depth k) h] (getFloatListForSetAtLevelKFromTable k t someMiddleTable)
 	| [] -> [];;
 
 (* This function implements Equation 19 *)
+(* the float list returned is the list of values for non-terminals in a set at depth k*)
 let getNewFloatListForSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
 = floatListSubstraction (getFloatListForSetAtLevelKFromTable k oneSet someMiddleTable) (Matrix.mult_by_vec 
@@ -426,7 +432,8 @@ let getNewFloatListForSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable
 
 
 (****************************************************************************************)
-(* The following section devotes to create a data structure to store all previously calculated value *)
+(*part 4*)
+(* The following section implements the filling process of the table*)
 (* Detailed and visualized information about the data structure will be in a seperate note file *)
 
 (*put in values into the table for a set at depth k*)
@@ -476,7 +483,8 @@ let updateTable= add someMiddleTable Settled h (someMiddleTable (Depth k) h) in
 (settleTableForSet t k updateTable)
 | _-> someMiddleTable;;
 
-
+(*this function checks whether depth k has already fulfilled the threshold requrement for the set of non-terminals-- all the
+difference of values in depth k and k-1 is below threshold, if yes, settle the table; if not, continue to incremenation of k*)
 let rec oneSetCheckAtLevelKAndIncrement mode (k:int)(r:float)(oneSet: string list)(someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)=
 if (oneSetWithInRangeAtLevelK r someMiddleTable k oneSet) 
@@ -512,6 +520,7 @@ let rec fillInTableBySets mode (mutuallyRecursiveSets: string list list) (initia
 |_-> initialTable;;
 
 
+(*this is the final function, returns the filled out table for all non-terminals*)
 let getTable mode (rules: Rule.r list) (r: float)
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
 = fillInTableBySets mode (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
@@ -519,6 +528,7 @@ let getTable mode (rules: Rule.r list) (r: float)
 
 
 (****************************************************************************************)
+(*part5*)
 (* The following section devotes to implement user interface*)
 
 (* The arguments are an existing grammar (list of rules) to be normalized and that grammar's start symbol. 
@@ -556,94 +566,6 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
-
-
-
-(*************************************************************************************************)
-(*tests for functions*)
-
-(* test for fillInTableBySets #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg *)
-     (* let mutuallyRecursiveSets4= [["C"];["A";"B"];["S"]] in
-        let range=0.00001 in
-        let finalTable=fillInTableBySets mutuallyRecursiveSets4 initialTable rules range in
-        List.iter(fun x-> 
-            Printf.printf "this is %s and the probability of it within the range %f is %f \n"
-            x range (finalTable Settled x) 
-
-        ) ["A";"B";"C";"S"]; *)
-
-
-
-(* test for oneSetWithInRangeAtLevelK #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg*)
-      (* let someMiddleTable = add (add (add (add (add initialTable (Depth 2) "B" 0.65) (Depth 2) "C" 2.0) (Depth 2) "A" 0.1) (Depth 1) "A" 0.0) (Depth 1) "B" 0.75 in
-        if(oneSetWithInRangeAtLevelK 0.1 someMiddleTable 2 ["A";"B"]) 
-        then Printf.printf "oneNonTerminalWithInRangeAtLevelK passed test1 \n"
-        else Printf.printf "oneNonTerminalWithInRangeAtLevelK not passing test1 \n";
-
-        let someMiddleTable2 = add (add (add (add (add initialTable (Depth 2) "B" 0.65) (Depth 2) "C" 2.0) (Depth 2) "A" 0.1) (Depth 1) "A" 0.0) (Depth 1) "B" 0.75 in
-        if not(oneSetWithInRangeAtLevelK 0.01 someMiddleTable2 2 ["A";"B"]) 
-        then Printf.printf "oneNonTerminalWithInRangeAtLevelK passed test2 \n"
-        else Printf.printf "oneNonTerminalWithInRangeAtLevelK not passing test2 \n"; *)
-
-
-
-(*test for naiveOneNonTeminalOneRuleAtLevelK #use ./renormalize -g grammars/Yi_test_grammar/simplegrammar.wmcfg*)
-      (*let mutuallyRecursiveSets3= [["C"];["A";"B"]] in 
-        let someMiddleTable = add (add (add initialTable (Depth 1) "C" 0.5) (Depth 2) "C" 2.0) Settled "C" 1.0 in
-        let prob_A_level1= (naiveOneNonTeminalAtLevelK mode 1 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for naiveOneNonTeminalAtLevelK mode for A at depth 1 the answer should be 0 \n";
-        Printf.printf "the answer is actually %f \n" prob_A_level1;
-
-        let prob_B_level1= (naiveOneNonTeminalAtLevelK mode 1 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for naiveOneNonTeminalAtLevelK mode for B at depth 1 the answer should be 0.75 \n";
-        Printf.printf "the answer is actually %f \n" prob_B_level1; *)        
-      (*let mutuallyRecursiveSets3= [["C"];["A";"B"]] in 
-        let someMiddleTable = add (add (add (add (add initialTable (Depth 1) "C" 0.5) (Depth 2) "C" 2.0) Settled "C" 1.0) (Depth 1) "A" 0.0) (Depth 1) "B" 0.75in
-        let prob_A_level2= (naiveOneNonTeminalAtLevelK mode 2 "A" (findRule "A" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for naiveOneNonTeminalAtLevelK mode for A at depth 2 the answer should be 0.375 \n";
-        Printf.printf "the answer is actually %f \n" prob_A_level2;
-
-        let prob_B_level2= (naiveOneNonTeminalAtLevelK mode 2 "B" (findRule "B" rules) someMiddleTable mutuallyRecursiveSets3) in
-        Printf.printf "test for naiveOneNonTeminalAtLevelK mode for B at depth 2 the answer should be 0.75 \n";
-        Printf.printf "the answer is actually %f \n" prob_B_level2; *)
-
-
-
-(* test for sameSet #use ./renormalize -g grammars/wmcfg/toy.wmcfg *)
-     (* let mutuallyRecursiveSets2=[["Adj";"Adj2";"Adj3"];["N"];["NBAR";"NBAR2"];["Det"];["NP"];["VP"];["S"]] in
-
-        if not(sameSet "N" "NBAR" mutuallyRecursiveSets2) then 
-        Printf.printf "sameSet passed test1 \n"
-        else Printf.printf "sameSet not passing test1 \n";
-
-        if (sameSet "NBAR2" "NBAR" mutuallyRecursiveSets2) then 
-        Printf.printf "sameSet passed test2 \n"
-        else Printf.printf "sameSet not passing test2 \n";
-
-
-        if not(sameSet "Adj3" "S" mutuallyRecursiveSets2) then 
-        Printf.printf "sameSet passed test3 \n"
-        else Printf.printf "sameSet not passing test3 \n"; *)
-
-
-
-(* test for contains #use ./renormalize -g grammars/wmcfg/toy.wmcfg*)
-      (* 
-        if (contains "hi" ["p";"l";"hi"]) then Printf.printf "first test passed for contains \n"
-        else Printf.printf "first test not passed for contains \n";
-        if (not (contains "hi" [])) then Printf.printf "second test passed for contains \n"
-        else Printf.printf "second test not passed for contains \n"; *)
-
-
-
-(*the test for findRule #use ./renormalize -g grammars/wmcfg/toy.wmcfg*)
-      (*let modifiedlist=findRule "PP" rules in 
-        List.iter (fun (a,b)-> 
-            Printf.printf "this is nonterminals %s \n" (show_list (fun x -> x) a);
-            Printf.printf "this is weight %f \n" b) 
-            modifiedlist; *)
-
-
         Printf.printf "(* \"probability = %f\" *)\n" prob ;
     )
 
