@@ -1,10 +1,21 @@
 This is the structure demonstration for renormalize.ml file.
 
+Overal Struture:
+1. helper functions
+2. implementation of getOrderedMutuallyRecursiveSets
+3. implementation of naive method and Newton's method
+	3.1 storage table set up
+	3.2 naive (fixed-point method) special functions
+	3.3 Newton's method special functions
+4. implementation of filling the storage table
+5. implementation of user interface
+
+
 Currently, this file achieves calculating Z value for every non-terminal. Two methods are implemented, the fixed-point-method and the Newton's method. For each method, a threshold value must be provided so that the program knows when to terminate the calculation.
 
 Shared part:
 
-Both methods the concept of Mutually Recursive Sets mentioned at the end of Section3 of the paper. It is considered an optimization for Fixed-point method and a necessarity for Newton's method. This part is shared by both methods. Both methods solve the sets of non-terminals in order. If set N < N bar, we will not touch set N bar until set N is solved. (part2 in the renormalize.ml file, the function getOrderedMutuallyRecursiveSets takes in rules and return a set of string sets. Both methods will solve the problem by solving the sets returned by this function in order.)
+Both methods use the concept of Mutually Recursive Sets mentioned at the end of Section3 of the paper. It is considered an optimization for Fixed-point method and a necessarity for Newton's method. This part is shared by both methods. Both methods solve the sets of non-terminals in order. If set N < N bar, we will not touch set N bar until set N is solved. (part2 in the renormalize.ml file, the function getOrderedMutuallyRecursiveSets takes in rules and return a set of string sets. Both methods will solve the problem by solving the sets returned by this function in order.)
 
 Both methods use a table to store the values. The part of implementing the table is shared by both method. Both methods calculate the approximate Z value by incrementing k. Therefore, the table is filled by layers until the threshold has been reached.
 
