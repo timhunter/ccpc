@@ -17,6 +17,8 @@ train
 visualize
 cycles
 compare
+findentropy
+renormalize
 doc
 Makefile.dependencies
 
