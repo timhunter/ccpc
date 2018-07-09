@@ -6,6 +6,7 @@ exception Failure of string
 
 type mode = Naive | Newton
 
+
 (****************************************************************************************)
 (*part1*)
 (* Helper functions*)
@@ -46,11 +47,30 @@ let rec findRule (nonterminal:string) (rules: Rule.r list)(* =[(["nonterminal1";
     else (findRule nonterminal t)
 | _-> [];;
 
-(* remove dupilcated from the rules *)
+module StringMap = Map.Make (String);;
+
+(*Given a list, and a map representing each unique value in the list, remove duplicates from the list*)
+let rec removeDupWithMap xs m = 
+    match xs with 
+        |[] -> []
+        |h::t -> (match StringMap.mem h m with 
+            | false -> (removeDupWithMap t m)
+            | true -> h::(removeDupWithMap t (StringMap.remove h m))
+            );;
+
+(*Given a list, build a map that associates each unique value of the list with 1*)
+let rec buildUniqueMap xs = 
+    match xs with 
+        |[] -> StringMap.empty;
+        |h::t -> StringMap.add h (Some 1) (buildUniqueMap t);;
+        
+let rec remove_from_left xs = removeDupWithMap xs (buildUniqueMap xs);;
+
+(* remove duplicates from the rules *)
 let removeDup xs x = 
     if List.mem x xs then xs else x:: xs;;
 
-let remove_from_left xs = List.rev (List.fold_left removeDup [] xs);;
+let remove_from_left_old xs = List.rev (List.fold_left removeDup [] xs);;
 
 (* get all the nonterminals in the rules *)
 let getAllNonterm rules = 
