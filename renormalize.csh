@@ -20,7 +20,7 @@ endif
 
 #################################################################################
 
-set RENORM=./renormalize.m
+set CCPCDIR=`dirname $0`
 
-$MATHSCRIPT $RENORM $argv[1] | sed -f onespace.sed
+$MATHSCRIPT $CCPCDIR/renormalize.m $argv[1] | sed -f $CCPCDIR/onespace.sed
 
