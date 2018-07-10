@@ -5,7 +5,7 @@ Prerequisites: OCaml, ocamlgraph, Mathematica, pdflatex, swipl.
 ==== Working with the bundled grammars ====
 ===========================================
 
-To try things out with the grammars that are included in the SVN 
+To try things out with the grammars that are included in the 
 repository, all you should need to do is the following:
 
 (1) Run 'make' in the root directory of your working copy. This should 
@@ -63,7 +63,7 @@ to do the following:
 
 Now, to set up a new additional Minimalist Grammar for the parser to work 
 with, you need to provide one file yourself and then use make to generate 
-three other derived files. Let's call the root of the SVN working copy $ROOT, 
+three other derived files. Let's call the root of the working copy $ROOT, 
 and let's suppose that $NAME is a good name to associate with the new grammar.
 
 The file you need to provide is:
@@ -137,7 +137,6 @@ that the trees in the PDFs produced by transitions.sh shows MG derived trees
 ==== For more information ====
 ==============================
 
-See the CCPC user documentation, available for checkout over subversion like this:
-    svn checkout --username mcfgcky2 --password mcfgcky2 https://forge.cornell.edu/svn/repos/mcfgcky2_userdoc/trunk ccpc_userdoc
-(You will need to compile the latex source code, for example with pdflatex.)
+See the CCPC user documentation, available online here:
+    https://courses.cit.cornell.edu/jth99/ccpc-doc.pdf
 
