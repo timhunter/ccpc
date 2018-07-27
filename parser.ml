@@ -115,9 +115,12 @@ end
 
     let deduce rules input =
       let pick_out_rules (acc_unary_rules, acc_binary_rules) r =
-        match (Rule.rule_arity r) with 1 -> (r::acc_unary_rules, acc_binary_rules)
-                                     | 2 -> (acc_unary_rules, r::acc_binary_rules)
-                                     | _ -> (acc_unary_rules, acc_binary_rules)
+        match (Rule.rule_arity r) with
+            | 0 -> (acc_unary_rules, acc_binary_rules)
+            | 1 -> (r::acc_unary_rules, acc_binary_rules)
+            | 2 -> (acc_unary_rules, r::acc_binary_rules)
+            | _ -> (Printf.eprintf "WARNING: Ignoring rule with arity greater than two:\n         %s\n%!" (to_string r); 
+                    (acc_unary_rules, acc_binary_rules))
       in
       let (unary_rules, binary_rules) = List.fold_left pick_out_rules ([],[]) rules in
       let left_map = Tables.build_rule_map binary_rules 0 in 
