@@ -169,119 +169,125 @@ let rec printList l=
   It is considered an optimization for Fixed-point method and a necessarity for Newton's method.
 *)
 
+(* Returns a pair of directed graphs, each represented by a hashtable mapping a vertex to its children. 
+   In the first graph, there's an edge from X to Y iff there's a rule that has X as the LHS and Y 
+   somewhere on the RHS. The second graph is the transpose/reverse of the first. *)
+let grammar_to_tables (rules : Rule.r list) : (string, string) Hashtbl.t * (string, string) Hashtbl.t =
+    let (tbl, tbl_transpose) = (Hashtbl.create 100, Hashtbl.create 100) in
+    let add_rule (t,tt) r =
+        let lhs = get_nonterm r in
+        match get_expansion r with
+        | PublicTerminating s -> (t,tt)
+        | PublicNonTerminating (nts, recipe) -> (
+            List.iter (fun nt -> Hashtbl.add t lhs nt; Hashtbl.add tt nt lhs) (Nelist.to_list nts) ;
+            (t,tt)
+        )
+    in
+    List.fold_left add_rule (tbl, tbl_transpose) rules
 
-(* helper function for reachable
- * take a nonterminal, a rule and a list as arguments. 
- * If 1. the nonterminal matches 2.  the righthand side is nonterminating 3.the righthand side has not appeared in the list
- * push the right handside to the list (to be analyzed later)
- *)
-let reachableHelper nonterm rule acc =
-    if (nonterm = get_nonterm rule) then
-        match (get_expansion rule) with
-          | PublicTerminating str -> acc
-          | PublicNonTerminating (nts,_) -> mergeList acc (Nelist.to_list nts)
-    else acc;; 
+let all_vertices (t : (string,string) Hashtbl.t) : string list =
+    let add_vertex x acc =
+        if List.mem x acc then
+            acc
+        else
+            (x :: acc)
+    in
+    Hashtbl.fold (fun v1 v2 vs -> add_vertex v1 (add_vertex v2 vs)) t []
 
-(* go through the rules and collect all the right hand side in a no duplicated way*)
-let reachableHelper2 nonterm rules acc =
-    List.fold_left mergeList [] (List.map (fun r -> reachableHelper nonterm r acc) rules);;
+(* Based on Cormen et al., page 604. *)
+(* TODO: Can be refactored; we don't need all these attributes, could use callbacks instead. *)
+let dfs (t : ('a,'a) Hashtbl.t) (compare : 'a -> 'a -> int) : (('a,int) Hashtbl.t * ('a,'a) Hashtbl.t * 'a list) =
 
-(* print out a list of nonterminals that this symbol can reach 
-   acc is used to store all the reachable nonterminals and avoid loop, the default acc for a nonterm is itself
-*)
-let rec reachable nonterm rules acc =  
-     match acc with
-      | [] -> raise (Failure "acc could not be empty")
-      | h::t -> let temp = reachableHelper2 nonterm rules acc in
-                  let index = find nonterm temp in
-                   if (List.length temp = index + 1) then temp
-                   else reachable (List.nth temp (index + 1)) rules temp;; 
+    let (cWHITE, cGREY, cBLACK) = (0, 1, 2) in
+    let tblColor = Hashtbl.create 100 in
+    let tblParent = Hashtbl.create 100 in
+    let tblFinish = Hashtbl.create 100 in
+    let roots = ref [] in
+    let time = ref 0 in
 
-(* test whether two nonterminals are mututally reachable *)
-let mutallyReachable nonTermList reachableList nonTerm1 nonTerm2 = 
-    let index2 = find nonTerm2 nonTermList in
-      List.mem nonTerm1 (List.nth reachableList index2);;
+    let vertices = List.sort compare (all_vertices t) in
 
-(* remove all nonterminals that A can reach to but could not reach A *)
-let mutallyReachable2 nonTermList reachableList nonTerm1 =
-    let index1 = find nonTerm1 nonTermList in
-    let workingCopy = List.nth reachableList index1 in
-      List.filter (fun ele -> mutallyReachable nonTermList reachableList nonTerm1 ele) workingCopy;;
+    (* for each vertex, set color to white *)
+    List.iter (fun v -> Hashtbl.add tblColor v cWHITE) vertices ;
 
-(* This function returns mutually recursive sets that are not ordered. *)
-let getMutuallyRecursiveSets rules =
-    let nonTermList = getAllNonterm rules in
-      let reachableList = List.map (fun nonterm -> reachable nonterm rules [nonterm]) nonTermList in
-        removeDupListFromLeft (List.rev (List.map (fun ele -> mutallyReachable2 nonTermList reachableList ele) nonTermList));;  
+    let rec dfs_visit u =
+        incr time ;
+        Hashtbl.add tblColor u cGREY ;
+        List.iter (fun v ->     (* explore each edge (u,v) *)
+            if Hashtbl.find tblColor v = cWHITE then (
+                Hashtbl.add tblParent v u ;
+                dfs_visit v
+            ) else ()
+        ) (List.sort compare (Hashtbl.find_all t u)) ;
+        Hashtbl.add tblColor u cBLACK ;
+        incr time ;
+        Hashtbl.add tblFinish u (!time)
+    in
 
-(* Now we need to put these recursive sets into orders *)
-(* The basic idea is to find one independent nonterminal (no other nonterminals depend on it) each time *)
+    (* for each vertex, if it's white do dfs_visit *)
+    List.iter (fun v -> if Hashtbl.find tblColor v = cWHITE then (roots := v::(!roots) ; dfs_visit v) else ()) vertices ;
 
-(* helper function for left2num. for an element, find out which set includes it. Counter has default value 0*)
-let rec findFromListofList ele ll counter= 
-      match ll with
-       | [] -> raise (Failure "Not Found")
-       | h::t -> if (List.mem ele h) then counter else findFromListofList ele t (counter + 1);;
+    (tblFinish, tblParent, !roots)
 
-(* Assign every rules' left hand side nonterminal a number*)
-let left2num mutuallyRecursiveSets rules= 
-    let lhs = List.map (fun r -> get_nonterm r) rules in
-      List.map (fun ele -> findFromListofList ele mutuallyRecursiveSets 0) lhs;;
+(* Given a list of vertices and a table mapping each vertex to its 
+   parent (if it has one in a forest), 
+   return a list of lists that groups elements from the same tree together. *)
+let components_from_forest (vertices : 'a list) (tblParent : ('a,'a) Hashtbl.t) (roots : 'a list) : ('a list list) =
 
-(* If the right hand side is terminating, then return empty list. Otherwise, convert the right hand side symbols into numbers*)
-(* Also remove the number that is on the lhs*)
-let right2numHelper lhsNum mutuallyRecursiveSets rule=
-    match (get_expansion rule) with
-          | PublicTerminating str -> []
-          | PublicNonTerminating (nts,_) -> let rightHandSide = Nelist.to_list nts in 
-                                              List.filter (fun x -> x <> lhsNum) (List.map (fun ele -> findFromListofList ele mutuallyRecursiveSets 0) rightHandSide);;
+    let tblChildren = Hashtbl.create 100 in
+    Hashtbl.iter (fun c p -> Hashtbl.add tblChildren p c) tblParent ;
 
-(* Convert the right hand side of the rules into int list list *)
-let right2num lhsList mutuallyRecursiveSets rules=
-    List.map (fun r -> right2numHelper (List.nth lhsList (find r rules)) mutuallyRecursiveSets r) rules;;
+    let rec all_descendents v =
+        let children = Hashtbl.find_all tblChildren v in
+        v :: (concatmap_tr all_descendents children)
+    in
 
-(* convert the rules to number tuples, with the first element as lhs and second element as rhs*)
-let convert2tuple mutuallyRecursiveSets rules=
-    let lhsList = left2num mutuallyRecursiveSets rules in
-      let rhsList = right2num lhsList mutuallyRecursiveSets rules in
-        zip lhsList rhsList;;
-        
-(* Find the number that is removed (the nonterminal that is independent) *)
-let findRemoveNum zippedList = 
-    let (lst1, lst2) = unzip zippedList [] [] in 
-        findUnique lst1 (List.flatten lst2);;
-        
-(* If the first element of the tuple equal to removeNum, then remove it from the list *)
-let tupleReduction removeNum zippedList=
-    List.filter (fun tup -> (fst tup) <> removeNum) zippedList;;
+    map_tr all_descendents roots
 
-(* acc has a default value of [] *)
-let rec getOrder rules acc zippedList= 
-(*     let mutuallyRecursiveSets = getMutuallyRecursiveSets rules in
-      let zippedList = convert2tuple mutuallyRecursiveSets rules in  *)
-        match zippedList with 
-          | [] -> acc
-          | _ -> let removeNum = findRemoveNum zippedList in
-                    getOrder rules (removeNum::acc) (tupleReduction removeNum zippedList);;
+(* Computes a topologically sorted list of the vertices in a directed acyclic graph.
+   The graph is specified by a list of vertices, and a function f such that `f x y' is 
+   true iff there is an edge from x to y. *)
+(* See Cormen et al., page 613. *)
+(* TODO: This is a form of DFS, should be refactored to use the dfs function above. *)
+let topological_sort (vertices : 'a list) (edge_check : 'a -> 'a -> bool) : 'a list =
 
-(* acc has a default value of []*)
-(* This function is used to tease out nonterminals that are not depended by any other
-nonterminals. By doing this we can avoid the problem of order*)
-let rec outputInOrder mutuallyRecursiveSets order acc= 
-    match order with
-      | [] -> acc
-      | h::t -> outputInOrder mutuallyRecursiveSets t ((List.nth mutuallyRecursiveSets h) :: acc)
+    let result = ref [] in
 
-(* 
-  This is THE function that returns ordered mutually recursive sets.
-  If you are not interested in how the algorithm works, you can call this function directly.
-*)
-let getOrderedMutuallyRecursiveSets rules = 
-    let mutuallyRecursiveSets = getMutuallyRecursiveSets rules in 
-      let zippedList = convert2tuple mutuallyRecursiveSets rules in
-        let order = getOrder rules [] zippedList in 
-          List.rev (outputInOrder mutuallyRecursiveSets order []);;
+    let rec visit u =
+        let children = List.filter (edge_check u) vertices in
+        List.iter (fun v ->
+            if (not (List.mem v (!result))) then (
+                visit v
+            ) else ()
+        ) children ;
+        result := u::(!result)
+    in
 
+    List.iter (fun v ->
+        if (not (List.mem v (!result))) then visit v else ()
+    ) vertices ;
+
+    reverse_tr (!result)
+
+let getOrderedMutuallyRecursiveSets (rules : Rule.r list) : (string list list) =
+
+    let (t,tt) = grammar_to_tables rules in
+
+    (* Find the strongly connected components. See Cormen et al., page 617. *)
+    let (tblFinish, tblParent, roots) = dfs t Pervasives.compare in
+    let compare_decreasing_finish_time x y =
+        0 - Pervasives.compare (Hashtbl.find tblFinish x) (Hashtbl.find tblFinish y)
+    in
+    let (tblFinish2, tblParent2, roots2) = dfs tt compare_decreasing_finish_time in
+    let components = components_from_forest (List.sort Pervasives.compare (all_vertices t)) tblParent2 roots2 in
+
+    let components_linked xs ys =
+        (xs <> ys) && List.exists (fun x -> List.exists (fun y -> List.mem y (Hashtbl.find_all t x)) ys) xs
+    in
+
+    let sorted_components = topological_sort components components_linked in
+
+    sorted_components
 
 (****************************************************************************************)
 (*part 3: implementation of Naive method and Newton's method*)
