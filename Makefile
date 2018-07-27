@@ -1,8 +1,8 @@
 # For profiling, use: 'ocamlcp' instead of 'ocamlc'
 #                     'ocamlopt -p' instead of 'ocamlopt'
 # But profiling is incompatible with preprocessing so I'm leaving it aside.
-COMPILER_BYTECODE=ocamlcp
-COMPILER_NATIVE=ocamlopt -p
+COMPILER_BYTECODE=ocamlc
+COMPILER_NATIVE=ocamlopt
 
 LEX=ocamllex
 YACC=ocamlyacc
