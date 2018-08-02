@@ -16,6 +16,12 @@ sig
   (* ts must be comparable *)
   val compare : t -> t -> Order.order
 
+  (* Converts a t to a float *)
+  val to_float : t -> float
+
+  (* Converts a float to a t *)
+  val from_float : float -> t
+
   (* Converts a t to a string *)
   val to_string : t -> string
 

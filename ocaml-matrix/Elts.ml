@@ -29,7 +29,11 @@ struct
       else if a > b then Order.Greater
       else
         raise (Failure "Error in compare.")
-  
+
+  let to_float x = x
+
+  let from_float x = x
+
   let to_string = string_of_float
 
   let from_string (x: string) = 
@@ -100,6 +104,10 @@ struct
     else if Num.compare_num a b = 1 then Order.Greater
     else
       raise (Failure "Error in compare.")
+
+  let to_float = Num.float_of_num
+
+  let from_float f = Num.num_of_string (string_of_float f)
 
   let to_string = Num.string_of_num
 
