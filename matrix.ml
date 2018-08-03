@@ -1,6 +1,6 @@
 open Util
 
-type matrix = OCamlMatrix.Matrix.EltMatrix.matrix * string list
+type matrix = float array array * string list
 
 exception IndexingError of (string * string list)
 
@@ -17,16 +17,21 @@ let dot_product xs ys =
 
 (************************************************************)
 
-let create_square_matrix xs f =
-    let create_row r = map_tr (fun c -> OCamlMatrix.Elts.Elts.from_float (f r c)) xs in
-    let list_of_rows = map_tr create_row xs in
-    let m = OCamlMatrix.Matrix.EltMatrix.from_list list_of_rows in
-    (m, xs)
+let create_square_matrix indices f =
+    let dim = List.length indices in
+    let create_row (r : string) : float array = Array.init dim (fun ci -> f r (List.nth indices ci)) in
+    let m = Array.init dim (fun ri -> create_row (List.nth indices ri)) in
+    (m, indices)
 
 let get_element (m,indices) r c =
     let row_num = index_as_int indices r in
     let column_num = index_as_int indices c in
-    OCamlMatrix.Elts.Elts.to_float (OCamlMatrix.Matrix.EltMatrix.get_elt m (row_num, column_num))
+    try
+        m.(row_num - 1).(column_num - 1)
+    with e ->
+        Printf.eprintf "Indexing error trying to look up index (%d,%d), from strings (%s,%s), in this matrix:\n" row_num column_num r c ;
+        Array.iter (fun row -> Array.iter (fun x -> Printf.eprintf "% f " x) row; Printf.eprintf "\n") m ;
+        raise e
 
 let get_row (m,indices) r =
     map_tr (fun c -> get_element (m,indices) r c) indices
@@ -39,8 +44,14 @@ let get_indices (m,indices) = indices
 let identity_matrix xs =
     create_square_matrix xs (fun r c -> if r = c then 1.0 else 0.0)
 
-let invert (m,indices) =
-    (OCamlMatrix.Matrix.EltMatrix.inverse m, indices)
+let invert ((m,indices) : matrix) =
+    let m' = OCamlMatrix.Matrix.EltMatrix.from_list (map_tr (fun ri -> map_tr OCamlMatrix.Elts.Elts.from_float (get_row (m,indices) ri)) indices) in
+    let invm' = OCamlMatrix.Matrix.EltMatrix.inverse m' in
+    let invm = create_square_matrix indices (fun r c -> let ri = index_as_int indices r in
+                                                        let ci = index_as_int indices c in
+                                                        let elt = OCamlMatrix.Matrix.EltMatrix.get_elt invm' (ri,ci) in
+                                                        OCamlMatrix.Elts.Elts.to_float elt) in
+    invm
 
 let multiply (m1,indices1) (m2,indices2) =
     assert (indices1 = indices2) ;
