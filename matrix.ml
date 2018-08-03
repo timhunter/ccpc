@@ -7,13 +7,13 @@ exception IndexingError of (string * string list)
 (************************************************************)
 (* Private functions for use inside this file ***************)
 
-let elt_of_float = OCamlMatrix.Elts.Elts.from_float
-let float_of_elt = OCamlMatrix.Elts.Elts.to_float
-
 let index_as_int indices str =
     match find_in_list str indices with
     | (n::[]) -> n + 1
     | _ -> raise (IndexingError (str, indices))
+
+let dot_product xs ys =
+    List.fold_left (+.) 0.0 (List.map2 ( *. ) xs ys)
 
 (************************************************************)
 
@@ -28,6 +28,12 @@ let get_element (m,indices) r c =
     let column_num = index_as_int indices c in
     OCamlMatrix.Elts.Elts.to_float (OCamlMatrix.Matrix.EltMatrix.get_elt m (row_num, column_num))
 
+let get_row (m,indices) r =
+    map_tr (fun c -> get_element (m,indices) r c) indices
+
+let get_col (m,indices) c =
+    map_tr (fun r -> get_element (m,indices) r c) indices
+
 let get_indices (m,indices) = indices
 
 let identity_matrix xs =
@@ -38,34 +44,31 @@ let invert (m,indices) =
 
 let multiply (m1,indices1) (m2,indices2) =
     assert (indices1 = indices2) ;
-    (OCamlMatrix.Matrix.EltMatrix.mult m1 m2, indices2)
+    let f r c = dot_product (get_row (m1,indices1) r) (get_col (m2,indices2) c) in
+    create_square_matrix indices2 f
 
 let add (m1,indices1) (m2,indices2) =
     assert (indices1 = indices2) ;
-    (OCamlMatrix.Matrix.EltMatrix.add m1 m2, indices2)
+    let f r c = get_element (m1,indices1) r c +. get_element (m2,indices2) r c in
+    create_square_matrix indices2 f
 
 let subtract (m1,indices1) (m2,indices2) =
-    let neg_m2 = OCamlMatrix.Matrix.EltMatrix.scale m2 (OCamlMatrix.Elts.Elts.from_float (-1.0)) in
-    add (m1,indices1) (neg_m2,indices2)
+    let neg_m2 = create_square_matrix indices2 (fun r c -> -1.0 *. get_element (m2,indices2) r c) in
+    add (m1,indices1) neg_m2
 
-let mult_vec_by xs (m,_) =
-    let indices = map_tr (fun x -> x + 1) (range 0 (List.length xs)) in
-    let row_vector = OCamlMatrix.Matrix.EltMatrix.from_list [map_tr OCamlMatrix.Elts.Elts.from_float xs] in
-    let m_result = OCamlMatrix.Matrix.EltMatrix.mult row_vector m in
-    map_tr (fun c -> OCamlMatrix.Elts.Elts.to_float (OCamlMatrix.Matrix.EltMatrix.get_elt m_result (1,c))) indices
+let mult_vec_by xs (m,indices) =
+    assert (List.length xs = List.length indices) ;
+    map_tr (fun c -> dot_product xs (get_col (m,indices) c)) indices
 
-let mult_by_vec (m,_) xs =
-    let indices = map_tr (fun x -> x + 1) (range 0 (List.length xs)) in
-    let col_vector = OCamlMatrix.Matrix.EltMatrix.from_list (map_tr (fun x -> [OCamlMatrix.Elts.Elts.from_float x]) xs) in
-    let m_result = OCamlMatrix.Matrix.EltMatrix.mult m col_vector in
-    map_tr (fun r -> OCamlMatrix.Elts.Elts.to_float (OCamlMatrix.Matrix.EltMatrix.get_elt m_result (r,1))) indices
+let mult_by_vec (m,indices) xs =
+    assert (List.length xs = List.length indices) ;
+    map_tr (fun r -> dot_product (get_row (m,indices) r) xs) indices
 
-let print (m,_) =
-    let (num_rows, num_cols) = OCamlMatrix.Matrix.EltMatrix.get_dimensions m in
-    let go r c elt =
-        if c = 1 then Printf.printf "| " else () ;
-        Printf.printf "% f " (OCamlMatrix.Elts.Elts.to_float elt) ;
-        if c = num_cols then Printf.printf "|\n" else () ;
+let print ?(ch = stdout) (m,indices) =
+    let print_row r =
+        Printf.fprintf ch "| " ;
+        List.iter (fun c -> Printf.fprintf ch "% f " (get_element (m,indices) r c)) indices ;
+        Printf.fprintf ch "|\n"
     in
-    OCamlMatrix.Matrix.EltMatrix.iteri go m
+    List.iter print_row indices
 

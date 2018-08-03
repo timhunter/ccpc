@@ -45,5 +45,5 @@ val mult_vec_by : float list -> matrix -> float list
 val mult_by_vec : matrix -> float list -> float list
 
 (** Prints out a matrix. Used for debugging. *)
-val print : matrix -> unit
+val print : ?ch:(out_channel) -> matrix -> unit
 
