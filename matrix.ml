@@ -4,6 +4,8 @@ type matrix = float array array * string list
 
 exception IndexingError of (string * string list)
 
+exception NonInvertible of matrix
+
 (************************************************************)
 (* Private functions for use inside this file ***************)
 
@@ -44,14 +46,68 @@ let get_indices (m,indices) = indices
 let identity_matrix xs =
     create_square_matrix xs (fun r c -> if r = c then 1.0 else 0.0)
 
-let invert ((m,indices) : matrix) =
-    let m' = OCamlMatrix.Matrix.EltMatrix.from_list (map_tr (fun ri -> map_tr OCamlMatrix.Elts.Elts.from_float (get_row (m,indices) ri)) indices) in
-    let invm' = OCamlMatrix.Matrix.EltMatrix.inverse m' in
-    let invm = create_square_matrix indices (fun r c -> let ri = index_as_int indices r + 1 in
-                                                        let ci = index_as_int indices c + 1 in
-                                                        let elt = OCamlMatrix.Matrix.EltMatrix.get_elt invm' (ri,ci) in
-                                                        OCamlMatrix.Elts.Elts.to_float elt) in
-    invm
+let invert (m,indices) =
+
+    let dim = List.length indices in
+    let make_augmented_row ri = Array.init (2 * dim) (fun ci -> if ci < dim then m.(ri).(ci) else if ci = ri + dim then 1.0 else 0.0) in
+    let augmented_matrix = Array.init dim make_augmented_row in
+
+    (* Modify a row according to the given function, which accepts a column index and the current element as arguments. *)
+    let tweak_row m ri (f : int -> float -> float) =
+        let tweak_position ci =
+            let old = m.(ri).(ci) in
+            Array.set m.(ri) ci (f ci old)
+        in
+        List.iter tweak_position (range 0 (2*dim))
+    in
+
+    let swap_rows m ri1 ri2 =
+        let old_ri1 = m.(ri1) in
+        m.(ri1) <- m.(ri2) ;
+        m.(ri2) <- old_ri1
+    in
+
+    (* Modify augmented_matrix to have a zero at position (ri,ci) by adding some multiple of row rownum to row ri *)
+    let zero_position_using_row (ri,ci) rownum =
+        let here = augmented_matrix.(ri).(ci) in
+        if here <> 0.0 then (
+            let there = augmented_matrix.(rownum).(ci) in
+            assert (there <> 0.0) ;
+            let factor = here /. there in
+            tweak_row augmented_matrix ri (fun ci' x -> x -. factor *. augmented_matrix.(rownum).(ci'))
+        ) else ()
+    in
+
+    (* Manipulate the augmented matrix, column by column working from the left, into a form where:
+        (a) everything underneath the diagonal is zero, and 
+        (b) everything on the diagonal is non-zero. *)
+    let zero_bottom_part_of_col ci =
+        if augmented_matrix.(ci).(ci) = 0.0 then
+            let values_in_this_col = map_tr (fun i -> (i, augmented_matrix.(i).(ci))) (range (ci+1) dim) in
+            match (List.filter (fun (i,x) -> x <> 0.0) values_in_this_col) with
+            | [] -> raise (NonInvertible (m,indices))
+            | ((otherrow,_)::_) -> swap_rows augmented_matrix otherrow ci
+        else () ;
+        List.iter (fun ri -> zero_position_using_row (ri,ci) ci) (range (ci+1) dim)
+    in
+    List.iter zero_bottom_part_of_col (range 0 dim) ;
+
+    (* Zero out the top right triangle of the matrix, column by column working from the right *)
+    let zero_top_part_of_col ci = List.iter (fun ri -> zero_position_using_row (ri,ci) ci) (reverse_tr (range 0 ci)) in
+    List.iter zero_top_part_of_col (range 0 dim) ;
+
+    (* Scale each row to make the values on the diagonal one. *)
+    let set_diagonal_to_one i =
+        let z = augmented_matrix.(i).(i) in
+        assert (z <> 0.0) ;
+        tweak_row augmented_matrix i (fun ci x -> x /. z)
+    in
+    List.iter set_diagonal_to_one (range 0 dim) ;
+
+    let extract_inverse_row ri = Array.sub augmented_matrix.(ri) dim dim in
+    let result = Array.init dim extract_inverse_row in
+
+    (result,indices)
 
 let multiply (m1,indices1) (m2,indices2) =
     assert (indices1 = indices2) ;

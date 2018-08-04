@@ -1,2 +1,0 @@
-title: Matrix Module and Simplex Algorithm
-seas-usernames: andyshi, dzhou, luisperez, zihaowang01
