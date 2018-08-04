@@ -562,7 +562,8 @@ let getTable mode (rules: Rule.r list) (r: float)
  * symbol in the argument grammar, and the second member is the list of rules with reweighted probabilities. 
  *)
 let renormalize_grammar mode rules start_symbol =
-    (getTable mode rules 0.0000001 Settled start_symbol, rules)
+    let threshold = 0.000000001 in
+    (getTable mode rules threshold Settled start_symbol, rules)
 
 let main () =
     let mode = ref Newton in
