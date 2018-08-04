@@ -9,7 +9,7 @@ exception IndexingError of (string * string list)
 
 let index_as_int indices str =
     match find_in_list str indices with
-    | (n::[]) -> n + 1
+    | (n::[]) -> n
     | _ -> raise (IndexingError (str, indices))
 
 let dot_product xs ys =
@@ -27,7 +27,7 @@ let get_element (m,indices) r c =
     let row_num = index_as_int indices r in
     let column_num = index_as_int indices c in
     try
-        m.(row_num - 1).(column_num - 1)
+        m.(row_num).(column_num)
     with e ->
         Printf.eprintf "Indexing error trying to look up index (%d,%d), from strings (%s,%s), in this matrix:\n" row_num column_num r c ;
         Array.iter (fun row -> Array.iter (fun x -> Printf.eprintf "% f " x) row; Printf.eprintf "\n") m ;
@@ -47,8 +47,8 @@ let identity_matrix xs =
 let invert ((m,indices) : matrix) =
     let m' = OCamlMatrix.Matrix.EltMatrix.from_list (map_tr (fun ri -> map_tr OCamlMatrix.Elts.Elts.from_float (get_row (m,indices) ri)) indices) in
     let invm' = OCamlMatrix.Matrix.EltMatrix.inverse m' in
-    let invm = create_square_matrix indices (fun r c -> let ri = index_as_int indices r in
-                                                        let ci = index_as_int indices c in
+    let invm = create_square_matrix indices (fun r c -> let ri = index_as_int indices r + 1 in
+                                                        let ci = index_as_int indices c + 1 in
                                                         let elt = OCamlMatrix.Matrix.EltMatrix.get_elt invm' (ri,ci) in
                                                         OCamlMatrix.Elts.Elts.to_float elt) in
     invm
