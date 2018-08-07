@@ -125,7 +125,7 @@ let main () =
                 prerr_endline "===============" ;
                 prerr_endline (Path.show_history (fun x -> x) cycle) ;
                 prerr_endline "    Ways into this cycle:" ;
-                List.iter (fun w -> prerr_endline ("    " ^ (Path.show_history (fun x -> x) w))) ways_to_cycle ;
+                List.iter (fun w -> prerr_endline ("    " ^ (Path.show_history (fun x -> x) w))) (List.sort compare_by_weight ways_to_cycle) ;
                 prerr_endline "===============" ;
                 () in
         List.iter prerr_cycle cycles ;
