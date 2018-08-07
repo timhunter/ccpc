@@ -39,6 +39,9 @@ val try_ending_cycle : 'a history -> ('a history * 'a history) option
 (** Product of all the weights of hyperedges used on this path. *)
 val weight_product : 'a history -> Util.weight
 
+(** Compares two histories, by entire weights and then (if weights are equal) by contents. *)
+val compare_histories : 'a history -> 'a history -> int
+
 (** In [rotate x h], the path [h] must contains the vertex [x] and must be a loop, i.e. must begin and end with the same vertex. 
     The result is a path that represents the same loop as [h] does, but with [x] as the first and last vertex. *)
 val rotate : 'a -> 'a history -> 'a history

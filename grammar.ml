@@ -29,7 +29,6 @@ let get_input_grammar grammar_file =
   with Failure str -> Printf.eprintf "%s\n" str ;
                       failwith ("Can't parse input mcfg file "^grammar_file)
   in
-  let _ = Printf.fprintf stderr "finished reading in %d rules\n" (List.length rules) in
   let _ = flush stderr in
   let start_symbol = choose_start_symbol (List.map Rule.get_nonterm rules) in
   (rules, start_symbol)
