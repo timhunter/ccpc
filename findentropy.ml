@@ -90,7 +90,7 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let entropy = find_entropy rules start_symbol in
-        	Printf.printf "(* entropy = %f *)\n" entropy;
+        	Printf.printf "(* entropy = %.18f *)\n" entropy;
 
 	(* Printf.printf "\nget_nonterms\n%s\n\n" (show_list  (fun (x:string) -> x) (Grammar.get_nonterminals rules start_symbol)); 
 
