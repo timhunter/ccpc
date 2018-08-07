@@ -70,10 +70,6 @@ let latex_tree_node dict nt =
                           Printf.sprintf "{%s\\\\[-0.2\\baselineskip]\\texttt{%s}}" (verbatim nt) (verbatim combined)
                       with Not_found -> Printf.sprintf "{%s}" (verbatim nt)
 
-let compare_by_weight h1 h2 =
-        let w1, w2 = Path.weight_product h1, Path.weight_product h2 in
-        Util.compare_weights w1 w2
-
 (* returns:  ('a * 'b list) list *)
 let group assocs : (('a * 'b) list) =
         let tbl = Hashtbl.create 10 in
@@ -90,7 +86,7 @@ let latex_cycle dict (cycle, ways_to_cycle) =
         let tikz_diagram = Path.latex_history_tikz (latex_tree_node dict) cycle in
         (* let summarise w = Printf.sprintf "%s %s --> ... --> %s" (Util.show_weight_float (Path.weight_product w)) (Path.root w) (let (_,x,_) = Path.last w in x) in *)
         let summarise w = Printf.sprintf "\\item %s" (Path.show_history (fun s -> s) w) in
-        let sorted = Util.reverse_tr (List.sort compare_by_weight ways_to_cycle) in
+        let sorted = Util.reverse_tr (List.sort Path.compare_histories ways_to_cycle) in
         let ways_in_lines = ["Ways to this cycle";"\\begin{itemize}"] @ (Util.map_tr (fun w -> (verbatim (summarise w)) ^ "\\\\") sorted) @ ["\\end{itemize}"] in
         let middle = [tikz_diagram] @ [""] @ ways_in_lines in
 
@@ -117,7 +113,7 @@ let main () =
         let (rules, start_symbol) = Grammar.get_input_grammar grammar_file in
         let dict = match dict_file with None -> None | Some f -> Some (Grammar.get_guillaumin_dict f) in
         let broken_paths = find_cycles rules start_symbol in    (* a broken path is a pair of histories, the first of which is a cycle *)
-        let sort xs = Util.reverse_tr (List.sort (fun (c1,_) (c2,_) -> compare_by_weight c1 c2) xs) in
+        let sort xs = Util.reverse_tr (List.sort (fun (c1,_) (c2,_) -> Path.compare_histories c1 c2) xs) in
         let cycles = sort (group broken_paths) in
         let cycles' = Util.map_tr fst cycles in   (* Just the cycles themselves, no "ways in" *)
         prerr_endline (String.concat "\n" (Util.map_tr (Path.show_history (fun x -> x)) cycles')) ;
@@ -125,7 +121,7 @@ let main () =
                 prerr_endline "===============" ;
                 prerr_endline (Path.show_history (fun x -> x) cycle) ;
                 prerr_endline "    Ways into this cycle:" ;
-                List.iter (fun w -> prerr_endline ("    " ^ (Path.show_history (fun x -> x) w))) (List.sort compare_by_weight ways_to_cycle) ;
+                List.iter (fun w -> prerr_endline ("    " ^ (Path.show_history (fun x -> x) w))) (List.sort Path.compare_histories ways_to_cycle) ;
                 prerr_endline "===============" ;
                 () in
         List.iter prerr_cycle cycles ;
