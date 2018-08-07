@@ -104,11 +104,13 @@ let show_list f lst =
 
 (****************************************************************************)
 
-type weight = (Num.num * Num.num) option
+open Big_int
+
+type weight = (big_int * big_int) option
 
 let no_weight = None
-let weight_one = Some(Num.num_of_int 1, Num.num_of_int 1)
-let make_weight n1 n2 = Some(Num.num_of_big_int n1, Num.num_of_big_int n2)
+let weight_one = Some (big_int_of_int 1, big_int_of_int 1)
+let make_weight n1 n2 = Some (n1, n2)
 
 (* Computes (n * 10^x) all in type num *)
 let scientific_num n x =
@@ -152,58 +154,67 @@ let num_from_decimal (str : string) : Num.num =
 (* Guaranteed to return a weight of the form Some(n,d) where n and d are both nums that correspond 
  * to whole integers. We keep all our weights this way so that show_weight works correctly. *)
 let weight_from_float f =
-    let n = num_from_decimal (Printf.sprintf "%g" f) in
+    let n = num_from_decimal (Printf.sprintf "%.24g" f) in
     if (Num.is_integer_num n) then
-        Some (n, (Num.num_of_int 1))
+        Some (big_int_of_int (Num.int_of_num n), (big_int_of_int 1))
     else
         let s = Num.string_of_num n in     (* s is something like "234/5678" *)
         let regex = Str.regexp "^\\([0-9]+\\)\\/\\([0-9]+\\)$" in
         if (Str.string_match regex s 0) then (
             let num = Str.matched_group 1 s in
             let denom = Str.matched_group 2 s in
-            Some (Num.num_of_string num, Num.num_of_string denom)
+            Some (big_int_of_string num, big_int_of_string denom)
         ) else (
             failwith (Printf.sprintf "weight_from_float: I thought string_of_num was guaranteed to give me a string in fractional form, but it gave me '%s'" s)
         )
 
 let show_weight w =
   match w with
-  | Some (x,y) -> Printf.sprintf "%s / %s" (Num.string_of_num x) (Num.string_of_num y)
-  | None -> ""
-
-let show_weight_float w =
-  match w with
-  | Some (x,y) -> string_of_float (Num.float_of_num (Num.div_num x y))
+  | Some (x,y) -> Printf.sprintf "%s / %s" (string_of_big_int x) (string_of_big_int y)
   | None -> ""
 
 let mult_weights w1 w2 =
   match (w1,w2) with
   | (None, None) -> None
-  | (Some (n1,d1), Some (n2,d2)) -> Some (Num.mult_num n1 n2, Num.mult_num d1 d2)
+  | (Some (n1,d1), Some (n2,d2)) -> Some (mult_big_int n1 n2, mult_big_int d1 d2)
   | _ -> Printf.eprintf "WARNING: Multiplying a None weight with a non-None weight!\n" ; None
+
+let normalized_ratio x y =
+    let z = gcd_big_int x y in
+    (div_big_int x z, div_big_int y z)
+
+let div_weights w1 w2 =
+  match (w1,w2) with
+  | (None, None) -> None
+  | (Some (n1,d1), Some (n2,d2)) -> Some (normalized_ratio (mult_big_int n1 d2) (mult_big_int d1 n2))
+  | _ -> Printf.eprintf "WARNING: Dividing a None weight by a non-None weight!\n" ; None
 
 let add_weights w1 w2 =
   match (w1,w2) with
   | (None, None) -> None
   | (Some (n1,d1), Some (n2,d2)) ->
-        let new_numerator = Num.add_num (Num.mult_num n1 d2) (Num.mult_num n2 d1) in
-        let new_denominator = Num.mult_num d1 d2 in
+        let new_numerator = add_big_int (mult_big_int n1 d2) (mult_big_int n2 d1) in
+        let new_denominator = mult_big_int d1 d2 in
         Some (new_numerator, new_denominator)
   | _ -> Printf.eprintf "WARNING: Adding a None weight with a non-None weight!\n" ; None
 
 let compare_weights w1 w2 =
   match (w1,w2) with
   | (None, None) -> 0
-  | (Some (n1,d1), Some (n2,d2)) -> Num.compare_num (Num.div_num n1 d1) (Num.div_num n2 d2)
-  | (None, Some (n,d)) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!\n" ; Num.compare_num (Num.num_of_int 0) (Num.div_num n d)
-  | (Some (n,d), None) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!\n" ; Num.compare_num (Num.div_num n d) (Num.num_of_int 0)
+  | (Some (n1,d1), Some (n2,d2)) -> Num.compare_num (Num.div_num (Num.num_of_big_int n1) (Num.num_of_big_int d1))
+                                                    (Num.div_num (Num.num_of_big_int n2) (Num.num_of_big_int d2))
+  | (None, Some (n,d)) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!\n" ; - Num.sign_num (Num.div_num (Num.num_of_big_int n) (Num.num_of_big_int d))
+  | (Some (n,d), None) -> Printf.eprintf "WARNING: Comparing a None weight with a non-None weight!\n" ; Num.sign_num (Num.div_num (Num.num_of_big_int n) (Num.num_of_big_int d))
 
-let num_of_weight w =
+let float_of_weight w =
     match w with
-    | None -> failwith "num_of_weight: None weight!"
-    | Some(n,d) -> Num.div_num n d
+    | None -> failwith "float_of_weight: None weight!"
+    | Some (n,d) -> Num.float_of_num (Num.div_num (Num.num_of_big_int n) (Num.num_of_big_int d))
 
-let float_of_weight w = Num.float_of_num (num_of_weight w)
+let show_weight_float w =
+  match w with
+  | Some (x,y) -> string_of_float (float_of_weight w)
+  | None -> ""
 
 (* weighted random sampling
  assumes that all the weights have the same denominator (and also, I think, that the weights sum to one)
@@ -219,17 +230,16 @@ let weighted_random xs_with_weights =
                      Some rs -> rs | _ -> failwith "weighted_random: Got a none weight!" in
         let sorted_xs_with_ratios = List.map2 (fun (x,wt) ratio -> (x,ratio)) sorted_xs_with_weights ratios in
         let denominators = List.map snd ratios in
-        let common_denominator = match (uniques denominators) with [d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
-        let sum_of_numerators = List.fold_left Num.add_num (Num.num_of_int 0) (List.map fst ratios) in
-        if (sum_of_numerators <> common_denominator) then failwith "weighted_random: Weights do not sum to one!" ;
-        let i64_of_num n = Big_int.int64_of_big_int (Num.big_int_of_num n) in
-        let one = Num.num_of_int 1 in
-        let die_roll = Random.int64 (i64_of_num (Num.add_num common_denominator one)) in
+        let common_denominator = match (uniques ~eq:eq_big_int denominators) with [d] -> d | _ -> failwith "weighted_random: Denominators should be equal!" in
+        let sum_of_numerators = List.fold_left add_big_int (big_int_of_int 0) (List.map fst ratios) in
+        if (not (eq_big_int sum_of_numerators common_denominator)) then failwith "weighted_random: Weights do not sum to one!" ;
+        let one = big_int_of_int 1 in
+        let die_roll = Random.int64 (int64_of_big_int (add_big_int common_denominator one)) in
         let rec select stillleft = function
                 [] -> failwith "select: nothing to choose from"
              | (x,wt)::[] -> x
              | (x,wt)::rest -> let (numerator,_) = wt in
-                               let diff = Int64.sub stillleft (i64_of_num numerator) in
+                               let diff = Int64.sub stillleft (int64_of_big_int numerator) in
                                if diff < Int64.zero then x else select diff rest
         in
         select die_roll sorted_xs_with_ratios

@@ -70,12 +70,22 @@ let latex_tree_node dict nt =
                           Printf.sprintf "{%s\\\\[-0.2\\baselineskip]\\texttt{%s}}" (verbatim nt) (verbatim combined)
                       with Not_found -> Printf.sprintf "{%s}" (verbatim nt)
 
-(* returns:  ('a * 'b list) list *)
-let group assocs : (('a * 'b) list) =
-        let tbl = Hashtbl.create 10 in
-        List.iter (fun (a,b) -> Hashtbl.add tbl a b) assocs ;
-        let keys = Hashtbl.fold (fun k v l -> if List.mem k l then l else k::l) tbl [] in
-        let result = Util.map_tr (fun k -> (k, Hashtbl.find_all tbl k)) keys in
+
+(* This function notionally has type ('a * 'b) list -> ('a * 'b list) list 
+   but it can't actually be that general because special hashing is required for histories 
+   (because they contain weights). *)
+let group (assocs : (string Path.history * string Path.history) list) =
+        let module StringHistHashtbl = Hashtbl.Make(
+            struct
+                type t = string Path.history
+                let equal x y = (Path.compare_histories x y = 0)
+                let hash h = Hashtbl.hash (Path.show_history_full (fun x -> x) h)   (* That will do *)
+            end
+        ) in
+        let tbl = StringHistHashtbl.create 10 in
+        let tblKeysOnly = StringHistHashtbl.create 10 in    (* because apparently there's no simpler way to iterate only over unique keys *)
+        List.iter (fun (a,b) -> StringHistHashtbl.add tbl a b; StringHistHashtbl.replace tblKeysOnly a ()) assocs ;
+        let result = StringHistHashtbl.fold (fun k () lst -> (k, StringHistHashtbl.find_all tbl k)::lst) tblKeysOnly [] in
         result
 
 let latex_cycle dict (cycle, ways_to_cycle) =
