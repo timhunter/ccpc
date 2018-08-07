@@ -576,6 +576,30 @@ let renormalize_grammar mode rules start_symbol =
     let new_rules = map_tr (fun r -> Rule.reweight r (new_weight r)) rules in
     (z start_symbol, new_rules)
 
+let get_metadata grammar_file =
+    let channel =
+        try Some (open_in grammar_file)
+        with Sys_error _ -> (Printf.eprintf "WARNING: Couldn't open file %s to retrieve metadata\n" grammar_file; None)
+    in
+    match channel with
+    | None -> []
+    | Some ch -> (
+        let re = Str.regexp "^ *(\\*\\(.*\\)\\*) *$" in
+        let result = ref [] in
+        begin
+        try
+            while true; do
+                let line = input_line ch in
+                if (Str.string_match re line 0) then
+                    result := ((Str.matched_group 1 line)::(!result))
+                else
+                    ()
+            done
+        with End_of_file -> close_in ch
+        end ;
+        reverse_tr (!result)
+    )
+
 let main () =
     let mode = ref Newton in
     let grammar_file = ref "" in
@@ -593,6 +617,7 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
+        List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
         Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
         List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
     )
