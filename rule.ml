@@ -107,6 +107,11 @@ let desituate_rule rule =
         Terminating (_,_,w) -> w
       | NonTerminating (_,_,_,w) -> w
 
+    let reweight rule w =
+      match rule with
+      | Terminating (nt, str, _) -> Terminating (nt, str, w)
+      | NonTerminating (left, rights, recipes, _) -> NonTerminating (left, rights, recipes, w)
+
     let get_expansion rule =
       match rule with
       | Terminating (_, str, weight) -> PublicTerminating str

@@ -156,7 +156,7 @@ let num_from_decimal (str : string) : Num.num =
 (* Guaranteed to return a weight of the form Some(n,d) where n and d are both nums that correspond 
  * to whole integers. We keep all our weights this way so that show_weight works correctly. *)
 let weight_from_float f =
-    let n = num_from_decimal (Printf.sprintf "%g" f) in
+    let n = num_from_decimal (Printf.sprintf "%.24g" f) in
     if (Num.is_integer_num n) then
         Some (n, (Num.num_of_int 1))
     else
@@ -185,6 +185,22 @@ let mult_weights w1 w2 =
   | (None, None) -> None
   | (Some (n1,d1), Some (n2,d2)) -> Some (Num.mult_num n1 n2, Num.mult_num d1 d2)
   | _ -> Printf.eprintf "WARNING: Multiplying a None weight with a non-None weight!\n" ; None
+
+let normalized_ratio x y =
+    let rec gcd x y =
+        if Num.compare_num y (Num.num_of_int 0) = 0 then
+            x
+        else
+            gcd y (Num.mod_num x y)
+    in
+    let z = gcd x y in
+    (Num.div_num x z, Num.div_num y z)
+
+let div_weights w1 w2 =
+  match (w1,w2) with
+  | (None, None) -> None
+  | (Some (n1,d1), Some (n2,d2)) -> Some (normalized_ratio (Num.mult_num n1 d2) (Num.mult_num d1 n2))
+  | _ -> Printf.eprintf "WARNING: Dividing a None weight by a non-None weight!\n" ; None
 
 let add_weights w1 w2 =
   match (w1,w2) with

@@ -24,6 +24,9 @@ val get_nonterm : r -> string
 (** The weight of this rule. *)
 val get_weight : r -> Util.weight
 
+(** Create a new copy of this rule, with the specified weight but otherwise the same. *)
+val reweight : r -> Util.weight -> r
+
 (** The right hand side of this rule; see description of [expansion] type above. *)
 val get_expansion : r -> expansion
 

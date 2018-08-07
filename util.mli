@@ -58,6 +58,7 @@ val float_of_weight : weight -> float
 val show_weight : weight -> string
 val show_weight_float : weight -> string
 val mult_weights : weight -> weight -> weight
+val div_weights : weight -> weight -> weight
 val add_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
 val weighted_random : ('a * weight) list -> 'a

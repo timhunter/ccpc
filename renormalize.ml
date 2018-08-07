@@ -563,7 +563,18 @@ let getTable mode (rules: Rule.r list) (r: float)
  *)
 let renormalize_grammar mode rules start_symbol =
     let threshold = 0.000000001 in
-    (getTable mode rules threshold Settled start_symbol, rules)
+    let tbl = getTable mode rules threshold in
+    let z nt = weight_from_float (tbl Settled nt) in
+    let new_weight r =
+        let lhs = get_nonterm r in
+        match get_expansion r with
+        | PublicTerminating _ -> div_weights (get_weight r) (z lhs)
+        | PublicNonTerminating (nts,_) ->
+            let z_nts = Nelist.fold mult_weights (Nelist.map z nts) in
+            div_weights (mult_weights (get_weight r) z_nts) (z lhs)
+    in
+    let new_rules = map_tr (fun r -> Rule.reweight r (new_weight r)) rules in
+    (z start_symbol, new_rules)
 
 let main () =
     let mode = ref Newton in
@@ -582,7 +593,8 @@ let main () =
         (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
-        Printf.printf "(* \"probability = %.18f\" *)\n" prob ;
+        Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
+        List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
     )
 
 let _ = if (!Sys.interactive) then () else main ()
