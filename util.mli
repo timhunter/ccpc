@@ -61,4 +61,5 @@ val mult_weights : weight -> weight -> weight
 val div_weights : weight -> weight -> weight
 val add_weights : weight -> weight -> weight
 val compare_weights : weight -> weight -> int
+val common_denominator : weight list -> weight list
 val weighted_random : ('a * weight) list -> 'a

@@ -574,7 +574,8 @@ let renormalize_grammar mode rules start_symbol =
             div_weights (mult_weights (get_weight r) z_nts) (z lhs)
     in
     let new_rules = map_tr (fun r -> Rule.reweight r (new_weight r)) rules in
-    (z start_symbol, new_rules)
+    let new_rules_with_fixed_denoms = Grammar.ensure_common_denominators new_rules in
+    (z start_symbol, new_rules_with_fixed_denoms)
 
 let get_metadata grammar_file =
     let channel =

@@ -220,6 +220,21 @@ let show_weight_float w =
   | Some (x,y) -> string_of_float (float_of_weight w)
   | None -> ""
 
+let common_denominator ws =
+    let lcm x y = div_big_int (abs_big_int (mult_big_int x y)) (gcd_big_int x y) in
+    match require_no_nones ws with
+    | None -> ws
+    | Some fractions -> (
+        let denominators = map_tr (fun (n,d) -> d) fractions in
+        match denominators with
+        | [] -> ws   (* this means fractions was [] too *)
+        | (d::ds) -> (
+            let new_denom = List.fold_left lcm d ds in
+            let new_fractions = map_tr (fun (n,d) -> (div_big_int (mult_big_int n new_denom) d, new_denom)) fractions in
+            map_tr (fun (n,d) -> Some (n,d)) new_fractions
+        )
+    )
+
 (* weighted random sampling
  assumes that all the weights have the same denominator (and also, I think, that the weights sum to one)
  we're using the 64-bit random number generator because these denominators are so freakin large

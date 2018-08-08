@@ -48,7 +48,17 @@ let get_nonterminals rules start_symbol =
 
 (******************************************************************************************)
 
-
+let ensure_common_denominators rules =
+    let tbl = Hashtbl.create 50 in
+    let nonterms = uniques (map_tr get_nonterm rules) in
+    List.iter (fun r -> Hashtbl.add tbl (get_nonterm r) r) rules ;
+    List.fold_left (fun acc nt ->
+        let rs = Hashtbl.find_all tbl nt in
+        let weights = map_tr get_weight rs in
+        let new_weights = common_denominator weights in
+        let new_rs = List.map2 (fun r w -> Rule.reweight r w) rs new_weights in
+        append_tr acc new_rs
+    ) [] nonterms
 
 let get_guillaumin_dict filename =
 

@@ -16,6 +16,10 @@ val intersection_grammar : Chart.chart -> string -> Fsa.fsa -> (Rule.r list * st
 (** Reads a (weighted or unweighted) MCFG from a file with the specified name. *)
 val get_input_grammar : string -> (Rule.r list * string)
 
+(** Re-expresses all weights in a grammar so that whenever two rules have the same 
+    left-hand side, their weights have the same denominator. *)
+val ensure_common_denominators : Rule.r list -> Rule.r list
+
 (** Reads from the specified dict file and returns a mapping from guillaumin-generated 
     preterminals (e.g. ["t123"]) to feature sequences (e.g. [":: =N D -f"]). *)
 val get_guillaumin_dict : string -> (string, string) Hashtbl.t
