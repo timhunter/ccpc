@@ -126,41 +126,6 @@ let rec unzip zippedList lst1 lst2=
 
 
 
-(*with two float lists of the same length, substract the second float list from the first one to get a new float list*)
-let rec floatListSubstraction (list1: float list) (list2: float list)
-=match (list1,list2) with
-  | (h1::t1,h2::t2) -> Util.append_tr [h1 -. h2] (floatListSubstraction t1 t2)
-  | ([],[])-> []
-  | _ -> raise (Failure "cannot substract two float lists with different length");;
-
-(* test function used to print out*)
-let rec print_list_string myList = 
-  match myList with
-    | [] -> print_endline "]"
-    | head::body -> 
-          begin
-          Printf.printf "\"%s\"; " head;
-          print_list_string body
-          end;;
-
-(* test function*)
-let rec print_string_list myList = 
-  match myList with
-    | [] -> print_endline "]"
-    | head::body ->
-        begin
-          Printf.printf "[";
-          print_list_string head;
-          print_string_list body
-        end;;
-
-(* Testing floatlist *)
-let rec printList l=
-  match l with
-  | (h::t) -> Printf.printf "%f !!!" h;
-              printList t
-  | [] -> Printf.printf "\n\n\n";;
-
 (****************************************************************************************)
 (*part2*)
 (***implementation of getOrderedMutuallyRecursiveSets***)
@@ -332,7 +297,7 @@ let rec naiveOneNonTeminalOneRuleAtLevelK (k:int)(nonterminal:string)(onePair:(s
 (someMiddleTable: indicator->string->float)(mutuallyRecursiveSets: string list list)=
 (*return float;*)
 match onePair with
-|(h::t,f)-> (* (Printf.printf "I am here, the h is %s and the two floats are %f and %f \n" h (someMiddleTable Settled h)(naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets));*)
+|(h::t,f)-> (* (Printf.eprintf "I am here, the h is %s and the two floats are %f and %f \n" h (someMiddleTable Settled h)(naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets));*)
         (* Equation 16 *)
         if (sameSet nonterminal h mutuallyRecursiveSets) then (someMiddleTable (Depth (k-1)) h)*. 
         (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (t,f) someMiddleTable mutuallyRecursiveSets) 
@@ -345,7 +310,7 @@ match onePair with
 let rec naiveOneNonTeminalAtLevelK (k:int)(nonterminal:string)(alllist:(string list*float) list)
 (someMiddleTable: indicator->string->float)(mutuallyRecursiveSets: string list list)
 =match alllist with
-                |(a,b)::t-> (* (Printf.printf "the head is %f and the float is %f \n" b 
+                |(a,b)::t-> (* (Printf.eprintf "the head is %f and the float is %f \n" b 
                   (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets)); *)
                   (naiveOneNonTeminalOneRuleAtLevelK k nonterminal (a,b) someMiddleTable mutuallyRecursiveSets) +. 
                   (naiveOneNonTeminalAtLevelK k nonterminal t someMiddleTable mutuallyRecursiveSets)
@@ -435,7 +400,7 @@ let rec fillTableForSetAtDepthKNewton (k: int)(oneSet: string list) (someMiddleT
 (floatlist: float list)
 =match (oneSet,floatlist) with 
 	| (h1::t1,h2::t2) -> 
-		(* if(k<10) then Printf.printf "at level %i for %s put in value %f \n" k h1 h2; (* testing function to see the value*) *)
+		(* if(k<10) then Printf.eprintf "at level %i for %s put in value %f \n" k h1 h2; (* testing function to see the value*) *)
 	fillTableForSetAtDepthKNewton k t1 (add someMiddleTable (Depth k) h1 h2) t2
 	| ([],[])->someMiddleTable
 	| _->raise (Failure "string list and float lost don't match in length");;
@@ -451,7 +416,7 @@ let rec getFloatListForSetAtLevelKFromTable (k: int)(oneSet: string list) (someM
 (* the float list returned is the list of values for non-terminals in a set at depth k*)
 let getNewFloatListForSetAtLevelK (k: int)(oneSet: string list) (someMiddleTable: indicator->string->float)
 (rules: Rule.r list) (mutuallyRecursiveSets: string list list)
-= floatListSubstraction (getFloatListForSetAtLevelKFromTable k oneSet someMiddleTable) (Matrix.mult_by_vec 
+= List.map2 (-.) (getFloatListForSetAtLevelKFromTable k oneSet someMiddleTable) (Matrix.mult_by_vec 
 	(Matrix.invert (getJFMatrix k oneSet someMiddleTable rules mutuallyRecursiveSets))
 	(getFForVector k oneSet someMiddleTable rules mutuallyRecursiveSets)
 	)
@@ -471,7 +436,7 @@ let rec oneSetAtLevelK mode (k: int)(oneSet: string list) (someMiddleTable: indi
 match mode with 
   |Naive->(match oneSet with
               | h::t -> 
-              (* Printf.printf "I am adding the value %.20f for %s at level %i \n" (naiveOneNonTeminalAtLevelK mode k h (findRule h rules) someMiddleTable mutuallyRecursiveSets) h k; *)
+              (* Printf.eprintf "I am adding the value %.20f for %s at level %i \n" (naiveOneNonTeminalAtLevelK mode k h (findRule h rules) someMiddleTable mutuallyRecursiveSets) h k; *)
               let newTable = (add someMiddleTable (Depth k) h 
                   (naiveOneNonTeminalAtLevelK k h (findRule h rules) someMiddleTable mutuallyRecursiveSets))  in
               (oneSetAtLevelK mode k t newTable rules mutuallyRecursiveSets)
@@ -504,7 +469,7 @@ match oneSet with
 let rec settleTableForSet (oneSet: string list) (k: int) (someMiddleTable: indicator->string->float)
 =match oneSet with
 | h::t-> 
-(* Printf.printf "I am settling the value for %s at level %i: %f \n" h k (someMiddleTable (Depth k) h); *)
+(* Printf.eprintf "I am settling the value for %s at level %i: %.20f \n" h k (someMiddleTable (Depth k) h); *)
 let updateTable= add someMiddleTable Settled h (someMiddleTable (Depth k) h) in
 (settleTableForSet t k updateTable)
 | _-> someMiddleTable;;
