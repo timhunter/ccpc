@@ -16,6 +16,9 @@ val intersection_grammar : Chart.chart -> string -> Fsa.fsa -> (Rule.r list * st
 (** Reads a (weighted or unweighted) MCFG from a file with the specified name. *)
 val get_input_grammar : string -> (Rule.r list * string)
 
+(** Checks whether the given grammar is consistent. *)
+val is_consistent : (Rule.r list * string) -> bool
+
 (** Re-expresses all weights in a grammar so that whenever two rules have the same 
     left-hand side, their weights have the same denominator. *)
 val ensure_common_denominators : Rule.r list -> Rule.r list

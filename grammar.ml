@@ -259,5 +259,26 @@ let drawgraph chart goal_items symbols filename =
       close_out oc
     end
 
+(********************************************************)
 
-  
+(* fertility : rule list -> string -> string -> float *)
+let fertility rules a b =
+    (* Angelica: do this! :-) *)
+    0.3
+
+let fertility_matrix (rules, start_symbol) =
+    let indices = get_nonterminals rules start_symbol in
+    Printf.printf("Here are the indices:\n") ;
+    List.iter (fun s -> Printf.printf "%s " s) indices ;
+    Printf.printf("\n") ;
+    let m = Matrix.create_square_matrix indices (fertility rules) in
+    Printf.printf("Here's the fertility matrix:\n") ;
+    Matrix.print m ;
+    m
+
+let is_consistent (rules, start_symbol) =
+    Printf.printf("is_consistent\n") ;
+    let m = fertility_matrix (rules, start_symbol) in
+    let sr = Matrix.spectral_radius m in
+    (sr < 1.0)
+

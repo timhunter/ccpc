@@ -139,3 +139,7 @@ let print ?(ch = stdout) (m,indices) =
     in
     List.iter print_row indices
 
+let spectral_radius (m,indices) =
+    (* Angelica: do this! :-) *)
+    0.9
+

@@ -44,6 +44,9 @@ val mult_vec_by : float list -> matrix -> float list
     The result is another column vector. *)
 val mult_by_vec : matrix -> float list -> float list
 
+(** Spectral radius of a matrix. *)
+val spectral_radius : matrix -> float
+
 (** Prints out a matrix. Used for debugging. *)
 val print : ?ch:(out_channel) -> matrix -> unit
 

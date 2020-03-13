@@ -24,7 +24,7 @@ FLAGS= -I mcfgread -I +ocamlgraph
 LIBS= nums.cmxa str.cmxa unix.cmxa graph.cmxa
 
 # All source files that do not correspond to the "top" file of an executable.
-MODULES= util.ml fsa.ml nelist.ml rule.ml chart.ml parser.ml mcfgread/read.ml mcfgread/lexer.ml grammar.ml derivation.ml path.ml matrix.ml
+MODULES= util.ml fsa.ml nelist.ml rule.ml chart.ml parser.ml mcfgread/read.ml mcfgread/lexer.ml matrix.ml grammar.ml derivation.ml path.ml
 
 OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)

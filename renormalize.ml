@@ -580,12 +580,15 @@ let main () =
         Printf.eprintf "Must provide a grammar file\n" ;
         Arg.usage speclist usage_msg
     ) else (
-        (* Everything's OK, let's do our thing ... *)
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
-        let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
-        List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
-        Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
-        List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
+        if not (Grammar.is_consistent (rules,start_symbol)) then (
+            Printf.eprintf "Grammar is not consistent\n" ;
+        ) else (
+            let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
+            List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
+            Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
+            List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
+        )
     )
 
 let _ = if (!Sys.interactive) then () else main ()
