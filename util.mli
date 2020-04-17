@@ -49,6 +49,7 @@ val append_tr : 'a list -> 'a list -> 'a list
 
 (** A [weight] is either an exact-fraction weight (for use with weighted grammars) 
     or the distinguished value [no_weight] (for use with unweighted grammars). *)
+
 type weight
 val no_weight : weight
 val weight_one : weight

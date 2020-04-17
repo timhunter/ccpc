@@ -44,9 +44,19 @@ val mult_vec_by : float list -> matrix -> float list
     The result is another column vector. *)
 val mult_by_vec : matrix -> float list -> float list
 
-(** Spectral radius of a matrix. *)
-val spectral_radius : matrix -> float
-
 (** Prints out a matrix. Used for debugging. *)
 val print : ?ch:(out_channel) -> matrix -> unit
 
+(** functions by Angelica *)
+
+(** Divides a column vector, given in the form of a list, by a scalar.
+    The result is another column vector. *)
+val div_vec_by : float list -> float -> float list
+
+(** Spectral radius of a matrix. *)
+val spectral_radius : matrix -> float
+
+(** Checks whether the fertility matrix of a given grammar is consistent. *)
+val is_consistent : matrix -> bool
+
+val create_test_matrix : int -> float list -> string list -> matrix

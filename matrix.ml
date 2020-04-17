@@ -21,9 +21,14 @@ let dot_product xs ys =
 
 let create_square_matrix indices f =
     let dim = List.length indices in
+    (* create_row: int -> (int -> float) -> float array *)
+    (* fun ci: int -> float *)
+    (* f: string -> (string list -> int -> string) -> float *)
     let create_row (r : string) : float array = Array.init dim (fun ci -> f r (List.nth indices ci)) in
     let m = Array.init dim (fun ri -> create_row (List.nth indices ri)) in
     (m, indices)
+(* let test_matrix indices f =
+    let dim = List.el *)
 
 let get_element (m,indices) r c =
     let row_num = index_as_int indices r in
@@ -131,15 +136,113 @@ let mult_by_vec (m,indices) xs =
     assert (List.length xs = List.length indices) ;
     map_tr (fun r -> dot_product (get_row (m,indices) r) xs) indices
 
-let print ?(ch = stdout) (m,indices) =
+(* let print ?(ch = stdout) (m,indices) =
     let print_row r =
         Printf.fprintf ch "| " ;
         List.iter (fun c -> Printf.fprintf ch "% f " (get_element (m,indices) r c)) indices ;
         Printf.fprintf ch "|\n"
     in
     List.iter print_row indices
+ *)
 
-let spectral_radius (m,indices) =
-    (* Angelica: do this! :-) *)
-    0.9
+(* let fertility_matrix (rules, start_symbol) =
+    let indices = get_nonterminals rules start_symbol in
+    Printf.printf("Here are the indices:\n") ;
+    List.iter (fun s -> Printf.printf "%s " s) indices ;
+    Printf.printf("\n") ;
+    let m = Matrix.create_square_matrix indices (fertility rules) in
+    Printf.printf("Here's the fertility matrix:\n") ;
+    Matrix.print m ;
+    m
 
+ *)
+
+
+(* functions created by Angelica *)
+
+let div_vec_by v scalar = 
+    List.map (fun x -> x /. scalar) v
+
+let spectral_radius (m, indices) =
+    let d = List.length(indices) in
+    (* List.init is only in ocaml 4.06.0 and later *)
+    (* the Float module is only in ocaml 4.07.0 and later *)
+      (* let v_0 = List.init d (fun c -> Float.one /. Float.sqrt (float_of_int d)) in *)
+    let list_init n ~f = Array.(init n f |> to_list) in
+    let v_0 = list_init d (fun c -> 1. /. sqrt (float_of_int d)) in 
+    let ev_0 = 0. in 
+
+    let rec power_iterate matrix v_current ev_current =
+        let p = mult_by_vec matrix v_current in
+        let abs_max lst =
+            let abs_lst = List.map abs_float lst in
+            match abs_lst with
+            | [] -> invalid_arg "empty list"
+            | x::xs -> List.fold_left max x xs
+        in 
+        let ev_next = abs_max p in
+        let v_next = div_vec_by p ev_next in 
+        if abs_float(ev_next -. ev_current) < 0.00001
+        then ev_next
+        else power_iterate matrix v_next ev_next
+    in power_iterate (m, indices) v_0 ev_0
+
+let is_consistent (m, indices) =
+    let sr = spectral_radius (m,indices) in (sr < 1.0)
+
+ let print ?(ch = stdout) (m,indices) =
+    Printf.printf ("Spectral radius: %.*F \n\n") 5 (spectral_radius (m, indices)) ;
+    Printf.printf("Here are the indices:\n") ;
+    List.iter (fun s -> Printf.printf "%s " s) indices ;
+    Printf.printf("\n\n") ;
+    Printf.printf("Here is the fertility matrix:\n") ;
+    let rec longest_string lst = 
+        match lst with
+        | [] -> 0
+        | x::[] -> String.length x
+        | x::y::z ->  if String.length x > String.length y then longest_string (x::z) else longest_string (y::z)
+    in
+    (* find length of longest string in the list of indices *)
+    let l = max (longest_string indices) 2 in 
+    let print_row r =  
+        Printf.fprintf ch "%-*s | " l r;
+        List.iter (fun c -> Printf.fprintf ch "%.*f " l (get_element (m,indices) r c)) indices ;
+        Printf.fprintf ch "|\n"
+    in
+    (* print indices horizontally *)
+    Printf.fprintf ch "%-*s" (l+3) "" ;
+    List.iter (fun x -> Printf.fprintf ch "%-*s " (l+2) x) indices ;
+    Printf.printf("\n") ;
+    (* print rest of matrix *)
+    List.iter print_row indices
+
+let create_test_matrix n lst str_lst = 
+    assert (List.length lst = n*n) ;
+
+    let skeleton = Array.init n (fun (t:int) -> Array.create_float n) in
+    let rec modify_row row float_list col_index =
+      if col_index = n
+      then begin
+        () ;
+        (skeleton, float_list)
+      end
+      else begin
+        Array.set row col_index (List.hd float_list) ;
+        modify_row row (List.tl float_list) (col_index + 1)
+      end
+      in 
+      let rec modify_matrix matrix float_list i =
+        if i = n 
+        then
+          if (str_lst = []) then  
+            let list_init n ~f = Array.(init n f |> to_list) in
+            let indices = List.map (Char.escaped) (List.map (Char.chr) (list_init n (fun i -> i + 65)))
+            in (skeleton, indices)
+          else (
+            assert (List.length str_lst = n) ;
+            let indices = str_lst in (skeleton, indices)
+          )
+        else
+          let (_, new_list) = modify_row skeleton.(i) float_list 0 in
+          modify_matrix skeleton new_list (i + 1)
+      in modify_matrix skeleton lst 0

@@ -107,7 +107,6 @@ let show_list f lst =
         "[" ^ (String.concat ";" (map_tr f lst)) ^ "]"
 
 (****************************************************************************)
-
 open Big_int
 
 type weight = (big_int * big_int) option

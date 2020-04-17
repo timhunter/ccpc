@@ -259,14 +259,18 @@ let drawgraph chart goal_items symbols filename =
       close_out oc
     end
 
-(********************************************************)
 
+
+(* functions created by Angelica *)
 (* fertility : rule list -> string -> string -> float *)
 let fertility rules a b =
     (* Angelica: do this! :-) *)
-    0.3
+    let y = Random.int 99 in
+    if y < 50 then 0.
+    else if y >=50 && y < 75 then 0.5
+    else 1.
 
-let fertility_matrix (rules, start_symbol) =
+(* let fertility_matrix (rules, start_symbol) =
     let indices = get_nonterminals rules start_symbol in
     Printf.printf("Here are the indices:\n") ;
     List.iter (fun s -> Printf.printf "%s " s) indices ;
@@ -275,10 +279,14 @@ let fertility_matrix (rules, start_symbol) =
     Printf.printf("Here's the fertility matrix:\n") ;
     Matrix.print m ;
     m
+ *)
+let fertility_matrix (rules, start_symbol) =
+    let indices = get_nonterminals rules start_symbol in
+    let m = Matrix.create_square_matrix indices (fertility rules) in
+    m
 
-let is_consistent (rules, start_symbol) =
-    Printf.printf("is_consistent\n") ;
+(* let is_consistent (rules, start_symbol) =
     let m = fertility_matrix (rules, start_symbol) in
     let sr = Matrix.spectral_radius m in
-    (sr < 1.0)
+    (sr < 1.0) *)
 
