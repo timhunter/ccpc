@@ -11,6 +11,7 @@ mcfgread/read.ml
 mcfgread/read.mli
 mcfg_nt
 mcfg_bc
+ccpctop
 parse
 intersect
 train

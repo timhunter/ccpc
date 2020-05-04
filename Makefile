@@ -30,7 +30,7 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: parse intersect train visualize cycles compare renormalize findentropy
+all: parse intersect train visualize cycles compare renormalize findentropy ccpctop
 
 ###########################################################################################
 ### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
@@ -47,6 +47,12 @@ mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) main.cmx
 
 ###########################################################################################
+
+# The weird '-warn-error -a' prevents Warning 31 from being treated as a fatal error.
+# Not sure why it's required here and not for generating other executables.
+# https://stackoverflow.com/questions/37415476/ocaml-warning-31-compiler-libs-and-ppx
+ccpctop: $(OCAMLINT) $(MODULES:.ml=.cmo)
+	ocamlmktop -warn-error -a -o ccpctop $(FLAGS) $(LIBS:.cmxa=.cma) $(MODULES:.ml=.cmo)
 
 parse: $(OCAMLINT) $(OCAMLOBJ) parse.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) parse.cmx
