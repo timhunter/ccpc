@@ -14,6 +14,7 @@ val take : int -> 'a list -> 'a list
 val take_while : ('a -> bool) -> 'a list -> 'a list
 
 (** [optlistmap f as] collects only the non-[None] elements of [map f as]. *)
+(* Angelica (5/6/20): added [List.rev] *)
 val optlistmap : ('a -> 'b option) -> 'a list -> 'b list
 
 (** Returns [Some xs] if every element of the argument list is of the form [Some x]; otherwise returns [None]. *)

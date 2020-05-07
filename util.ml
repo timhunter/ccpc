@@ -44,13 +44,14 @@ let rec take_while p lst =
   | [] -> []
   | (x::xs) -> if p x then (x::(take_while p xs)) else []
 
+(* Angelica (5/6/20): added [List.rev] to [| [] -> acc] so that the returned list is in the original order. *)
 let optlistmap f xs =
   let rec optlistmap' f lst acc =
     match lst with
-      [] -> acc
+    | [] -> List.rev acc
     | x::xs ->
       match f x with
-        Some y -> optlistmap' f xs (y::acc)
+      | Some y -> optlistmap' f xs (y::acc)
       | None -> optlistmap' f xs acc
   in
   optlistmap' f xs []

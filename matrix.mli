@@ -45,18 +45,27 @@ val mult_vec_by : float list -> matrix -> float list
 val mult_by_vec : matrix -> float list -> float list
 
 (** Prints out a matrix. Used for debugging. *)
+(* Angelica (5/20): added various things *)
 val print : ?ch:(out_channel) -> matrix -> unit
 
-(** functions by Angelica *)
+(******************************************************************************************)
 
-(** Divides a column vector, given in the form of a list, by a scalar.
+(** Functions by Angelica *)
+
+(** Divides a column vector, given by first [float list] argument, by a scalar.
     The result is another column vector. *)
 val div_vec_by : float list -> float -> float list
+
+(* Returns the numeric part of a Matrix.matrix. Used for debugging. *)
+val get_matrix : matrix -> float array array
+
+(* Modifies the element at the specified position, to the specified value.
+    The first [string] argument picks out the row, and the second picks out the column *)
+val modify_element : matrix -> string -> string -> float -> unit 
 
 (** Spectral radius of a matrix. *)
 val spectral_radius : matrix -> float
 
-(** Checks whether the fertility matrix of a given grammar is consistent. *)
-val is_consistent : matrix -> bool
-
+(* Creates a square matrix, with values specified by [float list] argument.
+    Uses [string list] argument as matrix indices; if given [] then uses ASCII characters starting from "A" as indices. *)
 val create_test_matrix : int -> float list -> string list -> matrix

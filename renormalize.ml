@@ -566,32 +566,6 @@ let get_metadata grammar_file =
         reverse_tr (!result)
     )
 
-(* let main () =
-    let mode = ref Newton in
-    let grammar_file = ref "" in
-    let speclist = Arg.align([  ("-g",      Arg.Set_string(grammar_file),           " WMCFG grammar file (obligatory)") ;
-                                ("-naive",  Arg.Unit(fun () -> mode := Naive),      " use naive method") ;
-                                ("-newton", Arg.Unit(fun () -> mode := Newton),     " use Newton's method (default)") ;
-                            ]) in
-    let usage_msg = Printf.sprintf "Usage: %s -g <grammar file>" Sys.argv.(0) in
-    let superfluous_arg s = raise (Arg.Bad (Printf.sprintf "Bad extra argument: %s" s)) in
-    Arg.parse speclist superfluous_arg usage_msg ;
-    if (!grammar_file = "") then (
-        Printf.eprintf "Must provide a grammar file\n" ;
-        Arg.usage speclist usage_msg
-    ) else (
-        let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
-        if not (Grammar.is_consistent (rules,start_symbol)) then (
-            Printf.eprintf "Grammar is not consistent\n" ;
-
-        ) else (
-            let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
-            List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
-            Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
-            List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
-        )
-    ) *)
-
 let main () =
     let mode = ref Newton in
     let grammar_file = ref "" in
@@ -607,33 +581,21 @@ let main () =
         Arg.usage speclist usage_msg
     ) else (
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
-        (* Matrix.spectral_radius test_1 = 0.999997138982507749 *)
-        (* Matrix.spectral_radius test_2 = 1.20710571923743504 *)
-        (* Matrix.spectral_radius test_3 = 1.0 *)
-        (* Matrix.spectral_radius test_4 = 0.80901856763925728 *)
-        let test_1 = Matrix.create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.5;0.;0.;0.;0.5;1.;0.;0.;0.5;0.] [] in
-        let test_2 = Matrix.create_test_matrix 3 [0.;1.;0.;0.;0.5;1.;0.;0.5;0.5] [] in
-        let test_3 = Matrix.create_test_matrix 2 [0.;1.;0.;1.] [] in
-        let test_4 = Matrix.create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.;0.5;0.;0.;0.5;0.5;0.;0.;0.5;0.] [] in
-        let m = test_4 in
-        (* let spectral_radius = 1.0 in  *)
+        let m = Grammar.fertility_matrix (rules, start_symbol) in
         let spectral_radius = Matrix.spectral_radius m in 
         if (spectral_radius >= 1.0) then (
-            Printf.printf "Grammar is not consistent.\n" ;
-            (* Printf.printf "%.*f \n\n" 5 spectral_radius ; *)
+            Printf.printf "\nGrammar is not consistent.\n" ;
             Matrix.print m
         ) else if ((1. -. spectral_radius) < 0.001) then (
-            Printf.printf "Spectral radius is estimated to be less than 1, but is probably >= 1.\n\n" ;
-            (* Printf.printf "%.*F \n\n" 5 (Matrix.spectral_radius m) ; *)
+            Printf.printf "\nSpectral radius is estimated to be less than 1, but is probably >= 1.\n(Note: the printed spectral radius may have been rounded to 1.)\n\n" ;
             Matrix.print m
         ) else (
-            Printf.printf "Grammar is consistent.\n\n" ;
-            (* Printf.printf "%.*f \n\n" 5 spectral_radius ; *)
-            Matrix.print m
-                            (* let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
+            Printf.printf "\nGrammar is consistent.\n\n" ;
+            Matrix.print m ;
+            let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
             List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
             Printf.printf "(* \"probability = %.18f\" *)\n" (float_of_weight prob) ;
-            List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules *)
+            List.iter (fun r -> Printf.printf "%s\n" (Rule.to_string r)) new_rules
         )
     )
 let _ = if (!Sys.interactive) then () else main ()

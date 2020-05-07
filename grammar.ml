@@ -35,16 +35,17 @@ let get_input_grammar grammar_file =
 
 (******************************************************************************************)
 
+(* Angelica (5/7/20): added [List.rev] to [start_symbol::nonterms] so that the returned list matches the input grammar in order. *)
 let get_nonterminals rules start_symbol =
   let nonterms =
     (List.fold_left
        (fun acc rule ->
-	 let n_t = get_nonterm rule in
+	 let n_t = Rule.get_nonterm rule in
 	 if (List.mem n_t acc || n_t = start_symbol) then acc else n_t::acc)
        []
        rules
     ) in
-  start_symbol::nonterms
+  start_symbol::(List.rev nonterms)
 
 (******************************************************************************************)
 
@@ -259,34 +260,40 @@ let drawgraph chart goal_items symbols filename =
       close_out oc
     end
 
-
+(******************************************************************************************)
 
 (* functions created by Angelica *)
-(* fertility : rule list -> string -> string -> float *)
-let fertility rules a b =
-    (* Angelica: do this! :-) *)
-    let y = Random.int 99 in
-    if y < 50 then 0.
-    else if y >=50 && y < 75 then 0.5
-    else 1.
 
-(* let fertility_matrix (rules, start_symbol) =
-    let indices = get_nonterminals rules start_symbol in
-    Printf.printf("Here are the indices:\n") ;
-    List.iter (fun s -> Printf.printf "%s " s) indices ;
-    Printf.printf("\n") ;
-    let m = Matrix.create_square_matrix indices (fertility rules) in
-    Printf.printf("Here's the fertility matrix:\n") ;
-    Matrix.print m ;
-    m
- *)
+(* grammar_as_triple : Rule.r list -> (float * string * string list) list
+    Re-expresses a grammar (given as [string] argument) as a list of (weight, LHS, RHS) "rules" *)
+let grammar_as_triple rules = 
+    (* get_float_weight : Rule.r -> float
+        Extracts weight of rule as a float. *)
+    let get_float_weight r =
+      Util.float_of_weight (Rule.get_weight r) in
+    (* expand_to_list : Rule.r -> (float * string * string list) option *)
+    let expand_to_list rule =
+      match (Rule.get_expansion rule) with
+      | Rule.PublicTerminating s -> None
+      | Rule.PublicNonTerminating (nt,_) -> Some (get_float_weight rule, Rule.get_nonterm rule, Nelist.to_list nt)
+    in
+    Util.optlistmap expand_to_list rules
+    
 let fertility_matrix (rules, start_symbol) =
-    let indices = get_nonterminals rules start_symbol in
-    let m = Matrix.create_square_matrix indices (fertility rules) in
-    m
+  let indices = get_nonterminals rules start_symbol in
+  let rule_list = grammar_as_triple rules in
+  (* create square matrix with all values initialized to 0. *)
+  let skeleton = Matrix.create_square_matrix indices (fun (x:string) (y:string) -> 0.) in
+  (*  modifies an element of [skeleton] using a (float * string * string list)-triple *)
+  let use_one_rule m (weight, left, right) =
+    let use_one_rhs_nonterm rhs_nonterm =
+      Matrix.modify_element m left rhs_nonterm ((Matrix.get_element m left rhs_nonterm) +. (1. *. weight))
+    in List.map use_one_rhs_nonterm right
+  in
+  List.map (fun r -> use_one_rule skeleton r) rule_list ;
+  skeleton
 
-(* let is_consistent (rules, start_symbol) =
+let is_consistent (rules, start_symbol) =
     let m = fertility_matrix (rules, start_symbol) in
     let sr = Matrix.spectral_radius m in
-    (sr < 1.0) *)
-
+    (sr < 1.0)

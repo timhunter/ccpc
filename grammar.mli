@@ -26,10 +26,15 @@ val get_guillaumin_dict : string -> (string, string) Hashtbl.t
 
 val drawgraph : Chart.chart -> Chart.item list -> string list -> string -> unit
 
+(* Angelica (5/7/20): added [List.rev] *)
 val get_nonterminals : Rule.r list -> string -> string list
 
-(* by me (Angelica), so probably wrong *)
+(******************************************************************************************)
+
+(* Functions by Angelica *)
+
+(* Creates the fertility matrix of a grammar. *)
 val fertility_matrix : (Rule.r list * string) -> Matrix.matrix
 
 (** Checks whether the given grammar is consistent. *)
-(* val is_consistent : (Rule.r list * string) -> bool *)
+val is_consistent : (Rule.r list * string) -> bool
