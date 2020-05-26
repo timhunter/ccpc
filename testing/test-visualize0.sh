@@ -1,5 +1,4 @@
 GRAMMAR=`mktemp /tmp/tmp.XXXXXX`
-OUTPUT=`mktemp /tmp/tmp.XXXXXX`
 
 # This the result of intersecting chomskyan.wmcfg with the empty prefix, then renormalizing.
 # Using an input like this with visualize tests some parts of the code that are not used with
@@ -346,13 +345,7 @@ cat <<EOF > $GRAMMAR
 1 / 1     t18_tmp1_0-0 --> "  "
 EOF
 
-./visualize -kbest -g $GRAMMAR -n 30 -o $OUTPUT | `dirname $0`/canonicalize.sh
-
-echo "======================================"
-
-# grep to remove the timestamp and the comment that gives the name of the input file, because these details change each run
-cat $OUTPUT | egrep -v '\\item timestamp: ' | egrep -v $GRAMMAR
+./visualize -kbest -g $GRAMMAR -n 30 | `dirname $0`/canonicalize.sh
 
 rm $GRAMMAR
-rm $OUTPUT
 

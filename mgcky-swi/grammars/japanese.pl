@@ -1,1 +1,0 @@
-../../grammars/mg/japanese.pl
