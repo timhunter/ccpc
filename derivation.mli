@@ -56,3 +56,5 @@ val get_n_best_from_grammar : int -> Rule.r list -> string -> (string derivation
 val print_tree : ('a -> string) -> 'a derivation_tree -> string
 val print_tree_sexp : ('a -> string) -> 'a derivation_tree -> string
 val print_tree_compact : 'a derivation_tree -> string
+val latex_tree : ('a -> string) -> 'a derivation_tree -> string
+

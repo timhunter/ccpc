@@ -118,6 +118,15 @@ let print_tree f tree =
 	in
 	String.concat "\n" (print_tree' tree)
 
+let latex_tree f tree =
+    let rec print' t =
+        match (get_children t, Rule.get_expansion (get_rule t)) with
+        | ([], Rule.PublicTerminating s) -> Printf.sprintf "(%s \"%s\")" (f (get_root_item t)) s
+        | (cs, Rule.PublicNonTerminating _) -> "(" ^ (f (get_root_item t)) ^ " " ^  (String.concat " " (map_tr print' cs)) ^ ")"
+        | _ -> failwith "Inconsistent tree in print_tree"
+    in
+    Printf.sprintf "Here's some latex code: %s" (print' tree)
+
 let rec get_derivations chart item =
         let routes = Chart.get_routes item chart in
         let children_lists antecedent_items = one_from_each (map_tr (get_derivations chart) antecedent_items) in

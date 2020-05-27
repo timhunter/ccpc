@@ -56,8 +56,7 @@ let get_timestamp () =
 (* We report the number of parses that have probability greater than this threshold *)
 let const_THRESHOLD = 0.001
 
-(* derivations is a list of pairs; the first component is a derivation list, the second is a weight *)
-let save_to_file mode_note grammar_files prolog_file (trees : (string Derivation.derivation_tree) list) filename =
+let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_tree) list) filename =
 
         (* Open the file we'll be writing to *)
         let oc = open_out filename in
@@ -94,7 +93,7 @@ let save_to_file mode_note grammar_files prolog_file (trees : (string Derivation
         List.iter (fun t ->
             let sentence = Derivation.derived_string t in 
             Printf.fprintf oc "%.6g\t%s\n" (float_of_weight (Derivation.get_weight t)) sentence ;
-            Printf.fprintf oc "%s\n" (Derivation.print_tree_sexp (fun x -> x) t) ;
+            Printf.fprintf oc "%s\n" (Derivation.latex_tree (fun x -> x) t) ;
             Printf.fprintf oc "\n" ;
         ) trees ;
 
@@ -152,13 +151,12 @@ let run_visualization wmcfg_file num_trees output_filename mode optional_seed =
     | None -> ()
     | Some f ->
         try
-            let prolog_file  = (Filename.dirname Sys.executable_name) ^ "/mgcky-swi/setup.pl" in
             let (grammars_dir, grammar_name) = identify_original_grammar wmcfg_file in
             let grammar_files = { mg_file    = grammars_dir ^ "/mg/" ^ grammar_name ^ ".pl" ;
                                   wmcfg_file = wmcfg_file ;
                                   dict_file  = grammars_dir ^ "/mcfgs/" ^ grammar_name ^ ".dict"
                                 } in
-            save_to_file mode_note grammar_files prolog_file trees f
+            save_to_file mode_note grammar_files trees f
         with Failure str ->
             Printf.eprintf "%s\n" str ;
             Printf.eprintf "Couldn't write derivations to latex file\n"
