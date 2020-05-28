@@ -30,7 +30,7 @@ OCAMLINT= $(MODULES:.ml=.cmi)
 OCAMLOBJ= $(MODULES:.ml=.cmx)
 
 .PHONY: all
-all: parse intersect train visualize cycles compare
+all: parse intersect train visualize cycles compare ccpctop
 
 ###########################################################################################
 ### These two executables (and the corresponding main.ml file) are now deprecated. Leaving 
@@ -47,6 +47,12 @@ mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) main.cmx
 
 ###########################################################################################
+
+# The weird '-warn-error -a' prevents Warning 31 from being treated as a fatal error.
+# Not sure why it's required here and not for generating other executables.
+# https://stackoverflow.com/questions/37415476/ocaml-warning-31-compiler-libs-and-ppx
+ccpctop: $(OCAMLINT) $(MODULES:.ml=.cmo)
+	ocamlmktop -warn-error -a -o ccpctop $(FLAGS) $(LIBS:.cmxa=.cma) $(MODULES:.ml=.cmo)
 
 parse: $(OCAMLINT) $(OCAMLOBJ) parse.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) parse.cmx
@@ -81,7 +87,7 @@ clean:
 	rm -f $(DEPENDENCIES_FILE)
 	rm -f *.o *.cmo *.cmi *.cmx
 	rm -f mcfgread/*.o mcfgread/*.cmo mcfgread/*.cmi mcfgread/*.cmx mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
-	rm -f mcfg_bc mcfg_nt parse intersect train visualize cycles compare
+	rm -f mcfg_bc mcfg_nt parse intersect train visualize cycles compare ccpctop
 
 # Stop make from deleting ``intermediate'' mcfg files.
 # NB: (1) PRECIOUS is a lot like SECONDARY, but SECONDARY doesn't allow wildcards.
