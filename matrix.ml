@@ -163,20 +163,20 @@ let spectral_radius (m, indices) =
         in 
         let ev_next = abs_max p in
         let v_next = div_vec_by p ev_next in 
-        if abs_float(ev_next -. ev_current) < 0.00001
-        then ev_next
+        (* the [ev_next = 0.] break condition is necessary for grammars like /grammars/wmcfg/toy.wmcfg *)
+        if ev_next = 0. then ev_next
+        else if abs_float(ev_next -. ev_current) < 0.00001 then ev_next
         else power_iterate matrix v_next ev_next
     in power_iterate (m, indices) v_0 ev_0
     
-(* Angelica (5/20): added various things *)
+(* Angelica (May 2020): added various things *)
 let print ?(ch = stdout) (m,indices) =
-    Printf.printf ("Spectral radius: %.*F \n\n") 5 (spectral_radius (m, indices)) ;
+    Printf.printf ("Approximated spectral radius: %.*F \n\n") 5 (spectral_radius (m, indices)) ;
 
-    Printf.printf("Here are the indices:\n") ;
+    Printf.printf("There are %d indices:\n") (List.length indices) ;
     List.iter (fun s -> Printf.printf "%s " s) indices ;
     Printf.printf("\n\n") ;
 
-    Printf.printf("Here is the fertility matrix:\n") ;
     (* returns length of longest string in [indices] *)
     let rec longest_string lst = 
         match lst with
@@ -191,15 +191,20 @@ let print ?(ch = stdout) (m,indices) =
         List.iter (fun c -> Printf.fprintf ch "%.*f " spacing (get_element (m,indices) r c)) indices ;
         Printf.fprintf ch "|\n"
     in
-    (* prints indices horizontally *)
-    Printf.fprintf ch "%-*s" (spacing + 3) "" ;
-    List.iter (fun x -> Printf.fprintf ch "%-*s " (spacing + 2) x) indices ;
-    Printf.printf("\n") ;
 
-    (* prints rest of matrix *)
-    List.iter print_row indices ;
-    Printf.printf("\n")
+    Printf.printf("Fertility matrix:\n") ;
+    if List.length indices > 20
+    then (Printf.printf("Not printed due to size of matrix (larger than 20x20).\n") ;)
+    else (
+        (* prints indices horizontally *)
+        Printf.fprintf ch "%-*s" (spacing + 3) "" ;
+        List.iter (fun x -> Printf.fprintf ch "%-*s " (spacing + 2) x) indices ;
+        Printf.printf("\n") ;
 
+        (* prints rest of matrix *)
+        List.iter print_row indices ;
+        Printf.printf("\n")
+    )
 
 let create_test_matrix n lst str_lst = 
     assert (List.length lst = n*n) ;
@@ -236,14 +241,16 @@ let create_test_matrix n lst str_lst =
     in modify_matrix skeleton lst 0
 
 
-(* matrices for testing *)
-(* let test_a = create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.5;0.;0.;0.;0.5;1.;0.;0.;0.5;0.] []
+(* matrices for testing
+let test_a = create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.5;0.;0.;0.;0.5;1.;0.;0.;0.5;0.] []
 let test_b = create_test_matrix 3 [0.;1.;0.;0.;0.5;1.;0.;0.5;0.5] [] 
 let test_c = create_test_matrix 2 [0.;1.;0.;1.] [] 
-let test_d = create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.;0.5;0.;0.;0.5;0.5;0.;0.;0.5;0.] []  *)
+let test_d = create_test_matrix 4 [0.;1.;0.;0.;0.;0.;0.;0.5;0.;0.;0.5;0.5;0.;0.;0.5;0.] []  
+*)
 
-(* results of Matrix.spectral_radius / as calculated by [https://www.symbolab.com/solver/matrix-eigenvalues-calculator/]*)
-(* spectral_radius test_a = 0.999997138982507749   (1.0)
-spectral_radius test_b = 1.20710571923743504    (≈1.207106781186)
-spectral_radius test_c = 1.0                    (1.0)
-spectral_radius test_d = 0.80901856763925728    (≈0.8090169943749) *)
+(* results of Matrix.spectral_radius / as calculated by [https://www.symbolab.com/solver/matrix-eigenvalues-calculator/]
+spectral_radius test_a = 0.999997138982507749       (1.0)
+spectral_radius test_b = 1.20710571923743504        (≈1.207106781186)
+spectral_radius test_c = 1.0                        (1.0)
+spectral_radius test_d = 0.80901856763925728        (≈0.8090169943749) 
+*)

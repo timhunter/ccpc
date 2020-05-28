@@ -587,10 +587,10 @@ let main () =
             Printf.printf "\nGrammar is not consistent.\n" ;
             Matrix.print m
         ) else if ((1. -. spectral_radius) < 0.001) then (
-            Printf.printf "\nSpectral radius is estimated to be less than 1, but is probably >= 1.\n(Note: the printed spectral radius may have been rounded to 1.)\n\n" ;
+            Printf.printf "\nSpectral radius is estimated to be less than 1, but is probably >= 1.\n(Note: printed spectral radius may have been rounded to 1.)\n" ;
             Matrix.print m
         ) else (
-            Printf.printf "\nGrammar is consistent.\n\n" ;
+            Printf.printf "\nGrammar is consistent.\n" ;
             Matrix.print m ;
             let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
             List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
