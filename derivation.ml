@@ -121,7 +121,11 @@ let print_tree f tree =
 let latex_tree f tree =
     let rec print' t =
         match (get_children t, Rule.get_expansion (get_rule t)) with
-        | ([], Rule.PublicTerminating s) -> Printf.sprintf "[%s\\\\%s]" (f (get_root_item t)) s
+        | ([], Rule.PublicTerminating s) -> 
+            if (s = " ") || (s = "")
+            then Printf.sprintf "[%s\\\\%s]" (f (get_root_item t)) s
+            else Printf.sprintf "[%s\\\\\\textbf{%s}]" (f (get_root_item t)) s
+        (* | ([], Rule.PublicTerminating s) -> Printf.sprintf "[%s\\\\%s]" (f (get_root_item t)) s *)
         | (cs, Rule.PublicNonTerminating _) -> "[" ^ (f (get_root_item t)) ^ " " ^ (String.concat " " (map_tr print' cs)) ^ "]"
         | _ -> failwith "Inconsistent tree in print_tree"
     in

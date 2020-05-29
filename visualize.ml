@@ -64,7 +64,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
 
         (* latex preamble *)
         Printf.fprintf oc "\\documentclass[11pt]{article}\n" ;
-        Printf.fprintf oc "\\usepackage[margin=1in]{geometry}\n" ;
+        Printf.fprintf oc "\\usepackage[landscape, margin=1in]{geometry}\n" ;
         Printf.fprintf oc "\\usepackage[linguistics]{forest}\n" ;
         Printf.fprintf oc "\\usepackage[strings]{underscore}\n" ;
         Printf.fprintf oc "\n" ;
@@ -119,15 +119,9 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                 Printf.fprintf oc "\\rownumber & %.6g & \\textit{%s} \\\\\n" weight sentence ;
         ) trees ;
         Printf.fprintf oc "\t\\hline\n" ;
-        Printf.fprintf oc "\\end{tabular}\n\n" ;
+        Printf.fprintf oc "\\end{tabular}\n" ;
+        Printf.fprintf oc "\\pagebreak\n\n" ;
 
-        (* List.iter (fun t ->
-            let sentence = Derivation.derived_string t in 
-            Printf.fprintf oc "%.6g\t%s\n" (float_of_weight (Derivation.get_weight t)) sentence ;
-            Printf.fprintf oc "%s\n" (Derivation.latex_tree (fun x -> x) t) ;
-
-            Printf.fprintf oc "\n" ;
-        ) trees ; *)
 
         (* derivation trees *)
         Printf.fprintf oc "\\section{Derivation trees}\n" ;
@@ -142,8 +136,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                 Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;              
                 Printf.fprintf oc "\t%s\n" (Derivation.latex_tree (fun x -> x) t) ;
                 Printf.fprintf oc "\t\\end{forest}\n" ;
-                Printf.fprintf oc "\t\\vspace{2\\baselineskip}\n" ;
-                Printf.fprintf oc "\t\\hrule\n\n" ;
+                Printf.fprintf oc "\t\\newpage\n\n" ;
         ) trees ;
         Printf.fprintf oc "\\end{enumerate}\n\n" ;
 
@@ -252,4 +245,3 @@ let main () =
         run_visualization (!grammar_file) (!num_trees) (!output_file) (!mode) (!random_seed)
     )
 let _ = if (!Sys.interactive) then () else main ()
-
