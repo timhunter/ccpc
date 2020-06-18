@@ -2,19 +2,33 @@ open Util
 
 type derived_tree = Leaf of string | NonLeaf of (string option) * derived_tree * derived_tree
 
+(* This function combines two arguments of type [derived_tree option]. If either of the inputs 
+ * is [None], then the result is [None] as well. Otherwise, the two trees get joined together. *)
+let join_trees x y =
+    match (x,y) with
+    | (None,_) -> y
+    | (_,None) -> x
+    | (Some(t1), Some(t2)) -> Some(NonLeaf(None,t1,t2))  (* The inner None here is root label for the new tree *)
+
 let derived_tree tree =
     (* argument to helper might not be a root tree, so it might return a non-singleton list *)
     let rec helper t =
+        let root_label = Derivation.get_root_item t in
         let children = Derivation.get_children t in
         match (children, Rule.get_expansion (Derivation.get_rule t)) with
-        | ([],   Rule.PublicTerminating str) -> if str = " " then [Leaf("")] else [Leaf(str)]
+        | ([],   Rule.PublicTerminating str) ->
+            (* If it's one of those dummy E nodes for head movement, then it contributes nothing to the derived tree. *)
+            if root_label = "E" then
+                [None]
+            else
+                [Some(Leaf(if str = " " then "" else str))]
         | (_::_, Rule.PublicNonTerminating (nts, recipe)) ->
             let subresults = map_tr helper children in
-            (Rule.apply recipe subresults (fun x y -> NonLeaf(None,x,y)))
+            (Rule.apply recipe subresults join_trees)
         | _ -> failwith "derived_tree: mismatch between tree structure and rules"
     in
     match (helper tree) with
-    | [x] -> x
+    | [Some x] -> x
     | xs -> failwith (Printf.sprintf "derived_tree: expected a one-tuple but got an %d-tuple\n" (List.length xs))
 
 let rec latex_derived_tree t =
