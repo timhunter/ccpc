@@ -23,6 +23,9 @@ val make_derivation_tree : 'a -> ('a derivation_tree) list -> Rule.r -> 'a deriv
 (** Returns the string derived by a derivation. Fails if the provided derivation derives an MCFG nonterminal of rank greater than one. *)
 val derived_string : 'a derivation_tree -> string
 
+(** Returns the string derived by a derivation. Fails if the provided derivation derives an MCFG nonterminal of rank greater than one. *)
+val derived_tree : 'a derivation_tree -> Mg.derived_tree
+
 (** Retrieves all derivations of the given item from the chart. *)
 val get_derivations : Chart.chart -> Chart.item -> (Chart.item derivation_tree) list
 
@@ -73,3 +76,4 @@ val print_tuple : 'a derivation_tree -> string
 
 (** Prints the features of the root item (requires a valid .dict file) *)
 val print_features : (string, string) Hashtbl.t option -> string -> string
+

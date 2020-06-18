@@ -75,6 +75,20 @@ let derived_string tree =
     | [x] -> x
     | xs -> failwith (Printf.sprintf "derived_string: expected a one-tuple but got an %d-tuple: %s\n" (List.length xs) (Util.show_list (fun s -> s) xs))
 
+let derived_tree tree =
+    (* argument to helper might not be a root tree, so it might return a non-singleton list of strings *)
+    let rec helper t =
+        match (t, Rule.get_expansion (get_rule t)) with
+        | (Leaf _,                      Rule.PublicTerminating str) -> if str = " " then [Mg.Leaf("")] else [Mg.Leaf(str)]
+        | (NonLeaf (_, children, _, _), Rule.PublicNonTerminating (nts, recipe)) ->
+            let subresults = map_tr helper children in
+            (Rule.apply recipe subresults (fun x y -> Mg.NonLeaf(None,x,y)))
+        | _ -> failwith "derived_tree: mismatch between tree structure and rules"
+    in
+    match (helper tree) with
+    | [x] -> x
+    | xs -> failwith (Printf.sprintf "derived_tree: expected a one-tuple but got an %d-tuple\n" (List.length xs))
+
 let rec one_from_each (lists : 'a list list) : ('a list list) =
 	let prepend_one_of xs ys = map_tr (fun x -> x::ys) xs in
 	match lists with

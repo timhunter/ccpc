@@ -139,6 +139,13 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                 Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_simple dict start_symbol t) ;
                 (* Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_full dict t) ; *)
                 Printf.fprintf oc "\t\\end{forest}\n" ;
+                Printf.fprintf oc "\t\\\\\n" ;
+                Printf.fprintf oc "\t\\begin{forest}\n" ;
+                (* control forest tree spacing *)
+                Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
+                Printf.fprintf oc "\t%s\n" (Mg.latex_derived_tree (Derivation.derived_tree t)) ;
+                (* Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_full dict t) ; *)
+                Printf.fprintf oc "\t\\end{forest}\n" ;
                 Printf.fprintf oc "\t\\newpage\n\n" ;
         ) trees ;
         Printf.fprintf oc "\\end{enumerate}\n\n" ;
