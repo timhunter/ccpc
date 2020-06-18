@@ -75,20 +75,6 @@ let derived_string tree =
     | [x] -> x
     | xs -> failwith (Printf.sprintf "derived_string: expected a one-tuple but got an %d-tuple: %s\n" (List.length xs) (Util.show_list (fun s -> s) xs))
 
-let derived_tree tree =
-    (* argument to helper might not be a root tree, so it might return a non-singleton list of strings *)
-    let rec helper t =
-        match (t, Rule.get_expansion (get_rule t)) with
-        | (Leaf _,                      Rule.PublicTerminating str) -> if str = " " then [Mg.Leaf("")] else [Mg.Leaf(str)]
-        | (NonLeaf (_, children, _, _), Rule.PublicNonTerminating (nts, recipe)) ->
-            let subresults = map_tr helper children in
-            (Rule.apply recipe subresults (fun x y -> Mg.NonLeaf(None,x,y)))
-        | _ -> failwith "derived_tree: mismatch between tree structure and rules"
-    in
-    match (helper tree) with
-    | [x] -> x
-    | xs -> failwith (Printf.sprintf "derived_tree: expected a one-tuple but got an %d-tuple\n" (List.length xs))
-
 let rec one_from_each (lists : 'a list list) : ('a list list) =
 	let prepend_one_of xs ys = map_tr (fun x -> x::ys) xs in
 	match lists with
@@ -162,53 +148,21 @@ let print_tuple tree =
         | x::xs -> if x = "" then "$\\epsilon$"::add_epsilon(xs) else x::add_epsilon(xs)
     in
     Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " (add_epsilon tuple_list)) ^ "}$\\rangle$"
- 
-let print_features table string = 
-    match table with
-    | None -> ""
-    | Some t -> 
-        let x = Hashtbl.find_opt t string in
-        match x with
-        | None -> ""
-        | Some raw ->
-            (* Wrapper function to make regexp substitutions easier *)
-            let replace rx subst string = Str.global_replace (Str.regexp rx) subst string in
-            (* Replace certain strings with LaTeX code: tuple delimiter ";:" with "{,}", "=" with "{=}", and ">" with "$>$".
-                Then, split string by " " *)
-            let split = Str.split (Str.regexp " ") (replace ">" "$>$" (replace "=" "{=}" (replace ";:" "{,}" raw))) in
-            (* "::" -> lexical (subscript 1) *)
-            (* ":" -> non-lexical (subscript 0) *)
-            let subscript = (if List.hd split = "::" then "_1" else "_0") in
-            Printf.sprintf "::$\\langle$\\texttt{" ^ (String.concat " " (List.tl split)) ^ "}$\\rangle" ^ subscript ^"$"
 
-let latex_tree dict start_symbol tree =
-    let table = if (Sys.file_exists dict) then (Some (Grammar.get_guillaumin_dict dict)) else None in 
+let latex_tree tree =
     let print_terminal x y = 
         if (y = " ") || (y = "") 
         then Printf.sprintf "[%s\\\\$\\epsilon$]" x
         else Printf.sprintf "[%s\\\\\\textbf{%s}]" x y in
     let rec print' t =
         let node = get_root_item t in
-        match table with
-        | None ->
-            (match (get_children t, Rule.get_expansion (get_rule t)) with
-            | ([], Rule.PublicTerminating s) -> print_terminal node s
-            | (cs, Rule.PublicNonTerminating _) ->
-                "[" ^ node ^ (print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' cs)) ^ "]"
-            | _ -> failwith "Inconsistent tree in latex_tree"
-            )
-        | Some tb ->
-            (match (get_children t, Rule.get_expansion (get_rule t)) with
-            | ([], Rule.PublicTerminating s) -> if (Hashtbl.mem tb node) then (print_terminal node s) else ""
-            | (cs, Rule.PublicNonTerminating _) ->
-                (* Only print start symbol, or nonterminals that have features in [table], if [table] exists *)
-                if (node = start_symbol) || (Hashtbl.mem tb node)
-                then "[" ^ node ^ (print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' cs)) ^ "]"
-                else ""
-            | _ -> failwith "Inconsistent tree in latex_tree"
-            )
-    in 
-    Printf.sprintf "%s" (print' tree)
+        match (get_children t, Rule.get_expansion (get_rule t)) with
+        | ([], Rule.PublicTerminating s) -> print_terminal node s
+        | (cs, Rule.PublicNonTerminating _) ->
+            "[" ^ node ^ (print_tuple t) ^ (String.concat " " (map_tr print' cs)) ^ "]"
+        | _ -> failwith "Inconsistent tree in latex_tree"
+    in
+    print' tree
 
 (**************************************************************************)
 (****** Stuff for random generation ***************************************)

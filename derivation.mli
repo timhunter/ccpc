@@ -23,9 +23,6 @@ val make_derivation_tree : 'a -> ('a derivation_tree) list -> Rule.r -> 'a deriv
 (** Returns the string derived by a derivation. Fails if the provided derivation derives an MCFG nonterminal of rank greater than one. *)
 val derived_string : 'a derivation_tree -> string
 
-(** Returns the string derived by a derivation. Fails if the provided derivation derives an MCFG nonterminal of rank greater than one. *)
-val derived_tree : 'a derivation_tree -> Mg.derived_tree
-
 (** Retrieves all derivations of the given item from the chart. *)
 val get_derivations : Chart.chart -> Chart.item -> (Chart.item derivation_tree) list
 
@@ -63,13 +60,9 @@ val print_tree_compact : 'a derivation_tree -> string
 (******************************************************************************************)
 (** Functions by Angelica *)
 
-(** Prints a derivation tree in a way that can be compiled by LaTeX. Relies on [forest] package. 
-        For MCFGs-derived-from-MGs, only prints nodes that have features in the corresponding [.dict] file *)
-val latex_tree : string -> string -> string derivation_tree -> string
+(** Prints a derivation tree in a way that can be compiled by LaTeX. Relies on [forest] package. *)
+val latex_tree : string derivation_tree -> string
 
 (** Prints the derived "tuple" of strings (actually a string list) of the root item. *)
 val print_tuple : 'a derivation_tree -> string 
-
-(** Prints the features of the root item (requires a valid .dict file) *)
-val print_features : (string, string) Hashtbl.t option -> string -> string
 

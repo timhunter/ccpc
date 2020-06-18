@@ -128,22 +128,30 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
         Printf.fprintf oc "%% every tree will be an item in this enumeration\n" ;
         Printf.fprintf oc "\\begin{enumerate}\n" ;
         let (_, start_symbol) = Grammar.get_input_grammar (grammar_files.wmcfg_file) in
-        let dict = grammar_files.dict_file in
+        let grammar_is_mg = Sys.file_exists grammar_files.dict_file in
         List.iter (fun t ->
                 let weight = float_of_weight (Derivation.get_weight t) in
                 let sentence = Derivation.derived_string t in
                 Printf.fprintf oc "\t\\item  %.6g: \\textit{%s} \\\\[0.5em]\n" weight sentence ;
-                Printf.fprintf oc "\t\\begin{forest}\n" ;
-                (* control forest tree spacing *)
-                Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;     
-                Printf.fprintf oc "\t%s\n" (Derivation.latex_tree dict start_symbol t) ;
-                Printf.fprintf oc "\t\\end{forest}\n" ;
-                Printf.fprintf oc "\t\\\\\n" ;
-                Printf.fprintf oc "\t\\begin{forest}\n" ;
-                (* control forest tree spacing *)
-                Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
-                Printf.fprintf oc "\t%s\n" (Mg.latex_derived_tree (Derivation.derived_tree t)) ;
-                Printf.fprintf oc "\t\\end{forest}\n" ;
+                if grammar_is_mg then (
+                    (* Draw the derivation tree, with some MG-specific tweaks *)
+                    Printf.fprintf oc "\t\\begin{forest}\n" ;
+                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
+                    Printf.fprintf oc "\t%s\n" (Mg.latex_derivation_tree grammar_files.dict_file start_symbol t) ;
+                    Printf.fprintf oc "\t\\end{forest}\n" ;
+                    Printf.fprintf oc "\t\\\\\n" ;
+                    (* Draw the derived tree *)
+                    Printf.fprintf oc "\t\\begin{forest}\n" ;
+                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
+                    Printf.fprintf oc "\t%s\n" (Mg.latex_derived_tree (Mg.derived_tree t)) ;
+                    Printf.fprintf oc "\t\\end{forest}\n" ;
+                ) else (
+                    (* Draw the derivation tree, in ``plain'' MCFG format *)
+                    Printf.fprintf oc "\t\\begin{forest}\n" ;
+                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
+                    Printf.fprintf oc "\t%s\n" (Derivation.latex_tree t) ;
+                    Printf.fprintf oc "\t\\end{forest}\n" ;
+                ) ;
                 Printf.fprintf oc "\t\\newpage\n\n" ;
         ) trees ;
         Printf.fprintf oc "\\end{enumerate}\n\n" ;
