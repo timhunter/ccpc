@@ -64,12 +64,8 @@ val print_tree_compact : 'a derivation_tree -> string
 (** Functions by Angelica *)
 
 (** Prints a derivation tree in a way that can be compiled by LaTeX. Relies on [forest] package. 
-        Prints all nodes. *)
-val latex_tree_full : string -> string derivation_tree -> string
-
-(** Prints a derivation tree in a way that can be compiled by LaTeX. Relies on [forest] package. 
         For MCFGs-derived-from-MGs, only prints nodes that have features in the corresponding [.dict] file *)
-val latex_tree_simple : string -> string -> string derivation_tree -> string
+val latex_tree : string -> string -> string derivation_tree -> string
 
 (** Prints the derived "tuple" of strings (actually a string list) of the root item. *)
 val print_tuple : 'a derivation_tree -> string 

@@ -181,7 +181,7 @@ let print_features table string =
             let subscript = (if List.hd split = "::" then "_1" else "_0") in
             Printf.sprintf "::$\\langle$\\texttt{" ^ (String.concat " " (List.tl split)) ^ "}$\\rangle" ^ subscript ^"$"
 
-let latex_tree_simple dict start_symbol tree =
+let latex_tree dict start_symbol tree =
     let table = if (Sys.file_exists dict) then (Some (Grammar.get_guillaumin_dict dict)) else None in 
     let print_terminal x y = 
         if (y = " ") || (y = "") 
@@ -195,7 +195,7 @@ let latex_tree_simple dict start_symbol tree =
             | ([], Rule.PublicTerminating s) -> print_terminal node s
             | (cs, Rule.PublicNonTerminating _) ->
                 "[" ^ node ^ (print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' cs)) ^ "]"
-            | _ -> failwith "Inconsistent tree in latex_tree_simple"
+            | _ -> failwith "Inconsistent tree in latex_tree"
             )
         | Some tb ->
             (match (get_children t, Rule.get_expansion (get_rule t)) with
@@ -205,25 +205,10 @@ let latex_tree_simple dict start_symbol tree =
                 if (node = start_symbol) || (Hashtbl.mem tb node)
                 then "[" ^ node ^ (print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' cs)) ^ "]"
                 else ""
-            | _ -> failwith "Inconsistent tree in latex_tree_simple"
+            | _ -> failwith "Inconsistent tree in latex_tree"
             )
     in 
     Printf.sprintf "%s" (print' tree)
-
-let latex_tree_full dict tree =
-    let table = if (Sys.file_exists dict) then (Some (Grammar.get_guillaumin_dict dict)) else None in 
-    let rec print' t =
-        let node = get_root_item t in
-        match (get_children t, Rule.get_expansion (get_rule t)) with
-        | ([], Rule.PublicTerminating s) -> 
-            if (s = " ") || (s = "")
-            then Printf.sprintf "[%s\\\\$\\epsilon$]" node
-            else Printf.sprintf "[%s\\\\\\textbf{%s}]" node s
-        | (cs, Rule.PublicNonTerminating _) -> "[" ^ node ^ (print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' cs)) ^ "]"
-        | _ -> failwith "Inconsistent tree in latex_tree"
-    in
-    Printf.sprintf "%s" (print' tree)
-
 
 (**************************************************************************)
 (****** Stuff for random generation ***************************************)

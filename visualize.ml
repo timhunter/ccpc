@@ -125,7 +125,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
 
         (* Derivation trees *)
         Printf.fprintf oc "\\section{Derivation trees}\n" ;
-        Printf.fprintf oc "% every tree will be an item in this enumeration\n" ;
+        Printf.fprintf oc "%% every tree will be an item in this enumeration\n" ;
         Printf.fprintf oc "\\begin{enumerate}\n" ;
         let (_, start_symbol) = Grammar.get_input_grammar (grammar_files.wmcfg_file) in
         let dict = grammar_files.dict_file in
@@ -136,15 +136,13 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                 Printf.fprintf oc "\t\\begin{forest}\n" ;
                 (* control forest tree spacing *)
                 Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;     
-                Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_simple dict start_symbol t) ;
-                (* Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_full dict t) ; *)
+                Printf.fprintf oc "\t%s\n" (Derivation.latex_tree dict start_symbol t) ;
                 Printf.fprintf oc "\t\\end{forest}\n" ;
                 Printf.fprintf oc "\t\\\\\n" ;
                 Printf.fprintf oc "\t\\begin{forest}\n" ;
                 (* control forest tree spacing *)
                 Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
                 Printf.fprintf oc "\t%s\n" (Mg.latex_derived_tree (Derivation.derived_tree t)) ;
-                (* Printf.fprintf oc "\t%s\n" (Derivation.latex_tree_full dict t) ; *)
                 Printf.fprintf oc "\t\\end{forest}\n" ;
                 Printf.fprintf oc "\t\\newpage\n\n" ;
         ) trees ;
