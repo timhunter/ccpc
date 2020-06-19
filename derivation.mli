@@ -5,7 +5,7 @@
     (internal nodes and leaf nodes). This type parameter is typically either [string], in which 
     case its values represent nonterminal symbols, or [Chart.item]; recall that a [Chart.item] is 
     effectively just a nonterminal symbol paired with a list of ranges. *)
-type 'a derivation_tree
+type 'a derivation_tree = Leaf of 'a * Rule.r * Util.weight | NonLeaf of 'a * ('a derivation_tree) list * Rule.r * Util.weight
 
 val get_root_item : 'a derivation_tree -> 'a
 val get_children : 'a derivation_tree -> 'a derivation_tree list

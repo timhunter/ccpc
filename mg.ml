@@ -38,6 +38,44 @@ let rec latex_derived_tree t =
                                                                 (latex_derived_tree left)
                                                                 (latex_derived_tree right)
 
+(* MG-specific version of [Derivation.print_tuple].  
+    The first three elements of [tuple_list] represents a triple: (left-of-head, head, right-of-head).
+    Any following elements are "triples" that have been concatenated into a singleton. *)
+let print_tuple_mg tree =
+    (* [helper] function taken from [Derivation.derived_string] *)
+    let rec helper t =
+        match (t, Rule.get_expansion (Derivation.get_rule t)) with
+        | (Leaf _,                      Rule.PublicTerminating str) -> if str = " " then [""] else [str]
+        | (NonLeaf (_, children, _, _), Rule.PublicNonTerminating (nts, recipe)) ->
+            let subresults = Util.map_tr helper children in
+            (Rule.apply recipe subresults (^^))
+        | _ -> failwith "derived_string: mismatch between tree structure and rules"
+    in
+    let tuple_list = helper tree in
+    (* add_epsilon : string list -> string list
+        Adds LaTeX code to print empty string as epsilon symbol *)
+    let rec add_epsilon lst =
+        match lst with
+        | [] -> []
+        | x::xs -> if x = "" then "$\\epsilon$"::add_epsilon(xs) else x::add_epsilon(xs)
+    in
+    (* split: 'a list -> int -> 'a list * 'a list 
+        Splits a list into a pair of lists, where the first component is length [n:int] *)
+    let split lst n =
+        let rec split' fst snd i =
+            match snd with
+            | [] -> List.rev fst, []
+            | x::xs -> if i = 0 then List.rev fst, x::xs else split' (x::fst) xs (i-1)
+        in split' [] lst n
+    in
+    let (x, xs) = split (add_epsilon tuple_list) 3 in
+    let others = 
+        if List.length xs = 0
+        then ""
+        else "{,} \\texit{" ^ (String.concat "{,} " xs) ^ "}" in  
+    (* Print [x] as triple surrounded by "(" and ")". Then print [xs] with LaTeX formatting, if any. *)
+    Printf.sprintf "\\\\$\\langle$(\\textit{" ^ (String.concat "{,} " x) ^ "})" ^ others ^ "$\\rangle$"
+
 let print_features table str = 
     match (Hashtbl.find_opt table str) with
     | None -> ""
@@ -66,7 +104,7 @@ let latex_derivation_tree dict start_symbol tree =
         | (_::_, Rule.PublicNonTerminating _) ->
             (* Only print start symbol, or nonterminals that have features in [table], if [table] exists *)
             if (node = start_symbol) || (Hashtbl.mem table node)
-            then "[" ^ node ^ (Derivation.print_tuple t) ^ (print_features table node) ^ (String.concat " " (map_tr print' children)) ^ "]"
+            then "[" ^ node ^ (print_tuple_mg t) ^ (print_features table node) ^ (String.concat " " (map_tr print' children)) ^ "]"
             else ""
         | _ -> failwith "Inconsistent tree in latex_tree"
     in
