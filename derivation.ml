@@ -150,14 +150,14 @@ let print_tuple tree =
     Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " (add_epsilon tuple_list)) ^ "}$\\rangle$"
 
 let latex_tree tree =
-    let print_terminal x y = 
+    let print_terminating x y = 
         if (y = " ") || (y = "") 
         then Printf.sprintf "[%s\\\\$\\epsilon$]" x
         else Printf.sprintf "[%s\\\\\\textbf{%s}]" x y in
     let rec print' t =
         let node = get_root_item t in
         match (get_children t, Rule.get_expansion (get_rule t)) with
-        | ([], Rule.PublicTerminating s) -> print_terminal node s
+        | ([], Rule.PublicTerminating s) -> print_terminating node s
         | (cs, Rule.PublicNonTerminating _) ->
             "[" ^ node ^ (print_tuple t) ^ (String.concat " " (map_tr print' cs)) ^ "]"
         | _ -> failwith "Inconsistent tree in latex_tree"
