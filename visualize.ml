@@ -73,7 +73,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
         Printf.fprintf oc "\\usepackage{adjustbox}\n" ;
         Printf.fprintf oc "\n" ;
 
-        (* Remove horizontal space from forest trees *)
+        (* Remove horizontal space from [forest] trees *)
         Printf.fprintf oc "%%==============================================\n" ;
         Printf.fprintf oc "%%%% Magic incantation to remove extra horizontal space before forest trees.\n" ;
         Printf.fprintf oc "%%%% Copied from here: https://tex.stackexchange.com/a/513549\n" ;
@@ -84,12 +84,24 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
         Printf.fprintf oc "\t{\\noexpand\\pgfmathfloatdivide@}\n" ;
         Printf.fprintf oc "\t{}{}\n" ;
         Printf.fprintf oc "\\makeatother\n" ;
+        Printf.fprintf oc "\n" ;
+
+        (* [forest] formatting for nice empty nodes / trees with straight spines *)
+        Printf.fprintf oc "%%%% Create trees with nice empty nodes and straight spines\n" ;
+        Printf.fprintf oc "%%%% Copied from Section 4.1 \"Libraries -- linguistics\" of [forest documentation]\n" ;
+        Printf.fprintf oc "%%%% http://ctan.mirrors.hoobly.com/graphics/pgf/contrib/forest/forest-doc.pdf\n" ;
+        Printf.fprintf oc "\\forestset{\n" ;
+        Printf.fprintf oc "\tnice empty nodes/.style={\n" ;
+        Printf.fprintf oc "\t\tfor tree={calign=fixed edge angles},\n" ;
+        Printf.fprintf oc "\t\t delay={where content={}{shape=coordinate, for current and siblings={anchor=north}}{}}\n" ;
+        Printf.fprintf oc "\t},\n" ;
+        Printf.fprintf oc "}\n" ;
         Printf.fprintf oc "%%==============================================\n" ;
         Printf.fprintf oc "\n" ;
 
         (* Start document *)
         Printf.fprintf oc "\\begin{document}\n\n" ;
-
+        
         (* Title *)
         Printf.fprintf oc "\\begin{center}\n" ;
         Printf.fprintf oc "{\\huge \\textbf{%s}} \\\\[0.5em]\n" grammar_files.wmcfg_file ;
@@ -125,7 +137,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
         Printf.fprintf oc "\\renewcommand{\\arraystretch}{1.15}\n" ;
         Printf.fprintf oc "\\newcounter{rownumber}\n" ;
         Printf.fprintf oc "\\newcommand\\rownumber{\\stepcounter{rownumber}\\arabic{rownumber}}\n" ;
-        Printf.fprintf oc "%% every yield will be a row in this table\n" ;
+        Printf.fprintf oc "%% Every yield will be a row in this table\n" ;
         (* print table *)
         Printf.fprintf oc "\\begin{tabular}{l l l}\n" ;
         Printf.fprintf oc "\t\\hline\n" ;
@@ -142,7 +154,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
 
         (* Section: Derivation trees *)
         Printf.fprintf oc "\\section{Derivation trees}\n" ;
-        Printf.fprintf oc "%% every tree will be an item in this enumeration\n" ;
+        Printf.fprintf oc "%% Every tree will be an item in this enumeration\n" ;
         Printf.fprintf oc "\\begin{enumerate}\n" ;
         let (_, start_symbol) = Grammar.get_input_grammar (grammar_files.wmcfg_file) in
         let grammar_is_mg = Sys.file_exists grammar_files.dict_file in
@@ -152,28 +164,16 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                 Printf.fprintf oc "\t\\item  %.6g: \\textit{%s} \\\\[0.5em]\n" weight sentence ;
                 if grammar_is_mg then (
                     (* Draw the derivation tree, with some MG-specific tweaks *)
-                    Printf.fprintf oc "\t\\begin{adjustbox}{max width = \\textwidth}\n" ;
-                    Printf.fprintf oc "\t\\begin{forest}\n" ;
-                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
-                    Printf.fprintf oc "\t%s\n" (Mg.latex_derivation_tree grammar_files.dict_file start_symbol t) ;
-                    Printf.fprintf oc "\t\\end{forest}\n" ;
-                    Printf.fprintf oc "\t\\end{adjustbox}\n" ;
+                    Printf.fprintf oc "\t%% Derivation tree for \"%s\"\n" sentence ;
+                    Printf.fprintf oc "%s" (Mg.latex_derivation_tree grammar_files.dict_file start_symbol t) ;
                     Printf.fprintf oc "\t\\\\\n" ;
                     (* Draw the derived tree *)
-                    Printf.fprintf oc "\t\\begin{adjustbox}{max width = \\textwidth}\n" ;
-                    Printf.fprintf oc "\t\\begin{forest}\n" ;
-                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
-                    Printf.fprintf oc "\t%s\n" (Mg.latex_derived_tree (Mg.derived_tree t)) ;
-                    Printf.fprintf oc "\t\\end{forest}\n" ;
-                    Printf.fprintf oc "\t\\end{adjustbox}\n" ;
+                    Printf.fprintf oc "\t%% MG-specific Derived tree for \"%s\"\n" sentence ;
+                    Printf.fprintf oc "%s" (Mg.latex_derived_tree (Mg.derived_tree start_symbol t)) ; 
                 ) else (
-                    (* Draw the derivation tree, in ``plain'' MCFG format *)
-                    Printf.fprintf oc "\t\\begin{adjustbox}{max width = \\textwidth}\n" ;
-                    Printf.fprintf oc "\t\\begin{forest}\n" ;
-                    Printf.fprintf oc "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ;
-                    Printf.fprintf oc "\t%s\n" (Derivation.latex_tree t) ;
-                    Printf.fprintf oc "\t\\end{forest}\n" ;
-                    Printf.fprintf oc "\t\\end{adjustbox}\n" ;
+                    (* Draw the derivation tree, in "plain" MCFG format *)
+                    Printf.fprintf oc "\t%% Derivation tree for \"%s\"\n" sentence ;
+                    Printf.fprintf oc "%s" (Derivation.latex_tree t) ;
                 ) ;
                 Printf.fprintf oc "\t\\newpage\n\n" ;
         ) trees ;

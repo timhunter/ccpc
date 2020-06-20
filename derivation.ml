@@ -129,7 +129,7 @@ let rec get_derivations chart item =
 (******************************************************************************************)
 (* functions by Angelica: June 2020 *)
 
-let print_tuple tree =
+let get_tuple tree = 
     (* [helper] function taken from [derived_string] *)
     let rec helper t =
         match (t, Rule.get_expansion (get_rule t)) with
@@ -137,7 +137,7 @@ let print_tuple tree =
         | (NonLeaf (_, children, _, _), Rule.PublicNonTerminating (nts, recipe)) ->
             let subresults = map_tr helper children in
             (Rule.apply recipe subresults (^^))
-        | _ -> failwith "derived_string: mismatch between tree structure and rules"
+        | _ -> failwith "Derivation.get_tuple: mismatch between tree structure and rules"
     in
     let tuple_list = helper tree in
     (* add_epsilon : string list -> string list
@@ -147,22 +147,33 @@ let print_tuple tree =
         | [] -> []
         | x::xs -> if x = "" then "$\\epsilon$"::add_epsilon(xs) else x::add_epsilon(xs)
     in
-    Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " (add_epsilon tuple_list)) ^ "}$\\rangle$"
+    add_epsilon tuple_list
+
+let print_tuple tree = 
+    let tuple = get_tuple tree in
+    Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " tuple) ^ "}$\\rangle$" 
 
 let latex_tree tree =
-    let print_terminating x y = 
-        if (y = " ") || (y = "") 
-        then Printf.sprintf "[%s\\\\$\\epsilon$]" x
-        else Printf.sprintf "[%s\\\\\\textbf{%s}]" x y in
     let rec print' t =
         let node = get_root_item t in
         match (get_children t, Rule.get_expansion (get_rule t)) with
-        | ([], Rule.PublicTerminating s) -> print_terminating node s
+        | ([], Rule.PublicTerminating s) -> 
+            if (s = " ") || (s = "")
+            then Printf.sprintf "[%s\\\\$\\epsilon$]" node
+            else Printf.sprintf "[%s\\\\\\textbf{%s}]" node s 
         | (cs, Rule.PublicNonTerminating _) ->
             "[" ^ node ^ (print_tuple t) ^ (String.concat " " (map_tr print' cs)) ^ "]"
-        | _ -> failwith "Inconsistent tree in latex_tree"
+        | _ -> failwith "Derivation.latex_tree: Inconsistent tree"
     in
-    print' tree
+    (* print' tree *)
+    Printf.sprintf "\t\\begin{adjustbox}{max width = \\textwidth}\n" ^
+    Printf.sprintf "\t\\begin{forest}\n" ^
+    Printf.sprintf "\tfor tree={s sep=5mm, inner sep = 0, l-=3em}\n" ^
+    Printf.sprintf "\t" ^
+    print' tree ^
+    Printf.sprintf "\n" ^
+    Printf.sprintf "\t\\end{forest}\n" ^
+    Printf.sprintf "\t\\end{adjustbox}\n" 
 
 (**************************************************************************)
 (****** Stuff for random generation ***************************************)
@@ -402,4 +413,3 @@ module KBestFromGrammar = KBestCalculation(GrammarAsGraph)
 
 let get_n_best_from_chart = KBestFromChart.get_n_best
 let get_n_best_from_grammar = KBestFromGrammar.get_n_best
-

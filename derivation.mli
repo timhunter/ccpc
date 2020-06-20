@@ -6,6 +6,7 @@
     case its values represent nonterminal symbols, or [Chart.item]; recall that a [Chart.item] is 
     effectively just a nonterminal symbol paired with a list of ranges. *)
 type 'a derivation_tree = Leaf of 'a * Rule.r * Util.weight | NonLeaf of 'a * ('a derivation_tree) list * Rule.r * Util.weight
+(* type 'a derivation_tree *)
 
 val get_root_item : 'a derivation_tree -> 'a
 val get_children : 'a derivation_tree -> 'a derivation_tree list
@@ -63,6 +64,10 @@ val print_tree_compact : 'a derivation_tree -> string
 (** Prints a derivation tree in a way that can be compiled by LaTeX. Relies on [forest] package. *)
 val latex_tree : string derivation_tree -> string
 
-(** Prints the derived "tuple" of strings (actually a string list) of the root item. *)
-val print_tuple : 'a derivation_tree -> string 
-
+(** Produces the derived "tuple" of strings (actually a string list) of the tree's root item. 
+    If the produced list is length 1, then it represents a triple (left-of-head, head, right-of-head) 
+        that has been concatenated into a singleton.
+    If the produced list is length 3, then it represents a triple.
+    If the produced list is length >3, then the first three elements represent a triple, and all following elements            
+        represents triples that have been concatenated into singletons (aka moving elements). *)
+val get_tuple : 'a derivation_tree -> string list
