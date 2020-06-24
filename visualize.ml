@@ -169,7 +169,7 @@ let save_to_file mode_note grammar_files (trees : (string Derivation.derivation_
                     Printf.fprintf oc "\t\\\\\n" ;
                     (* Draw the derived tree *)
                     Printf.fprintf oc "\t%% MG-specific Derived tree for \"%s\"\n" sentence ;
-                    Printf.fprintf oc "%s" (Mg.latex_derived_tree (Mg.derived_tree start_symbol t)) ; 
+                    Printf.fprintf oc "%s" (Mg.latex_derived_tree2 (Mg.derived_tree2 grammar_files.dict_file t)) ; 
                 ) else (
                     (* Draw the derivation tree, in "plain" MCFG format *)
                     Printf.fprintf oc "\t%% Derivation tree for \"%s\"\n" sentence ;

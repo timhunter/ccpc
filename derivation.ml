@@ -139,7 +139,11 @@ let get_tuple tree =
             (Rule.apply recipe subresults (^^))
         | _ -> failwith "Derivation.get_tuple: mismatch between tree structure and rules"
     in
-    let tuple_list = helper tree in
+    helper tree
+
+
+let print_tuple tree = 
+    let tuple_list = get_tuple tree in
     (* add_epsilon : string list -> string list
         Adds LaTeX code to print empty string as epsilon symbol *)
     let rec add_epsilon lst =
@@ -147,11 +151,7 @@ let get_tuple tree =
         | [] -> []
         | x::xs -> if x = "" then "$\\epsilon$"::add_epsilon(xs) else x::add_epsilon(xs)
     in
-    add_epsilon tuple_list
-
-let print_tuple tree = 
-    let tuple = get_tuple tree in
-    Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " tuple) ^ "}$\\rangle$" 
+    Printf.sprintf "\\\\$\\langle$\\textit{" ^ (String.concat "{,} " (add_epsilon tuple_list)) ^ "}$\\rangle$" 
 
 let latex_tree tree =
     let rec print' t =

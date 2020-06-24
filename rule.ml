@@ -160,4 +160,23 @@ let desituate_rule rule =
             let recipe_str = String.concat "" (List.map stringrecipe_to_string (Nelist.to_list recipes)) in
             failwith (Printf.sprintf "Rule does not have enough nonterminals on the right-hand side for this recipe:   %s   %s" rule_str recipe_str)
 
+    (**********************************************************)
+    
+    (* Angelica, June 2020 *)
+    let get_tuplerecipe rule =
+      (* squish: Rule.component -> int * int *)
+      let squish (Component (x, y)) = (x,y) in
+      (* squish_stringrecipe: Rule.component list -> (int * int) list *)
+      let rec squish_stringrecipe lst = 
+        match lst with
+        | [] -> []
+        | x::xs -> (squish x)::(squish_stringrecipe xs)
+      in
+      let expansion = get_expansion rule in
+      match expansion with
+      | PublicTerminating str -> [[]]
+      | PublicNonTerminating (strs, tuplerecipe) -> 
+        (* Rule.component list list *)
+        let components = List.map (fun x -> Nelist.to_list x) (Nelist.to_list tuplerecipe) in
+        List.map (fun y -> squish_stringrecipe y) components
 

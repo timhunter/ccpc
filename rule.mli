@@ -1,4 +1,3 @@
-
 (** Multiple context-free grammar rules. *)
 
 (** A rule. *)
@@ -79,3 +78,6 @@ val create_tuplerecipe : component list -> tuplerecipe
 val create_component : int -> int -> component
 val add_to_recipe : component list -> tuplerecipe -> tuplerecipe
 
+(** Angelica, June 2020 *)
+(** Gets the tuple recipe of an expansion, represented as a non-abstract list of (int, int) lists. *)
+val get_tuplerecipe : r -> (int * int) list list
