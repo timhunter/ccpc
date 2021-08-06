@@ -145,7 +145,7 @@ let print_tuple_mg tree =
     let others = 
         if List.length xs = 0
         then ""
-        else "{,} \\texit{" ^ (String.concat "{,} " xs) ^ "}" in  
+        else "{,} \\textit{" ^ (String.concat "{,} " xs) ^ "}" in  
     (* Print [x] as triple surrounded by "(" and ")". Then print [xs] with LaTeX formatting, if any. *)
     Printf.sprintf "\\\\$\\langle$(\\textit{" ^ (String.concat "{,} " x) ^ "})" ^ others ^ "$\\rangle$"
 
