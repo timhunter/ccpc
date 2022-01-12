@@ -12,7 +12,7 @@ type derived_tree2 =
 let get_features table node =
     let separate_features str = Str.split (Str.regexp " ") str in
     let separate_subscript lst = [List.hd lst]::[List.tl lst] in
-    match (Hashtbl.find_opt table node) with
+    match (Hashtbl.find_opt table (Rule.desituate node)) with
     | None -> [[]]
     | Some raw -> 
         let big_list = Str.split (Str.regexp ";:") raw in
@@ -150,7 +150,7 @@ let print_tuple_mg tree =
     Printf.sprintf "\\\\$\\langle$(\\textit{" ^ (String.concat "{,} " x) ^ "})" ^ others ^ "$\\rangle$"
 
 let print_features table str = 
-    match (Hashtbl.find_opt table str) with
+    match (Hashtbl.find_opt table (Rule.desituate str)) with
     | None -> ""
     | Some raw ->
         (* Wrapper function to make regexp substitutions easier *)
@@ -183,14 +183,14 @@ let latex_derivation_tree dict start_symbol tree =
         then Printf.sprintf "[%s\\\\$\\epsilon$]" x
         else Printf.sprintf "[%s\\\\\\textbf{%s}]" x y in
     let rec print' t =
-        let root = Derivation.get_root_item t in
+        let root = Rule.desituate (Derivation.get_root_item t) in
         let children = Derivation.get_children t in
         let rule = Derivation.get_rule t in
         match (children, Rule.get_expansion rule) with
         | ([], Rule.PublicTerminating s) -> if (Hashtbl.mem table root) then (print_terminal root s) else ""
         | (_::_, Rule.PublicNonTerminating _) ->
             (* Only print start symbol, or nonterminals that have features in [table]. *)
-            if (root = start_symbol) || (Hashtbl.mem table root)
+            if (root = (Rule.desituate start_symbol)) || (Hashtbl.mem table root)
             then "[" ^ root ^ (print_tuple_mg t) ^ (print_features table root) ^ (String.concat " " (map_tr print' children)) ^ "]"
             else ""
         | _ -> failwith "Mg.latex_derivation_tree: Inconsistent tree"
