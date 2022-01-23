@@ -1,8 +1,9 @@
 # For profiling, use: 'ocamlcp' instead of 'ocamlc'
 #                     'ocamlopt -p' instead of 'ocamlopt'
 # But profiling is incompatible with preprocessing so I'm leaving it aside.
-COMPILER_BYTECODE=ocamlc
-COMPILER_NATIVE=ocamlopt
+COMPILER_BYTECODE=ocamlfind ocamlc
+COMPILER_NATIVE=ocamlfind ocamlopt
+COMPILER_MKTOP=ocamlfind ocamlmktop
 
 LEX=ocamllex
 YACC=ocamlyacc
@@ -20,8 +21,9 @@ GRAMMARS=grammars
 # Directory for auto-generated documentation
 DOCDIR=doc
 
-FLAGS= -I mcfgread -I +ocamlgraph
-LIBS= nums.cmxa str.cmxa unix.cmxa graph.cmxa
+# https://opam.ocaml.org/doc/FAQ.html#How-to-link-to-libraries-installed-with-opam
+FLAGS= -I mcfgread -package num -package ocamlgraph
+LIBS= str.cmxa unix.cmxa -linkpkg
 
 # All source files that do not correspond to the "top" file of an executable.
 MODULES= util.ml fsa.ml nelist.ml rule.ml chart.ml parser.ml mcfgread/read.ml mcfgread/lexer.ml grammar.ml derivation.ml path.ml
@@ -52,7 +54,7 @@ mcfg_nt: $(OCAMLINT) $(OCAMLOBJ) main.cmx
 # Not sure why it's required here and not for generating other executables.
 # https://stackoverflow.com/questions/37415476/ocaml-warning-31-compiler-libs-and-ppx
 ccpctop: $(OCAMLINT) $(MODULES:.ml=.cmo)
-	ocamlmktop -warn-error -a -o ccpctop $(FLAGS) $(LIBS:.cmxa=.cma) $(MODULES:.ml=.cmo)
+	$(COMPILER_MKTOP) -warn-error -a -o ccpctop $(FLAGS) $(LIBS:.cmxa=.cma) $(MODULES:.ml=.cmo)
 
 parse: $(OCAMLINT) $(OCAMLOBJ) parse.cmx
 	$(COMPILER_NATIVE) $(FLAGS) -o $@ $(LIBS) $(OCAMLOBJ) parse.cmx
@@ -79,7 +81,7 @@ prefilter: $(OCAMLINT) $(OCAMLOBJ) prefilter.cmx
 # Dependencies
 -include $(DEPENDENCIES_FILE)
 $(DEPENDENCIES_FILE): *.mli *.ml mcfgread/lexer.ml mcfgread/read.ml mcfgread/read.mli
-	ocamldep $(FLAGS) $^ > $@
+	ocamlfind ocamldep $(FLAGS) $^ > $@
 
 .PHONY: clean
 clean:

@@ -1,5 +1,10 @@
 
-Prerequisites: OCaml, ocamlgraph, Mathematica, pdflatex, swipl.
+Prerequisites:  ocaml
+                ocamlfind
+                ocaml libraries (installable via opam): ocamlgraph, num
+                mathematica
+                pdflatex
+                swipl
 
 ===========================================
 ==== Working with the bundled grammars ====
