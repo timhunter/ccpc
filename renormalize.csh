@@ -17,6 +17,10 @@ hostname | grep -q '.cdh.ucla.edu$'
 if ( $? == 0 ) then
     set MATHSCRIPT="/usr/local/bin/MathematicaScript -script"
 endif
+hostname | grep -q '.us-west-2.compute.internal$'
+if ( $? == 0 ) then
+    set MATHSCRIPT="/usr/local/bin/MathematicaScript -script"
+endif
 
 #################################################################################
 
