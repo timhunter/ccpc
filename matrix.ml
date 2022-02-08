@@ -171,11 +171,11 @@ let spectral_radius (m, indices) =
     
 (* Angelica (May 2020): added various things *)
 let print ?(ch = stdout) (m,indices) =
-    Printf.printf ("Approximated spectral radius: %.*F \n\n") 5 (spectral_radius (m, indices)) ;
+    Printf.fprintf ch ("Approximated spectral radius: %.*F \n\n") 5 (spectral_radius (m, indices)) ;
 
-    Printf.printf("There are %d indices:\n") (List.length indices) ;
-    List.iter (fun s -> Printf.printf "%s " s) indices ;
-    Printf.printf("\n\n") ;
+    Printf.fprintf ch ("There are %d indices:\n") (List.length indices) ;
+    List.iter (fun s -> Printf.fprintf ch "%s " s) indices ;
+    Printf.fprintf ch ("\n\n") ;
 
     (* returns length of longest string in [indices] *)
     let rec longest_string lst = 
@@ -192,18 +192,18 @@ let print ?(ch = stdout) (m,indices) =
         Printf.fprintf ch "|\n"
     in
 
-    Printf.printf("Fertility matrix:\n") ;
+    Printf.fprintf ch ("Fertility matrix:\n") ;
     if List.length indices > 20
-    then (Printf.printf("Not printed due to size of matrix (larger than 20x20).\n") ;)
+    then (Printf.fprintf ch ("Not printed due to size of matrix (larger than 20x20).\n") ;)
     else (
         (* prints indices horizontally *)
         Printf.fprintf ch "%-*s" (spacing + 3) "" ;
         List.iter (fun x -> Printf.fprintf ch "%-*s " (spacing + 2) x) indices ;
-        Printf.printf("\n") ;
+        Printf.fprintf ch ("\n") ;
 
         (* prints rest of matrix *)
         List.iter print_row indices ;
-        Printf.printf("\n")
+        Printf.fprintf ch ("\n")
     )
 
 let create_test_matrix n lst str_lst = 
