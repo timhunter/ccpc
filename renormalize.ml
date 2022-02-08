@@ -583,14 +583,15 @@ let main () =
         let (rules,start_symbol) = Grammar.get_input_grammar (!grammar_file) in
         let m = Grammar.fertility_matrix (rules, start_symbol) in
         let spectral_radius = Matrix.spectral_radius m in 
-        if (spectral_radius >= 1.0) then (
+        if (spectral_radius > 1.0) then (
             Printf.eprintf "\nGrammar is not consistent.\n" ;
             Matrix.print ~ch:stderr m
-        ) else if ((1. -. spectral_radius) < 0.001) then (
-            Printf.eprintf "\nSpectral radius is estimated to be less than 1, but is probably >= 1.\n(Note: printed spectral radius may have been rounded to 1.)\n" ;
-            Matrix.print ~ch:stderr m
         ) else (
-            Printf.eprintf "\nGrammar is consistent.\n" ;
+            if (spectral_radius = 1.0) then (
+                Printf.eprintf "\nGrammar might be consistent ... ?\n" ;
+            ) else (
+                Printf.eprintf "\nGrammar is consistent.\n" ;
+            ) ;
             Matrix.print ~ch:stderr m ;
             let (prob, new_rules) = renormalize_grammar (!mode) rules start_symbol in
             List.iter (Printf.printf "(*%s*)\n") (get_metadata (!grammar_file)) ;
