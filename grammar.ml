@@ -288,9 +288,9 @@ let fertility_matrix (rules, start_symbol) =
   let use_one_rule m (weight, left, right) =
     let use_one_rhs_nonterm rhs_nonterm =
       Matrix.modify_element m left rhs_nonterm ((Matrix.get_element m left rhs_nonterm) +. (1. *. weight))
-    in List.map use_one_rhs_nonterm right
+    in List.iter use_one_rhs_nonterm right
   in
-  List.map (fun r -> use_one_rule skeleton r) rule_list ;
+  List.iter (use_one_rule skeleton) rule_list ;
   skeleton
 
 let is_consistent (rules, start_symbol) =

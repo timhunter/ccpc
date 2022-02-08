@@ -239,12 +239,12 @@ let getOrderedMutuallyRecursiveSets (rules : Rule.r list) : (string list list) =
     let (t,tt) = grammar_to_tables rules in
 
     (* Find the strongly connected components. See Cormen et al., page 617. *)
-    let (tblFinish, tblParent, roots) = dfs t Pervasives.compare in
+    let (tblFinish, tblParent, roots) = dfs t Stdlib.compare in
     let compare_decreasing_finish_time x y =
-        0 - Pervasives.compare (Hashtbl.find tblFinish x) (Hashtbl.find tblFinish y)
+        0 - Stdlib.compare (Hashtbl.find tblFinish x) (Hashtbl.find tblFinish y)
     in
     let (tblFinish2, tblParent2, roots2) = dfs tt compare_decreasing_finish_time in
-    let components = components_from_forest (List.sort Pervasives.compare (all_vertices t)) tblParent2 roots2 in
+    let components = components_from_forest (List.sort Stdlib.compare (all_vertices t)) tblParent2 roots2 in
 
     let components_linked xs ys =
         (xs <> ys) && List.exists (fun x -> List.exists (fun y -> List.mem y (Hashtbl.find_all t x)) ys) xs

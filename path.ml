@@ -93,7 +93,7 @@ let weight_product lst =
 let compare_histories h1 h2 =
         let w1, w2 = weight_product h1, weight_product h2 in
         match (Util.compare_weights w1 w2) with
-        | 0 -> Pervasives.compare (MyList.contents h1, MyList.labels h1) (MyList.contents h2, MyList.labels h2)
+        | 0 -> Stdlib.compare (MyList.contents h1, MyList.labels h1) (MyList.contents h2, MyList.labels h2)
         | n -> n
 
 let latex_history_tikz f hist =

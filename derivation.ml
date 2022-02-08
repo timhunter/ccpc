@@ -190,7 +190,7 @@ module GrammarAsGraph =
         struct
                 type v = string   (* nonterminals *)
                 type g = Rule.r list
-                let compare = Pervasives.compare   (* fine for strings *)
+                let compare = Stdlib.compare   (* fine for strings *)
                 let show nonterm = nonterm
                 let tails rules nonterm =
                         let relevant_rules = List.filter (fun r -> Rule.get_nonterm r = nonterm) rules in
