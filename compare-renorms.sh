@@ -2,14 +2,34 @@
 
 CCPCDIR=`dirname $0`
 
+function extract () {
+
+    gawk -v target=$1 '
+        BEGIN {
+            found=0
+            re=sprintf("\\(\\* \"?%s = ([^\"]*)\"? \\*\\)", target)
+        }
+        match($0, re, a) {
+            print a[1]
+            found=1
+        }
+        END {
+            if (! found) {
+                print "---"
+            }
+        }
+    '
+
+}
+
 function mathematica () {
 
     g=$1
     output=`mktemp /tmp/mathematica-output.XXXX`
 
     $CCPCDIR/renormalize.csh $g > $output
-    probability=`gawk 'match($0, /\(\* "probability = ([^"]*)" \*\)/, a) {print a[1]}' $output`
-    entropy=`gawk 'match($0, /\(\* "entropy = ([^"]*)" \*\)/, a) {print a[1]}' $output`
+    probability=`extract probability < $output`
+    entropy=`extract entropy < $output`
     echo "$probability $entropy"
 
     rm $output
@@ -24,8 +44,8 @@ function ocaml () {
 
     $CCPCDIR/renormalize -g $g 2>/dev/null > $output1
     $CCPCDIR/findentropy -g $output1 2>/dev/null > $output3
-    probability=`gawk 'match($0, /\(\* "?probability = ([^"]*)"? \*\)/, a) {print a[1]}' $output1`
-    entropy_straight=`gawk 'match($0, /\(\* "?entropy = ([^"]*)"? \*\)/, a) {print a[1]}' $output3`
+    probability=`extract probability < $output1`
+    entropy_straight=`extract entropy < $output3`
     echo "$probability $entropy_straight"
 
     rm $output1 $output3
@@ -38,7 +58,7 @@ function mixed_entropy () {
     output=`mktemp /tmp/mixed-output.XXXX`
 
     $CCPCDIR/renormalize.csh $g | $CCPCDIR/findentropy -g /dev/stdin 2>/dev/null > $output
-    entropy=`gawk 'match($0, /\(\* "?entropy = ([^"]*)"? \*\)/, a) {print a[1]}' $output`
+    entropy=`extract entropy < $output`
     echo "$entropy"
 
     rm $output
