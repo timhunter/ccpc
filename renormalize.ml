@@ -514,7 +514,11 @@ let rec fillInTableBySets mode (mutuallyRecursiveSets: string list list) (initia
 (*this is the final function, returns the filled out table for all non-terminals*)
 let getTable mode (rules: Rule.r list) (r: float)
 (*  = fun (k':indicator) (s':string) -> 5.0;; *)
-= fillInTableBySets mode (getOrderedMutuallyRecursiveSets rules) initialTable rules r ;;
+=   let tbl = fillInTableBySets mode (getOrderedMutuallyRecursiveSets rules) initialTable rules r in
+    let nonterms = uniques (map_tr get_nonterm rules) in
+    Printf.eprintf "Partition function:\n" ;
+    List.iter (fun nt -> Printf.eprintf "  Z(%s) = %f\n" nt (tbl Settled nt)) nonterms ;
+    tbl
 
 
 
